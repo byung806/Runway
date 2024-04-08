@@ -6,7 +6,7 @@ import { Colors, Fonts } from '../styles';
 
 // export const BUTTON_HEIGHT = Scale.s(45);
 export const BUTTON_HEIGHT = 45;
-export const ANIM_CONFIG = { duration: 80, useNativeDriver: true };
+export const ANIM_CONFIG = { duration: 30, useNativeDriver: true };
 
 interface MainButtonProps {
     label: string;
