@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
+import { MainButton } from '@/components';
 
 export default function Page() {
     return (
@@ -8,6 +9,11 @@ export default function Page() {
             <View style={styles.main}>
                 <Text style={styles.title}>Hello World</Text>
                 <Text style={styles.subtitle}>This is the first page of your app.</Text>
+                <MainButton
+                    disabled={false}  // {selection === ''}
+                    label={'COMPLETE'}
+                    callback={() => {}}
+                />
             </View>
         </View>
     );
