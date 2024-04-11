@@ -1,34 +1,44 @@
 {
-    "expo": {
-        "name": "MobileSTEMApp",
-        "slug": "MobileSTEMApp",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "icon": "src/assets/icon.png",
-        "userInterfaceStyle": "light",
-        "splash": {
-            "image": "src/assets/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
-        "assetBundlePatterns": [
-            "**/*"
-        ],
-        "ios": {
-            "supportsTablet": true
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "src/assets/adaptive-icon.png",
-                "backgroundColor": "#ffffff"
-            }
-        },
-        "web": {
-            "favicon": "src/assets/favicon.png"
-        },
-        "plugins": [
-            "expo-router"
-        ],
-        "scheme": "mobilestemapp"
-    }
+  "expo": {
+    "name": "MobileSTEMApp",
+    "slug": "MobileSTEMApp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "src/assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.byung806.MobileSTEMApp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "src/assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "src/assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "scheme": "mobilestemapp",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "1eab8bbe-8ff6-4833-a276-48f544d4a9a6"
+      }
+    },
+    "owner": "byung806"
+  }
 }
