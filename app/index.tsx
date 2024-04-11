@@ -3,13 +3,18 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { MainButton } from '@/components';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { usePushNotifications } from "@/utils/usePushNotifications";
 
 export default function Page() {
+    const {expoPushToken, notification} = usePushNotifications()
+
+    const data = JSON.stringify(notification, undefined, 2)
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.main}>
-                <Text style={styles.title}>Hello World</Text>
-                <Text style={styles.subtitle}>This is the first page of your app.</Text>
+                <Text style={styles.title}>Token: {expoPushToken?.data ?? ""}</Text>
+                <Text style={styles.subtitle}>{data}</Text>
                 <MainButton
                     disabled={false}  // {selection === ''}
                     label={'COMPLETE'}
