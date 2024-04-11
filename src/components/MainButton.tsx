@@ -2,9 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 
 import { Colors, Fonts } from '../styles';
-// import { Scale } from '../../utils';
 
-// export const BUTTON_HEIGHT = Scale.s(45);
 export const BUTTON_HEIGHT = 45;
 export const ANIM_CONFIG = { duration: 30, useNativeDriver: true };
 
@@ -12,9 +10,10 @@ interface MainButtonProps {
     label: string;
     callback: () => void;
     disabled?: boolean;
+    filled?: boolean;
 }
 
-export default function MainButton({ label, callback, disabled = false }: MainButtonProps) {
+export default function MainButton({ label, callback, disabled = false, filled = true }: MainButtonProps) {
     const translateY = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
@@ -47,10 +46,10 @@ export default function MainButton({ label, callback, disabled = false }: MainBu
         return (
             <Pressable onPressIn={onPressIn} onPressOut={onPressOut}>
                 <View style={styles.outsideView}>
-                    <Animated.View style={[styles.mainButton, { transform: [{ translateY }] }]}>
-                        <Text style={styles.label}>{label}</Text>
+                    <Animated.View style={[filled ? styles.filledMainButton : styles.unfilledMainButton, { transform: [{ translateY }] }]}>
+                        <Text style={filled ? styles.filledLabel : styles.unfilledLabel}>{label}</Text>
                     </Animated.View>
-                    <View style={styles.background} />
+                    <View style={filled ? styles.filledBackground : styles.unfilledBackground} />
                 </View>
             </Pressable>
         );
@@ -73,8 +72,8 @@ const styles = StyleSheet.create({
     outsideView: {
         height: BUTTON_HEIGHT,
     },
-    background: {
-        backgroundColor: Colors.light.greenDark,
+    filledBackground: {
+        backgroundColor: Colors.light.accentDarker,
         width: '100%',
         height: BUTTON_HEIGHT - 2,
         borderRadius: 14,
@@ -82,16 +81,39 @@ const styles = StyleSheet.create({
         zIndex: -1,
         bottom: 0,
     },
-    mainButton: {
+    unfilledBackground: {
+        backgroundColor: Colors.light.gray,
         width: '100%',
         height: BUTTON_HEIGHT - 2,
         borderRadius: 14,
-        backgroundColor: Colors.light.green,
+        position: 'absolute',
+        zIndex: -1,
+        bottom: 0,
+    },
+    filledMainButton: {
+        width: '100%',
+        height: BUTTON_HEIGHT - 2,
+        borderRadius: 14,
+        backgroundColor: Colors.light.accent,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    label: {
+    unfilledMainButton: {
+        width: '100%',
+        height: BUTTON_HEIGHT - 2,
+        borderRadius: 14,
+        borderWidth: 2,
+        borderColor: Colors.light.gray,
+        backgroundColor: Colors.light.white,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    filledLabel: {
         ...Fonts.btnLabel,
         color: Colors.light.white,
     },
+    unfilledLabel: {
+        ...Fonts.btnLabel,
+        color: Colors.light.accent,
+    }
 });
