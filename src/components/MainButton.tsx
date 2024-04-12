@@ -58,7 +58,6 @@ export default function MainButton({ label, callback, disabled = false, filled =
 
 const styles = StyleSheet.create({
     mainDisabledButton: {
-        width: '100%',
         height: BUTTON_HEIGHT,
         borderRadius: 14,
         backgroundColor: Colors.light.gray,
@@ -91,20 +90,20 @@ const styles = StyleSheet.create({
         bottom: 0,
     },
     filledMainButton: {
-        width: '100%',
         height: BUTTON_HEIGHT - 2,
         borderRadius: 14,
         backgroundColor: Colors.light.accent,
+        padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
     },
     unfilledMainButton: {
-        width: '100%',
         height: BUTTON_HEIGHT - 2,
         borderRadius: 14,
         borderWidth: 2,
         borderColor: Colors.light.gray,
         backgroundColor: Colors.light.white,
+        padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
     },
