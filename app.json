@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MobileSTEMApp",
-    "slug": "MobileSTEMApp",
+    "name": "Runway",
+    "slug": "runway",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "src/assets/icon.png",
@@ -16,7 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.byung806.MobileSTEMApp"
+      "bundleIdentifier": "com.byung806.runway"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,13 +30,13 @@
     "plugins": [
       "expo-router"
     ],
-    "scheme": "mobilestemapp",
+    "scheme": "runway",
     "extra": {
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": "1eab8bbe-8ff6-4833-a276-48f544d4a9a6"
+        "projectId": "35a43238-3d11-4db6-b7da-15358a8579fb"
       }
     },
     "owner": "byung806"
