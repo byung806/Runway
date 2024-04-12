@@ -1,49 +1,23 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import OnboardingScreen from './onboarding';
+import { usePushNotifications } from '@/utils/usePushNotifications';
+import Layout from './(screens)/_layout';
 
-import { MainButton } from '@/components';
-import { SafeAreaView } from "react-native-safe-area-context";
-import { usePushNotifications } from "@/utils/usePushNotifications";
 
-export default function Page() {
-    const {expoPushToken, notification} = usePushNotifications()
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
+export default function RootLayout() {
+    const { expoPushToken, notification } = usePushNotifications()
     const data = JSON.stringify(notification, undefined, 2)
+    {/* <Text style={styles.title}>Token: {expoPushToken?.data ?? ""}</Text>
+    <Text style={styles.subtitle}>{data}</Text> */}
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.main}>
-                <Text style={styles.title}>Token: {expoPushToken?.data ?? ""}</Text>
-                <Text style={styles.subtitle}>{data}</Text>
-                <MainButton
-                    disabled={false}  // {selection === ''}
-                    label={'COMPLETE'}
-                    callback={ () => {} }
-                />
-            </View>
-        </SafeAreaView>
+        <Stack.Navigator>
+            <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="app" component={Layout} options={{ headerShown: false }} />
+        </Stack.Navigator>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        padding: 24,
-    },
-    main: {
-        flex: 1,
-        justifyContent: "center",
-        maxWidth: 960,
-        marginHorizontal: "auto",
-        marginTop: 24,
-    },
-    title: {
-        fontSize: 64,
-        fontWeight: "bold",
-    },
-    subtitle: {
-        fontSize: 36,
-        color: "#38434D",
-    },
-});
