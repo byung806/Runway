@@ -4,7 +4,6 @@ import Colors from './Colors';
 
 const styles: { [key: string]: object & StyleProp<TextStyle> } = {
     centeredContainer: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
