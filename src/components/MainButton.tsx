@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 
-import { Colors, Fonts } from '../styles';
+import { Colors, Styles } from '../styles';
 
 export const BUTTON_HEIGHT = 45;
 export const ANIM_CONFIG = { duration: 30, useNativeDriver: true };
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     btnDisabledLabel: {
-        ...Fonts.btnLabel,
+        ...Styles.btnLabel,
         color: '#aaaaaa',
     },
     outsideView: {
@@ -108,11 +108,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     filledLabel: {
-        ...Fonts.btnLabel,
+        ...Styles.btnLabel,
         color: Colors.light.white,
     },
     unfilledLabel: {
-        ...Fonts.btnLabel,
+        ...Styles.btnLabel,
         color: Colors.light.accent,
     }
 });

@@ -2,7 +2,7 @@ import { MainButton } from "@/components";
 import React from "react";
 import { View, Text } from "react-native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Fonts, Styles } from "@/styles";
+import { Styles } from "@/styles";
 
 
 export default function HomeScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
@@ -11,8 +11,8 @@ export default function HomeScreen({ navigation }: { navigation: NativeStackNavi
             ...Styles.centeredContainer,
             padding: 24
         }}>
-            <Text style={Fonts.title}>Home</Text>
-            <Text style={Fonts.subtitle}>Screen</Text>
+            <Text style={Styles.title}>Home</Text>
+            <Text style={Styles.subtitle}>Screen</Text>
             {/* TODO: add timeline */}
         </View>
     );

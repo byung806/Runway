@@ -2,19 +2,19 @@ import type { StyleProp, TextStyle } from 'react-native';
 
 import Colors from './Colors';
 
-const fonts: { [key: string]: object & StyleProp<TextStyle> } = {
+const styles: { [key: string]: object & StyleProp<TextStyle> } = {
+    centeredContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     title: {
-        fontSize: 22,
+        fontSize: 40,
         fontWeight: 'bold',
         color: Colors.light.black,
     },
-    iconLabel: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: Colors.light.black,
-    },
-    activityLabel: {
-        fontSize: 14,
+    subtitle: {
+        fontSize: 20,
         fontWeight: 'bold',
         color: Colors.light.black,
     },
@@ -25,4 +25,4 @@ const fonts: { [key: string]: object & StyleProp<TextStyle> } = {
     }
 };
 
-export default fonts;
+export default styles;
