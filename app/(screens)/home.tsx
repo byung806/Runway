@@ -1,47 +1,19 @@
 import { MainButton } from "@/components";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Fonts, Styles } from "@/styles";
 
-export default function HomeScreen() {
+
+export default function HomeScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
     return (
-        <View style={styles.main}>
-            <Text style={styles.title}>Home</Text>
-            <Text style={styles.subtitle}>Screen</Text>
-            <MainButton
-                disabled={false}  // {selection === ''}
-                label={'GET STARTED'}
-                callback={() => { }}
-                filled={true}
-            />
-            <MainButton
-                disabled={false}  // {selection === ''}
-                label={'I HAVE AN ACCOUNT'}
-                callback={() => { }}
-                filled={false}
-            />
+        <View style={{
+            ...Styles.centeredContainer,
+            padding: 24
+        }}>
+            <Text style={Fonts.title}>Home</Text>
+            <Text style={Fonts.subtitle}>Screen</Text>
+            {/* TODO: add timeline */}
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        padding: 24
-    },
-    main: {
-        flex: 1,
-        justifyContent: "center",
-        // maxWidth: 960,
-        marginHorizontal: "auto",
-        // marginTop: 24,
-    },
-    title: {
-        fontSize: 64,
-        fontWeight: "bold",
-    },
-    subtitle: {
-        fontSize: 36,
-        color: "#38434D",
-    }
-});
