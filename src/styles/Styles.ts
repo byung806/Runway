@@ -21,6 +21,9 @@ const styles: { [key: string]: object & StyleProp<TextStyle> } = {
         fontSize: 15,
         fontWeight: 'bold',
         color: Colors.light.black,
+    },
+    flex: {
+        flex: 1
     }
 };
 
