@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, useWindowDimensions } from 'react-native';
-import MainButton from './MainButton';
+import MainButton from '../MainButton';
 import { Styles } from '@/styles';
 
 
@@ -13,7 +13,7 @@ interface FooterProps {
 export default function Footer({ backgroundColor, buttonLabel, buttonCallback }: FooterProps) {
     const windowWidth = useWindowDimensions().width;
     const HEIGHT = windowWidth * 0.21;
-    const FOOTER_PADDING = windowWidth * 0.1;
+    const FOOTER_PADDING = windowWidth * 0.05;
 
     return (
         <View
@@ -22,7 +22,6 @@ export default function Footer({ backgroundColor, buttonLabel, buttonCallback }:
                 height: HEIGHT,
                 backgroundColor,
                 paddingHorizontal: FOOTER_PADDING,
-                paddingBottom: 12,
             }}
         >
             <View

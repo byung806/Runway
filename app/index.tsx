@@ -9,25 +9,24 @@ import { NavigationContainer } from '@react-navigation/native';
 import { registerRootComponent } from 'expo';
 
 
-const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const forceOnboarding = true;
+const forceOnboarding = false;
 
 export default function App() {
     const { expoPushToken, notification } = usePushNotifications()
     const data = JSON.stringify(notification, undefined, 2)
     // token: expoPushToken?.data ?? ""
 
-    const [firstLaunch, setFirstLaunch] = useState(true);
+    const [showOnboarding, setShowOnboarding] = useState(true);
     useEffect(() => {
         async function setData() {
             const appData = await AsyncStorage.getItem("firstTime");
             if (appData == null) {
-                setFirstLaunch(true);
+                setShowOnboarding(true);
                 AsyncStorage.setItem("firstTime", "false");
             } else {
-                setFirstLaunch(false);
+                setShowOnboarding(false);
             }
         }
         setData();
@@ -36,10 +35,19 @@ export default function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                {(firstLaunch || forceOnboarding) && (
-                    <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
+                {(showOnboarding || forceOnboarding) && (
+                    <Stack.Screen name="onboarding" options={{ headerShown: false }}
+                    >
+                        {(props) => (
+                            <OnboardingScreen {...props} setShowOnboarding={setShowOnboarding} />
+                        )}
+                    </Stack.Screen>
                 )}
-                <Stack.Screen name="app" component={ScreenLayout} options={{ headerShown: false }} />
+                <Stack.Screen
+                    name="app"
+                    component={ScreenLayout}
+                    options={{ headerShown: false }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

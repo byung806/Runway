@@ -1,7 +1,10 @@
-import { Footer, MainButton, OnboardingPage } from "@/components";
-import { Colors } from "@/styles";
-import { View, Image } from "react-native";
+import { Logo, OnboardingPage } from "@/components";
+import { Colors, Styles } from "@/styles";
+import { View, Image, Text } from "react-native";
 import ViewPager from "react-native-pager-view"
+import React, { useRef } from 'react';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
 
 
 interface Slide {
@@ -26,30 +29,48 @@ const slides: Slide[] = [
     }
 ]
 
-export default function OnboardingScreen() {
+export default function OnboardingScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
+    const pagerRef = useRef<ViewPager>(null);
+
+    const handlePageChange = (pageNumber: number) => {
+        pagerRef.current?.setPage(pageNumber);
+    };
+
     return (
         <View style={{ flex: 1 }}>
-            <ViewPager style={{ flex: 1 }}>
+            <ViewPager style={{ flex: 1 }} ref={pagerRef}>
                 <View key="1">
                     <OnboardingPage
-                        backgroundColor={Colors.light.white}
-                        iconName="paper-plane"
-                        iconColor={Colors.light.accent}
-                        title="Welcome to Runway"
-                    />
-                    <Footer
-                        backgroundColor={Colors.light.white}
-                        buttonLabel="Next"
-                        buttonCallback={() => {}}
-                    />
+                        nextButtonCallback={() => { handlePageChange(1) }}
+                    >
+                        <>
+                            <Logo />
+                            <Text style={Styles.title}>Take off with daily puzzles</Text>
+                        </>
+                    </OnboardingPage>
                 </View>
                 <View key="2">
                     <OnboardingPage
-                        backgroundColor="#07689f"
-                        iconName="plane"
-                        iconColor={Colors.light.black}
-                        title="Take off with daily puzzles"
-                    />
+                        prevButtonCallback={() => { handlePageChange(0) }}
+                        nextButtonCallback={() => { handlePageChange(2) }}
+                    >
+                        <>
+                            <Logo />
+                            <Text style={Styles.title}>Onboarding 2</Text>
+                        </>
+                    </OnboardingPage>
+                </View>
+                <View key="3">
+                    <OnboardingPage
+                        buttonText="TAKE OFF!"
+                        prevButtonCallback={() => { handlePageChange(1) }}
+                        nextButtonCallback={() => { navigation.navigate("app") }}
+                    >
+                        <>
+                            <Logo />
+                            <Text style={Styles.title}>Onboarding 3</Text>
+                        </>
+                    </OnboardingPage>
                 </View>
             </ViewPager >
         </View >
