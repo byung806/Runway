@@ -4,6 +4,7 @@ import { View, Text, SafeAreaView } from "react-native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Colors, Styles } from "@/styles";
 import CustomTextInput from "@/components/CustomTextInput";
+import Header from "@/components/start/BackHeader";
 
 
 export default function LoginScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
@@ -11,15 +12,20 @@ export default function LoginScreen({ navigation }: { navigation: NativeStackNav
     const [password, setPassword] = useState('');
 
     return (
-        <View style={Styles.flex}>
-            <SafeAreaView style={{...Styles.centeredContainer, ...Styles.flex,}}>
-                <View style={{flex: 2, ...Styles.centeredContainer}}>
+        <View style={{ ...Styles.flex, backgroundColor: Colors.light.background }}>
+            <SafeAreaView style={{...Styles.centeredContainer, ...Styles.flex }}>
+                <Header
+                    backgroundColor={Colors.light.background}
+                    prevButtonCallback={() => navigation.navigate('start')}
+                />
+
+                <View style={{flex: 3, ...Styles.centeredContainer}}>
                     <Logo />
                     <Text style={Styles.title}>Welcome Back!</Text>
                     <Text style={Styles.subtitle}>Log in to continue your flight.</Text>
                 </View>
 
-                <View style={{flex: 1, width: '90%'}}>
+                <View style={{flex: 2, width: '90%'}}>
                     <CustomTextInput
                         placeholder={'Username'}
                         onChangeText={setUsername}

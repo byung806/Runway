@@ -1,18 +1,14 @@
-import { Footer, Logo, MainButton } from "@/components";
+import { Logo, MainButton } from "@/components";
 import React from "react";
-import { View, Text, useWindowDimensions } from "react-native";
+import { View, Text } from "react-native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Colors, Debug, Styles } from "@/styles";
+import { Colors, Styles } from "@/styles";
 import { SafeAreaView } from "react-native";
 
 
 export default function StartScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
-    const windowWidth = useWindowDimensions().width;
-    const HEIGHT = windowWidth * 0.21;
-    const FOOTER_PADDING = windowWidth * 0.05;
-
     return (
-        <View style={{ ...Styles.flex, backgroundColor: Colors.light.white }}>
+        <View style={{ ...Styles.flex, backgroundColor: Colors.light.background }}>
             <SafeAreaView style={{
                 ...Styles.centeredContainer,
                 ...Styles.flex
