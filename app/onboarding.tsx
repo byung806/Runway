@@ -1,5 +1,5 @@
 import { Logo, OnboardingPage } from "@/components";
-import { Colors, Styles } from "@/styles";
+import { Styles } from "@/styles";
 import { View, Image, Text } from "react-native";
 import ViewPager from "react-native-pager-view"
 import React, { useRef } from 'react';
@@ -41,6 +41,7 @@ export default function OnboardingScreen({ navigation }: { navigation: NativeSta
             <ViewPager style={{ flex: 1 }} ref={pagerRef}>
                 <View key="1">
                     <OnboardingPage
+                        prevButtonCallback={() => { navigation.navigate('start') }}
                         nextButtonCallback={() => { handlePageChange(1) }}
                     >
                         <>

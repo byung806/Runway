@@ -1,5 +1,4 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import OnboardingScreen from './onboarding';
 import { usePushNotifications } from '@/utils/usePushNotifications';
 import ScreenLayout from './(screens)/layout';
@@ -37,8 +36,8 @@ export default function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                {(!loggedIn && firstTime) && <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />}
-                {(!loggedIn && firstTime) && <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />}
+                {!loggedIn && <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />}
+                {!loggedIn && <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />}
                 {!loggedIn && <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />}
                 <Stack.Screen name="app" component={ScreenLayout} options={{ headerShown: false }} />
             </Stack.Navigator>
