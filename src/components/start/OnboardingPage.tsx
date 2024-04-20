@@ -1,7 +1,7 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { Colors, Styles } from "@/styles";
 import Footer from "./Footer";
-import Header from "./Header";
+import Header from "./BackHeader";
 import { SafeAreaView } from "react-native";
 
 interface OnboardingPageProps {
@@ -12,7 +12,7 @@ interface OnboardingPageProps {
     children: JSX.Element;
 }
 
-export default function OnboardingPage({ backgroundColor=Colors.light.white, buttonText='NEXT', prevButtonCallback, nextButtonCallback, children }: OnboardingPageProps) {
+export default function OnboardingPage({ backgroundColor=Colors.light.background, buttonText='NEXT', prevButtonCallback, nextButtonCallback, children }: OnboardingPageProps) {
     return (
         <View
             style={{
@@ -22,7 +22,7 @@ export default function OnboardingPage({ backgroundColor=Colors.light.white, but
         >
             <SafeAreaView style={Styles.flex}>
                 <Header
-                    backgroundColor={Colors.light.white}
+                    backgroundColor={backgroundColor}
                     prevButtonCallback={prevButtonCallback}
                 />
                 <View
@@ -35,7 +35,7 @@ export default function OnboardingPage({ backgroundColor=Colors.light.white, but
                     {children}
                 </View>
                 <Footer
-                    backgroundColor={Colors.light.white}
+                    backgroundColor={backgroundColor}
                     buttonLabel={buttonText}
                     buttonCallback={nextButtonCallback}
                 />

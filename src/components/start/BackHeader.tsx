@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, View, useWindowDimensions } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { FontAwesome as Icon } from '@expo/vector-icons';
 import { Colors, Styles } from '@/styles';
 
@@ -10,24 +10,19 @@ interface HeaderProps {
 }
 
 export default function Header({ backgroundColor, prevButtonCallback }: HeaderProps) {
-    const windowWidth = useWindowDimensions().width;
-    const HEIGHT = windowWidth * 0.21;
-    const PADDING = windowWidth * 0.08;
-
     return (
         <View
             style={{
                 ...Styles.centeredContainer,
-                height: HEIGHT,
+                flexDirection: 'row',
                 backgroundColor,
-                paddingHorizontal: PADDING,
-                paddingBottom: 12,
+                paddingHorizontal: 24,
+                paddingVertical: 20
             }}
         >
             <View
                 style={{
                     width: '100%',
-                    flexDirection: 'column',
                 }}
             >
                 {prevButtonCallback && (
