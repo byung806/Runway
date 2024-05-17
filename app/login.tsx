@@ -1,10 +1,10 @@
-import { Logo, MainButton } from "@/components";
+import { Logo, MainButton } from "@/components/screens";
 import { useState } from "react";
 import { View, Text, SafeAreaView } from "react-native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Colors, Styles } from "@/styles";
-import CustomTextInput from "@/components/CustomTextInput";
-import Header from "@/components/start/BackHeader";
+import CustomTextInput from "@/components/screens/CustomTextInput";
+import Header from "@/components/screens/start/BackHeader";
 
 
 export default function LoginScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {

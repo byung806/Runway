@@ -1,4 +1,4 @@
-import { Logo, OnboardingPage } from "@/components";
+import { Logo, OnboardingPage } from "@/components/screens";
 import { Styles } from "@/styles";
 import { View, Image, Text } from "react-native";
 import ViewPager from "react-native-pager-view"

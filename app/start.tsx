@@ -1,4 +1,4 @@
-import { Logo, MainButton } from "@/components";
+import { Logo, MainButton } from "@/components/screens";
 import React from "react";
 import { View, Text } from "react-native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';

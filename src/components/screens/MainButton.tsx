@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { View, Text, Pressable, Animated } from 'react-native';
 
-import { Colors, Styles } from '../styles';
+import { Colors, Styles } from '../../styles';
 
 // export const BUTTON_HEIGHT = 45;
 export const ANIM_CONFIG = { duration: 30, useNativeDriver: true };

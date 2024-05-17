@@ -1,6 +1,6 @@
 import { TextInput } from 'react-native';
 
-import { Colors } from '../styles';
+import { Colors } from '../../styles';
 
 export const INPUT_HEIGHT = 45;
 
