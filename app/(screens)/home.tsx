@@ -1,32 +1,38 @@
 import { MainButton } from "@/components/screens";
-import React, { Suspense } from "react";
-import { View, Text } from "react-native";
+import React, { Suspense, useRef, useState } from "react";
+import { View } from "react-native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Debug, Styles } from "@/styles";
 
 import Plane from "@/components/game/Plane";
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, MeshProps, useFrame } from "@react-three/fiber/native";
 import useControls from "r3f-native-orbitcontrols";
+import Particles from "@/components/game/Particles";
+import { Mesh, PerspectiveCamera } from "three";
 
 
 export default function HomeScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
-    const [OrbitControls, setOrbitControls] = useControls();
+    const [OrbitControls, events] = useControls();
 
     return (
-        <Canvas
-        // orthographic
-        // camera={{ position: [1, 1, 1], scale: [0.01, 0.01, 0.01] }}
-        camera={{ position: [1.5, 1.5, 1.5] }}
-        >
-            <ambientLight intensity={0.5} />
-            <directionalLight position={[-1, 2, 2]} intensity={4} />
-            <pointLight position={[1, 0, 0]} intensity={10} />
-            <Suspense fallback={null}>
-                <Plane />
-                {/* <TwistedBox /> */}
-            </Suspense>
-            <OrbitControls />
-        </Canvas>
+        <View style={{ flex: 1 }} {...events}>
+            <Canvas
+                // orthographic
+                // camera={{ position: [1, 1, 1], scale: [0.01, 0.01, 0.01] }}
+                camera={{position: [0, 0, 2]}}
+            >
+                <OrbitControls
+                    minZoom={5}
+                    maxZoom={10}
+                    enablePan={false}
+                />
+                <ambientLight />
+                <Suspense fallback={null}>
+                    <Plane />
+                    <Particles />
+                </Suspense>
+            </Canvas>
+        </View>
     );
 };
