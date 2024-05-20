@@ -1,10 +1,10 @@
 import { Logo, OnboardingPage } from "@/components/screens";
-import { Styles } from "@/styles";
+import { Colors, Styles } from "@/styles";
 import { View, Image, Text } from "react-native";
 import ViewPager from "react-native-pager-view"
 import React, { useRef } from 'react';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
+import { Ionicons, MaterialCommunityIcons, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 
 
 interface Slide {
@@ -31,6 +31,7 @@ const slides: Slide[] = [
 
 export default function OnboardingScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
     const pagerRef = useRef<ViewPager>(null);
+    const size = 144;
 
     const handlePageChange = (pageNumber: number) => {
         pagerRef.current?.setPage(pageNumber);
@@ -45,8 +46,8 @@ export default function OnboardingScreen({ navigation }: { navigation: NativeSta
                         nextButtonCallback={() => { handlePageChange(1) }}
                     >
                         <>
-                            <Logo />
-                            <Text style={Styles.title}>Take off with daily puzzles</Text>
+                            <MaterialIcons name="science" size={size} color={Colors.light.accent} />
+                            <Text style={Styles.title}>Explore Different Science Topics</Text>
                         </>
                     </OnboardingPage>
                 </View>
@@ -56,20 +57,31 @@ export default function OnboardingScreen({ navigation }: { navigation: NativeSta
                         nextButtonCallback={() => { handlePageChange(2) }}
                     >
                         <>
-                            <Logo />
-                            <Text style={Styles.title}>Onboarding 2</Text>
+                            <Ionicons name="game-controller" size={size} color={Colors.light.accent} />
+                            <Text style={Styles.title}>Play Minigames</Text>
                         </>
                     </OnboardingPage>
                 </View>
                 <View key="3">
                     <OnboardingPage
-                        buttonText="TAKE OFF!"
                         prevButtonCallback={() => { handlePageChange(1) }}
+                        nextButtonCallback={() => { handlePageChange(3) }}
+                    >
+                        <>
+                            <MaterialCommunityIcons name="fire" size={size} color={Colors.light.accent} />
+                            <Text style={Styles.title}>Rack Up Points and Streaks</Text>
+                        </>
+                    </OnboardingPage>
+                </View>
+                <View key="4">
+                    <OnboardingPage
+                        buttonText="TAKE OFF!"
+                        prevButtonCallback={() => { handlePageChange(2) }}
                         nextButtonCallback={() => { navigation.navigate("app") }}
                     >
                         <>
-                            <Logo />
-                            <Text style={Styles.title}>Onboarding 3</Text>
+                            <FontAwesome5 name="user-friends" size={size} color={Colors.light.accent} />
+                            <Text style={Styles.title}>Compete with Friends</Text>
                         </>
                     </OnboardingPage>
                 </View>
