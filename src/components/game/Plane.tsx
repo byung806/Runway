@@ -12,7 +12,11 @@ export default function Plane({ level = 0, ...props }: { level?: number } & Mesh
     const url = levelToImage[level];
     const texture = useMemo(() => new THREE.TextureLoader().load(url), [url]);
 
-    // useFrame((_, delta) => (mesh.current.rotation.x += delta));
+    useFrame((_, delta) => {
+        if (mesh.current) {
+            mesh.current.rotation.y += delta;
+        }
+    });
 
     return (
         <mesh {...props} ref={mesh}>
