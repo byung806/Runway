@@ -8,18 +8,18 @@ const levelToImage: Record<number, string> = {
 };
 
 export default function Plane({ level = 0, ...props }: { level?: number } & MeshProps) {
-    const mesh = useRef<Mesh>(null);
+    // const mesh = useRef<Mesh>(null);
     const url = levelToImage[level];
     const texture = useMemo(() => new THREE.TextureLoader().load(url), [url]);
 
-    useFrame((_, delta) => {
-        if (mesh.current) {
-            mesh.current.rotation.y += delta;
-        }
-    });
+    // useFrame((_, delta) => {
+    //     if (mesh.current) {
+    //         mesh.current.rotation.y += delta;
+    //     }
+    // });
 
     return (
-        <mesh {...props} ref={mesh}>
+        <mesh {...props}>
             <planeGeometry />
             <meshStandardMaterial transparent map={texture} side={THREE.DoubleSide} />
         </mesh>
