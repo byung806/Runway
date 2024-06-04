@@ -1,47 +1,83 @@
 import { MainButton } from "@/components/screens";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
 
+const tableData = [
+    {"name": "jacob", "score": 100000, "place": 1},
+    {"name": "bryan", "score": 99999, "place": 2},
+    {"name": "random", "score": 10, "place": 3},
+    {"name": "random2", "score": 9, "place": 4},
+    {"name": "random3", "score": 8, "place": 5}
+];
+
+const renderItem=() => (
+    <View style={styles.row}>
+        <Text style={styles.cell}>(item.name)</Text>
+        <Text style={styles.cell}>(item.score)</Text>
+        <Text style={styles.cell}>(item.place)</Text>
+    </View>
+);
 export default function LeaderboardScreen() {
     return (
-        <View style={styles.main}>
-            <Text style={styles.title}>Leaderboard</Text>
-            <Text style={styles.subtitle}>Screen</Text>
-            <MainButton
-                disabled={false}  // {selection === ''}
-                label={'GET STARTED'}
-                callback={() => { }}
-                filled={true}
-            />
-            <MainButton
-                disabled={false}  // {selection === ''}
-                label={'I HAVE AN ACCOUNT'}
-                callback={() => { }}
-                filled={false}
-            />
+        <View style = {styles.container}>
+            <View style={styles.headerTopBar}>
+                <Text style={styles.headerTopBarText}>Leaderboard</Text>
+            </View>
+            <View style={styles.header}>
+                <Text style={styles.heading}>Name</Text>
+                <Text style={styles.heading}>Score</Text>
+                <Text style={styles.heading}>Place</Text>
+            </View>
+            <FlatList
+                data={tableData}
+                keyExtractor={(item) => (item.name.toString())}
+                renderItem={renderItem}
+                />
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: "center",
-        padding: 24
+        backgroundColor: '#fff',
+        paddingVertical: 30,
+        paddingHorizontal: 30
     },
-    main: {
+    headerTopBar: {
+        backgroundColor: 'green',
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        borderRadius: 5,
+        elevation: 2
+    },
+    headerTopBarText: {
+        fontSize: 16,
+        color: '#fff'
+    },
+    header: {
+        padding: 10,
+        justifyContent: 'space-between',
+        flexDirection: 'row'
+    },
+    heading: {
         flex: 1,
-        justifyContent: "center",
-        // maxWidth: 960,
-        marginHorizontal: "auto",
-        // marginTop: 24,
+        fontSize: 16
     },
-    title: {
-        fontSize: 64,
-        fontWeight: "bold",
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderRadius: 3,
+        borderColor: 'green',
+        marginVertical: 0,
+        marginHorizontal: 2,
+        elevation: 1,
+        padding: 10,
+        backgroundColor: '#fff'
     },
-    subtitle: {
-        fontSize: 36,
-        color: "#38434D",
+    cell: {
+        fontSize: 15,
+        textAlign: 'left',
+        flex: 1
     }
 });
