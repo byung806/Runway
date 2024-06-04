@@ -2,10 +2,16 @@ import type { StyleProp, TextStyle } from 'react-native';
 
 import Colors from './Colors';
 
+
 const styles: { [key: string]: object & StyleProp<TextStyle> } = {
-    centeredContainer: {
+    centeringContainer: {
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    titleBox: {
+        padding: 10,
+        borderRadius: 5,
+        elevation: 2,
     },
     title: {
         fontSize: 40,

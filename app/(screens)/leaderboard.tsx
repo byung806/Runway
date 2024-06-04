@@ -1,27 +1,48 @@
 import { MainButton } from "@/components/screens";
+import { Styles } from "@/styles";
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
+import { View, Text, StyleSheet, ScrollView, FlatList, ListRenderItemInfo } from "react-native";
 
 const tableData = [
-    {"name": "jacob", "score": 100000, "place": 1},
-    {"name": "bryan", "score": 99999, "place": 2},
-    {"name": "random", "score": 10, "place": 3},
-    {"name": "random2", "score": 9, "place": 4},
-    {"name": "random3", "score": 8, "place": 5}
+    { "name": "bryan", "score": 99999, "place": 2 },
+    { "name": "jacob", "score": 100000, "place": 1 },
+    { "name": "random", "score": 10, "place": 3 },
+    { "name": "random2", "score": 9, "place": 4 },
+    { "name": "random3", "score": 8, "place": 5 },
+    { "name": "dummy1", "score": 7, "place": 6 },
+    { "name": "dummy2", "score": 6, "place": 7 },
+    { "name": "dummy3", "score": 5, "place": 8 },
+    { "name": "dummy4", "score": 4, "place": 9 },
+    { "name": "dummy5", "score": 3, "place": 10 },
+    { "name": "dummy6", "score": 2, "place": 11 },
+    { "name": "dummy7", "score": 1, "place": 12 },
+    { "name": "dummy8", "score": 0, "place": 13 },
+    { "name": "dummy9", "score": -1, "place": 14 },
+    { "name": "dummy10", "score": -2, "place": 15 },
+    { "name": "dummy11", "score": -3, "place": 16 },
+    { "name": "dummy12", "score": -4, "place": 17 },
+    { "name": "dummy13", "score": -5, "place": 18 },
+    { "name": "dummy14", "score": -6, "place": 19 },
+    { "name": "dummy15", "score": -7, "place": 20 },
+    { "name": "dummy16", "score": -8, "place": 21 },
+    { "name": "dummy17", "score": -9, "place": 22 },
+    { "name": "dummy18", "score": -10, "place": 23 },
+    { "name": "dummy19", "score": -11, "place": 24 },
+    { "name": "dummy20", "score": -12, "place": 25 },
 ];
 
-const renderItem=() => (
+const renderItem = ({ item }: ListRenderItemInfo<{ name: string; score: number; place: number; }>) => (
     <View style={styles.row}>
-        <Text style={styles.cell}>(item.name)</Text>
-        <Text style={styles.cell}>(item.score)</Text>
-        <Text style={styles.cell}>(item.place)</Text>
+        <Text style={styles.cell}>{item.name}</Text>
+        <Text style={styles.cell}>{item.score}</Text>
+        <Text style={styles.cell}>{item.place}</Text>
     </View>
 );
 export default function LeaderboardScreen() {
     return (
-        <View style = {styles.container}>
-            <View style={styles.headerTopBar}>
-                <Text style={styles.headerTopBarText}>Leaderboard</Text>
+        <View style={{ ...Styles.flex }}>
+            <View style={{...Styles.titleBox, ...Styles.centeringContainer}}>
+                <Text style={Styles.title}>Leaderboard</Text>
             </View>
             <View style={styles.header}>
                 <Text style={styles.heading}>Name</Text>
@@ -29,10 +50,10 @@ export default function LeaderboardScreen() {
                 <Text style={styles.heading}>Place</Text>
             </View>
             <FlatList
-                data={tableData}
+                data={tableData.sort((a, b) => b.score - a.score)}
                 keyExtractor={(item) => (item.name.toString())}
-                renderItem={renderItem}
-                />
+                renderItem={(item) => renderItem(item)}
+            />
         </View>
     );
 }

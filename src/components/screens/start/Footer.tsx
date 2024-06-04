@@ -18,7 +18,7 @@ export default function Footer({ backgroundColor, buttonLabel, buttonCallback }:
     return (
         <View
             style={{
-                ...Styles.centeredContainer,
+                ...Styles.centeringContainer,
                 height: HEIGHT,
                 backgroundColor,
                 paddingHorizontal: FOOTER_PADDING,
