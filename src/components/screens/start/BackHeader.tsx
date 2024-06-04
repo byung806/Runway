@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 import { FontAwesome as Icon } from '@expo/vector-icons';
 import { Colors, Styles } from '@/styles';
 import Header from '../Header';
+import { useTheme } from "@react-navigation/native";
 
 
 interface BackHeaderProps {
@@ -11,6 +12,8 @@ interface BackHeaderProps {
 }
 
 export default function BackHeader({ backgroundColor, prevButtonCallback }: BackHeaderProps) {
+    const { colors } = useTheme();
+
     return (
         <Header>
             <View
@@ -20,7 +23,7 @@ export default function BackHeader({ backgroundColor, prevButtonCallback }: Back
             >
                 {prevButtonCallback && (
                     <Pressable onPressIn={prevButtonCallback}>
-                        <Icon name="arrow-left" size={30} color={Colors.light.accent} />
+                        <Icon name="arrow-left" size={30} color={colors.primary} />
                     </Pressable>
                 )}
             </View>

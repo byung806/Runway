@@ -8,11 +8,11 @@ interface HeaderProps {
     children: JSX.Element;
 }
 
-export default function Header({ backgroundColor=Colors.light.background, children }: HeaderProps) {
+export default function Header({ backgroundColor, children }: HeaderProps) {
     return (
         <View
             style={{
-                ...Styles.centeredContainer,
+                ...Styles.centeringContainer,
                 flexDirection: 'row',
                 backgroundColor,
                 paddingHorizontal: 24,

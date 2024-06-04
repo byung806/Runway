@@ -1,25 +1,28 @@
 import { Logo, MainButton } from "@/components/screens";
 import { useState } from "react";
-import { View, Text, SafeAreaView } from "react-native";
+import { View, Text } from "react-native";
+import { useTheme } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Colors, Styles } from "@/styles";
+import { Styles } from "@/styles";
 import CustomTextInput from "@/components/screens/CustomTextInput";
 import Header from "@/components/screens/start/BackHeader";
-
 
 export default function LoginScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    const { colors } = useTheme();
+
     return (
-        <View style={{ ...Styles.flex, backgroundColor: Colors.light.background }}>
-            <SafeAreaView style={{...Styles.centeredContainer, ...Styles.flex }}>
+        <View style={{ ...Styles.flex, backgroundColor: colors.background }}>
+            <SafeAreaView style={{...Styles.centeringContainer, ...Styles.flex }}>
                 <Header
-                    backgroundColor={Colors.light.background}
+                    backgroundColor={colors.background}
                     prevButtonCallback={() => navigation.navigate('start')}
                 />
 
-                <View style={{flex: 3, ...Styles.centeredContainer}}>
+                <View style={{flex: 3, ...Styles.centeringContainer}}>
                     <Logo />
                     <Text style={Styles.title}>Welcome Back!</Text>
                     <Text style={Styles.subtitle}>Log in to continue your flight.</Text>

@@ -6,12 +6,14 @@ import MainScene from "@/components/game/scenes/MainScene";
 import { Colors, Styles } from "@/styles";
 import Header from "@/components/screens/Header";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { useTheme } from "@react-navigation/native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 export default function HomeScreen({ navigation, props }: { navigation: NativeStackNavigationProp<any, any>, props?: any }) {
     const [streak, setStreak] = useState(0);
+
+    const { colors } = useTheme();
 
     useEffect(() => {
         async function setData() {
@@ -38,9 +40,9 @@ export default function HomeScreen({ navigation, props }: { navigation: NativeSt
                     }}
                 >
                     <>
-                        <MaterialCommunityIcons name="fire" size={30} color={Colors.light.accent} />
+                        <MaterialCommunityIcons name="fire" size={30} color={colors.primary} />
                         <Text style={{
-                            color: Colors.light.accent,
+                            color: colors.primary,
                             fontSize: 20,
                             fontWeight: 'bold',
                         }}>{streak}</Text>

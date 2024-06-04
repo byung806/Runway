@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { View, Text, Pressable, Animated } from 'react-native';
-
+import { useTheme } from "@react-navigation/native";
 import { Colors, Styles } from '../../styles';
 
 // export const BUTTON_HEIGHT = 45;
@@ -14,6 +14,8 @@ interface MainButtonProps {
 }
 
 export default function MainButton({ label, callback, disabled = false, filled = true }: MainButtonProps) {
+    const { colors } = useTheme();
+
     const translateY = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
@@ -41,7 +43,7 @@ export default function MainButton({ label, callback, disabled = false, filled =
             <View style={{
                 borderRadius: 14,
                 backgroundColor: Colors.light.gray,
-                ...Styles.centeredContainer,
+                ...Styles.centeringContainer,
                 padding: 10,
             }}>
                 <Text style={{
@@ -60,7 +62,7 @@ export default function MainButton({ label, callback, disabled = false, filled =
                     borderColor: Colors.light.gray,
                     borderWidth: filled ? 0 : 2,
                     padding: 10,
-                    ...Styles.centeredContainer,
+                    ...Styles.centeringContainer,
                     transform: [{ translateY }]
                 }}>
                     <Text style={{

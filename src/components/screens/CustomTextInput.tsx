@@ -1,5 +1,5 @@
 import { TextInput } from 'react-native';
-
+import { useTheme } from "@react-navigation/native";
 import { Colors } from '../../styles';
 
 export const INPUT_HEIGHT = 45;
@@ -11,6 +11,8 @@ interface CustomTextInputProps {
 }
 
 export default function CustomTextInput({ placeholder, onChangeText, password=false }: CustomTextInputProps) {
+    const { colors } = useTheme();
+
     return (
         <TextInput
             placeholder={placeholder}
@@ -19,10 +21,10 @@ export default function CustomTextInput({ placeholder, onChangeText, password=fa
             style={{
                 height: INPUT_HEIGHT,
                 borderRadius: 14,
-                backgroundColor: Colors.light.white,
+                backgroundColor: colors.background,
                 padding: 10,
                 borderWidth: 2,
-                borderColor: Colors.light.gray,
+                borderColor: colors.border,
             }}
         />
     );

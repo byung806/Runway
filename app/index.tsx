@@ -8,6 +8,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { registerRootComponent } from 'expo';
 import StartScreen from './start';
 import LoginScreen from './login';
+import { useColorScheme } from 'react-native';
+import { RunwayDarkTheme, RunwayLightTheme } from '@/styles/Theme';
 
 
 const Stack = createNativeStackNavigator();
@@ -33,8 +35,11 @@ export default function App() {
         setData();
     }, []);
 
+    const scheme = useColorScheme();
+    const theme = scheme === 'dark' ? RunwayDarkTheme : RunwayLightTheme;
+
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={theme}>
             <Stack.Navigator>
                 {!loggedIn && <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />}
                 {!loggedIn && <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />}

@@ -3,6 +3,7 @@ import { Colors, Styles } from "@/styles";
 import { View, Image, Text } from "react-native";
 import ViewPager from "react-native-pager-view"
 import React, { useRef } from 'react';
+import { useTheme } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Ionicons, MaterialCommunityIcons, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 
@@ -32,6 +33,7 @@ const slides: Slide[] = [
 export default function OnboardingScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
     const pagerRef = useRef<ViewPager>(null);
     const size = 144;
+    const { colors } = useTheme(); // Add this line to use the theme
 
     const handlePageChange = (pageNumber: number) => {
         pagerRef.current?.setPage(pageNumber);
@@ -46,7 +48,7 @@ export default function OnboardingScreen({ navigation }: { navigation: NativeSta
                         nextButtonCallback={() => { handlePageChange(1) }}
                     >
                         <>
-                            <MaterialIcons name="science" size={size} color={Colors.light.accent} />
+                            <MaterialIcons name="science" size={size} color={colors.primary} />
                             <Text style={Styles.title}>Explore Different Science Topics</Text>
                         </>
                     </OnboardingPage>
@@ -57,7 +59,7 @@ export default function OnboardingScreen({ navigation }: { navigation: NativeSta
                         nextButtonCallback={() => { handlePageChange(2) }}
                     >
                         <>
-                            <Ionicons name="game-controller" size={size} color={Colors.light.accent} />
+                            <Ionicons name="game-controller" size={size} color={colors.primary} />
                             <Text style={Styles.title}>Play Minigames</Text>
                         </>
                     </OnboardingPage>
@@ -68,7 +70,7 @@ export default function OnboardingScreen({ navigation }: { navigation: NativeSta
                         nextButtonCallback={() => { handlePageChange(3) }}
                     >
                         <>
-                            <MaterialCommunityIcons name="fire" size={size} color={Colors.light.accent} />
+                            <MaterialCommunityIcons name="fire" size={size} color={colors.primary} />
                             <Text style={Styles.title}>Rack Up Points and Streaks</Text>
                         </>
                     </OnboardingPage>
@@ -80,7 +82,7 @@ export default function OnboardingScreen({ navigation }: { navigation: NativeSta
                         nextButtonCallback={() => { navigation.navigate("app") }}
                     >
                         <>
-                            <FontAwesome5 name="user-friends" size={size} color={Colors.light.accent} />
+                            <FontAwesome5 name="user-friends" size={size} color={colors.primary} />
                             <Text style={Styles.title}>Compete with Friends</Text>
                         </>
                     </OnboardingPage>

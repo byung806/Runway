@@ -27,8 +27,7 @@ export default function Loading({ id = 0, size = 144 }: { id?: number, size?: nu
     })
 
     return (
-        // <Icon name="paper-plane" size={size} color={Colors.light.accent} />
-        <View style={{...Styles.flex, ...Styles.centeredContainer}}>
+        <View style={{...Styles.flex, ...Styles.centeringContainer}}>
             <Animated.View
                 style={{
                     transform: [{ rotate: spin }]
