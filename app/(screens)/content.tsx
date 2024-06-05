@@ -38,6 +38,12 @@ export default function ContentScreen({ navigation, props }: { navigation: Nativ
                         theme={{
                             backgroundColor: colors.background,
                             calendarBackground: colors.background,
+                            selectedDayBackgroundColor: colors.primary,
+                            selectedDayTextColor: colors.text,
+                            todayTextColor: colors.primary,
+                            dayTextColor: colors.text,
+                            dotColor: colors.primary,
+                            indicatorColor: colors.primary,
                         }}
                     />
                     <View

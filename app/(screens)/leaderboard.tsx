@@ -1,7 +1,7 @@
-import { MainButton } from "@/components/screens";
 import { Styles } from "@/styles";
+import { useTheme } from "@react-navigation/native";
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, FlatList, ListRenderItemInfo } from "react-native";
+import { FlatList, ListRenderItemInfo, StyleSheet, Text, View } from "react-native";
 
 const tableData = [
     { "name": "bryan", "score": 99999, "place": 2 },
@@ -31,51 +31,37 @@ const tableData = [
     { "name": "dummy20", "score": -12, "place": 25 },
 ];
 
-const renderItem = ({ item }: ListRenderItemInfo<{ name: string; score: number; place: number; }>) => (
+const renderItem = ({ item, colors }: { item: any, colors: any }) => (
     <View style={styles.row}>
-        <Text style={styles.cell}>{item.name}</Text>
-        <Text style={styles.cell}>{item.score}</Text>
-        <Text style={styles.cell}>{item.place}</Text>
+        <Text style={{ ...styles.cell, color: colors.text }}>{item.name}</Text>
+        <Text style={{ ...styles.cell, color: colors.text }}>{item.score}</Text>
+        <Text style={{ ...styles.cell, color: colors.text }}>{item.place}</Text>
     </View>
 );
+
 export default function LeaderboardScreen() {
+    const { colors } = useTheme();
+
     return (
         <View style={{ ...Styles.flex }}>
-            <View style={{...Styles.titleBox, ...Styles.centeringContainer}}>
-                <Text style={Styles.title}>Leaderboard</Text>
+            <View style={{ ...Styles.titleBox, ...Styles.centeringContainer }}>
+                <Text style={{ ...Styles.title, color: colors.text }}>Leaderboard</Text>
             </View>
             <View style={styles.header}>
-                <Text style={styles.heading}>Name</Text>
-                <Text style={styles.heading}>Score</Text>
-                <Text style={styles.heading}>Place</Text>
+                <Text style={{ ...styles.heading, color: colors.text }}>Name</Text>
+                <Text style={{ ...styles.heading, color: colors.text }}>Score</Text>
+                <Text style={{ ...styles.heading, color: colors.text }}>Place</Text>
             </View>
             <FlatList
                 data={tableData.sort((a, b) => b.score - a.score)}
                 keyExtractor={(item) => (item.name.toString())}
-                renderItem={(item) => renderItem(item)}
+                renderItem={({ item }) => renderItem({ item, colors })}
             />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        paddingVertical: 30,
-        paddingHorizontal: 30
-    },
-    headerTopBar: {
-        backgroundColor: 'green',
-        paddingHorizontal: 12,
-        paddingVertical: 10,
-        borderRadius: 5,
-        elevation: 2
-    },
-    headerTopBarText: {
-        fontSize: 16,
-        color: '#fff'
-    },
     header: {
         padding: 10,
         justifyContent: 'space-between',
@@ -94,7 +80,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 2,
         elevation: 1,
         padding: 10,
-        backgroundColor: '#fff'
     },
     cell: {
         fontSize: 15,
