@@ -10,11 +10,12 @@ import StartScreen from './start';
 import LoginScreen from './login';
 import { useColorScheme } from 'react-native';
 import { RunwayDarkTheme, RunwayLightTheme } from '@/styles/Theme';
+import { StatusBar } from 'expo-status-bar';
 
 
 const Stack = createNativeStackNavigator();
 
-const loggedIn = false;
+const loggedIn = true;
 
 export default function App() {
     const { expoPushToken, notification } = usePushNotifications()
@@ -39,14 +40,17 @@ export default function App() {
     const theme = scheme === 'dark' ? RunwayDarkTheme : RunwayLightTheme;
 
     return (
-        <NavigationContainer theme={theme}>
-            <Stack.Navigator>
-                {!loggedIn && <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />}
-                {!loggedIn && <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />}
-                {!loggedIn && <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />}
-                <Stack.Screen name="app" component={ScreenLayout} options={{ headerShown: false }} />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <>
+            <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+            <NavigationContainer theme={theme}>
+                <Stack.Navigator>
+                    {!loggedIn && <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />}
+                    {!loggedIn && <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />}
+                    {!loggedIn && <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />}
+                    <Stack.Screen name="app" component={ScreenLayout} options={{ headerShown: false }} />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </>
     );
 }
 
