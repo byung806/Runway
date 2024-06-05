@@ -1,17 +1,54 @@
-import { Styles } from "@/styles";
+import ContentCard from "@/components/screens/ContentCard";
+import { getTodayDate } from "@/utils/date";
+import { useTheme } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useEffect, useState } from "react";
-import { View, Text, Button, Image, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { Animated, View } from "react-native";
+import { CalendarProvider, WeekCalendar } from "react-native-calendars";
+
 
 export default function ContentScreen({ navigation, props }: { navigation: NativeStackNavigationProp<any, any>, props?: any }) {
-    const[isVisible, setIsVisible] = useState(false);
+    const { colors } = useTheme();
+
+    const [selected, setSelected] = useState('');
+
+    console.log(new Date().toISOString());
+
+    function handleDayPress(date: string) {
+        console.log('selected day', date);
+        setSelected(date);
+    }
 
     return (
-        <ScrollView contentContainerStyle={Styles.centeringContainer}>
-            <ScrollView style={{flex: 1, backgroundColor: "green", padding: 60}}>
-                <Button title="Show Content" onPress={() => setIsVisible(!isVisible)}/>
-            </ScrollView>
-            {isVisible && <Text>Blah Blah Blah</Text>}
-        </ScrollView>
+        <>
+            <CalendarProvider
+                date={getTodayDate()}
+                onDateChanged={handleDayPress}
+            >
+                <Animated.View style={{ flex: 1 }}>
+                    <WeekCalendar
+                        disableAllTouchEventsForDisabledDays
+                        animateScroll={false}
+                        allowSelectionOutOfRange={true}
+                        allowShadow={true}
+
+                        pastScrollRange={1}
+                        futureScrollRange={1}
+
+                        theme={{
+                            backgroundColor: colors.background,
+                            calendarBackground: colors.background,
+                        }}
+                    />
+                    <View
+                        style={{
+                            flex: 1, backgroundColor: colors.primary,
+                        }}
+                    >
+                        <ContentCard date={selected} />
+                    </View>
+                </Animated.View>
+            </CalendarProvider>
+        </>
     );
 }
