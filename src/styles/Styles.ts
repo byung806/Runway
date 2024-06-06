@@ -1,7 +1,5 @@
 import type { StyleProp, TextStyle } from 'react-native';
 
-import Colors from './Colors';
-
 
 const styles: { [key: string]: object & StyleProp<TextStyle> } = {
     centeringContainer: {
@@ -16,17 +14,20 @@ const styles: { [key: string]: object & StyleProp<TextStyle> } = {
     title: {
         fontSize: 40,
         fontWeight: 'bold',
-        color: Colors.light.black,
     },
     subtitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: Colors.light.black,
+    },
+    bodyText: {
+        fontSize: 15,
+    },
+    heavy: {
+        fontWeight: 900,
     },
     btnLabel: {
         fontSize: 15,
         fontWeight: 'bold',
-        color: Colors.light.black,
     },
     flex: {
         flex: 1

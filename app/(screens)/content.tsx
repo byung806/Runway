@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useState } from "react";
 import { Animated, View } from "react-native";
 import { CalendarProvider, WeekCalendar } from "react-native-calendars";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function ContentScreen({ navigation, props }: { navigation: NativeStackNavigationProp<any, any>, props?: any }) {
@@ -20,7 +21,7 @@ export default function ContentScreen({ navigation, props }: { navigation: Nativ
     }
 
     return (
-        <>
+        <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
             <CalendarProvider
                 date={getTodayDate()}
                 onDateChanged={handleDayPress}
@@ -30,7 +31,7 @@ export default function ContentScreen({ navigation, props }: { navigation: Nativ
                         disableAllTouchEventsForDisabledDays
                         animateScroll={false}
                         allowSelectionOutOfRange={true}
-                        allowShadow={true}
+                        allowShadow={false}
 
                         pastScrollRange={1}
                         futureScrollRange={1}
@@ -55,6 +56,6 @@ export default function ContentScreen({ navigation, props }: { navigation: Nativ
                     </View>
                 </Animated.View>
             </CalendarProvider>
-        </>
+        </SafeAreaView>
     );
 }

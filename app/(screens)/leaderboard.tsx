@@ -1,63 +1,80 @@
-import { Styles } from "@/styles";
+import LeaderboardEntry from "@/components/screens/LeaderboardEntry";
+import { Debug, Styles } from "@/styles";
 import { useTheme } from "@react-navigation/native";
 import React from "react";
 import { FlatList, ListRenderItemInfo, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+interface TableItemType {
+    name: string;
+    score: number;
+}
 
 const tableData = [
-    { "name": "bryan", "score": 99999, "place": 2 },
-    { "name": "jacob", "score": 100000, "place": 1 },
-    { "name": "random", "score": 10, "place": 3 },
-    { "name": "random2", "score": 9, "place": 4 },
-    { "name": "random3", "score": 8, "place": 5 },
-    { "name": "dummy1", "score": 7, "place": 6 },
-    { "name": "dummy2", "score": 6, "place": 7 },
-    { "name": "dummy3", "score": 5, "place": 8 },
-    { "name": "dummy4", "score": 4, "place": 9 },
-    { "name": "dummy5", "score": 3, "place": 10 },
-    { "name": "dummy6", "score": 2, "place": 11 },
-    { "name": "dummy7", "score": 1, "place": 12 },
-    { "name": "dummy8", "score": 0, "place": 13 },
-    { "name": "dummy9", "score": -1, "place": 14 },
-    { "name": "dummy10", "score": -2, "place": 15 },
-    { "name": "dummy11", "score": -3, "place": 16 },
-    { "name": "dummy12", "score": -4, "place": 17 },
-    { "name": "dummy13", "score": -5, "place": 18 },
-    { "name": "dummy14", "score": -6, "place": 19 },
-    { "name": "dummy15", "score": -7, "place": 20 },
-    { "name": "dummy16", "score": -8, "place": 21 },
-    { "name": "dummy17", "score": -9, "place": 22 },
-    { "name": "dummy18", "score": -10, "place": 23 },
-    { "name": "dummy19", "score": -11, "place": 24 },
-    { "name": "dummy20", "score": -12, "place": 25 },
+    { "name": "Bryan", "score": 10000 },
+    { "name": "Jacob", "score": 8700 },
+    { "name": "byung", "score": 4100 },
+    { "name": "James", "score": 2400 },
+    { "name": "John", "score": 450 },
+    { "name": "Michael", "score": 400 },
+    { "name": "William", "score": 350 },
+    { "name": "David", "score": 300 },
+    { "name": "Joseph", "score": 250 },
+    { "name": "Daniel", "score": 200 },
+    { "name": "Matthew", "score": 150 },
+    { "name": "Andrew", "score": 100 },
+    { "name": "Christopher", "score": 50 },
 ];
 
-const renderItem = ({ item, colors }: { item: any, colors: any }) => (
-    <View style={styles.row}>
-        <Text style={{ ...styles.cell, color: colors.text }}>{item.name}</Text>
-        <Text style={{ ...styles.cell, color: colors.text }}>{item.score}</Text>
-        <Text style={{ ...styles.cell, color: colors.text }}>{item.place}</Text>
-    </View>
-);
+const renderItem = (item: TableItemType, place: number) => {
+    var color;
+    if (place == 1) {
+        color = "gold";
+    } else if (place == 2) {
+        color = "silver";
+    } else if (place == 3) {
+        color = "#CD7F32";
+    }
+    return (
+        <LeaderboardEntry
+            place={place}
+            avatar={"@/assets/favicon.png"}
+            name={item.name}
+            score={item.score}
+            color={color}
+        />
+    );
+}
 
 export default function LeaderboardScreen() {
     const { colors } = useTheme();
 
     return (
-        <View style={{ ...Styles.flex }}>
-            <View style={{ ...Styles.titleBox, ...Styles.centeringContainer }}>
-                <Text style={{ ...Styles.title, color: colors.text }}>Leaderboard</Text>
+        <SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }} edges={['top']}>
+            <View 
+                style={{
+                    ...Styles.titleBox,
+                    ...Styles.centeringContainer,
+                    flexShrink: 1,
+                }}>
+                <Text style={{ ...Styles.title, color: colors.card }}>Leaderboard</Text>
             </View>
-            <View style={styles.header}>
-                <Text style={{ ...styles.heading, color: colors.text }}>Name</Text>
-                <Text style={{ ...styles.heading, color: colors.text }}>Score</Text>
-                <Text style={{ ...styles.heading, color: colors.text }}>Place</Text>
+            
+            <View 
+                style={{
+                    flex: 1,
+                    backgroundColor: colors.background,
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                    flexGrow: 1,
+                }}>
+                <FlatList
+                    data={tableData.sort((a, b) => b.score - a.score)}
+                    keyExtractor={(item) => (item.name.toString())}
+                    renderItem={({ item, index }) => renderItem(item, index + 1)}
+                />
             </View>
-            <FlatList
-                data={tableData.sort((a, b) => b.score - a.score)}
-                keyExtractor={(item) => (item.name.toString())}
-                renderItem={({ item }) => renderItem({ item, colors })}
-            />
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -73,12 +90,7 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        borderRadius: 3,
-        borderColor: 'green',
-        marginVertical: 0,
         marginHorizontal: 2,
-        elevation: 1,
         padding: 10,
     },
     cell: {
