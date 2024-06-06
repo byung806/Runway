@@ -16,10 +16,12 @@
         ],
         "ios": {
             "supportsTablet": true,
-            "bundleIdentifier": "com.byung806.runway"
+            "bundleIdentifier": "com.byung806.runway",
+            "googleServicesFile": "GoogleService-Info.plist"
         },
         "android": {
             "package": "com.byung806.runway",
+            "googleServicesFile": "google-services.json",
             "adaptiveIcon": {
                 "foregroundImage": "src/assets/adaptive-icon.png",
                 "backgroundColor": "#ffffff"
@@ -29,7 +31,17 @@
             "favicon": "src/assets/favicon.png"
         },
         "plugins": [
-            "expo-router"
+            "expo-router",
+            "@react-native-firebase/app",
+            "@react-native-firebase/auth",
+            [
+                "expo-build-properties",
+                {
+                    "ios": {
+                        "useFrameworks": "static"
+                    }
+                }
+            ]
         ],
         "scheme": "runway",
         "extra": {

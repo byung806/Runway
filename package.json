@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "main": "app/index.tsx",
   "scripts": {
-    "start": "expo start --go --clear",
-    "build-android": "eas build --profile development --platform android"
+      "prebuild": "expo prebuild",
+      "android": "expo run:android",
+      "ios": "expo run:ios",
+      "build-android": "eas build --profile development --platform android"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.23.1",
+    "@react-native-firebase/app": "^20.1.0",
+    "@react-native-firebase/auth": "^20.1.0",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
@@ -27,10 +31,12 @@
     "react": "18.2.0",
     "react-native": "0.74.1",
     "react-native-calendars": "^1.1305.0",
+    "react-native-gesture-handler": "~2.16.1",
     "react-native-pager-view": "^6.3.0",
     "react-native-safe-area-context": "4.10.1",
     "react-native-screens": "3.31.1",
-    "three": "^0.164.1"
+    "three": "^0.164.1",
+    "expo-build-properties": "~0.12.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
