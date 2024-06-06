@@ -35,18 +35,37 @@ export default function HomeScreen({ navigation, props }: { navigation: NativeSt
                     style={{
                         flex: 1,
                         flexDirection: 'row',
-                        justifyContent: 'center',
                         alignItems: 'center',
                     }}
                 >
-                    <>
+                    <Text style={{
+                        color: colors.primary,
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                    }}>byungg</Text>
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
                         <MaterialCommunityIcons name="fire" size={30} color={colors.primary} />
                         <Text style={{
                             color: colors.primary,
                             fontSize: 20,
                             fontWeight: 'bold',
                         }}>{streak}</Text>
-                    </>
+                    </View>
+
+                    {/* flex: 1, justifyContent: 'flex-end' */}
+                    {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{
+                            color: colors.primary,
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                        }}>10000 </Text>
+                        <Text style={{
+                            color: colors.primary,
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                        }}>pts</Text>
+                    </View> */}
 
                 </View>
             </Header>
