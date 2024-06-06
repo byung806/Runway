@@ -10,18 +10,19 @@ import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
-export default function LoginScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
+export default function SignupScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const { colors } = useTheme();
 
-    const onLoginPress = () => {
+    const onSignupPress = () => {
         auth()
-        .signInWithEmailAndPassword(username, password)
+        .createUserWithEmailAndPassword(username, password)
         .then((response) => {
-            console.log('User signed in!');
+            console.log('User created!');
             console.log(username, password);
+            console.log(response);
             navigation.navigate('app');
         })
         .catch(error => {
@@ -29,6 +30,7 @@ export default function LoginScreen({ navigation }: { navigation: NativeStackNav
         })
     }
 
+    // TODO: refer friends
     return (
         <View style={{ ...Styles.flex, backgroundColor: colors.background }}>
             <SafeAreaView style={{...Styles.centeringContainer, ...Styles.flex }}>
@@ -39,8 +41,8 @@ export default function LoginScreen({ navigation }: { navigation: NativeStackNav
 
                 <View style={{flex: 3, ...Styles.centeringContainer}}>
                     <Logo />
-                    <Text style={Styles.title}>Welcome Back!</Text>
-                    <Text style={Styles.subtitle}>Log in to continue your flight.</Text>
+                    <Text style={Styles.title}>Sign Up!</Text>
+                    <Text style={Styles.subtitle}>Create an account to continue your flight.</Text>
                 </View>
 
                 <View style={{flex: 2, width: '90%'}}>
@@ -54,14 +56,14 @@ export default function LoginScreen({ navigation }: { navigation: NativeStackNav
                         onChangeText={setPassword}
                     />
                     <MainButton
-                        label={'LOGIN'}
-                        callback={onLoginPress}
+                        label={'SIGN UP'}
+                        callback={onSignupPress}
                     />
                     <Text style={{...Styles.subtitle, textAlign: 'center', marginVertical: 10}}>OR</Text>
                     <MainButton
-                        label={'CREATE AN ACCOUNT'}
+                        label={'I HAVE AN ACCOUNT'}
                         filled={false}
-                        callback={() => navigation.navigate('signup')}
+                        callback={() => navigation.navigate('login')}
                     />
                 </View>
             </SafeAreaView>

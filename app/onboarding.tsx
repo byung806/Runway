@@ -8,28 +8,6 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Ionicons, MaterialCommunityIcons, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 
 
-interface Slide {
-    backgroundColor: string;
-    image: JSX.Element;
-    title: string;
-    subtitle: string;
-}
-
-const slides: Slide[] = [
-    {
-        backgroundColor: '#fff',
-        image: <Image source={require('src/assets/favicon.png')} />,
-        title: 'Welcome to app',
-        subtitle: 'subtitle 1',
-    },
-    {
-        backgroundColor: '#444',
-        image: <Image source={require('src/assets/favicon.png')} />,
-        title: 'Hi',
-        subtitle: 'subtitle 2',
-    }
-]
-
 export default function OnboardingScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
     const pagerRef = useRef<ViewPager>(null);
     const size = 144;
@@ -79,7 +57,7 @@ export default function OnboardingScreen({ navigation }: { navigation: NativeSta
                     <OnboardingPage
                         buttonText="TAKE OFF!"
                         prevButtonCallback={() => { handlePageChange(2) }}
-                        nextButtonCallback={() => { navigation.navigate("app") }}
+                        nextButtonCallback={() => { navigation.navigate("signup") }}
                     >
                         <>
                             <FontAwesome5 name="user-friends" size={size} color={colors.primary} />
