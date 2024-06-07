@@ -12,30 +12,28 @@ export default function ScreenLayout() {
     const { colors } = useTheme();
 
     return (
-        <SafeAreaView style={{...Styles.flex, backgroundColor: colors.background}} edges={['top']}>
-            <Tab.Navigator
-                initialRouteName="Home"
-                screenOptions={({ route }) => ({
-                    tabBarShowLabel: false,
-                    tabBarIcon: ({ focused }) => {
-                        let iconName;
+        <Tab.Navigator
+            initialRouteName="Home"
+            screenOptions={({ route }) => ({
+                tabBarShowLabel: false,
+                tabBarIcon: ({ focused }) => {
+                    let iconName;
 
-                        if (route.name === 'Content') {
-                            iconName = 'book';
-                        } else if (route.name === 'Home') {
-                            iconName = 'home';
-                        } else if (route.name === 'Leaderboard') {
-                            iconName = 'trophy';
-                        }
+                    if (route.name === 'Content') {
+                        iconName = 'book';
+                    } else if (route.name === 'Home') {
+                        iconName = 'home';
+                    } else if (route.name === 'Leaderboard') {
+                        iconName = 'trophy';
+                    }
 
-                        return <Icon name={iconName} size={25} color={focused ? colors.primary : colors.text} />;
-                    },
-                })}
-            >
-                <Tab.Screen name="Content" component={ContentScreen} options={{ headerShown: false }} />
-                <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-                <Tab.Screen name="Leaderboard" component={LeaderboardScreen} options={{ headerShown: false }} />
-            </Tab.Navigator>
-        </SafeAreaView>
+                    return <Icon name={iconName} size={25} color={focused ? colors.primary : colors.text} />;
+                },
+            })}
+        >
+            <Tab.Screen name="Content" component={ContentScreen} options={{ headerShown: false }} />
+            <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+            <Tab.Screen name="Leaderboard" component={LeaderboardScreen} options={{ headerShown: false }} />
+        </Tab.Navigator>
     );
 }
