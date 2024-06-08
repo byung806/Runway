@@ -6,32 +6,37 @@ import { emailEnding, registerUser } from "@/utils/firestore";
 import auth from "@react-native-firebase/auth";
 import { useTheme } from "@react-navigation/native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useState } from "react";
+import { useCreateUserWithEmailAndPassword } from "@skillnation/react-native-firebase-hooks/auth";
+import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function SignupScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
+    const { colors } = useTheme();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
 
-    const { colors } = useTheme();
+    const [
+        createUserWithEmailAndPassword,
+        user,
+        loading,
+        error,
+    ] = useCreateUserWithEmailAndPassword(auth);
+    // TODO: validate form inputs
 
-    const onSignupPress = () => {
-        auth()
-        .createUserWithEmailAndPassword(username + emailEnding, password)
-        .then((response) => {
-            console.log('User created!');
-            console.log(username, password);
-            console.log(response);
+    useEffect(() => {
+        // useEffect tracks changes in [user] variable
+        // called once user is created and logged in
+        if (user) {
+            registerUser(user.user.uid, username, email, password);
             navigation.navigate('app');
+        }
+    }, [user]);
 
-            registerUser(username, email, password, response.user.uid);
-        })
-        .catch(error => {
-            alert(error)
-        })
+    if (error) {
+        alert(error);
     }
 
     // TODO: refer friends
@@ -50,29 +55,18 @@ export default function SignupScreen({ navigation }: { navigation: NativeStackNa
                 </View>
 
                 <View style={{flex: 2, width: '90%'}}>
-                    <CustomTextInput
-                        placeholder={'Username'}
-                        onChangeText={setUsername}
-                    />
-                    <CustomTextInput
-                        placeholder={'Email'}
-                        onChangeText={setEmail}
-                    />
-                    <CustomTextInput
-                        placeholder={'Password'}
-                        password={true}
-                        onChangeText={setPassword}
-                    />
+                    <CustomTextInput placeholder={'Username'} onChangeText={setUsername} />
+                    <CustomTextInput placeholder={'Email'} onChangeText={setEmail} />
+                    <CustomTextInput placeholder={'Password'} onChangeText={setPassword} password={true} />
                     <MainButton
                         label={'SIGN UP'}
-                        callback={onSignupPress}
+                        disabled={loading}
+                        callback={() => {createUserWithEmailAndPassword(username + emailEnding, password)}}
                     />
+
                     <Text style={{...Styles.subtitle, textAlign: 'center', marginVertical: 10}}>OR</Text>
-                    <MainButton
-                        label={'I HAVE AN ACCOUNT'}
-                        filled={false}
-                        callback={() => navigation.navigate('login')}
-                    />
+
+                    <MainButton label={'I HAVE AN ACCOUNT'} filled={false} callback={() => navigation.navigate('login')} />
                 </View>
             </SafeAreaView>
         </View>

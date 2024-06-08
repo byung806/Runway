@@ -2,10 +2,10 @@ import firestore from '@react-native-firebase/firestore';
 
 export const emailEnding = '@example.com';
 
-async function registerUser(username: string, email: string, password: string, uid: string) {
+async function registerUser(uid: string, username: string, email: string, password: string) {
     firestore()
         .collection('users')
-        .doc(username)
+        .doc(uid)
         .set({
             email: email,
             friends: [],
@@ -13,7 +13,8 @@ async function registerUser(username: string, email: string, password: string, u
             point_days: {},
             points: 0,
             streak: 0,
-            uid: uid
+            uid: uid,
+            username: username
         })
         .then(() => {
             console.log('Registered user ' + username);
@@ -24,10 +25,10 @@ async function registerUser(username: string, email: string, password: string, u
         })
 }
 
-async function addFriend(username: string, friend: string) {
+async function addFriend(uid: string, username: string, friend: string) {
     firestore()
         .collection('users')
-        .doc(username)
+        .doc(uid)
         .update({
             friends: firestore.FieldValue.arrayUnion(friend)
         })
@@ -40,7 +41,7 @@ async function addFriend(username: string, friend: string) {
         })
 }
 
-async function addPoints(username: string, points: number) {
+async function addPoints(uid: string, username: string, points: number) {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayDateString = yesterday.toDateString();
@@ -49,7 +50,7 @@ async function addPoints(username: string, points: number) {
 
     firestore()
         .collection('users')
-        .doc(username)
+        .doc(uid)
         .get()
         .then((doc) => {
             const pointDays = doc.data()?.point_days;
@@ -69,7 +70,7 @@ async function addPoints(username: string, points: number) {
             }
             firestore()
                 .collection('users')
-                .doc(username)
+                .doc(uid)
                 .update(update)
                 .then(() => {
                     console.log('Updated streak & added ' + points + 'points for ' + username);
@@ -85,10 +86,10 @@ async function addPoints(username: string, points: number) {
         });
 }
 
-async function getUserData(username: string) {
+async function getUserData(uid: string) {
     firestore()
         .collection('users')
-        .doc(username)
+        .doc(uid)
         .get()
         .then((doc) => {
             return doc.data();

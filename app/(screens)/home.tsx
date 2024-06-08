@@ -1,38 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Text, View } from "react-native";
 
 import MainScene from "@/components/game/scenes/MainScene";
-import { Colors, Styles } from "@/styles";
+import { MainButton } from '@/components/screens';
 import Header from "@/components/screens/Header";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useTheme } from "@react-navigation/native";
+import Loading from '@/components/screens/Loading';
+import { Styles } from "@/styles";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import auth from "@react-native-firebase/auth";
+import firestore from '@react-native-firebase/firestore';
 import { useTheme } from "@react-navigation/native";
+import { useDocumentDataOnce } from '@skillnation/react-native-firebase-hooks/firestore';
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function HomeScreen({ navigation, props }: { navigation: NativeStackNavigationProp<any, any>, props?: any }) {
-    const [streak, setStreak] = useState(0);
-
     const { colors } = useTheme();
+    const user = auth().currentUser;  // guaranteed to be signed in
+    const [snapshot, loading, error] = useDocumentDataOnce(
+        firestore().collection('users').doc(user?.uid)
+    );
 
-    useEffect(() => {
-        async function setData() {
-            const appData = await AsyncStorage.getItem("streak");
-            if (appData == null) {
-                setStreak(0);
-                AsyncStorage.setItem("streak", "0");
-            } else {
-                setStreak(parseInt(appData));
-            }
-        }
-        setData();
-    }, []);
+    function logOut() {
+        auth().signOut().then(() => {
+            console.log('User signed out!');
+            navigation.navigate('login');
+        });
+    }
 
+    if (loading) {
+        return <Loading />;
+    }
+    if (error) {
+        alert(error);
+    }
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
             <Header>
@@ -47,36 +49,20 @@ export default function HomeScreen({ navigation, props }: { navigation: NativeSt
                         color: colors.primary,
                         fontSize: 20,
                         fontWeight: 'bold',
-                    }}>byungg</Text>
-
+                    }}>
+                        {snapshot?.username}
+                    </Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
                         <MaterialCommunityIcons name="fire" size={30} color={colors.primary} />
                         <Text style={{
                             color: colors.primary,
                             fontSize: 20,
                             fontWeight: 'bold',
-                        }}>0</Text>
-                        <MainButton label={'Logout'} callback={async () => {
-                            await auth().signOut();
-                            console.log('User signed out!');
-                            navigation.navigate('login');
-                        }} />
+                        }}>
+                            {snapshot?.points}
+                        </Text>
+                        <MainButton label={'Logout'} callback={logOut} />
                     </View>
-
-                    {/* flex: 1, justifyContent: 'flex-end' */}
-                    {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{
-                            color: colors.primary,
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                        }}>10000 </Text>
-                        <Text style={{
-                            color: colors.primary,
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                        }}>pts</Text>
-                    </View> */}
-
                 </View>
             </Header>
             <View style={Styles.flex} {...props}>
