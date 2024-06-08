@@ -2,6 +2,7 @@ import { Logo, MainButton } from "@/components/screens";
 import CustomTextInput from "@/components/screens/CustomTextInput";
 import Header from "@/components/screens/start/BackHeader";
 import { Styles } from "@/styles";
+import { emailEnding, registerUser } from "@/utils/firestore";
 import auth from "@react-native-firebase/auth";
 import { useTheme } from "@react-navigation/native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -13,17 +14,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function SignupScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
 
     const { colors } = useTheme();
 
     const onSignupPress = () => {
         auth()
-        .createUserWithEmailAndPassword(username, password)
+        .createUserWithEmailAndPassword(username + emailEnding, password)
         .then((response) => {
             console.log('User created!');
             console.log(username, password);
             console.log(response);
             navigation.navigate('app');
+
+            registerUser(username, email, password, response.user.uid);
         })
         .catch(error => {
             alert(error)
@@ -49,6 +53,10 @@ export default function SignupScreen({ navigation }: { navigation: NativeStackNa
                     <CustomTextInput
                         placeholder={'Username'}
                         onChangeText={setUsername}
+                    />
+                    <CustomTextInput
+                        placeholder={'Email'}
+                        onChangeText={setEmail}
                     />
                     <CustomTextInput
                         placeholder={'Password'}

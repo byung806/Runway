@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useEffect, useState } from "react";
+import { Text, View } from "react-native";
 
 import MainScene from "@/components/game/scenes/MainScene";
 import { Colors, Styles } from "@/styles";
@@ -8,6 +10,9 @@ import Header from "@/components/screens/Header";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "@react-navigation/native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import auth from "@react-native-firebase/auth";
+import { useTheme } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function HomeScreen({ navigation, props }: { navigation: NativeStackNavigationProp<any, any>, props?: any }) {
@@ -29,7 +34,7 @@ export default function HomeScreen({ navigation, props }: { navigation: NativeSt
     }, []);
 
     return (
-        <>
+        <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
             <Header>
                 <View
                     style={{
@@ -50,7 +55,12 @@ export default function HomeScreen({ navigation, props }: { navigation: NativeSt
                             color: colors.primary,
                             fontSize: 20,
                             fontWeight: 'bold',
-                        }}>{streak}</Text>
+                        }}>0</Text>
+                        <MainButton label={'Logout'} callback={async () => {
+                            await auth().signOut();
+                            console.log('User signed out!');
+                            navigation.navigate('login');
+                        }} />
                     </View>
 
                     {/* flex: 1, justifyContent: 'flex-end' */}
@@ -72,6 +82,6 @@ export default function HomeScreen({ navigation, props }: { navigation: NativeSt
             <View style={Styles.flex} {...props}>
                 <MainScene referenceSphere={true} />
             </View>
-        </>
+        </SafeAreaView>
     );
 };
