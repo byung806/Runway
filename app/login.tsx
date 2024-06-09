@@ -61,6 +61,7 @@ export default function LoginScreen({ navigation }: { navigation: NativeStackNav
                     />
                     <MainButton
                         label={'LOGIN'}
+                        disabled={loading}
                         callback={() => signInWithEmailAndPassword(username + emailEnding, password)}
                     />
                     <Text style={{ ...Styles.subtitle, textAlign: 'center', marginVertical: 10 }}>OR</Text>
