@@ -1,42 +1,42 @@
 import { Styles } from "@/styles";
-import React, { useEffect } from 'react';
-import { Animated, Easing, Image, View } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
+import { useTheme } from "@react-navigation/native";
+import { useDocumentDataOnce } from "@skillnation/react-native-firebase-hooks/firestore";
+import React from 'react';
+import { View, Text } from 'react-native';
+import Loading from "./Loading";
+
 
 export default function ContentCard({ date }: { date: string }) {
-    const animated = new Animated.Value(0);
-    const duration = 4000;
+    const { colors } = useTheme();
+    const [snapshot, loading, error] = useDocumentDataOnce(
+        firestore().collection('content').doc(date)
+    );
+    console.log(snapshot, loading, error);
 
-    useEffect(() => {
-        Animated.loop(
-            Animated.timing(
-                animated,
-                {
-                    toValue: 1,
-                    duration: duration,
-                    easing: Easing.linear,
-                    useNativeDriver: true
-                }
-            )
-        ).start();
-    }, []);
-
-    const spin = animated.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '360deg']
-    })
-
+    if (loading) {
+        return <Loading />;
+    }
+    if (error) {
+        alert(error);
+    }
+    if (!snapshot) {
+        return (
+            <View style={{...Styles.flex, ...Styles.centeringContainer}}>
+                <Text style={{color: colors.text, fontSize: 20, fontWeight: 'bold'}}>
+                    No content for this day!
+                </Text>
+            </View>
+        )
+    }
     return (
         <View style={{...Styles.flex, ...Styles.centeringContainer}}>
-            <Animated.View
-                style={{
-                    transform: [{ rotate: spin }]
-                }}
-            >
-                <Image
-                    source={require('@/assets/planes/plane0.png')}
-                    style={{ width: 144, height: 144 }}
-                />
-            </Animated.View>
+            <Text style={{color: colors.text, fontSize: 15, fontWeight: 'bold'}}>
+                {snapshot?.body}
+            </Text>
+            <Text style={{color: colors.text, fontSize: 20, fontWeight: 'bold'}}>
+                {snapshot?.category}
+            </Text>
         </View>
     )
 }

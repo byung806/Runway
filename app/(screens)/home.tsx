@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import MainScene from "@/components/game/scenes/MainScene";
 import { MainButton } from '@/components/screens';
@@ -45,13 +45,16 @@ export default function HomeScreen({ navigation, props }: { navigation: NativeSt
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{
-                        color: colors.primary,
-                        fontSize: 20,
-                        fontWeight: 'bold',
-                    }}>
-                        {snapshot?.username}
-                    </Text>
+                    {/* TODO: profile & logout */}
+                    <Pressable onPress={logOut}>
+                        <Text style={{
+                            color: colors.primary,
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                        }}>
+                            {snapshot?.username}
+                        </Text>
+                    </Pressable>
                     <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
                         <MaterialCommunityIcons name="fire" size={30} color={colors.primary} />
                         <Text style={{
@@ -61,7 +64,6 @@ export default function HomeScreen({ navigation, props }: { navigation: NativeSt
                         }}>
                             {snapshot?.points}
                         </Text>
-                        <MainButton label={'Logout'} callback={logOut} />
                     </View>
                 </View>
             </Header>
