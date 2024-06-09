@@ -9,7 +9,6 @@ const styles: { [key: string]: object & StyleProp<TextStyle> } = {
     titleBox: {
         padding: 10,
         borderRadius: 5,
-        elevation: 2,
     },
     title: {
         fontSize: 40,

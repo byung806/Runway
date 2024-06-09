@@ -3,7 +3,7 @@ import { Colors, Debug, Styles } from "@/styles";
 import { Animated, Easing, Image, Text, View } from 'react-native';
 import React, { useEffect, useRef } from 'react';
 
-export default function Loading({ id = 0, size = 144 }: { id?: number, size?: number }) {
+export default function Loading({ id = 0, size = 80 }: { id?: number, size?: number }) {
     const animated = new Animated.Value(0);
     const duration = 4000;
 
