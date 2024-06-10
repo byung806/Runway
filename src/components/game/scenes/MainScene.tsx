@@ -42,6 +42,7 @@ export default function MainScene({ referenceSphere = false, props }: { referenc
             <Canvas
                 orthographic
                 camera={{ position: [0, 0, 1], zoom: 100 }}
+                onCreated={(state) => { const _gl = state.gl.getContext(); const pixelStorei = _gl.pixelStorei.bind(_gl); _gl.pixelStorei = function(...args) { const [parameter] = args; switch(parameter) { case _gl.UNPACK_FLIP_Y_WEBGL: return pixelStorei(...args) } } }}
             >
                 {/* <OrbitControls
                     enablePan={false}
