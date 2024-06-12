@@ -1,11 +1,13 @@
-import { Logo, OnboardingPage } from "@/components/screens";
-import { Colors, Styles } from "@/styles";
-import { View, Image, Text } from "react-native";
-import ViewPager from "react-native-pager-view"
-import React, { useRef } from 'react';
+import { OnboardingPage } from "@/components/screens";
+
+import Text from '~/Text';
+import { Styles } from "@/styles";
+import { FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Ionicons, MaterialCommunityIcons, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
+import React, { useRef } from 'react';
+import { View } from "react-native";
+import ViewPager from "react-native-pager-view";
 
 
 export default function OnboardingScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {

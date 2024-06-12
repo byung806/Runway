@@ -1,6 +1,9 @@
-import { Logo, MainButton } from "@/components/screens";
-import CustomTextInput from "@/components/screens/CustomTextInput";
+import { Logo } from "@/components/screens";
+import Button from '~/Button';
+
+import TextInput from "@/components/screens/TextInput";
 import Header from "@/components/screens/start/BackHeader";
+import Text from '~/Text';
 import { Styles } from "@/styles";
 import { emailEnding, registerUser } from "@/utils/firestore";
 import auth from "@react-native-firebase/auth";
@@ -8,7 +11,7 @@ import { useTheme } from "@react-navigation/native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useCreateUserWithEmailAndPassword } from "@skillnation/react-native-firebase-hooks/auth";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
@@ -55,10 +58,10 @@ export default function SignupScreen({ navigation }: { navigation: NativeStackNa
                 </View>
 
                 <View style={{flex: 2, width: '90%'}}>
-                    <CustomTextInput placeholder={'Username'} onChangeText={setUsername} />
-                    <CustomTextInput placeholder={'Email'} onChangeText={setEmail} />
-                    <CustomTextInput placeholder={'Password'} onChangeText={setPassword} password={true} />
-                    <MainButton
+                    <TextInput placeholder={'Username'} onChangeText={setUsername} />
+                    <TextInput placeholder={'Email'} onChangeText={setEmail} />
+                    <TextInput placeholder={'Password'} onChangeText={setPassword} password={true} />
+                    <Button
                         label={'SIGN UP'}
                         disabled={loading}
                         callback={() => {createUserWithEmailAndPassword(username + emailEnding, password)}}
@@ -66,7 +69,7 @@ export default function SignupScreen({ navigation }: { navigation: NativeStackNa
 
                     <Text style={{...Styles.subtitle, textAlign: 'center', marginVertical: 10}}>OR</Text>
 
-                    <MainButton label={'I HAVE AN ACCOUNT'} filled={false} callback={() => navigation.navigate('login')} />
+                    <Button label={'I HAVE AN ACCOUNT'} filled={false} callback={() => navigation.navigate('login')} />
                 </View>
             </SafeAreaView>
         </View>

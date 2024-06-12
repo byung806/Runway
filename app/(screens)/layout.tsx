@@ -2,8 +2,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ContentScreen, HomeScreen, LeaderboardScreen } from ".";
 
 import { FontAwesome5 as Icon } from '@expo/vector-icons';
-import { Colors, Styles } from "@/styles";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();

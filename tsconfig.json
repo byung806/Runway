@@ -4,9 +4,8 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"],
+      "~/*": ["src/custom_components/*"],
     }
   },
   "include": [

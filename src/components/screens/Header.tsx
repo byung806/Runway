@@ -1,6 +1,6 @@
+import { Styles } from '@/styles';
 import React from 'react';
-import { View, Text } from 'react-native';
-import { Colors, Styles } from '@/styles';
+import { View } from 'react-native';
 
 
 interface HeaderProps {

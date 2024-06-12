@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, useWindowDimensions } from 'react-native';
-import MainButton from '../MainButton';
+import Button from '~/Button';
 import { Styles } from '@/styles';
 
 
@@ -30,7 +30,7 @@ export default function Footer({ backgroundColor, buttonLabel, buttonCallback }:
                     flexDirection: 'column',
                 }}
             >
-                <MainButton
+                <Button
                     label={buttonLabel}
                     callback={buttonCallback}
                 />

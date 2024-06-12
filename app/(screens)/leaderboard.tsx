@@ -1,8 +1,9 @@
 import LeaderboardEntry from "@/components/screens/LeaderboardEntry";
-import { Debug, Styles } from "@/styles";
+import Text from '~/Text';
+import { Styles } from "@/styles";
 import { useTheme } from "@react-navigation/native";
 import React from "react";
-import { FlatList, ListRenderItemInfo, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 interface TableItemType {

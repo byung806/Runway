@@ -1,6 +1,7 @@
+import Text from '~/Text';
 import { useTheme } from "@react-navigation/native";
 import React from 'react';
-import { Image, Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Styles } from '../../styles';
 
 
@@ -43,7 +44,6 @@ export default function LeaderboardEntry({ place, avatar, name, score, color }: 
                 }}>
                     <Text style={{
                         color: color ? color : colors.card,
-                        ...Styles.heavy
                     }}>{score}</Text>
                 </View>
             </View>

@@ -1,5 +1,6 @@
-import { Logo, MainButton } from "@/components/screens";
-import CustomTextInput from "@/components/screens/CustomTextInput";
+import { Logo } from "@/components/screens";
+import Button from '~/Button';
+import TextInput from "@/components/screens/TextInput";
 import Header from "@/components/screens/start/BackHeader";
 import { Styles } from "@/styles";
 import { emailEnding } from "@/utils/firestore";
@@ -8,7 +9,8 @@ import { useTheme } from "@react-navigation/native";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSignInWithEmailAndPassword } from '@skillnation/react-native-firebase-hooks/auth';
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import Text from '~/Text';
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
@@ -50,22 +52,22 @@ export default function LoginScreen({ navigation }: { navigation: NativeStackNav
                 </View>
 
                 <View style={{ flex: 2, width: '90%' }}>
-                    <CustomTextInput
+                    <TextInput
                         placeholder={'Username'}
                         onChangeText={setUsername}
                     />
-                    <CustomTextInput
+                    <TextInput
                         placeholder={'Password'}
                         password={true}
                         onChangeText={setPassword}
                     />
-                    <MainButton
+                    <Button
                         label={'LOGIN'}
                         disabled={loading}
                         callback={() => signInWithEmailAndPassword(username + emailEnding, password)}
                     />
                     <Text style={{ ...Styles.subtitle, textAlign: 'center', marginVertical: 10 }}>OR</Text>
-                    <MainButton
+                    <Button
                         label={'CREATE AN ACCOUNT'}
                         filled={false}
                         disabled={loading}

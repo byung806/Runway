@@ -1,12 +1,12 @@
+import Text from '~/Text';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 
 import MainScene from "@/components/game/scenes/MainScene";
-import { MainButton } from '@/components/screens';
 import Header from "@/components/screens/Header";
 import Loading from '@/components/screens/Loading';
-import { Styles } from "@/styles";
+import { Debug, Styles } from "@/styles";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import auth from "@react-native-firebase/auth";
 import firestore from '@react-native-firebase/firestore';
@@ -36,40 +36,34 @@ export default function HomeScreen({ navigation, props }: { navigation: NativeSt
         alert(error);
     }
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
-            <Header>
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}
-                >
-                    {/* TODO: profile & logout */}
-                    <Pressable onPress={logOut}>
-                        <Text style={{
-                            color: colors.primary,
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                        }}>
-                            {snapshot?.username}
-                        </Text>
-                    </Pressable>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
-                        <MaterialCommunityIcons name="fire" size={30} color={colors.primary} />
-                        <Text style={{
-                            color: colors.primary,
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                        }}>
-                            {snapshot?.points}
-                        </Text>
-                    </View>
+        <View style={{ flex: 1 }}>
+            <SafeAreaView style={{
+                flex: 1,
+                position: 'absolute',
+                zIndex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                margin: 20
+            }} edges={['top']}>
+                <Pressable onPress={logOut}>
+                    <Text style={{
+                        color: colors.text,
+                        ...Styles.subtitle,
+                    }}>
+                        {snapshot?.username}
+                    </Text>
+                </Pressable>
+                <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
+                    <MaterialCommunityIcons name="fire" size={30} color={colors.text} />
+                    <Text style={{
+                        color: colors.text,
+                        ...Styles.subtitle,
+                    }}>
+                        {snapshot?.points}
+                    </Text>
                 </View>
-            </Header>
-            <View style={Styles.flex} {...props}>
-                <MainScene referenceSphere={true} />
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+            <MainScene referenceSphere={true} />
+        </View>
     );
 };

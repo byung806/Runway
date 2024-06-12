@@ -1,10 +1,13 @@
-import { Logo, MainButton } from "@/components/screens";
-import React from "react";
-import { View, Text } from "react-native";
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Colors, Styles } from "@/styles";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Logo } from "@/components/screens";
+import Button from '~/Button';
+
+import Text from '~/Text';
+import { Styles } from "@/styles";
 import { useTheme } from "@react-navigation/native";
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React from "react";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function StartScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
     const { colors } = useTheme();
@@ -14,18 +17,19 @@ export default function StartScreen({ navigation }: { navigation: NativeStackNav
                 ...Styles.centeringContainer,
                 ...Styles.flex
             }}>
+                <Text>Hello</Text>
                 <View style={{...Styles.centeringContainer, ...Styles.flex}}>
                     <Logo />
                     <Text style={Styles.title}>Runway</Text>
                 </View>
                 <View style={{width: "90%"}}>
-                    <MainButton
+                    <Button
                         label={'GET STARTED'}
                         callback={() => {
                             navigation.navigate('onboarding');
                         }}
                     />
-                    <MainButton
+                    <Button
                         label={'I HAVE AN ACCOUNT'}
                         callback={() => {
                             navigation.navigate('login');

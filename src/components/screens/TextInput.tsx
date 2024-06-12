@@ -1,20 +1,20 @@
-import { TextInput } from 'react-native';
+import { TextInput as TextInputNative } from 'react-native';
 import { useTheme } from "@react-navigation/native";
 import { Colors } from '../../styles';
 
 export const INPUT_HEIGHT = 45;
 
-interface CustomTextInputProps {
+interface TextInputProps {
     placeholder: string;
     onChangeText: React.Dispatch<React.SetStateAction<string>>;
     password?: boolean;
 }
 
-export default function CustomTextInput({ placeholder, onChangeText, password=false }: CustomTextInputProps) {
+export default function TextInput({ placeholder, onChangeText, password=false }: TextInputProps) {
     const { colors } = useTheme();
 
     return (
-        <TextInput
+        <TextInputNative
             placeholder={placeholder}
             onChangeText={onChangeText}
             secureTextEntry={password}

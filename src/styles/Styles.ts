@@ -12,11 +12,9 @@ const styles: { [key: string]: object & StyleProp<TextStyle> } = {
     },
     title: {
         fontSize: 40,
-        fontWeight: 'bold',
     },
     subtitle: {
         fontSize: 20,
-        fontWeight: 'bold',
     },
     bodyText: {
         fontSize: 15,
@@ -26,7 +24,6 @@ const styles: { [key: string]: object & StyleProp<TextStyle> } = {
     },
     btnLabel: {
         fontSize: 15,
-        fontWeight: 'bold',
     },
     flex: {
         flex: 1

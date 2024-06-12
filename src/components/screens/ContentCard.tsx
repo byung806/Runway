@@ -1,9 +1,10 @@
+import Text from '~/Text';
 import { Styles } from "@/styles";
 import firestore from '@react-native-firebase/firestore';
 import { useTheme } from "@react-navigation/native";
 import { useDocumentDataOnce } from "@skillnation/react-native-firebase-hooks/firestore";
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import Loading from "./Loading";
 
 
@@ -23,7 +24,7 @@ export default function ContentCard({ date }: { date: string }) {
     if (!snapshot) {
         return (
             <View style={{...Styles.flex, ...Styles.centeringContainer}}>
-                <Text style={{color: colors.text, fontSize: 20, fontWeight: 'bold'}}>
+                <Text style={{color: colors.text, ...Styles.subtitle}}>
                     No content for this day!
                 </Text>
             </View>
@@ -31,10 +32,10 @@ export default function ContentCard({ date }: { date: string }) {
     }
     return (
         <View style={{...Styles.flex, ...Styles.centeringContainer}}>
-            <Text style={{color: colors.text, fontSize: 15, fontWeight: 'bold'}}>
+            <Text style={{color: colors.text, ...Styles.subtitle}}>
                 {snapshot?.body}
             </Text>
-            <Text style={{color: colors.text, fontSize: 20, fontWeight: 'bold'}}>
+            <Text style={{color: colors.text, ...Styles.subtitle}}>
                 {snapshot?.category}
             </Text>
         </View>
