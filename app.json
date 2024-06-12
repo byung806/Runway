@@ -1,57 +1,58 @@
 {
-    "expo": {
-        "name": "Runway",
-        "slug": "runway",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "icon": "src/assets/icon.png",
-        "userInterfaceStyle": "automatic",
-        "splash": {
-            "image": "src/assets/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
-        "assetBundlePatterns": [
-            "**/*"
-        ],
-        "ios": {
-            "supportsTablet": true,
-            "bundleIdentifier": "com.byung806.runway",
-            "googleServicesFile": "GoogleService-Info.plist"
-        },
-        "android": {
-            "package": "com.byung806.runway",
-            "googleServicesFile": "google-services.json",
-            "adaptiveIcon": {
-                "foregroundImage": "src/assets/adaptive-icon.png",
-                "backgroundColor": "#ffffff"
-            }
-        },
-        "web": {
-            "favicon": "src/assets/favicon.png"
-        },
-        "plugins": [
-            "expo-router",
-            "@react-native-firebase/app",
-            "@react-native-firebase/auth",
-            [
-                "expo-build-properties",
-                {
-                    "ios": {
-                        "useFrameworks": "static"
-                    }
-                }
-            ]
-        ],
-        "scheme": "runway",
-        "extra": {
-            "router": {
-                "origin": false
-            },
-            "eas": {
-                "projectId": "35a43238-3d11-4db6-b7da-15358a8579fb"
-            }
-        },
-        "owner": "byung806"
-    }
+  "expo": {
+    "name": "Runway",
+    "slug": "runway",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "src/assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.byung806.runway",
+      "googleServicesFile": "GoogleService-Info.plist"
+    },
+    "android": {
+      "package": "com.byung806.runway",
+      "googleServicesFile": "google-services.json",
+      "adaptiveIcon": {
+        "foregroundImage": "src/assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "src/assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      "expo-font"
+    ],
+    "scheme": "runway",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "35a43238-3d11-4db6-b7da-15358a8579fb"
+      }
+    },
+    "owner": "byung806"
+  }
 }

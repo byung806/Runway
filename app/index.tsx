@@ -1,27 +1,32 @@
 import { RunwayDarkTheme, RunwayLightTheme } from '@/styles/Theme';
-import { usePushNotifications } from '@/utils/usePushNotifications';
+import { Silkscreen_400Regular, Silkscreen_700Bold, useFonts } from '@expo-google-fonts/silkscreen';
 import auth from "@react-native-firebase/auth";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { registerRootComponent } from 'expo';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
-import { useColorScheme } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { View, useColorScheme } from 'react-native';
 import ScreenLayout from './(screens)/layout';
 import LoginScreen from './login';
 import OnboardingScreen from './onboarding';
 import SignupScreen from './signup';
 import StartScreen from './start';
 
-
+SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
 
 export default function App() {
     const scheme = useColorScheme();
     const theme = scheme === 'dark' ? RunwayDarkTheme : RunwayLightTheme;
 
-    const { expoPushToken, notification } = usePushNotifications()
-    const data = JSON.stringify(notification, undefined, 2)
+    const [fontsLoaded] = useFonts({
+        Silkscreen_400Regular,
+    });
+
+    // const { expoPushToken, notification } = usePushNotifications()
+    // const data = JSON.stringify(notification, undefined, 2)
     // token: expoPushToken?.data ?? ""
 
     const [initializing, setInitializing] = useState(true);
@@ -37,6 +42,14 @@ export default function App() {
         return subscriber; // unsubscribe on unmount
     }, []);
 
+    const onLayoutRootView = useCallback(async () => {
+        if (fontsLoaded) {
+            await SplashScreen.hideAsync();
+        }
+    }, [fontsLoaded]);
+    console.log(fontsLoaded);
+
+    if (!fontsLoaded) return null;
     if (initializing) return null;
 
 
@@ -55,7 +68,7 @@ export default function App() {
     // }, []);
 
     return (
-        <>
+        <View style={{flex: 1}} onLayout={onLayoutRootView}>
             <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
             <NavigationContainer theme={theme}>
                 <Stack.Navigator>
@@ -66,7 +79,7 @@ export default function App() {
                     <Stack.Screen name="app" component={ScreenLayout} options={{ headerShown: false }} />
                 </Stack.Navigator>
             </NavigationContainer>
-        </>
+        </View>
     );
 }
 
