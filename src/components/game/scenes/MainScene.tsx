@@ -1,15 +1,13 @@
+import { Styles } from "@/styles";
+import { useTheme } from "@react-navigation/native";
 import { Canvas, useFrame, useThree } from "@react-three/fiber/native";
 import useControls from "r3f-native-orbitcontrols";
 import React, { Suspense, useRef } from "react";
-import { Plane, PlaneRef } from "../Plane";
-import Particles from "../ParticleSphere";
 import { Button, View } from "react-native";
-import { Styles } from "@/styles";
-import { Sky } from "@react-three/drei/native";
-import { Vector3, Group } from "three";
-import { useTheme } from "@react-navigation/native";
-import Ground from "../Ground";
-import Ocean from "../Ocean";
+import { Group, Vector3 } from "three";
+import { Ground, GroundRef } from "../Ground";
+import Particles from "../ParticleSphere";
+import { Plane, PlaneRef } from "../Plane";
 
 
 function Rig({ children }: { children: React.ReactNode }) {
@@ -41,7 +39,7 @@ export default function MainScene({ referenceSphere = false, props }: { referenc
     // TODO: add a way to change sky color
     // TODO: ticking clock ui for next destination
     const plane = useRef<PlaneRef>();
-    const ground = useRef();
+    const ground = useRef<GroundRef>();
 
     const [OrbitControls, events] = useControls();
 
@@ -73,7 +71,8 @@ export default function MainScene({ referenceSphere = false, props }: { referenc
                     <Rig>
                         {/* @ts-expect-error */}
                         <Plane ref={plane} planeType={0} />
-                        <Ground />
+                        {/* @ts-expect-error */}
+                        <Ground ref={ground} />
                         {referenceSphere && <Particles />}
                     </Rig>
                 </Suspense>
