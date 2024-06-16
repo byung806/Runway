@@ -1,18 +1,17 @@
-import { RunwayDarkTheme, RunwayLightTheme } from '@/styles/Theme';
-import { Silkscreen_400Regular, Silkscreen_700Bold, useFonts } from '@expo-google-fonts/silkscreen';
-import auth from "@react-native-firebase/auth";
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { registerRootComponent } from 'expo';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
-import { View, useColorScheme } from 'react-native';
-import ScreenLayout from './(screens)/layout';
-import LoginScreen from './login';
-import OnboardingScreen from './onboarding';
-import SignupScreen from './signup';
-import StartScreen from './start';
+import { useColorScheme, View } from 'react-native';
+
+import { RunwayDarkTheme, RunwayLightTheme } from '@/styles/Theme';
+import { Silkscreen_400Regular, useFonts } from '@expo-google-fonts/silkscreen';
+import auth from '@react-native-firebase/auth';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { ScreenLayout } from './loggedIn';
+import { LoginScreen, OnboardingScreen, SignupScreen, StartScreen } from './loggedOut';
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -21,7 +20,7 @@ export default function App() {
     const scheme = useColorScheme();
     const theme = scheme === 'dark' ? RunwayDarkTheme : RunwayLightTheme;
 
-    const [fontsLoaded] = useFonts({
+    const [fontsLoaded, fontsError] = useFonts({
         Silkscreen_400Regular,
     });
 
@@ -47,11 +46,9 @@ export default function App() {
             await SplashScreen.hideAsync();
         }
     }, [fontsLoaded]);
-    console.log(fontsLoaded);
 
     if (!fontsLoaded) return null;
     if (initializing) return null;
-
 
     // const [firstTime, setFirstTime] = useState(true);
     // useEffect(() => {
