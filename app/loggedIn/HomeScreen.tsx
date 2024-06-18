@@ -22,7 +22,6 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
     function logOut() {
         auth().signOut().then(() => {
             console.log('User signed out!');
-            navigation.navigate('login');
         });
     }
 

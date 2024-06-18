@@ -65,19 +65,27 @@ export default function App() {
     // }, []);
 
     return (
-        <View style={{flex: 1}} onLayout={onLayoutRootView}>
+        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
             <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
             <NavigationContainer theme={theme}>
                 <Stack.Navigator
+                    initialRouteName={user ? 'app' : 'start'}
                     screenOptions={{
                         cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
                     }}
                 >
-                    <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />
-                    <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
-                    <Stack.Screen name="signup" component={SignupScreen} options={{ headerShown: false }} />
-                    <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
-                    <Stack.Screen name="app" component={ScreenLayout} options={{ headerShown: false }} />
+                    {!user ?
+                        <>
+                            <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
+                            <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />
+                            <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
+                            <Stack.Screen name="signup" component={SignupScreen} options={{ headerShown: false }} />
+                        </>
+                        :
+                        <>
+                            <Stack.Screen name="app" component={ScreenLayout} options={{ headerShown: false }} />
+                        </>
+                    }
                 </Stack.Navigator>
             </NavigationContainer>
         </View>
