@@ -1,4 +1,6 @@
-import { FontAwesome5 as Icon } from '@expo/vector-icons';
+import Book from '@/assets/svg/book.svg';
+import Home from '@/assets/svg/home.svg';
+import Trophy from '@/assets/svg/trophy.svg';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTheme } from '@react-navigation/native';
 
@@ -17,17 +19,13 @@ export default function ScreenLayout() {
             screenOptions={({ route }) => ({
                 tabBarShowLabel: false,
                 tabBarIcon: ({ focused }) => {
-                    let iconName;
-
                     if (route.name === 'Content') {
-                        iconName = 'book';
+                        return <Book width={30} height={30} fill={focused ? colors.primary : colors.text} />;
                     } else if (route.name === 'Home') {
-                        iconName = 'home';
+                        return <Home width={30} height={30} fill={focused ? colors.primary : colors.text} />;
                     } else if (route.name === 'Leaderboard') {
-                        iconName = 'trophy';
+                        return <Trophy width={30} height={30} fill={focused ? colors.primary : colors.text} />;
                     }
-
-                    return <Icon name={iconName} size={25} color={focused ? colors.primary : colors.text} />;
                 },
             })}
         >
