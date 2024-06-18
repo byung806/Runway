@@ -1,21 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Pressable, View } from 'react-native';
-import Text from './Text';
 
 import { Colors, Styles } from '@/styles';
 import { useTheme } from '@react-navigation/native';
 
+import Text from './Text';
+
 // export const BUTTON_HEIGHT = 45;
 export const ANIM_CONFIG = { duration: 30, useNativeDriver: true };
 
-interface MainButtonProps {
+interface ButtonProps {
     label: string;
     callback: () => void;
     disabled?: boolean;
     filled?: boolean;
 }
 
-export default function MainButton({ label, callback, disabled = false, filled = true }: MainButtonProps) {
+export default function Button({ label, callback, disabled = false, filled = true, ...props }: ButtonProps & any) {
     const { colors } = useTheme();
 
     const translateY = useRef(new Animated.Value(0)).current;
@@ -47,16 +48,17 @@ export default function MainButton({ label, callback, disabled = false, filled =
                 backgroundColor: Colors.light.gray,
                 ...Styles.centeringContainer,
                 padding: 10,
+                ...props.style
             }}>
                 <Text style={{
-                    ...Styles.btnLabel,
+                    fontSize: 15,
                     color: '#aaaaaa',
                 }}>{label}</Text>
             </View>
         );
     } else {
         return (
-            <Pressable onPressIn={onPressIn} onPressOut={onPressOut}>
+            <Pressable onPressIn={onPressIn} onPressOut={onPressOut} style={props.style}>
                 <Animated.View style={{
                     borderRadius: 14,
                     marginBottom: 2,
@@ -68,8 +70,8 @@ export default function MainButton({ label, callback, disabled = false, filled =
                     transform: [{ translateY }]
                 }}>
                     <Text style={{
-                        ...Styles.btnLabel,
-                        color: filled ? Colors.light.white : Colors.light.accent,
+                        fontSize: 15,
+                        color: filled ? Colors.light.white : Colors.light.black,
                     }}>{label}</Text>
                 </Animated.View>
                 <View style={{

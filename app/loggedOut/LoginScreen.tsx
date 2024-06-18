@@ -38,24 +38,26 @@ export default function LoginScreen({ navigation }: { navigation: NativeStackNav
             <SafeAreaView style={{ ...Styles.centeringContainer, ...Styles.flex }}>
                 <OnboardingHeader
                     backgroundColor={colors.background}
-                    prevButtonCallback={() => navigation.navigate('start')}
+                    prevButtonCallback={() => navigation.goBack()}
                 />
 
-                <View style={{ flex: 3, ...Styles.centeringContainer }}>
+                <View style={{ ...Styles.centeringContainer, margin: 50 }}>
                     <Logo />
                     <Text style={Styles.title}>Welcome Back!</Text>
                     <Text style={Styles.subtitle}>Log in to continue your flight.</Text>
                 </View>
 
-                <View style={{ flex: 2, width: '90%' }}>
+                <View style={{ flex: 1, width: '90%' }}>
                     <TextInput
                         placeholder={'Username'}
                         onChangeText={setUsername}
+                        style={{ marginBottom: 10 }}
                     />
                     <TextInput
                         placeholder={'Password'}
-                        password={true}
+                        password
                         onChangeText={setPassword}
+                        style={{ marginBottom: 10 }}
                     />
                     <Button
                         label={'LOGIN'}

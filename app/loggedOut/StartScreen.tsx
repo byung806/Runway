@@ -26,6 +26,7 @@ export default function StartScreen({ navigation }: { navigation: NativeStackNav
                         callback={() => {
                             navigation.navigate('onboarding');
                         }}
+                        style={{marginBottom: 10}}
                     />
                     <Button
                         label={'I HAVE AN ACCOUNT'}
@@ -33,6 +34,7 @@ export default function StartScreen({ navigation }: { navigation: NativeStackNav
                             navigation.navigate('login');
                         }}
                         filled={false}
+                        style={{marginBottom: 10}}
                     />
                 </View>
             </SafeAreaView>

@@ -10,7 +10,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export default function OnboardingScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
     const pagerRef = useRef<ViewPager>(null);
-    const size = 144;
+    const size = 80;
     const { colors } = useTheme(); // Add this line to use the theme
 
     const handlePageChange = (pageNumber: number) => {
@@ -25,10 +25,10 @@ export default function OnboardingScreen({ navigation }: { navigation: NativeSta
                         prevButtonCallback={() => { navigation.navigate('start') }}
                         nextButtonCallback={() => { handlePageChange(1) }}
                     >
-                        <>
+                        <View style={{flex: 1, margin: 50, ...Styles.centeringContainer}}>
                             <MaterialIcons name="science" size={size} color={colors.primary} />
                             <Text style={Styles.title}>Explore Different Science Topics</Text>
-                        </>
+                        </View>
                     </OnboardingPage>
                 </View>
                 <View key="2">
@@ -36,10 +36,10 @@ export default function OnboardingScreen({ navigation }: { navigation: NativeSta
                         prevButtonCallback={() => { handlePageChange(0) }}
                         nextButtonCallback={() => { handlePageChange(2) }}
                     >
-                        <>
+                        <View style={{flex: 1, margin: 50, ...Styles.centeringContainer}}>
                             <Ionicons name="game-controller" size={size} color={colors.primary} />
                             <Text style={Styles.title}>Play Minigames</Text>
-                        </>
+                        </View>
                     </OnboardingPage>
                 </View>
                 <View key="3">
@@ -47,10 +47,10 @@ export default function OnboardingScreen({ navigation }: { navigation: NativeSta
                         prevButtonCallback={() => { handlePageChange(1) }}
                         nextButtonCallback={() => { handlePageChange(3) }}
                     >
-                        <>
+                        <View style={{flex: 1, margin: 50, ...Styles.centeringContainer}}>
                             <MaterialCommunityIcons name="fire" size={size} color={colors.primary} />
                             <Text style={Styles.title}>Rack Up Points and Streaks</Text>
-                        </>
+                        </View>
                     </OnboardingPage>
                 </View>
                 <View key="4">
@@ -59,10 +59,10 @@ export default function OnboardingScreen({ navigation }: { navigation: NativeSta
                         prevButtonCallback={() => { handlePageChange(2) }}
                         nextButtonCallback={() => { navigation.navigate("signup") }}
                     >
-                        <>
+                        <View style={{flex: 1, margin: 50, ...Styles.centeringContainer}}>
                             <FontAwesome5 name="user-friends" size={size} color={colors.primary} />
                             <Text style={Styles.title}>Compete with Friends</Text>
-                        </>
+                        </View>
                     </OnboardingPage>
                 </View>
             </ViewPager >

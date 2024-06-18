@@ -12,9 +12,11 @@ const styles: { [key: string]: object & StyleProp<TextStyle> } = {
     },
     title: {
         fontSize: 40,
+        textAlign: 'center',
     },
     subtitle: {
         fontSize: 20,
+        textAlign: 'center',
     },
     bodyText: {
         fontSize: 15,

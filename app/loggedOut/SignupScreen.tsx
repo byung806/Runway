@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, OnboardingHeader, Logo, Text, TextInput } from '~/2d';
+import { Button, OnboardingHeader, Text, TextInput } from '~/2d';
 
 import { Styles } from '@/styles';
 import { emailEnding, registerUser } from '@/utils/firestore';
@@ -43,19 +43,21 @@ export default function SignupScreen({ navigation }: { navigation: NativeStackNa
             <SafeAreaView style={{...Styles.centeringContainer, ...Styles.flex }}>
                 <OnboardingHeader
                     backgroundColor={colors.background}
-                    prevButtonCallback={() => navigation.navigate('start')}
+                    prevButtonCallback={() => navigation.goBack()}
                 />
 
-                <View style={{flex: 3, ...Styles.centeringContainer}}>
-                    <Logo />
+                <View style={{...Styles.centeringContainer, margin: 50}}>
+                    {/* <Logo /> */}
                     <Text style={Styles.title}>Sign Up!</Text>
-                    <Text style={Styles.subtitle}>Create an account to continue your flight.</Text>
+                    <Text style={Styles.subtitle}>Create an account to start your flight.</Text>
                 </View>
 
-                <View style={{flex: 2, width: '90%'}}>
-                    <TextInput placeholder={'Username'} onChangeText={setUsername} />
-                    <TextInput placeholder={'Email'} onChangeText={setEmail} />
-                    <TextInput placeholder={'Password'} onChangeText={setPassword} password={true} />
+                {/* <Divider width={10} orientation='vertical' style={{marginBottom: 20}} /> */}
+
+                <View style={{flex: 1, width: '90%'}}>
+                    <TextInput placeholder={'Username'} onChangeText={setUsername} style={{ marginBottom: 10 }} />
+                    <TextInput placeholder={'Email'} onChangeText={setEmail} email style={{ marginBottom: 10 }} />
+                    <TextInput placeholder={'Password'} onChangeText={setPassword} password style={{ marginBottom: 10 }} />
                     <Button
                         label={'SIGN UP'}
                         disabled={loading}
