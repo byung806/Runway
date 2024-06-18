@@ -7,10 +7,10 @@ import { Styles } from '@/styles';
 import { emailEnding } from '@/utils/firestore';
 import auth from '@react-native-firebase/auth';
 import { useTheme } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useSignInWithEmailAndPassword } from '@skillnation/react-native-firebase-hooks/auth';
 
-export default function LoginScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
+export default function LoginScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const { colors } = useTheme();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

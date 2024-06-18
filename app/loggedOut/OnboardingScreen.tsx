@@ -6,9 +6,9 @@ import { OnboardingPage, Text } from '~/2d';
 import { Styles } from '@/styles';
 import { FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-export default function OnboardingScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
+export default function OnboardingScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const pagerRef = useRef<ViewPager>(null);
     const size = 80;
     const { colors } = useTheme(); // Add this line to use the theme

@@ -6,9 +6,9 @@ import { ContentCard } from '~/2d';
 
 import { getTodayDate } from '@/utils/date';
 import { useTheme } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-export default function ContentScreen({ navigation, props }: { navigation: NativeStackNavigationProp<any, any>, props?: any }) {
+export default function ContentScreen({ navigation, props }: { navigation: StackNavigationProp<any, any>, props?: any }) {
     const { colors } = useTheme();
 
     const [selected, setSelected] = useState(useMemo(getTodayDate, []));
@@ -41,11 +41,15 @@ export default function ContentScreen({ navigation, props }: { navigation: Nativ
                         backgroundColor: colors.background,
                         calendarBackground: colors.background,
                         selectedDayBackgroundColor: colors.primary,
-                        selectedDayTextColor: colors.text,
+                        selectedDayTextColor: colors.card,
                         todayTextColor: colors.primary,
                         dayTextColor: colors.text,
                         dotColor: colors.primary,
                         indicatorColor: colors.primary,
+
+                        textDayFontFamily: 'Silkscreen_400Regular',
+                        textMonthFontFamily: 'Silkscreen_400Regular',
+                        textDayHeaderFontFamily: 'Silkscreen_400Regular',
                     }}
                 />
             </CalendarProvider>

@@ -5,9 +5,9 @@ import { Button, Logo, Text } from '~/2d';
 
 import { Styles } from '@/styles';
 import { useTheme } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-export default function StartScreen({ navigation }: { navigation: NativeStackNavigationProp<any, any> }) {
+export default function StartScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const { colors } = useTheme();
     
     return (

@@ -9,10 +9,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { useTheme } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useDocumentDataOnce } from '@skillnation/react-native-firebase-hooks/firestore';
 
-export default function HomeScreen({ navigation, props }: { navigation: NativeStackNavigationProp<any, any>, props?: any }) {
+export default function HomeScreen({ navigation, props }: { navigation: StackNavigationProp<any, any>, props?: any }) {
     const { colors } = useTheme();
     const user = auth().currentUser;  // guaranteed to be signed in
     const [snapshot, loading, error] = useDocumentDataOnce(
@@ -60,7 +60,7 @@ export default function HomeScreen({ navigation, props }: { navigation: NativeSt
                     </Text>
                 </View>
             </SafeAreaView>
-            <MainScene referenceSphere={true} />
+            <MainScene />
         </View>
     );
 };
