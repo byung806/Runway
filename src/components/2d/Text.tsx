@@ -8,7 +8,7 @@ interface TextProps {
 export default function Text({ children, ...props }: TextProps & any) {
     return (
         <TextNative {...props} style={{ fontFamily: 'Silkscreen_400Regular', ...props.style }}>
-            {children}
+            {children.toString().replace('\\n', '\n')}
         </TextNative>
     );
 }
