@@ -2,19 +2,19 @@ import { registerRootComponent } from 'expo';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
-import { useColorScheme, View } from 'react-native';
+import { View, useColorScheme } from 'react-native';
 
 import { RunwayDarkTheme, RunwayLightTheme } from '@/styles/Theme';
 import { Silkscreen_400Regular, useFonts } from '@expo-google-fonts/silkscreen';
 import auth from '@react-native-firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 
 import { ScreenLayout } from './loggedIn';
 import { LoginScreen, OnboardingScreen, SignupScreen, StartScreen } from './loggedOut';
 
 SplashScreen.preventAutoHideAsync();
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
     const scheme = useColorScheme();
@@ -68,7 +68,11 @@ export default function App() {
         <View style={{flex: 1}} onLayout={onLayoutRootView}>
             <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
             <NavigationContainer theme={theme}>
-                <Stack.Navigator>
+                <Stack.Navigator
+                    screenOptions={{
+                        cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+                    }}
+                >
                     <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="signup" component={SignupScreen} options={{ headerShown: false }} />
