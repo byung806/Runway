@@ -8,7 +8,7 @@
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "src/assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
@@ -26,9 +26,6 @@
         "foregroundImage": "src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
-    },
-    "web": {
-      "favicon": "src/assets/favicon.png"
     },
     "plugins": [
       "@react-native-firebase/app",
