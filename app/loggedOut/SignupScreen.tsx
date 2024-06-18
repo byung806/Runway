@@ -16,25 +16,61 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
 
+    const [errorMessage, setErrorMessage] = useState('');
+
     const [
         createUserWithEmailAndPassword,
         user,
         loading,
         error,
     ] = useCreateUserWithEmailAndPassword(auth);
-    // TODO: validate form inputs
+
+    useEffect(() => {
+        setErrorMessage('');
+    }, [username, password, email])
+
+    useEffect(() => {
+        if (error) {
+            console.log(error);
+            if (error.code === 'auth/email-already-in-use') {
+                setErrorMessage('Please choose another username!');
+            }
+            else if (error.code === 'auth/invalid-email') {
+                setErrorMessage('Invalid email.');
+            }
+            else if (error.code === 'auth/weak-password') {
+                setErrorMessage('Please choose a stronger password!');
+            }
+            else {
+                setErrorMessage('Error signing up. Please try again later!');
+            }
+        }
+    }, [error])
 
     useEffect(() => {
         // useEffect tracks changes in [user] variable
         // called once user is created and logged in
+        console.log(user);
         if (user) {
             registerUser(user.user.uid, username, email, password);
-            navigation.navigate('app');
         }
     }, [user]);
 
-    if (error) {
-        alert(error);
+    // called on sign up button press
+    function signupCallback() {
+        if (username.length < 3) {
+            setErrorMessage('Please make your username at least 3 characters long!');
+            return;
+        }
+        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            setErrorMessage('Please enter a valid email!');
+            return;
+        }
+        if (password.length < 6) {
+            setErrorMessage('Please make your password at least 6 characters long!');
+            return;
+        }
+        createUserWithEmailAndPassword(username + emailEnding, password);
     }
 
     // TODO: refer friends
@@ -61,8 +97,9 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
                     <Button
                         label={'SIGN UP'}
                         disabled={loading}
-                        callback={() => {createUserWithEmailAndPassword(username + emailEnding, password)}}
+                        callback={signupCallback}
                     />
+                    { errorMessage ? <Text style={{fontSize: 15, textAlign: 'center', marginVertical: 5}}>{errorMessage}</Text> : null }
 
                     <Text style={{...Styles.subtitle, textAlign: 'center', marginVertical: 10}}>OR</Text>
 

@@ -14,23 +14,38 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
     const { colors } = useTheme();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const [errorMessage, setErrorMessage] = useState('');
+
     const [
         signInWithEmailAndPassword,
         user,
         loading,
         error,
     ] = useSignInWithEmailAndPassword(auth);
-    // TODO: validate form inputs
 
     useEffect(() => {
-        // useEffect tracks changes in [user] variable
-        if (user) {
-            navigation.navigate('app');
+        if (error) {
+            if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                setErrorMessage('Incorrect password. Please try again!');
+            }
+            else {
+                setErrorMessage('Error logging in. Please try again later!');
+            }
         }
-    }, [user]);
+    }, [error])
 
-    if (error) {
-        alert(error);
+    // called on sign up button press
+    function loginCallback() {
+        if (username.length == 0) {
+            setErrorMessage('Please enter a username!');
+            return;
+        }
+        if (password.length == 0) {
+            setErrorMessage('Please enter a password!');
+            return;
+        }
+        signInWithEmailAndPassword(username + emailEnding, password);
     }
 
     return (
@@ -38,7 +53,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
             <SafeAreaView style={{ ...Styles.centeringContainer, ...Styles.flex }}>
                 <OnboardingHeader
                     backgroundColor={colors.background}
-                    prevButtonCallback={() => navigation.goBack()}
+                    prevButtonCallback={() => navigation.navigate('start')}
                 />
 
                 <View style={{ ...Styles.centeringContainer, margin: 50 }}>
@@ -62,14 +77,18 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                     <Button
                         label={'LOGIN'}
                         disabled={loading}
-                        callback={() => signInWithEmailAndPassword(username + emailEnding, password)}
+                        callback={loginCallback}
                     />
+                    { errorMessage ? <Text style={{fontSize: 15, textAlign: 'center', marginVertical: 5}}>{errorMessage}</Text> : null }
+
                     <Text style={{ ...Styles.subtitle, textAlign: 'center', marginVertical: 10 }}>OR</Text>
+
                     <Button
                         label={'CREATE AN ACCOUNT'}
                         filled={false}
                         disabled={loading}
                         callback={() => navigation.navigate('signup')}
+                        style={{ marginBottom: 10 }}
                     />
                 </View>
             </SafeAreaView>

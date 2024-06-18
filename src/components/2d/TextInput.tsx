@@ -19,6 +19,8 @@ export default function TextInput({ placeholder, onChangeText, password=false, e
             placeholder={placeholder}
             onChangeText={onChangeText}
             autoCapitalize='characters'
+            inputMode={email ? 'email' : 'text'}
+            autoCorrect={false}
             secureTextEntry={password}
             style={{
                 fontFamily: 'Silkscreen_400Regular',
