@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Logo, OnboardingHeader, Text, TextInput } from '~/2d';
 
@@ -27,7 +27,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
     useEffect(() => {
         if (error) {
             if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-                setErrorMessage('Incorrect password. Please try again!');
+                setErrorMessage('Incorrect password!');
             }
             else {
                 setErrorMessage('Error logging in. Please try again later!');
@@ -50,36 +50,41 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
 
     return (
         <View style={{ ...Styles.flex, backgroundColor: colors.background }}>
-            <SafeAreaView style={{ ...Styles.centeringContainer, ...Styles.flex }}>
-                <OnboardingHeader
-                    backgroundColor={colors.background}
-                    prevButtonCallback={() => navigation.navigate('start')}
-                />
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <SafeAreaView style={{ ...Styles.centeringContainer, ...Styles.flex }}>
+                    <OnboardingHeader
+                        backgroundColor={colors.background}
+                        prevButtonCallback={() => navigation.navigate('start')}
+                    />
 
-                <View style={{ ...Styles.centeringContainer, margin: 50 }}>
-                    <Logo />
-                    <Text style={Styles.title}>Welcome Back!</Text>
-                    <Text style={Styles.subtitle}>Log in to continue your flight.</Text>
-                </View>
+                    <View style={{ ...Styles.centeringContainer, margin: 50, flex: 1 }}>
+                        <Logo />
+                        <Text style={Styles.title}>Welcome Back!</Text>
+                        <Text style={Styles.subtitle}>Log in to continue your flight.</Text>
+                    </View>
 
-                <View style={{ flex: 1, width: '90%' }}>
-                    <TextInput
-                        placeholder={'Username'}
-                        onChangeText={setUsername}
-                        style={{ marginBottom: 10 }}
-                    />
-                    <TextInput
-                        placeholder={'Password'}
-                        password
-                        onChangeText={setPassword}
-                        style={{ marginBottom: 10 }}
-                    />
-                    <Button
-                        label={'LOGIN'}
-                        disabled={loading}
-                        callback={loginCallback}
-                    />
-                    { errorMessage ? <Text style={{fontSize: 15, textAlign: 'center', marginVertical: 5}}>{errorMessage}</Text> : null }
+                    <KeyboardAvoidingView
+                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                        style={{ flex: 0, width: '90%' }}
+                    >
+                        <TextInput
+                            placeholder={'Username'}
+                            onChangeText={setUsername}
+                            style={{ marginBottom: 10 }}
+                        />
+                        <TextInput
+                            placeholder={'Password'}
+                            password={true}
+                            onChangeText={setPassword}
+                            style={{ marginBottom: 10 }}
+                        />
+                        <Button
+                            label={'LOGIN'}
+                            disabled={loading}
+                            callback={loginCallback}
+                        />
+                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5 }}>{errorMessage}</Text> : null}
+                    </KeyboardAvoidingView>
 
                     <Text style={{ ...Styles.subtitle, textAlign: 'center', marginVertical: 10 }}>OR</Text>
 
@@ -88,10 +93,10 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                         filled={false}
                         disabled={loading}
                         callback={() => navigation.navigate('signup')}
-                        style={{ marginBottom: 10 }}
+                        style={{ marginBottom: 20 }}
                     />
-                </View>
-            </SafeAreaView>
+                </SafeAreaView>
+            </TouchableWithoutFeedback>
         </View>
     );
 };
