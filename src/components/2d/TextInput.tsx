@@ -11,16 +11,16 @@ interface TextInputProps {
     email?: boolean;
 }
 
-export default function TextInput({ placeholder, onChangeText, password=false, email=false, ...props }: TextInputProps & any) {
+export default function TextInput({ placeholder, onChangeText, password = false, email = false, ...props }: TextInputProps & any) {
     const { colors } = useTheme();
 
     return (
         <TextInputNative
             placeholder={placeholder}
             onChangeText={onChangeText}
-            autoCapitalize='characters'
+            // autoCapitalize='characters'
             inputMode={email ? 'email' : 'text'}
-            autoCorrect={false}
+            keyboardType={"default"}
             secureTextEntry={password}
             style={{
                 fontFamily: 'Silkscreen_400Regular',
@@ -31,7 +31,6 @@ export default function TextInput({ placeholder, onChangeText, password=false, e
                 borderWidth: 2,
                 borderColor: colors.border,
                 ...props.style
-            }}
-        />
+            }} />
     );
 }
