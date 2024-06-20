@@ -1,58 +1,44 @@
-import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LeaderboardEntry, Text } from '~/2d';
 
 import { Styles } from '@/styles';
 import { useTheme } from '@react-navigation/native';
+import { useDocumentDataOnce } from '@skillnation/react-native-firebase-hooks/firestore';
+import firestore from '@react-native-firebase/firestore';
 
-interface TableItemType {
-    name: string;
-    score: number;
-}
+import { TabView, TabBar } from 'react-native-tab-view';
+import Leaderboard from '@/components/2d/Leaderboard';
 
-const tableData = [
-    { "name": "Bryan", "score": 10000 },
-    { "name": "Jacob", "score": 8700 },
-    { "name": "byung", "score": 4100 },
-    { "name": "James", "score": 2400 },
-    { "name": "John", "score": 450 },
-    { "name": "Michael", "score": 400 },
-    { "name": "William", "score": 350 },
-    { "name": "David", "score": 300 },
-    { "name": "Joseph", "score": 250 },
-    { "name": "Daniel", "score": 200 },
-    { "name": "Matthew", "score": 150 },
-    { "name": "Andrew", "score": 100 },
-    { "name": "Christopher", "score": 50 },
-];
-
-const renderItem = (item: TableItemType, place: number) => {
-    var color;
-    if (place == 1) {
-        color = "gold";
-    } else if (place == 2) {
-        color = "silver";
-    } else if (place == 3) {
-        color = "#CD7F32";
+const renderScene = ({ route }: { route: { key: string } }) => {
+    switch (route.key) {
+        case 'friends':
+            return <Leaderboard type='friends' />;
+        case 'global':
+            return <Leaderboard type='global' />;
+        default:
+            return null;
     }
-    return (
-        <LeaderboardEntry
-            place={place}
-            avatar={"@/assets/favicon.png"}
-            name={item.name}
-            score={item.score}
-            color={color}
-        />
-    );
-}
+};
+
 
 export default function LeaderboardScreen() {
     const { colors } = useTheme();
 
+    // const [snapshot, loading, error] = useDocumentDataOnce(
+    //     firestore().collection('users').doc(user?.uid)
+    // );
+
+    const [index, setIndex] = React.useState(0);
+    const [routes] = useState([
+        { key: 'friends', title: 'Friends' },
+        { key: 'global', title: 'Global' },
+    ]);
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }} edges={['top']}>
-            <View 
+            <View
                 style={{
                     ...Styles.titleBox,
                     ...Styles.centeringContainer,
@@ -60,21 +46,28 @@ export default function LeaderboardScreen() {
                 }}>
                 <Text style={{ ...Styles.title, color: colors.card }}>Leaderboard</Text>
             </View>
-            
-            <View 
-                style={{
-                    flex: 1,
-                    backgroundColor: colors.background,
-                    borderTopLeftRadius: 10,
-                    borderTopRightRadius: 10,
-                    flexGrow: 1,
-                }}>
-                <FlatList
-                    data={tableData.sort((a, b) => b.score - a.score)}
-                    keyExtractor={(item) => (item.name.toString())}
-                    renderItem={({ item, index }) => renderItem(item, index + 1)}
-                />
-            </View>
+            <TabView
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={{ width: Dimensions.get('window').width }}
+                renderTabBar={(props) => {
+                    return (
+                        <TabBar
+                            {...props}
+                            indicatorStyle={{ backgroundColor: 'white' }}
+                            style={{ backgroundColor: colors.primary }}
+                            bounces={true}
+                            pressColor={'transparent'}
+                            renderLabel={({ route, focused, color }) => (
+                                <Text style={{color: colors.card}}>{route.title}</Text>
+                            )}
+                        />
+                    )
+                }}
+            />
+
+            {/* <Leaderboard type='global' /> */}
         </SafeAreaView>
     );
 }

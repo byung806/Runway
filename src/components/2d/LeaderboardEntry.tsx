@@ -13,13 +13,24 @@ interface LeaderboardEntryProps {
     color?: any;
 }
 
-export default function LeaderboardEntry({ place, avatar, name, score, color }: LeaderboardEntryProps) {
+export default function LeaderboardEntry({ place, avatar, name, score }: LeaderboardEntryProps) {
     const { colors } = useTheme();
 
     function onPressIn() {
     }
 
     function onPressOut() {
+    }
+
+    function colorFromPlace(place: number): string {
+        if (place == 1) {
+            return "gold";
+        } else if (place == 2) {
+            return "silver";
+        } else if (place == 3) {
+            return "#CD7F32";
+        }
+        return colors.card;
     }
 
     return (
@@ -43,7 +54,7 @@ export default function LeaderboardEntry({ place, avatar, name, score, color }: 
                     ...Styles.centeringContainer,
                 }}>
                     <Text style={{
-                        color: color ? color : colors.card,
+                        color: colorFromPlace(place),
                     }}>{score}</Text>
                 </View>
             </View>
