@@ -15,7 +15,7 @@
     "@react-native-firebase/app": "^20.1.0",
     "@react-native-firebase/auth": "^20.1.0",
     "@react-native-firebase/firestore": "^20.1.0",
-    "@react-navigation/bottom-tabs": "^6.5.20",
+    "@react-navigation/material-top-tabs": "^6.6.13",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
     "@react-spring/native": "^9.7.3",
