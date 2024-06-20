@@ -58,38 +58,40 @@ export default function Button({ label, callback, disabled = false, filled = tru
         );
     } else {
         return (
-            <Pressable onPressIn={onPressIn} onPressOut={onPressOut} style={props.style}>
-                <Animated.View style={{
-                    borderRadius: 14,
-                    marginBottom: 2,
-                    backgroundColor: filled ? Colors.light.accent : Colors.light.white,
-                    borderColor: Colors.light.gray,
-                    borderWidth: filled ? 0 : 2,
-                    padding: 10,
-                    ...Styles.centeringContainer,
-                    transform: [{ translateY }]
-                }}>
-                    <Text style={{
-                        fontSize: 15,
-                        color: filled ? Colors.light.white : Colors.light.black,
-                    }}>{label}</Text>
-                </Animated.View>
-                <View style={{
-                    position: 'absolute',
-                    width: '100%',
-                    height: '100%',
-                    zIndex: -1,
-                }}>
-                    <View style={{
-                        flex: 1,
-                        backgroundColor: filled ? Colors.light.accentDarker : Colors.light.gray,
-                        marginTop: 2,
+            <View style={props.style}>
+                <Pressable onPressIn={onPressIn} onPressOut={onPressOut}>
+                    <Animated.View style={{
                         borderRadius: 14,
+                        marginBottom: 2,
+                        backgroundColor: filled ? Colors.light.accent : Colors.light.white,
+                        borderColor: Colors.light.gray,
+                        borderWidth: filled ? 0 : 2,
+                        padding: 10,
+                        ...Styles.centeringContainer,
+                        transform: [{ translateY }]
+                    }}>
+                        <Text style={{
+                            fontSize: 15,
+                            color: filled ? Colors.light.white : Colors.light.black,
+                        }}>{label}</Text>
+                    </Animated.View>
+                    <View style={{
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
                         zIndex: -1,
-                        bottom: 0,
-                    }} />
-                </View>
-            </Pressable>
+                    }}>
+                        <View style={{
+                            flex: 1,
+                            backgroundColor: filled ? Colors.light.accentDarker : Colors.light.gray,
+                            marginTop: 2,
+                            borderRadius: 14,
+                            zIndex: -1,
+                            bottom: 0,
+                        }} />
+                    </View>
+                </Pressable>
+            </View>
         );
     }
 }
