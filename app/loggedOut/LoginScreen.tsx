@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, Pressable, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Logo, OnboardingHeader, Text, TextInput } from '~/2d';
 
@@ -50,7 +50,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
 
     return (
         <View style={{ ...Styles.flex, backgroundColor: colors.background }}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{flex: 1}}>
                 <SafeAreaView style={{ ...Styles.centeringContainer, ...Styles.flex }}>
                     <OnboardingHeader
                         backgroundColor={colors.background}
@@ -96,7 +96,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                         style={{ marginBottom: 20 }}
                     />
                 </SafeAreaView>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
         </View>
     );
 };

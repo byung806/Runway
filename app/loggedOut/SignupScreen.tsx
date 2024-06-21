@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Logo, OnboardingHeader, Text, TextInput } from '~/2d';
 
-import { Debug, Styles } from '@/styles';
+import { Styles } from '@/styles';
 import { emailEnding, registerUser } from '@/utils/firestore';
 import auth from '@react-native-firebase/auth';
 import { useTheme } from '@react-navigation/native';
@@ -31,7 +31,6 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
 
     useEffect(() => {
         if (error) {
-            console.log(error);
             if (error.code === 'auth/email-already-in-use') {
                 setErrorMessage('Please choose another username!');
             }
@@ -50,7 +49,6 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
     useEffect(() => {
         // useEffect tracks changes in [user] variable
         // called once user is created and logged in
-        console.log(user);
         if (user) {
             registerUser(user.user.uid, username, email, password);
         }
@@ -76,7 +74,7 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
     // TODO: combine signup & login - enter username => check if user exists => if so, password to login, else, password to signup
     return (
         <View style={{ ...Styles.flex, backgroundColor: colors.background }}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{flex: 1}}>
                 <SafeAreaView style={{ ...Styles.centeringContainer, ...Styles.flex }}>
                     <OnboardingHeader
                         backgroundColor={colors.background}
@@ -110,7 +108,7 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
 
                     <Button label={'I HAVE AN ACCOUNT'} filled={false} callback={() => navigation.navigate('login')} style={{ marginBottom: 20 }} />
                 </SafeAreaView>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
         </View>
     );
 };
