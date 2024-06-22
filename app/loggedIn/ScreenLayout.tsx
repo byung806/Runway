@@ -9,24 +9,25 @@ import HomeScreen from './HomeScreen';
 import LeaderboardScreen from './LeaderboardScreen';
 import { Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function ScreenLayout() {
+export default function ScreenLayout({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const { colors } = useTheme();
 
     return (
         <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
             <Tab.Navigator
-                initialRouteName="Home"
+                initialRouteName="home"
                 screenOptions={({ route }) => ({
                     tabBarShowLabel: false,
                     tabBarIcon: ({ focused }) => {
-                        if (route.name === 'Content') {
+                        if (route.name === 'content') {
                             return <Book width={30} height={30} fill={focused ? colors.primary : colors.text} />;
-                        } else if (route.name === 'Home') {
+                        } else if (route.name === 'home') {
                             return <Home width={30} height={30} fill={focused ? colors.primary : colors.text} />;
-                        } else if (route.name === 'Leaderboard') {
+                        } else if (route.name === 'leaderboard') {
                             return <Trophy width={30} height={30} fill={focused ? colors.primary : colors.text} />;
                         }
                     },
@@ -37,9 +38,9 @@ export default function ScreenLayout() {
                 tabBarPosition="bottom"
                 initialLayout={{ width: Dimensions.get('window').width }}
             >
-                <Tab.Screen name="Content" component={ContentScreen} />
-                <Tab.Screen name="Home" component={HomeScreen} />
-                <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
+                <Tab.Screen name="content" component={ContentScreen} />
+                <Tab.Screen name="home" component={HomeScreen} />
+                <Tab.Screen name="leaderboard" component={LeaderboardScreen} />
             </Tab.Navigator>
         </SafeAreaView>
     );
