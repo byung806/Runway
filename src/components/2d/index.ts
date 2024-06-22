@@ -9,3 +9,4 @@ export { default as OnboardingHeader } from './OnboardingHeader';
 export { default as OnboardingPage } from './OnboardingPage';
 export { default as Text } from './Text';
 export { default as TextInput } from './TextInput';
+export { ThemeContext, ThemeProvider } from './ThemeProvider';

@@ -29,6 +29,10 @@ const styles: { [key: string]: object & StyleProp<TextStyle> } = {
     },
     flex: {
         flex: 1
+    },
+    debugBorder: {
+        borderWidth: 1,
+        borderColor: 'red',
     }
 };
 

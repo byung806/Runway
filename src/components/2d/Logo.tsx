@@ -1,10 +1,11 @@
 import { FontAwesome as Icon } from '@expo/vector-icons';
-import { useTheme } from '@react-navigation/native';
+import { useContext } from 'react';
+import { ThemeContext } from './ThemeProvider';
 
-export default function Logo({size=80}: {size?: number}) {
-    const { colors } = useTheme();
+export default function Logo({ size = 80 }: { size?: number }) {
+    const theme = useContext(ThemeContext);
 
     return (
-        <Icon name="paper-plane" size={size} color={colors.primary} />
+        <Icon name="paper-plane" size={size} color={theme.accent} />
     )
 }

@@ -2,10 +2,11 @@ import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Styles } from '@/styles';
-import { useTheme } from '@react-navigation/native';
 
+import { useContext } from 'react';
 import OnboardingFooter from './OnboardingFooter';
 import OnboardingHeader from './OnboardingHeader';
+import { ThemeContext } from './ThemeProvider';
 
 interface OnboardingPageProps {
     backgroundColor?: string;
@@ -15,8 +16,8 @@ interface OnboardingPageProps {
     children: JSX.Element;
 }
 
-export default function OnboardingPage({ backgroundColor, buttonText='NEXT', prevButtonCallback, nextButtonCallback, children }: OnboardingPageProps) {
-    const { colors } = useTheme();
+export default function OnboardingPage({ backgroundColor, buttonText = 'NEXT', prevButtonCallback, nextButtonCallback, children }: OnboardingPageProps) {
+    const theme = useContext(ThemeContext);
 
     return (
         <View
@@ -27,20 +28,18 @@ export default function OnboardingPage({ backgroundColor, buttonText='NEXT', pre
         >
             <SafeAreaView style={Styles.flex}>
                 <OnboardingHeader
-                    backgroundColor={backgroundColor || colors.background}
                     prevButtonCallback={prevButtonCallback}
                 />
                 <View
                     style={{
                         ...Styles.centeringContainer,
                         flex: 1,
-                        backgroundColor: backgroundColor
+                        backgroundColor: backgroundColor || theme.background
                     }}
                 >
                     {children}
                 </View>
                 <OnboardingFooter
-                    backgroundColor={backgroundColor || colors.background}
                     buttonLabel={buttonText}
                     buttonCallback={nextButtonCallback}
                 />

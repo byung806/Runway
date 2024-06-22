@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import Button from './Button';
 
 import { Styles } from '@/styles';
+import { ThemeContext } from './ThemeProvider';
 
 interface OnboardingFooterProps {
-    backgroundColor: string;
+    backgroundColor?: string;
     buttonLabel: string;
     buttonCallback: () => void;
 }
 
 export default function OnboardingFooter({ backgroundColor, buttonLabel, buttonCallback }: OnboardingFooterProps) {
+    const theme = useContext(ThemeContext);
+    
     const windowWidth = useWindowDimensions().width;
     const HEIGHT = windowWidth * 0.21;
     const FOOTER_PADDING = windowWidth * 0.05;
@@ -20,7 +23,7 @@ export default function OnboardingFooter({ backgroundColor, buttonLabel, buttonC
             style={{
                 ...Styles.centeringContainer,
                 height: HEIGHT,
-                backgroundColor,
+                backgroundColor: backgroundColor || theme.background,
                 paddingHorizontal: FOOTER_PADDING,
             }}
         >

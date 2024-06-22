@@ -1,12 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Animated, Pressable, View } from 'react-native';
 
-import { Colors, Styles } from '@/styles';
-import { useTheme } from '@react-navigation/native';
+import { Styles } from '@/styles';
+import { ThemeContext } from './ThemeProvider';
 
 import Text from './Text';
 
-// export const BUTTON_HEIGHT = 45;
 export const ANIM_CONFIG = { duration: 30, useNativeDriver: true };
 
 interface ButtonProps {
@@ -17,7 +16,7 @@ interface ButtonProps {
 }
 
 export default function Button({ label, callback, disabled = false, filled = true, ...props }: ButtonProps & any) {
-    const { colors } = useTheme();
+    const theme = useContext(ThemeContext);
 
     const translateY = useRef(new Animated.Value(0)).current;
 
@@ -45,7 +44,7 @@ export default function Button({ label, callback, disabled = false, filled = tru
         return (
             <View style={{
                 borderRadius: 14,
-                backgroundColor: Colors.light.gray,
+                backgroundColor: theme.gray,
                 ...Styles.centeringContainer,
                 padding: 10,
                 ...props.style
@@ -63,8 +62,8 @@ export default function Button({ label, callback, disabled = false, filled = tru
                     <Animated.View style={{
                         borderRadius: 14,
                         marginBottom: 2,
-                        backgroundColor: filled ? Colors.light.accent : Colors.light.white,
-                        borderColor: Colors.light.gray,
+                        backgroundColor: filled ? theme.accent : theme.white,
+                        borderColor: theme.gray,
                         borderWidth: filled ? 0 : 2,
                         padding: 10,
                         ...Styles.centeringContainer,
@@ -72,7 +71,7 @@ export default function Button({ label, callback, disabled = false, filled = tru
                     }}>
                         <Text style={{
                             fontSize: 15,
-                            color: filled ? Colors.light.white : Colors.light.black,
+                            color: filled ? theme.white : theme.black,
                         }}>{label}</Text>
                     </Animated.View>
                     <View style={{
@@ -83,7 +82,7 @@ export default function Button({ label, callback, disabled = false, filled = tru
                     }}>
                         <View style={{
                             flex: 1,
-                            backgroundColor: filled ? Colors.light.accentDarker : Colors.light.gray,
+                            backgroundColor: filled ? theme.accentDarker : theme.gray,
                             marginTop: 2,
                             borderRadius: 14,
                             zIndex: -1,

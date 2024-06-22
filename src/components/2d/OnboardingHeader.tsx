@@ -1,30 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Pressable, View } from 'react-native';
 
-import { FontAwesome as Icon } from '@expo/vector-icons';
 import ArrowLeft from '@/assets/svg/arrow-left.svg';
-import { useTheme } from '@react-navigation/native';
 
 import Header from './Header';
+import { ThemeContext } from './ThemeProvider';
 
 interface OnboardingHeaderProps {
-    backgroundColor: string;
+    backgroundColor?: string;
     prevButtonCallback?: () => void;
 }
 
 export default function OnboardingHeader({ backgroundColor, prevButtonCallback }: OnboardingHeaderProps) {
-    const { colors } = useTheme();
+    const theme = useContext(ThemeContext);
 
     return (
         <Header>
             <View
                 style={{
                     width: '100%',
+                    backgroundColor: backgroundColor || theme.background,
                 }}
             >
                 {prevButtonCallback && (
                     <Pressable onPressIn={prevButtonCallback}>
-                        <ArrowLeft width={36} height={36} fill={colors.primary} />
+                        <ArrowLeft width={36} height={36} fill={theme.accent} />
                     </Pressable>
                 )}
             </View>

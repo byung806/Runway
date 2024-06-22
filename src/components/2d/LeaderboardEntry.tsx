@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Pressable, View } from 'react-native';
 import Text from './Text';
 
 import { Styles } from '@/styles';
-import { useTheme } from '@react-navigation/native';
+import { ThemeContext } from './ThemeProvider';
 
 interface LeaderboardEntryProps {
     place: number;
@@ -14,7 +14,7 @@ interface LeaderboardEntryProps {
 }
 
 export default function LeaderboardEntry({ place, avatar, name, score }: LeaderboardEntryProps) {
-    const { colors } = useTheme();
+    const theme = useContext(ThemeContext);
 
     function onPressIn() {
     }
@@ -30,7 +30,7 @@ export default function LeaderboardEntry({ place, avatar, name, score }: Leaderb
         } else if (place == 3) {
             return "#CD7F32";
         }
-        return colors.card;
+        return theme.textInverse;
     }
 
     return (
@@ -41,16 +41,16 @@ export default function LeaderboardEntry({ place, avatar, name, score }: Leaderb
                 padding: 10,
             }}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
-                    <Text style={{ color: colors.text, ...Styles.bodyText, ...Styles.heavy, marginLeft: 10, marginRight: 30 }}>{place}</Text>
+                    <Text style={{ color: theme.text, ...Styles.bodyText, ...Styles.heavy, marginLeft: 10, marginRight: 30 }}>{place}</Text>
                     {/* <Image source={{ uri }} style={{ width: 50, height: 50 }} /> */}
-                    <Text style={{ color: colors.text, ...Styles.bodyText }}>{name}</Text>
+                    <Text style={{ color: theme.text, ...Styles.bodyText }}>{name}</Text>
                 </View>
                 <View style={{
                     margin: 5,
                     padding: 5,
                     borderRadius: 9999,
                     width: 80,
-                    backgroundColor: colors.primary,
+                    backgroundColor: theme.accent,
                     ...Styles.centeringContainer,
                 }}>
                     <Text style={{

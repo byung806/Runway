@@ -1,6 +1,6 @@
+import { useContext } from 'react';
 import { TextInput as TextInputNative } from 'react-native';
-
-import { useTheme } from '@react-navigation/native';
+import { ThemeContext } from './ThemeProvider';
 
 export const INPUT_HEIGHT = 45;
 
@@ -12,7 +12,7 @@ interface TextInputProps {
 }
 
 export default function TextInput({ placeholder, onChangeText, password = false, email = false, ...props }: TextInputProps & any) {
-    const { colors } = useTheme();
+    const theme = useContext(ThemeContext);
 
     return (
         <TextInputNative
@@ -26,11 +26,14 @@ export default function TextInput({ placeholder, onChangeText, password = false,
                 fontFamily: 'Silkscreen_400Regular',
                 height: INPUT_HEIGHT,
                 borderRadius: 14,
-                backgroundColor: colors.background,
+                backgroundColor: theme.background,
                 padding: 10,
                 borderWidth: 2,
-                borderColor: colors.border,
+                color: theme.text,
+                borderColor: theme.border,
                 ...props.style
-            }} />
+            }}
+            placeholderTextColor={theme.textPlaceholder}
+        />
     );
 }

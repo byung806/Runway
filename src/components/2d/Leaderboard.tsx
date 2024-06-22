@@ -1,6 +1,7 @@
-import { useTheme } from '@react-navigation/native';
+import { useContext } from 'react';
 import { FlatList, View } from 'react-native';
 import LeaderboardEntry from './LeaderboardEntry';
+import { ThemeContext } from './ThemeProvider';
 
 interface LeaderboardType {
     type: 'friends' | 'global';
@@ -23,13 +24,13 @@ const DEVtableData = [
 ];
 
 export default function Leaderboard({ type }: LeaderboardType) {
-    const { colors } = useTheme();
+    const theme = useContext(ThemeContext);
 
     return (
         <View
             style={{
                 flex: 1,
-                backgroundColor: colors.background,
+                backgroundColor: theme.background,
                 borderTopLeftRadius: 10,
                 borderTopRightRadius: 10,
             }}>

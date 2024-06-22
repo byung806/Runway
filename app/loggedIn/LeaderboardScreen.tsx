@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LeaderboardEntry, Text } from '~/2d';
+import { LeaderboardEntry, Text, ThemeContext } from '~/2d';
 
 import { Styles } from '@/styles';
-import { useTheme } from '@react-navigation/native';
 import { useDocumentDataOnce } from '@skillnation/react-native-firebase-hooks/firestore';
 import firestore from '@react-native-firebase/firestore';
 
@@ -24,7 +23,7 @@ const renderScene = ({ route }: { route: { key: string } }) => {
 
 
 export default function LeaderboardScreen() {
-    const { colors } = useTheme();
+    const theme = useContext(ThemeContext);
 
     // const [snapshot, loading, error] = useDocumentDataOnce(
     //     firestore().collection('users').doc(user?.uid)
@@ -37,14 +36,14 @@ export default function LeaderboardScreen() {
     ]);
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }} edges={['top']}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.accent }} edges={['top']}>
             <View
                 style={{
                     ...Styles.titleBox,
                     ...Styles.centeringContainer,
                     flexShrink: 1,
                 }}>
-                <Text style={{ ...Styles.title, color: colors.card }}>Leaderboard</Text>
+                <Text style={{ ...Styles.title, color: theme.textInverse }}>Leaderboard</Text>
             </View>
             <TabView
                 navigationState={{ index, routes }}
@@ -56,11 +55,11 @@ export default function LeaderboardScreen() {
                         <TabBar
                             {...props}
                             indicatorStyle={{ backgroundColor: 'white' }}
-                            style={{ backgroundColor: colors.primary }}
+                            style={{ backgroundColor: theme.accent }}
                             bounces={true}
                             pressColor={'transparent'}
                             renderLabel={({ route, focused, color }) => (
-                                <Text style={{color: colors.card}}>{route.title}</Text>
+                                <Text style={{ color: theme.textInverse }}>{route.title}</Text>
                             )}
                         />
                     )

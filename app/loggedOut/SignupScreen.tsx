@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Logo, OnboardingHeader, Text, TextInput } from '~/2d';
+import { Button, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '~/2d';
 
 import { Styles } from '@/styles';
 import { emailEnding, registerUser } from '@/utils/firestore';
 import auth from '@react-native-firebase/auth';
-import { useTheme } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useCreateUserWithEmailAndPassword } from '@skillnation/react-native-firebase-hooks/auth';
 
 export default function SignupScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
-    const { colors } = useTheme();
+    const theme = useContext(ThemeContext);
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -73,18 +73,18 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
 
     // TODO: combine signup & login - enter username => check if user exists => if so, password to login, else, password to signup
     return (
-        <View style={{ ...Styles.flex, backgroundColor: colors.background }}>
-            <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{flex: 1}}>
+        <View style={{ ...Styles.flex, backgroundColor: theme.background }}>
+            <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>
                 <SafeAreaView style={{ ...Styles.centeringContainer, ...Styles.flex }}>
                     <OnboardingHeader
-                        backgroundColor={colors.background}
+                        backgroundColor={theme.background}
                         prevButtonCallback={() => navigation.goBack()}
                     />
 
                     <View style={{ ...Styles.centeringContainer, margin: 50, flex: 1 }}>
                         <Logo />
                         <Text style={Styles.title}>Sign Up!</Text>
-                        <Text style={Styles.subtitle}>Create an account to start your flight.</Text>
+                        <Text style={{...Styles.subtitle, color: theme.subtext}}>Create an account to start your flight.</Text>
                     </View>
 
                     {/* <Divider width={10} orientation='vertical' style={{marginBottom: 20}} /> */}

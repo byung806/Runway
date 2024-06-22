@@ -1,10 +1,9 @@
 import { registerRootComponent } from 'expo';
 import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
-import { View, useColorScheme } from 'react-native';
+import { View } from 'react-native';
+import { ThemeProvider } from '~/2d';
 
-import { RunwayDarkTheme, RunwayLightTheme } from '@/styles/Theme';
 import { Silkscreen_400Regular, useFonts } from '@expo-google-fonts/silkscreen';
 import auth from '@react-native-firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
@@ -17,10 +16,7 @@ SplashScreen.preventAutoHideAsync();
 const Stack = createStackNavigator();
 
 export default function App() {
-    const scheme = useColorScheme();
-    const theme = scheme === 'dark' ? RunwayDarkTheme : RunwayLightTheme;
-
-    const [fontsLoaded, fontsError] = useFonts({
+    const [fontsLoaded] = useFonts({
         Silkscreen_400Regular,
     });
 
@@ -50,44 +46,31 @@ export default function App() {
     if (!fontsLoaded) return null;
     if (initializing) return null;
 
-    // const [firstTime, setFirstTime] = useState(true);
-    // useEffect(() => {
-    //     async function setData() {
-    //         const appData = await AsyncStorage.getItem("firstTime");
-    //         if (appData == null) {
-    //             setFirstTime(true);
-    //             AsyncStorage.setItem("firstTime", "false");
-    //         } else {
-    //             setFirstTime(false);
-    //         }
-    //     }
-    //     setData();
-    // }, []);
-
     return (
         <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-            <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
-            <NavigationContainer theme={theme}>
-                <Stack.Navigator
-                    initialRouteName={user ? 'app' : 'start'}
-                    screenOptions={{
-                        cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
-                    }}
-                >
-                    {!user ?
-                        <>
-                            <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
-                            <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />
-                            <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
-                            <Stack.Screen name="signup" component={SignupScreen} options={{ headerShown: false }} />
-                        </>
-                        :
-                        <>
-                            <Stack.Screen name="app" component={ScreenLayout} options={{ headerShown: false }} />
-                        </>
-                    }
-                </Stack.Navigator>
-            </NavigationContainer>
+            <ThemeProvider>
+                <NavigationContainer>
+                    <Stack.Navigator
+                        initialRouteName={user ? 'app' : 'start'}
+                        screenOptions={{
+                            cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+                        }}
+                    >
+                        {!user ?
+                            <>
+                                <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
+                                <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />
+                                <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
+                                <Stack.Screen name="signup" component={SignupScreen} options={{ headerShown: false }} />
+                            </>
+                            :
+                            <>
+                                <Stack.Screen name="app" component={ScreenLayout} options={{ headerShown: false }} />
+                            </>
+                        }
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </ThemeProvider>
         </View>
     );
 }

@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, Pressable, TouchableOpacity, View } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
+import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Logo, OnboardingHeader, Text, TextInput } from '~/2d';
+import { Button, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '~/2d';
 
 import { Styles } from '@/styles';
 import { emailEnding } from '@/utils/firestore';
 import auth from '@react-native-firebase/auth';
-import { useTheme } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useSignInWithEmailAndPassword } from '@skillnation/react-native-firebase-hooks/auth';
 
 export default function LoginScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
-    const { colors } = useTheme();
+    const theme = useContext(ThemeContext);
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -49,18 +49,18 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
     }
 
     return (
-        <View style={{ ...Styles.flex, backgroundColor: colors.background }}>
-            <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{flex: 1}}>
+        <View style={{ ...Styles.flex, backgroundColor: theme.background }}>
+            <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>
                 <SafeAreaView style={{ ...Styles.centeringContainer, ...Styles.flex }}>
                     <OnboardingHeader
-                        backgroundColor={colors.background}
+                        backgroundColor={theme.background}
                         prevButtonCallback={() => navigation.navigate('start')}
                     />
 
                     <View style={{ ...Styles.centeringContainer, margin: 50, flex: 1 }}>
                         <Logo />
                         <Text style={Styles.title}>Welcome Back!</Text>
-                        <Text style={Styles.subtitle}>Log in to continue your flight.</Text>
+                        <Text style={{...Styles.subtitle, color: theme.subtext}}>Log in to continue your flight.</Text>
                     </View>
 
                     <KeyboardAvoidingView

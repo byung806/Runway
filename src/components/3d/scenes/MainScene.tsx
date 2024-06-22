@@ -1,10 +1,10 @@
 import { Styles } from "@/styles";
-import { useTheme } from "@react-navigation/native";
 import { Canvas, useFrame, useThree } from "@react-three/fiber/native";
 import useControls from "r3f-native-orbitcontrols";
-import React, { Suspense, useRef } from "react";
+import React, { Suspense, useContext, useRef } from "react";
 import { Button, View } from "react-native";
 import { Group, Vector3 } from "three";
+import { ThemeContext } from "~/2d";
 import { Ground, GroundRef } from "../Ground";
 import Particles from "../ParticleSphere";
 import { Plane, PlaneRef } from "../Plane";
@@ -31,7 +31,7 @@ function Rig({ children }: { children: React.ReactNode }) {
 }
 
 export default function MainScene({ referenceSphere = false, props }: { referenceSphere?: boolean, props?: any }) {
-    const { colors } = useTheme();
+    const theme = useContext(ThemeContext);
     // TODO: landing/takeoff
     // TODO: different planes
     // TODO: different destinations / daily location
@@ -54,9 +54,9 @@ export default function MainScene({ referenceSphere = false, props }: { referenc
                 shadows
                 orthographic
                 camera={{ position: [0, 10, 0], zoom: 100 }}
-                onCreated={(state) => { const _gl = state.gl.getContext(); const pixelStorei = _gl.pixelStorei.bind(_gl); _gl.pixelStorei = function(...args) { const [parameter] = args; switch(parameter) { case _gl.UNPACK_FLIP_Y_WEBGL: return pixelStorei(...args) } } }}
+                onCreated={(state) => { const _gl = state.gl.getContext(); const pixelStorei = _gl.pixelStorei.bind(_gl); _gl.pixelStorei = function (...args) { const [parameter] = args; switch (parameter) { case _gl.UNPACK_FLIP_Y_WEBGL: return pixelStorei(...args) } } }}
             >
-            {/* <Canvas
+                {/* <Canvas
                 shadows
                 camera={{ position: [0, 10, 0], zoom: 3, rotation: [0, Math.PI/3, 0] }}
                 onCreated={(state) => { const _gl = state.gl.getContext(); const pixelStorei = _gl.pixelStorei.bind(_gl); _gl.pixelStorei = function(...args) { const [parameter] = args; switch(parameter) { case _gl.UNPACK_FLIP_Y_WEBGL: return pixelStorei(...args) } } }}
@@ -76,7 +76,7 @@ export default function MainScene({ referenceSphere = false, props }: { referenc
                     </Rig>
                 </Suspense>
             </Canvas>
-            <Button title="new day (dev)" onPress={() => {newDay('file')}} />
+            <Button title="new day (dev)" onPress={() => { newDay('file') }} />
         </View>
     );
 }

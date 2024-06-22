@@ -1,19 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Loading, Text } from '~/2d';
+import { Loading, Text, ThemeContext } from '~/2d';
 import { MainScene } from '~/3d';
 
 import { Styles } from '@/styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import { useTheme } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useDocumentDataOnce } from '@skillnation/react-native-firebase-hooks/firestore';
 
 export default function HomeScreen({ navigation, props }: { navigation: StackNavigationProp<any, any>, props?: any }) {
-    const { colors } = useTheme();
+    const theme = useContext(ThemeContext);
+
     const user = auth().currentUser;  // guaranteed to be signed in
     const [snapshot, loading, error] = useDocumentDataOnce(
         firestore().collection('users').doc(user?.uid)
@@ -43,16 +43,16 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
             }} edges={['top']}>
                 <Pressable onPress={logOut}>
                     <Text style={{
-                        color: colors.text,
+                        color: theme.text,
                         ...Styles.subtitle,
                     }}>
                         {snapshot?.username}
                     </Text>
                 </Pressable>
                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
-                    <MaterialCommunityIcons name="fire" size={30} color={colors.text} />
+                    <MaterialCommunityIcons name="fire" size={30} color={theme.text} />
                     <Text style={{
-                        color: colors.text,
+                        color: theme.text,
                         ...Styles.subtitle,
                     }}>
                         {snapshot?.points}

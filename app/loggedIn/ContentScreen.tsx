@@ -1,15 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { CalendarProvider, WeekCalendar } from 'react-native-calendars';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ContentCard } from '~/2d';
+import { ContentCard, ThemeContext } from '~/2d';
 
 import { getTodayDate } from '@/utils/date';
-import { useTheme } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 export default function ContentScreen({ navigation, props }: { navigation: StackNavigationProp<any, any>, props?: any }) {
-    const { colors } = useTheme();
+    const theme = useContext(ThemeContext);
 
     const [selected, setSelected] = useState(useMemo(getTodayDate, []));
 
@@ -19,7 +18,7 @@ export default function ContentScreen({ navigation, props }: { navigation: Stack
     }
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }} edges={['top']}>
             <CalendarProvider
                 date={useMemo(getTodayDate, [])}
                 onDateChanged={handleDayPress}
@@ -38,14 +37,14 @@ export default function ContentScreen({ navigation, props }: { navigation: Stack
                     futureScrollRange={1}
 
                     theme={{
-                        backgroundColor: colors.background,
-                        calendarBackground: colors.background,
-                        selectedDayBackgroundColor: colors.primary,
-                        selectedDayTextColor: colors.card,
-                        todayTextColor: colors.primary,
-                        dayTextColor: colors.text,
-                        dotColor: colors.primary,
-                        indicatorColor: colors.primary,
+                        backgroundColor: theme.background,
+                        calendarBackground: theme.background,
+                        selectedDayBackgroundColor: theme.accent,
+                        selectedDayTextColor: theme.textInverse,
+                        todayTextColor: theme.accent,
+                        dayTextColor: theme.text,
+                        dotColor: theme.accent,
+                        indicatorColor: theme.accent,
 
                         textDayFontFamily: 'Silkscreen_400Regular',
                         textMonthFontFamily: 'Silkscreen_400Regular',
@@ -56,7 +55,7 @@ export default function ContentScreen({ navigation, props }: { navigation: Stack
             <View
                 style={{
                     flex: 1,
-                    // backgroundColor: colors.primary,
+                    // backgroundColor: colors.accent,
                 }}
             >
                 <ContentCard date={selected} />
