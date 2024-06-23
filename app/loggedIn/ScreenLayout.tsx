@@ -18,7 +18,7 @@ export default function ScreenLayout({ navigation }: { navigation: StackNavigati
     const theme = useContext(ThemeContext);
 
     return (
-        <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }} edges={['bottom']}>
             <Tab.Navigator
                 initialRouteName="home"
                 screenOptions={({ route }) => ({
@@ -34,6 +34,9 @@ export default function ScreenLayout({ navigation }: { navigation: StackNavigati
                     },
                     tabBarStyle: {
                         backgroundColor: theme.background,
+                    },
+                    tabBarIndicatorStyle: {
+                        backgroundColor: theme.accent,
                     },
                     tabBarPressColor: 'transparent',
                     tabBarBounces: true,
