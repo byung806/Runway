@@ -102,6 +102,11 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
         }
     }
 
+    // TODO: request cloud functions to update today's streak (cloud functions will handle logic & prevent cheating)
+    async function requestCompleteToday() {
+
+    }
+
     // TODO: test friends function
     async function addFriend(uid: string, friend: string) {
         try {
