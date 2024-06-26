@@ -4,25 +4,20 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '~/2d';
 
 import { Styles } from '@/styles';
-import { emailEnding } from '@/utils/firestore';
-import auth from '@react-native-firebase/auth';
+import { useFirebase } from '@/utils/FirebaseProvider';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useSignInWithEmailAndPassword } from '@skillnation/react-native-firebase-hooks/auth';
 
 export default function LoginScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
+    const firebase = useFirebase();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const [errorMessage, setErrorMessage] = useState('');
 
-    const [
-        signInWithEmailAndPassword,
-        user,
-        loading,
-        error,
-    ] = useSignInWithEmailAndPassword(auth);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<any>();
 
     useEffect(() => {
         if (error) {
@@ -30,13 +25,14 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                 setErrorMessage('Incorrect password!');
             }
             else {
+                console.log(error);
                 setErrorMessage('Error logging in. Please try again later!');
             }
         }
     }, [error])
 
     // called on sign up button press
-    function loginCallback() {
+    async function loginCallback() {
         if (username.length == 0) {
             setErrorMessage('Please enter a username!');
             return;
@@ -45,7 +41,13 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
             setErrorMessage('Please enter a password!');
             return;
         }
-        signInWithEmailAndPassword(username + emailEnding, password);
+        setLoading(true);
+        const error = await firebase.logIn(username, password);
+        setError(error);
+        setLoading(false);
+        if (!error) {
+            navigation.navigate('app');
+        }
     }
 
     return (

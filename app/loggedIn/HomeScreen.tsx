@@ -1,35 +1,40 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Loading, Text, ThemeContext } from '~/2d';
 import { MainScene } from '~/3d';
 
 import { Styles } from '@/styles';
+import { UserData, useFirebase } from '@/utils/FirebaseProvider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useDocumentDataOnce } from '@skillnation/react-native-firebase-hooks/firestore';
 
 export default function HomeScreen({ navigation, props }: { navigation: StackNavigationProp<any, any>, props?: any }) {
     const theme = useContext(ThemeContext);
+    const firebase = useFirebase();
 
-    const user = auth().currentUser;  // guaranteed to be signed in
-    const [snapshot, loading, error] = useDocumentDataOnce(
-        firestore().collection('users').doc(user?.uid)
-    );
+    const [userData, setUserData] = useState<UserData | null>(null);
 
-    function logOut() {
-        auth().signOut().then(() => {
-            console.log('User signed out!');
-        });
+    // on mount get user data
+    useEffect(() => {
+        // console.log('from HomeScreen.tsx:  useEffect');
+        getUserData();
+    }, []);
+
+    async function getUserData() {
+        // console.log('from HomeScreen.tsx:  getUserData');
+        const data = await firebase.getUserData();
+        setUserData(data);
     }
 
-    if (loading) {
+    // TODO: better log out button
+    async function logOut() {
+        await firebase.logOut();
+        navigation.navigate('start');
+    }
+
+    if (!userData) {
         return <Loading />;
-    }
-    if (error) {
-        alert(error);
     }
     return (
         <View style={{ flex: 1 }}>
@@ -46,7 +51,7 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
                         color: theme.text,
                         ...Styles.subtitle,
                     }}>
-                        {snapshot?.username}
+                        {userData?.username}
                     </Text>
                 </Pressable>
                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
@@ -55,7 +60,7 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
                         color: theme.text,
                         ...Styles.subtitle,
                     }}>
-                        {snapshot?.points}
+                        {userData?.points}
                     </Text>
                 </View>
             </SafeAreaView>

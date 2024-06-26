@@ -4,13 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '~/2d';
 
 import { Styles } from '@/styles';
-import { emailEnding, registerUser } from '@/utils/firestore';
-import auth from '@react-native-firebase/auth';
+import { useFirebase } from '@/utils/FirebaseProvider';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useCreateUserWithEmailAndPassword } from '@skillnation/react-native-firebase-hooks/auth';
 
 export default function SignupScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
+    const firebase = useFirebase();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -18,17 +17,15 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
 
     const [errorMessage, setErrorMessage] = useState('');
 
-    const [
-        createUserWithEmailAndPassword,
-        user,
-        loading,
-        error,
-    ] = useCreateUserWithEmailAndPassword(auth);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<any>();
 
+    // reset error message when user changes input
     useEffect(() => {
         setErrorMessage('');
     }, [username, password, email])
 
+    // called when an error is detected on signup and should be shown to the user
     useEffect(() => {
         if (error) {
             if (error.code === 'auth/email-already-in-use') {
@@ -46,16 +43,8 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
         }
     }, [error])
 
-    useEffect(() => {
-        // useEffect tracks changes in [user] variable
-        // called once user is created and logged in
-        if (user) {
-            registerUser(user.user.uid, username, email, password);
-        }
-    }, [user]);
-
     // called on sign up button press
-    function signupCallback() {
+    async function signupCallback() {
         if (username.length < 3) {
             setErrorMessage('Please make your username at least 3 characters long!');
             return;
@@ -68,7 +57,13 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
             setErrorMessage('Please make your password at least 6 characters long!');
             return;
         }
-        createUserWithEmailAndPassword(username + emailEnding, password);
+        setLoading(true);
+        const error = await firebase.registerUser(username, email, password);
+        setError(error);
+        setLoading(false);
+        if (!error) {
+            navigation.navigate('app');
+        }
     }
 
     // TODO: combine signup & login - enter username => check if user exists => if so, password to login, else, password to signup
@@ -87,8 +82,6 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
                         <Text style={{...Styles.subtitle, color: theme.subtext}}>Create an account to start your flight.</Text>
                     </View>
 
-                    {/* <Divider width={10} orientation='vertical' style={{marginBottom: 20}} /> */}
-
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                         style={{ flex: 0, width: '90%' }}
@@ -106,7 +99,7 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
 
                     <Text style={{ ...Styles.subtitle, textAlign: 'center', marginVertical: 10 }}>OR</Text>
 
-                    <Button label={'I HAVE AN ACCOUNT'} filled={false} callback={() => navigation.navigate('login')} style={{ marginBottom: 20 }} />
+                    <Button label={'I HAVE AN ACCOUNT'} filled={false} disabled={loading} callback={() => navigation.navigate('login')} style={{ marginBottom: 20 }} />
                 </SafeAreaView>
             </TouchableOpacity>
         </View>
