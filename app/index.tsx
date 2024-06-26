@@ -6,14 +6,22 @@ import { ThemeProvider } from '~/2d';
 
 import { Silkscreen_400Regular, useFonts } from '@expo-google-fonts/silkscreen';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import { NavigationContainer } from '@react-navigation/native';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 
 import { ScreenLayout } from './loggedIn';
 import { LoginScreen, OnboardingScreen, SignupScreen, StartScreen } from './loggedOut';
+import { FirebaseProvider } from '@/utils/FirebaseProvider';
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createStackNavigator();
+
+if (__DEV__) {
+    console.log('from index.tsx:  Using Firebase Emulator');
+    auth().useEmulator('http://localhost:9099');
+    firestore().useEmulator('localhost', 8080);
+}
 
 export default function App() {
     const [fontsLoaded] = useFonts({
@@ -23,6 +31,7 @@ export default function App() {
     // const { expoPushToken, notification } = usePushNotifications()
     // const data = JSON.stringify(notification, undefined, 2)
     // token: expoPushToken?.data ?? ""
+    // TODO: daily push notifications
 
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState();
@@ -33,6 +42,7 @@ export default function App() {
     }
 
     useEffect(() => {
+        // console.log('from index.tsx:  useEffect');
         const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
         return subscriber; // unsubscribe on unmount
     }, []);
@@ -46,31 +56,29 @@ export default function App() {
     if (!fontsLoaded) return null;
     if (initializing) return null;
 
+    // @ts-expect-error
+    console.log('from index.tsx:  User:', user?.email);
+
     return (
         <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-            <ThemeProvider>
-                <NavigationContainer>
-                    <Stack.Navigator
-                        initialRouteName={user ? 'app' : 'start'}
-                        screenOptions={{
-                            cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
-                        }}
-                    >
-                        {!user ?
-                            <>
-                                <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
-                                <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />
-                                <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
-                                <Stack.Screen name="signup" component={SignupScreen} options={{ headerShown: false }} />
-                            </>
-                            :
-                            <>
-                                <Stack.Screen name="app" component={ScreenLayout} options={{ headerShown: false }} />
-                            </>
-                        }
-                    </Stack.Navigator>
-                </NavigationContainer>
-            </ThemeProvider>
+            <FirebaseProvider emulator={__DEV__}>
+                <ThemeProvider>
+                    <NavigationContainer>
+                        <Stack.Navigator
+                            initialRouteName={user ? 'app' : 'start'}
+                            screenOptions={{
+                                cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+                            }}
+                        >
+                            <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
+                            <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />
+                            <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
+                            <Stack.Screen name="signup" component={SignupScreen} options={{ headerShown: false }} />
+                            <Stack.Screen name="app" component={ScreenLayout} options={{ headerShown: false }} />
+                        </Stack.Navigator>
+                    </NavigationContainer>
+                </ThemeProvider>
+            </FirebaseProvider>
         </View>
     );
 }
