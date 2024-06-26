@@ -4,7 +4,7 @@
   "main": "app/index.tsx",
   "scripts": {
     "prebuild": "expo prebuild",
-    "prebuild-clean": "expo prebuild --clean",
+    "firebase-emulators": "cd functions && npm run emulators",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "build-android": "eas build --profile development --platform android"
@@ -36,6 +36,8 @@
     "expo-notifications": "~0.28.9",
     "expo-splash-screen": "^0.27.5",
     "expo-status-bar": "~1.12.1",
+    "firebase-admin": "^12.2.0",
+    "firebase-functions": "^5.0.1",
     "pixelarticons": "^1.8.0",
     "prettier": "^3.2.5",
     "r3f-native-orbitcontrols": "^1.0.12",
