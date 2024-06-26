@@ -38,3 +38,5 @@ src/components/game_unused
 
 google-services.json
 GoogleService-Info.plist
+
+*.log
