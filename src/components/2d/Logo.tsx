@@ -13,16 +13,22 @@ export default function Logo({ size = 120, animated = true }: { size?: number, a
     }));
 
     function handlePressIn() {
-        scale.value = withSpring(1.2, {
-            mass: 0.5,
-            damping: 4,
+        scale.value = withSpring(1.3, {
+            mass: 1,
+            damping: 5,
+            overshootClamping: false,
+            restDisplacementThreshold: 0.01,
+            restSpeedThreshold: 2,
         });
     }
 
     function handlePressOut() {
         scale.value = withSpring(1, {
-            mass: 0.5,
-            damping: 4,
+            mass: 1,
+            damping: 5,
+            overshootClamping: false,
+            restDisplacementThreshold: 0.01,
+            restSpeedThreshold: 2,
         });
     }
 

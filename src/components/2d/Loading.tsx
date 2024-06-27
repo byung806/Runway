@@ -1,42 +1,25 @@
-import React, { useEffect } from 'react';
-import { Animated, Easing, Image, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 
 import { Styles } from '@/styles';
+import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import Logo from './Logo';
 
 export default function Loading({ id = 0, size = 80 }: { id?: number, size?: number }) {
-    const animated = new Animated.Value(0);
-    const duration = 4000;
+    const opacity = useSharedValue<number>(1);
 
-    useEffect(() => {
-        Animated.loop(
-            Animated.timing(
-                animated,
-                {
-                    toValue: 1,
-                    duration: duration,
-                    easing: Easing.linear,
-                    useNativeDriver: true
-                }
-            )
-        ).start();
-    }, []);
+    const animatedStyles = useAnimatedStyle(() => ({
+        opacity: opacity.value,
+    }));
 
-    const spin = animated.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '360deg']
-    })
+    // TODO: fade out?
 
     return (
         <View style={{...Styles.flex, ...Styles.centeringContainer}}>
             <Animated.View
-                style={{
-                    transform: [{ rotate: spin }]
-                }}
+                style={animatedStyles}
             >
-                <Image
-                    source={require('@/assets/planes/plane0.png')}
-                    style={{ width: size, height: size }}
-                />
+                <Logo />
             </Animated.View>
         </View>
     )
