@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber/native";
 import useControls from "r3f-native-orbitcontrols";
 import React, { Suspense, useContext, useRef } from "react";
 import { Button, View } from "react-native";
-import { Group, Vector3 } from "three";
+import { Group, MathUtils, Vector3 } from "three";
 import { ThemeContext } from "~/2d";
 import { Ground, GroundRef } from "../Ground";
 import Particles from "../ParticleSphere";
@@ -41,7 +41,8 @@ export default function MainScene({ referenceSphere = false, props }: { referenc
     const plane = useRef<PlaneRef>();
     const ground = useRef<GroundRef>();
 
-    const [OrbitControls, events] = useControls();
+    // orbitcontrols overwrites canvas rotation prop
+    // const [OrbitControls, events] = useControls();
 
     function newDay(islandFile?: string) {
         if (!plane.current || !ground.current) return;
@@ -49,32 +50,26 @@ export default function MainScene({ referenceSphere = false, props }: { referenc
     }
 
     return (
-        <View style={Styles.flex} {...events} {...props}>
+        <View style={Styles.flex} {...props}>
             <Canvas
                 shadows
                 orthographic
                 camera={{ position: [0, 10, 0], zoom: 100 }}
                 onCreated={(state) => { const _gl = state.gl.getContext(); const pixelStorei = _gl.pixelStorei.bind(_gl); _gl.pixelStorei = function (...args) { const [parameter] = args; switch (parameter) { case _gl.UNPACK_FLIP_Y_WEBGL: return pixelStorei(...args) } } }}
             >
-                {/* <Canvas
-                shadows
-                camera={{ position: [0, 10, 0], zoom: 3, rotation: [0, Math.PI/3, 0] }}
-                onCreated={(state) => { const _gl = state.gl.getContext(); const pixelStorei = _gl.pixelStorei.bind(_gl); _gl.pixelStorei = function(...args) { const [parameter] = args; switch(parameter) { case _gl.UNPACK_FLIP_Y_WEBGL: return pixelStorei(...args) } } }}
-            > */}
-                <OrbitControls
-                    enablePan={false}
-                />
-                <ambientLight intensity={1} />
-                <directionalLight castShadow intensity={2} />
-                <Suspense fallback={null}>
-                    <Rig>
-                        {/* @ts-expect-error */}
-                        <Plane ref={plane} planeType={0} />
-                        {/* @ts-expect-error */}
-                        <Ground ref={ground} />
-                        {referenceSphere && <Particles />}
-                    </Rig>
-                </Suspense>
+                <group rotation-y={Math.PI/2} rotation-x={-Math.PI/20}>
+                    <ambientLight intensity={1} />
+                    <directionalLight castShadow intensity={2} />
+                    <Suspense fallback={null}>
+                        <Rig>
+                            {/* @ts-expect-error */}
+                            <Plane ref={plane} planeType={0} />
+                            {/* @ts-expect-error */}
+                            <Ground ref={ground} />
+                            {referenceSphere && <Particles />}
+                        </Rig>
+                    </Suspense>
+                </group>
             </Canvas>
             <Button title="new day (dev)" onPress={() => { newDay('file') }} />
         </View>
