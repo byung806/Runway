@@ -1,5 +1,11 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { Animated, Pressable, View } from 'react-native';
+import React, { useContext } from 'react';
+import { Pressable, View } from 'react-native';
+import Animated, {
+    Easing,
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming
+} from 'react-native-reanimated';
 
 import { Styles } from '@/styles';
 import { ThemeContext } from './ThemeProvider';
@@ -18,25 +24,21 @@ interface ButtonProps {
 export default function Button({ label, callback, disabled = false, filled = true, ...props }: ButtonProps & any) {
     const theme = useContext(ThemeContext);
 
-    const translateY = useRef(new Animated.Value(0)).current;
+    const offset = useSharedValue<number>(-2);
 
-    useEffect(() => {
-        animate(-2);
-    }, []);
-
-    function animate(toValue: 2 | -2) {
-        Animated.timing(translateY, {
-            toValue,
-            ...ANIM_CONFIG,
-        }).start();
-    }
+    const animatedStyles = useAnimatedStyle(() => ({
+        transform: [{ translateY: offset.value }],
+    }));
 
     function onPressIn() {
-        animate(2);
+        offset.value = withTiming(2, {
+            duration: 30,
+            easing: Easing.inOut(Easing.ease),
+        });
     }
 
     function onPressOut() {
-        animate(-2);
+        offset.value = withTiming(-2);
         callback();
     }
 
@@ -59,20 +61,21 @@ export default function Button({ label, callback, disabled = false, filled = tru
         return (
             <View style={props.style}>
                 <Pressable onPressIn={onPressIn} onPressOut={onPressOut}>
-                    <Animated.View style={{
-                        borderRadius: 14,
-                        marginBottom: 2,
-                        backgroundColor: filled ? theme.accent : theme.white,
-                        borderColor: theme.gray,
-                        borderWidth: filled ? 0 : 2,
-                        padding: 10,
-                        ...Styles.centeringContainer,
-                        transform: [{ translateY }]
-                    }}>
-                        <Text style={{
-                            fontSize: 15,
-                            color: filled ? theme.white : theme.black,
-                        }}>{label}</Text>
+                    <Animated.View style={animatedStyles}>
+                        <View style={{
+                            ...Styles.centeringContainer,
+                            borderRadius: 14,
+                            marginBottom: 2,
+                            backgroundColor: filled ? theme.accent : theme.white,
+                            borderColor: theme.gray,
+                            borderWidth: filled ? 0 : 2,
+                            padding: 10
+                        }}>
+                            <Text style={{
+                                fontSize: 15,
+                                color: filled ? theme.white : theme.black,
+                            }}>{label}</Text>
+                        </View>
                     </Animated.View>
                     <View style={{
                         position: 'absolute',
@@ -90,7 +93,7 @@ export default function Button({ label, callback, disabled = false, filled = tru
                         }} />
                     </View>
                 </Pressable>
-            </View>
+            </View >
         );
     }
 }
