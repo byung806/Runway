@@ -12,8 +12,6 @@ import { ThemeContext } from './ThemeProvider';
 
 import Text from './Text';
 
-export const ANIM_CONFIG = { duration: 30, useNativeDriver: true };
-
 interface ButtonProps {
     label: string;
     callback: () => void;
@@ -24,13 +22,16 @@ interface ButtonProps {
 export default function Button({ label, callback, disabled = false, filled = true, ...props }: ButtonProps & any) {
     const theme = useContext(ThemeContext);
 
+    // the number that's going to be animated
     const offset = useSharedValue<number>(-2);
 
+    // how the number that's going to be animated is used in styles
     const animatedStyles = useAnimatedStyle(() => ({
         transform: [{ translateY: offset.value }],
     }));
 
     function onPressIn() {
+        // withTiming starts an animation with the number going to 2
         offset.value = withTiming(2, {
             duration: 30,
             easing: Easing.inOut(Easing.ease),
