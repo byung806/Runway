@@ -21,8 +21,8 @@ const CommonThemeColors = {
 }
 
 export const RunwayLightTheme = {
-    accent: '#6C22A6',  // runway purple
-    accentDarker: '#301934',  // runway darker purple
+    accent: '#74398a',  // runway purple
+    accentDarker: '#532764',  // runway darker purple
 
     border: '#e5e5e5',
 
