@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Loading, Text, ThemeContext } from '~/2d';
+import { Button, Loading, Text, ThemeContext } from '~/2d';
 import { MainScene } from '~/3d';
 
 import { Styles } from '@/styles';
@@ -16,15 +16,27 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
     const [userData, setUserData] = useState<UserData | null>(null);
 
     // on mount get user data
+    // TODO: issue where if homescreen is already mounted then a new user signing in won't trigger this function
     useEffect(() => {
-        // console.log('from HomeScreen.tsx:  useEffect');
+        console.log('from HomeScreen.tsx:  useEffect');
         getUserData();
     }, []);
 
     async function getUserData() {
-        // console.log('from HomeScreen.tsx:  getUserData');
+        console.log('from HomeScreen.tsx:  getUserData');
         const data = await firebase.getUserData();
         setUserData(data);
+    }
+
+    async function requestCompleteToday() {
+        if (!userData) {
+            return;
+        }
+        const { dataChanged } = await firebase.requestCompleteToday();
+        if (dataChanged) {
+            console.log('from HomeScreen.tsx:  requestCompleteToday:  dataChanged');
+            getUserData();
+        }
     }
 
     // TODO: better log out button
@@ -34,7 +46,7 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
     }
 
     if (!userData) {
-        return <Loading />;
+        return <Button callback={logOut} title="logout (loading)" />;
     }
     return (
         <View style={{ flex: 1 }}>
@@ -46,6 +58,7 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
                 alignItems: 'center',
                 margin: 20
             }} edges={['top']}>
+                <Button callback={requestCompleteToday} title="request complete today (dev)" />
                 <Pressable onPress={logOut}>
                     <Text style={{
                         color: theme.text,
@@ -55,7 +68,7 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
                     </Text>
                 </Pressable>
                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
-                    <MaterialCommunityIcons name="fire" size={30} color={theme.text} />
+                    <MaterialCommunityIcons name="trophy" size={30} color={theme.text} />
                     <Text style={{
                         color: theme.text,
                         ...Styles.subtitle,
