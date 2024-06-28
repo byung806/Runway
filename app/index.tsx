@@ -6,6 +6,7 @@ import { ThemeProvider } from '~/2d';
 
 import { Silkscreen_400Regular, useFonts } from '@expo-google-fonts/silkscreen';
 import auth from '@react-native-firebase/auth';
+import functions from '@react-native-firebase/functions';
 import firestore from '@react-native-firebase/firestore';
 import { NavigationContainer } from '@react-navigation/native';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
@@ -20,6 +21,7 @@ const Stack = createStackNavigator();
 if (__DEV__) {
     console.log('from index.tsx:  Using Firebase Emulator');
     auth().useEmulator('http://localhost:9099');
+    functions().useEmulator('localhost', 5001);
     firestore().useEmulator('localhost', 8080);
 }
 
