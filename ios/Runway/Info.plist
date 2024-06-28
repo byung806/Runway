@@ -55,8 +55,6 @@
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
-<<<<<<< Updated upstream
-=======
     <key>NSUserActivityTypes</key>
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
@@ -69,7 +67,6 @@
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>
->>>>>>> Stashed changes
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
