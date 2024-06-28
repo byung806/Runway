@@ -40,3 +40,4 @@ google-services.json
 GoogleService-Info.plist
 
 *.log
+.vscode
