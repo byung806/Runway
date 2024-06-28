@@ -55,7 +55,7 @@ function whatToDoWithStreak(currentDate: string, lastLoggedDate: string) {
  * @param attemptIncrement whether to attempt to increment the streak
  */
 export const updateStreak = async (uid: string, attemptIncrement: boolean): Promise<{ dataChanged: boolean }> => {
-    console.log('from streak.ts:  updateStreak:  attemptIncrement:', attemptIncrement)
+    // console.log('from streak.ts:  updateStreak:  attemptIncrement:', attemptIncrement)
     let dataChanged = false;
 
     const userData = await getDbDoc('users', uid).get();
@@ -69,7 +69,7 @@ export const updateStreak = async (uid: string, attemptIncrement: boolean): Prom
     const { canIncrement, shouldReset } = whatToDoWithStreak(today, lastLoggedDate);
 
     if (shouldReset) {
-        console.log('from streak.ts:  updateStreak:  reset streak!!!')
+        // console.log('from streak.ts:  updateStreak:  reset streak!!!')
         if (userData.get('streak') !== 0) {
             await getDbDoc('users', uid).update({
                 streak: 0,
@@ -79,7 +79,7 @@ export const updateStreak = async (uid: string, attemptIncrement: boolean): Prom
     }
 
     if (canIncrement && attemptIncrement) {
-        console.log('from streak.ts:  updateStreak:  incremented streak!!!!')
+        // console.log('from streak.ts:  updateStreak:  incremented streak!!!!')
         // TODO: vary by streak and day
         const pointsToday = 500;
 
@@ -97,7 +97,7 @@ export const updateStreak = async (uid: string, attemptIncrement: boolean): Prom
         dataChanged = true;
     }
 
-    console.log('from streak.ts:  updateStreak:  dataChanged:', dataChanged)
+    // console.log('from streak.ts:  updateStreak:  dataChanged:', dataChanged)
     return { dataChanged };
 }
 
@@ -108,7 +108,6 @@ export const updateStreak = async (uid: string, attemptIncrement: boolean): Prom
  * @param request the request object
  */
 export const attemptIncrementStreak = async (request: CallableRequest): Promise<{ dataChanged: boolean }> => {
-    console.log('from streak.ts:  attemptIncrementStreak called')
     if (!request.auth) return { dataChanged: false };
     // TODO: a little wasteful getting uid and then requesting user data again when it's here
     const { dataChanged } = await updateStreak(request.auth.uid, true);
