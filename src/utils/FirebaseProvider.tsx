@@ -1,12 +1,9 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import React, { ReactNode, createContext, useContext, useEffect } from 'react';
+import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functions';
+import React, { ReactNode, createContext, useContext } from 'react';
 
 const emailEnding = '@example.com';
-
-function dateToString(date: Date): string {
-    return date.toISOString().split('T')[0];
-}
 
 export interface UserData {
     email: string;
@@ -24,38 +21,23 @@ interface FirebaseContextType {
     logIn: (email: string, password: string) => Promise<Error | null>;
     logOut: () => Promise<void>;
     getUserData: () => Promise<UserData | null>;
+    requestCompleteToday: () => Promise<{ dataChanged: boolean }>;
 }
 
 export function FirebaseProvider({ emulator = false, children }: { emulator?: boolean, children: ReactNode }) {
-    useEffect(() => {
-        // if (emulator) {
-        //     console.log('Using Firebase emulator');
-        //     auth().useEmulator('http://localhost:9099');
-        //     firestore().useEmulator('localhost', 8080);
-        // }
-        // console.log('from FirebaseProvider.tsx:  Firebase initialized');
-    }, []);
-
+    /**
+     * Registers a new user with the given username, email, and password
+     */
     async function registerUser(username: string, email: string, password: string) {
         try {
-            const user = await auth().createUserWithEmailAndPassword(username + emailEnding, password);
-            // console.log("from FirebaseProvider.tsx:  USER: " + user.user.toJSON());
-            // console.log("from FirebaseProvider.tsx:  UID: " + user.user?.uid);
-            const uid = user.user?.uid;
-            // console.log("from FirebaseProvider.tsx:  " + auth().currentUser?.uid);
-            await firestore()
-                .collection('users')
-                .doc(uid)
-                .set({
+            await auth().createUserWithEmailAndPassword(username + emailEnding, password);
+
+            // TODO: implement possibility of fail in server & here
+            await functions()
+                .httpsCallable('initializeUser')({
                     email: email,
-                    friends: [],
                     password: password,
-                    point_days: {},
-                    points: 0,
-                    streak: 0,
-                    uid: uid,
-                    username: username
-                })
+                });
             console.log('Registered user ' + username);
         } catch (error) {
             console.log(error);
@@ -84,30 +66,32 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
         }
     };
 
+    /**
+     * Fetches the user data for the currently logged in user
+     */
     async function getUserData() {
         try {
-            const user = auth().currentUser;
-            if (!user) {
-                throw new Error('from FirebaseProvider.tsx:  from getUserData:  No user signed in');
-            }
-            const uid = user.uid;
-            const userData = await firestore()
-                .collection('users')
-                .doc(uid)
-                .get();
-            return userData.data() as UserData;
+            // console.log('from FirebaseProvider.tsx:  from getUserData:  getUserData called');
+            const userData = await functions()
+                .httpsCallable('getUserData')() as FirebaseFunctionsTypes.HttpsCallableResult<UserData>;
+            return userData.data as UserData;
         } catch (error: any) {
             console.log(error);
             return null;
         }
     }
 
-    // TODO: request cloud functions to update today's streak (cloud functions will handle logic & prevent cheating)
+    /**
+     * Requests to the server to increment the streak and points for the logged in user
+     * Fails if the user has already completed the day's challenge and it has been logged
+     */
     async function requestCompleteToday() {
-
+        const data = await functions()
+            .httpsCallable('requestCompleteToday')() as FirebaseFunctionsTypes.HttpsCallableResult<{ dataChanged: boolean }>;
+        return data.data;
     }
 
-    // TODO: test friends function
+    // TODO: friends function & test
     async function addFriend(uid: string, friend: string) {
         try {
             await firestore()
@@ -123,22 +107,13 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
         }
     }
 
-    // TODO: streaks + points
-    async function addPoints(uid: string, points: number) {
-        const today = new Date().toDateString();
-
-        await firestore()
-            .collection('users')
-            .doc(uid)
-            .get()
-    }
-
     return (
         <FirebaseContext.Provider value={{
             registerUser,
             logIn,
             logOut,
-            getUserData
+            getUserData,
+            requestCompleteToday
         }}>
             {children}
         </FirebaseContext.Provider>

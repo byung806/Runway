@@ -1,29 +1,23 @@
-import { Change, FirestoreEvent, onDocumentCreated, onDocumentUpdated } from "firebase-functions/v2/firestore";
+import { Change, FirestoreEvent, onDocumentUpdated } from "firebase-functions/v2/firestore";
 import { onCall } from "firebase-functions/v2/https";
-import { AuthBlockingEvent, beforeUserCreated } from "firebase-functions/v2/identity";
 
 import { initializeApp } from "firebase-admin/app";
 import { QueryDocumentSnapshot } from "firebase-admin/firestore";
-import { completeTodayFunction } from "./streak";
+import { attemptIncrementStreak } from "./streak";
 import { getDbDoc } from "./utils";
+import { getUserData, initializeUser } from "./user";
 
 
 initializeApp();
 
-export const onUserCreated = beforeUserCreated(async (event: AuthBlockingEvent) => {
-    console.log('from index.ts:  onUserCreated triggered')
-    // const user = event.data;
-    // TODO: move creation logic here - get email and password data from client
-});
-// TODO: make server do all the registering initialization
 // TODO: make login not use /auth
 
 // UNTESTED
+// TODO: move this to a https callable
 /**
  * Listens for changes to the streak field in a user document and updates the streak field in the corresponding friend documents
  */
 export const onFriendAdded = onDocumentUpdated("users/{userId}", async (event: FirestoreEvent<Change<QueryDocumentSnapshot> | undefined, { userId: string; }>) => {
-    console.log("from index.ts:  onDocumentUpdated triggered");
     const data = event.data;
     if (!data) {
         console.log("from index.ts:  onDocumentUpdated:  No data found in event");
@@ -54,31 +48,21 @@ export const onFriendAdded = onDocumentUpdated("users/{userId}", async (event: F
     });
 });
 
-/**
- * Updates the username → uid mapping when a user is registered
- */
-export const onRegisteredUser = onDocumentCreated("users/{userId}", async (event: FirestoreEvent<QueryDocumentSnapshot | undefined, { userId: string; }>) => {
-    // right now the client creates the users/ document and the server creates the corresponding usernames/ (this is insecure)
-    // TODO: client requests to create an account and the server creates the users/ and usernames/ documents
-    console.log("from index.ts:  onDocumentCreated triggered");
-    const data = event.data;
-    if (!data) {
-        console.log("from index.ts:  onDocumentCreated:  No data found in event");
-        return;
-    }
-    const username = data.get("username");
-
-    await getDbDoc('usernames', username).set({
-        uid: event.params.userId
-    });
-});
-
 // ------------------ HTTPS CALLABLE FUNCTIONS ------------------
+
+/**
+ * Initializes a new user in the database
+ */
+exports.initializeUser = onCall(initializeUser);
 
 /**
  * Updates the user's streak and points with validation
  */
-exports.requestCompleteToday = onCall(completeTodayFunction);
+exports.requestCompleteToday = onCall(attemptIncrementStreak);
 
-// export const getLeaderboard = onCall((request: CallableRequest) => {
-// });
+/**
+ * Ensures the streak is updated and gets the user's data
+ */
+exports.getUserData = onCall(getUserData);
+
+// TODO: leaderboard
