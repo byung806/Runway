@@ -1,13 +1,9 @@
 rules_version = '2';
 
 service cloud.firestore {
-    function authenticate(id) {
-  	    return request.auth != null && request.auth.uid == id;
-    }
     match /databases/{database}/documents {
   	    match /users/{id} {
-    	    allow read, write: if authenticate(id);
-            allow create: if request.auth != null;
+    	    allow read, write, create: if false;
         }
         match /content/{document=**} {
             allow read: if request.auth != null;
