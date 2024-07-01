@@ -22,25 +22,20 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
         if (!isFocused) {
             return;
         }
-        console.log('from HomeScreen.tsx:  useEffect');
+        // console.log('from HomeScreen.tsx:  useEffect');
         getUserData();
     }, [isFocused]);
 
     async function getUserData() {
-        console.log('from HomeScreen.tsx:  getUserData');
+        // console.log('from HomeScreen.tsx:  getUserData');
         const data = await firebase.getUserData();
         setUserData(data);
     }
 
-    async function requestCompleteToday() {
-        if (!userData) {
-            return;
-        }
-        const { dataChanged } = await firebase.requestCompleteToday();
-        if (dataChanged) {
-            console.log('from HomeScreen.tsx:  requestCompleteToday:  dataChanged');
-            getUserData();
-        }
+    async function addFriend() {
+        // console.log('from HomeScreen.tsx:  addFriend');
+        const { success } = await firebase.addFriend('bryan');
+        console.log("from HomeScreen.tsx:  addFriend:  success: " + success);
     }
 
     // TODO: better log out button
@@ -63,7 +58,6 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
                 alignItems: 'center',
                 margin: 20
             }} edges={['top']}>
-                <Button onPress={requestCompleteToday} title="done w today" />
                 <Pressable onPress={logOut}>
                     <Text style={{
                         color: theme.text,
