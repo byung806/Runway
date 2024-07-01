@@ -22,6 +22,7 @@ interface FirebaseContextType {
     logOut: () => Promise<void>;
     getUserData: () => Promise<UserData | null>;
     requestCompleteToday: () => Promise<{ dataChanged: boolean }>;
+    addFriend: (friend: string) => Promise<{ success: boolean }>;
 }
 
 export function FirebaseProvider({ emulator = false, children }: { emulator?: boolean, children: ReactNode }) {
@@ -46,6 +47,9 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
         return null;
     }
 
+    /**
+     * Tries to log in with the given username and password
+     */
     async function logIn(username: string, password: string) {
         try {
             await auth().signInWithEmailAndPassword(username + emailEnding, password);
@@ -56,6 +60,9 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
         }
     };
 
+    /**
+     * Logs out the currently logged in user
+     */
     async function logOut() {
         try {
             await auth().signOut();
@@ -88,23 +95,21 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
     async function requestCompleteToday() {
         const data = await functions()
             .httpsCallable('requestCompleteToday')() as FirebaseFunctionsTypes.HttpsCallableResult<{ dataChanged: boolean }>;
-        return data.data;
+        return data.data as { dataChanged: boolean };
     }
 
-    // TODO: friends function & test
-    async function addFriend(uid: string, friend: string) {
-        try {
-            await firestore()
-                .collection('users')
-                .doc(uid)
-                .update({
-                    friends: firestore.FieldValue.arrayUnion(friend)
-                })
-            console.log('Added friend ' + friend + ' to ' + uid);
-        } catch (error: any) {
-            console.log(error);
-            return error.code;
-        }
+    /**
+     * Adds a friend to the current logged in user's friends list
+     * 
+     * @param friend the username of the friend to add
+     * @returns whether the friend was successfully added
+     */
+    async function addFriend(friend: string) {
+        const data = await functions()
+            .httpsCallable('addFriend')({
+                friendUsername: friend,
+            }) as FirebaseFunctionsTypes.HttpsCallableResult<{ success: boolean }>;
+        return data.data as { success: boolean };
     }
 
     return (
@@ -113,7 +118,8 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
             logIn,
             logOut,
             getUserData,
-            requestCompleteToday
+            requestCompleteToday,
+            addFriend,
         }}>
             {children}
         </FirebaseContext.Provider>
