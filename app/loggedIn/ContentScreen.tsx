@@ -13,7 +13,7 @@ export default function ContentScreen({ navigation, props }: { navigation: Stack
     const [selected, setSelected] = useState(useMemo(getTodayDate, []));
 
     function handleDayPress(date: string) {
-        console.log('selected day', date);
+        // console.log('selected day', date);
         setSelected(date);
     }
 
