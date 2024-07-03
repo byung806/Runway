@@ -1,3 +1,4 @@
+import { useIsFocused } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,13 +15,17 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
     const firebase = useFirebase();
 
     const [userData, setUserData] = useState<UserData | null>(null);
-
+    const isFocused = useIsFocused();
+    
     // on mount get user data
     // TODO: issue where if homescreen is already mounted then a new user signing in won't trigger this function
     useEffect(() => {
+        if (!isFocused) {
+            return;
+        }
         console.log('from HomeScreen.tsx:  useEffect');
         getUserData();
-    }, []);
+    }, [isFocused]);
 
     async function getUserData() {
         console.log('from HomeScreen.tsx:  getUserData');
@@ -43,10 +48,11 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
     async function logOut() {
         await firebase.logOut();
         navigation.navigate('start');
+        setUserData(null);
     }
 
     if (!userData) {
-        return <Button callback={logOut} title="logout (loading)" />;
+        return <Loading />;
     }
     return (
         <View style={{ flex: 1 }}>
