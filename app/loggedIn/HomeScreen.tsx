@@ -1,5 +1,5 @@
 import { useIsFocused } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Loading, Text, ThemeContext } from '~/2d';
@@ -14,8 +14,13 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
 
+    const userDataRef = useRef<UserData | null>(null);
     const [userData, setUserData] = useState<UserData | null>(null);
     const isFocused = useIsFocused();
+
+    useEffect(() => {
+        userDataRef.current = userData;
+    }, [userData]);
     
     // on mount get user data
     useEffect(() => {
@@ -24,6 +29,13 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
         }
         // console.log('from HomeScreen.tsx:  useEffect');
         getUserData();
+
+        setTimeout(() => {
+            // need to use ref here because setTimeout doesn't read updated state
+            if (!userDataRef.current) {
+                logOut();
+            }
+        }, 5000);
     }, [isFocused]);
 
     async function getUserData() {
