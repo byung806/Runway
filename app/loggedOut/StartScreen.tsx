@@ -21,15 +21,15 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                 </View>
                 <View style={{ width: "90%" }}>
                     <Button
-                        label={'GET STARTED'}
-                        callback={() => {
+                        title={'GET STARTED'}
+                        onPress={() => {
                             navigation.navigate('onboarding');
                         }}
                         style={{ marginBottom: 10 }}
                     />
                     <Button
-                        label={'I HAVE AN ACCOUNT'}
-                        callback={() => {
+                        title={'I HAVE AN ACCOUNT'}
+                        onPress={() => {
                             navigation.navigate('login');
                         }}
                         filled={false}

@@ -13,13 +13,13 @@ import { ThemeContext } from './ThemeProvider';
 import Text from './Text';
 
 interface ButtonProps {
-    label: string;
-    callback: () => void;
+    title: string;
+    onPress: () => void;
     disabled?: boolean;
     filled?: boolean;
 }
 
-export default function Button({ label, callback, disabled = false, filled = true, ...props }: ButtonProps & any) {
+export default function Button({ title, onPress, disabled = false, filled = true, ...props }: ButtonProps & any) {
     const theme = useContext(ThemeContext);
 
     // the number that's going to be animated
@@ -40,7 +40,7 @@ export default function Button({ label, callback, disabled = false, filled = tru
 
     function onPressOut() {
         offset.value = withTiming(-2);
-        callback();
+        onPress();
     }
 
     if (disabled) {
@@ -55,7 +55,7 @@ export default function Button({ label, callback, disabled = false, filled = tru
                 <Text style={{
                     fontSize: 15,
                     color: '#aaaaaa',
-                }}>{label}</Text>
+                }}>{title}</Text>
             </View>
         );
     } else {
@@ -75,7 +75,7 @@ export default function Button({ label, callback, disabled = false, filled = tru
                             <Text style={{
                                 fontSize: 15,
                                 color: filled ? theme.white : theme.black,
-                            }}>{label}</Text>
+                            }}>{title}</Text>
                         </View>
                     </Animated.View>
                     <View style={{

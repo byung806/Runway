@@ -90,16 +90,16 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
                         <TextInput placeholder={'Email'} onChangeText={setEmail} email style={{ marginBottom: 10 }} />
                         <TextInput placeholder={'Password'} onChangeText={setPassword} password style={{ marginBottom: 10 }} />
                         <Button
-                            label={'SIGN UP'}
+                            title={'SIGN UP'}
                             disabled={loading}
-                            callback={signupCallback}
+                            onPress={signupCallback}
                         />
                         {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5 }}>{errorMessage}</Text> : null}
                     </KeyboardAvoidingView>
 
                     <Text style={{ ...Styles.subtitle, textAlign: 'center', marginVertical: 10 }}>OR</Text>
 
-                    <Button label={'I HAVE AN ACCOUNT'} filled={false} disabled={loading} callback={() => navigation.navigate('login')} style={{ marginBottom: 20 }} />
+                    <Button title={'I HAVE AN ACCOUNT'} filled={false} disabled={loading} onPress={() => navigation.navigate('login')} style={{ marginBottom: 20 }} />
                 </SafeAreaView>
             </TouchableOpacity>
         </View>

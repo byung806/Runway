@@ -81,9 +81,9 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                             style={{ marginBottom: 10 }}
                         />
                         <Button
-                            label={'LOGIN'}
+                            title={'LOGIN'}
                             disabled={loading}
-                            callback={loginCallback}
+                            onPress={loginCallback}
                         />
                         {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5 }}>{errorMessage}</Text> : null}
                     </KeyboardAvoidingView>
@@ -91,10 +91,10 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                     <Text style={{ ...Styles.subtitle, textAlign: 'center', marginVertical: 10 }}>OR</Text>
 
                     <Button
-                        label={'CREATE AN ACCOUNT'}
+                        title={'CREATE AN ACCOUNT'}
                         filled={false}
                         disabled={loading}
-                        callback={() => navigation.navigate('signup')}
+                        onPress={() => navigation.navigate('signup')}
                         style={{ marginBottom: 20 }}
                     />
                 </SafeAreaView>

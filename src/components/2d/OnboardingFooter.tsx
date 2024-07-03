@@ -34,8 +34,8 @@ export default function OnboardingFooter({ backgroundColor, buttonLabel, buttonC
                 }}
             >
                 <Button
-                    label={buttonLabel}
-                    callback={buttonCallback}
+                    title={buttonLabel}
+                    onPress={buttonCallback}
                 />
             </View>
         </View>

@@ -18,7 +18,6 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
     const isFocused = useIsFocused();
     
     // on mount get user data
-    // TODO: issue where if homescreen is already mounted then a new user signing in won't trigger this function
     useEffect(() => {
         if (!isFocused) {
             return;
@@ -64,7 +63,7 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
                 alignItems: 'center',
                 margin: 20
             }} edges={['top']}>
-                <Button callback={requestCompleteToday} title="request complete today (dev)" />
+                <Button onPress={requestCompleteToday} title="done w today" />
                 <Pressable onPress={logOut}>
                     <Text style={{
                         color: theme.text,
