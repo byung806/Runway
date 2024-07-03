@@ -27,9 +27,9 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
         if (!isFocused) {
             return;
         }
-        // console.log('from HomeScreen.tsx:  useEffect');
         getUserData();
 
+        // log out if no user data after 5 seconds
         setTimeout(() => {
             // need to use ref here because setTimeout doesn't read updated state
             if (!userDataRef.current) {
@@ -39,15 +39,12 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
     }, [isFocused]);
 
     async function getUserData() {
-        // console.log('from HomeScreen.tsx:  getUserData');
         const data = await firebase.getUserData();
         setUserData(data);
     }
 
-    async function addFriend() {
-        // console.log('from HomeScreen.tsx:  addFriend');
-        const { success } = await firebase.addFriend('bryan');
-        console.log("from HomeScreen.tsx:  addFriend:  success: " + success);
+    async function addFriend(username: string) {
+        const { success } = await firebase.addFriend(username);
     }
 
     // TODO: better log out button

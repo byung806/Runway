@@ -39,7 +39,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
                     email: email,
                     password: password,
                 });
-            console.log('Registered user ' + username);
+            // console.log('Registered user ' + username);
         } catch (error) {
             console.log(error);
             return error as Error;
@@ -53,7 +53,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
     async function logIn(username: string, password: string) {
         try {
             await auth().signInWithEmailAndPassword(username + emailEnding, password);
-            console.log('from FirebaseProvider.tsx:  from logIn:  User signed in successfully');
+            // console.log('from FirebaseProvider.tsx:  from logIn:  User signed in successfully');
         } catch (error: any) {
             console.log(error);
             return error;
@@ -66,7 +66,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
     async function logOut() {
         try {
             await auth().signOut();
-            console.log('from FirebaseProvider.tsx:  logOut:  User signed out successfully');
+            // console.log('from FirebaseProvider.tsx:  logOut:  User signed out successfully');
         } catch (error: any) {
             console.log(error);
             return error;
