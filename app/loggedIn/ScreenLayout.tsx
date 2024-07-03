@@ -24,6 +24,7 @@ export default function ScreenLayout({ navigation }: { navigation: StackNavigati
                 tabBarPosition="bottom"
                 initialLayout={{ width: Dimensions.get('window').width }}
             >
+                <Tab.Screen name="streak" component={StreakScreen} />
                 <Tab.Screen name="content" component={ContentScreen} />
                 <Tab.Screen name="home" component={HomeScreen} />
                 <Tab.Screen name="leaderboard" component={LeaderboardScreen} />
