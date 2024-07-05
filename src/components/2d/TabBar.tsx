@@ -1,9 +1,9 @@
 import { Pressable, View } from "react-native";
-import { Text, ThemeContext } from "~/2d";
 import AnimatedIcon from "./AnimatedIcon";
 import { Styles } from "@/styles";
 import Animated from "react-native-reanimated";
 import { useContext } from "react";
+import { ThemeContext } from "./ThemeProvider";
 
 export default function TabBar({ state, descriptors, navigation }: { state: any, descriptors: any, navigation: any }) {
     const theme = useContext(ThemeContext);
