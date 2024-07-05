@@ -16,7 +16,12 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
 
     const userDataRef = useRef<UserData | null>(null);
     const [userData, setUserData] = useState<UserData | null>(null);
+    const isFocusedRef = useRef<boolean>(false);
     const isFocused = useIsFocused();
+
+    // TODO: don't refresh user data every time isFocused changes - only when logged in/logged out changes
+    // TODO: make ui for friending
+    // TODO: implement content every day
 
     useEffect(() => {
         userDataRef.current = userData;
@@ -24,6 +29,8 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
     
     // on mount get user data
     useEffect(() => {
+        isFocusedRef.current = isFocused;
+
         if (!isFocused) {
             return;
         }
@@ -32,7 +39,7 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
         // log out if no user data after 5 seconds
         setTimeout(() => {
             // need to use ref here because setTimeout doesn't read updated state
-            if (!userDataRef.current) {
+            if (!userDataRef.current && isFocusedRef.current) {
                 logOut();
             }
         }, 5000);

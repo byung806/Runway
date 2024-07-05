@@ -5,3 +5,7 @@ export function getDbDoc(collection: string, uid: string) {
     return db.collection(collection).doc(uid);
 }
 
+export function getDbCollection(collection: string) {
+    const db = getFirestore();
+    return db.collection(collection);
+}

@@ -1,5 +1,6 @@
 import { CallableRequest } from "firebase-functions/v2/https";
 import { getDbDoc } from "./utils";
+import { updateLeaderboard } from "./leaderboard";
 
 /**
  * Converts a Date object to a string in the format 'YYYY-MM-DD'
@@ -19,7 +20,7 @@ function stringToDate(date: string): Date {
 /**
  * Determines whether the streak can be incremented or should be resetted based on the current date and the last logged date
  */
-function whatToDoWithStreak(currentDate: string, lastLoggedDate: string) {
+function whatToDoWithStreak(currentDate: string, lastLoggedDate: string | undefined) {
     if (!lastLoggedDate) {
         return {
             canIncrement: true,
@@ -48,7 +49,7 @@ function whatToDoWithStreak(currentDate: string, lastLoggedDate: string) {
 }
 
 /**
- * Updates the streak
+ * Updates the streak and points
  * Resets the streak to 0 if the user misses a day
  * 
  * @param uid the user's uid
@@ -59,12 +60,20 @@ export const updateStreak = async (uid: string, attemptIncrement: boolean): Prom
     let dataChanged = false;
 
     const userData = await getDbDoc('users', uid).get();
+    if (!userData.exists) {
+        return { dataChanged };
+    }
     const pointDays = userData.get("point_days");
 
+    console.log('from streak.ts:  updateStreak:  pointDays:', pointDays)
+
     const today = dateToString(new Date());
-    const lastLoggedDate = Object.keys(pointDays)
-        .sort((a, b) => stringToDate(a).valueOf() - stringToDate(b).valueOf())
-        .reverse()[0];
+    let lastLoggedDate = undefined;
+    if (pointDays.length !== 0) {
+        lastLoggedDate = Object.keys(pointDays)
+            .sort((a, b) => stringToDate(a).valueOf() - stringToDate(b).valueOf())
+            .reverse()[0];
+    }
 
     const { canIncrement, shouldReset } = whatToDoWithStreak(today, lastLoggedDate);
 
@@ -75,6 +84,8 @@ export const updateStreak = async (uid: string, attemptIncrement: boolean): Prom
                 streak: 0,
             });
             dataChanged = true;
+
+            await updateLeaderboard(userData.get('username'), userData.get('points'), 0);
         }
     }
 
@@ -88,6 +99,9 @@ export const updateStreak = async (uid: string, attemptIncrement: boolean): Prom
             [today]: pointsToday
         };
 
+        const updatedStreak = shouldReset ? 1 : userData.get("streak") + 1;
+        const updatedPoints = userData.get("points") + pointsToday;
+
         await getDbDoc('users', uid).update({
             streak: shouldReset ? 1 : userData.get("streak") + 1,
             points: userData.get("points") + pointsToday,
@@ -95,6 +109,8 @@ export const updateStreak = async (uid: string, attemptIncrement: boolean): Prom
         });
 
         dataChanged = true;
+
+        await updateLeaderboard(userData.get('username'), updatedPoints, updatedStreak);
     }
 
     // console.log('from streak.ts:  updateStreak:  dataChanged:', dataChanged)

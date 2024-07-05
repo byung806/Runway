@@ -2,6 +2,7 @@ import { CallableRequest } from "firebase-functions/v2/https";
 import { FieldValue } from "firebase-admin/firestore";
 import { updateStreak } from "./streak";
 import { getDbDoc } from "./utils";
+import { updateLeaderboard } from "./leaderboard";
 
 /**
  * Initializes the user document and the usernames → uid mapping when a user is registered
@@ -31,6 +32,8 @@ export const initializeUser = async (request: CallableRequest): Promise<undefine
     await getDbDoc('usernames', username).set({
         uid: uid
     });
+
+    await updateLeaderboard(username, 0, 0);
 
     return;
 }
