@@ -1,5 +1,4 @@
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functions';
 import React, { ReactNode, createContext, useContext } from 'react';
 
@@ -16,6 +15,12 @@ export interface UserData {
     username: string;
 }
 
+interface LeaderboardUser {
+    username: string;
+    points: number;
+    streak: number;
+}
+
 interface FirebaseContextType {
     registerUser: (username: string, email: string, password: string) => Promise<Error | null>;
     logIn: (email: string, password: string) => Promise<Error | null>;
@@ -23,6 +28,7 @@ interface FirebaseContextType {
     getUserData: () => Promise<UserData | null>;
     requestCompleteToday: () => Promise<{ dataChanged: boolean }>;
     addFriend: (friend: string) => Promise<{ success: boolean }>;
+    getLeaderboard: (type: 'friends' | 'global') => Promise<{ leaderboard: LeaderboardUser[]; rank: number; }>;
 }
 
 export function FirebaseProvider({ emulator = false, children }: { emulator?: boolean, children: ReactNode }) {
@@ -112,6 +118,20 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
         return data.data as { success: boolean };
     }
 
+    /**
+     * Fetches the leaderboard and the current user's rank
+     */
+    async function getLeaderboard(type: 'friends' | 'global') {
+        const data = await functions()
+            .httpsCallable('getLeaderboard')({
+                type: type,
+            }) as FirebaseFunctionsTypes.HttpsCallableResult<{
+                leaderboard: LeaderboardUser[];
+                rank: number;
+            }>;
+        return data.data as { leaderboard: LeaderboardUser[]; rank: number; };
+    }
+
     return (
         <FirebaseContext.Provider value={{
             registerUser,
@@ -120,6 +140,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
             getUserData,
             requestCompleteToday,
             addFriend,
+            getLeaderboard,
         }}>
             {children}
         </FirebaseContext.Provider>

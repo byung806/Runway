@@ -1,7 +1,10 @@
-import { useContext } from 'react';
+import { useFirebase } from '@/utils/FirebaseProvider';
+import { useContext, useEffect, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import LeaderboardEntry from './LeaderboardEntry';
+import Loading from './Loading';
 import { ThemeContext } from './ThemeProvider';
+import { useIsFocused } from '@react-navigation/native';
 
 interface LeaderboardType {
     type: 'friends' | 'global';
@@ -23,9 +26,38 @@ const DEVtableData = [
     { "name": "Christopher", "score": 50 },
 ];
 
+interface LeaderboardUser {
+    username: string;
+    points: number;
+    streak: number;
+}
+
 export default function Leaderboard({ type }: LeaderboardType) {
     const theme = useContext(ThemeContext);
+    const firebase = useFirebase();
+    const isFocused = useIsFocused();
 
+    const [leaderboardData, setLeaderboardData] = useState<{ leaderboard: LeaderboardUser[]; rank: number; } | null>(null);
+
+    // on mount get leaderboard data
+    useEffect(() => {
+        if (!isFocused || leaderboardData) {
+            console.log('from useEffect with type ' + type + ':' + leaderboardData);
+            setLeaderboardData(null);
+            return;
+        }
+        getLeaderboardData();
+    }, [isFocused]);
+
+    async function getLeaderboardData() {
+        const data = await firebase.getLeaderboard(type);
+        setLeaderboardData(data);
+        console.log('from getLeaderboardData with type ' + type + ':' + data);
+    }
+
+    if (!leaderboardData) {
+        return <Loading />;
+    }
     return (
         <View
             style={{
@@ -35,13 +67,14 @@ export default function Leaderboard({ type }: LeaderboardType) {
                 borderTopRightRadius: 10,
             }}>
             <FlatList
-                data={DEVtableData.sort((a, b) => b.score - a.score)}
-                keyExtractor={(item) => (item.name.toString())}
+                data={leaderboardData.leaderboard}
+                keyExtractor={(item) => (item.username)}
                 renderItem={({ item, index }) => <LeaderboardEntry
                     place={index + 1}
                     avatar={"@/assets/favicon.png"}
-                    name={item.name}
-                    score={item.score}
+                    name={item.username}
+                    points={item.points}
+                    streak={item.streak}
                 />}
             />
         </View>

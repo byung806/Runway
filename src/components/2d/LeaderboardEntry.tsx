@@ -9,12 +9,15 @@ interface LeaderboardEntryProps {
     place: number;
     avatar: string;
     name: string;
-    score: number;
+    points: number;
+    streak: number;
     color?: any;
 }
 
-export default function LeaderboardEntry({ place, avatar, name, score }: LeaderboardEntryProps) {
+export default function LeaderboardEntry({ place, avatar, name, points, streak }: LeaderboardEntryProps) {
     const theme = useContext(ThemeContext);
+
+    // TODO: animate leaderboardentry
 
     function onPressIn() {
     }
@@ -55,7 +58,7 @@ export default function LeaderboardEntry({ place, avatar, name, score }: Leaderb
                 }}>
                     <Text style={{
                         color: colorFromPlace(place),
-                    }}>{score}</Text>
+                    }}>{points}</Text>
                 </View>
             </View>
         </Pressable>

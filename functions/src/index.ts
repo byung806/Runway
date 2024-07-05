@@ -3,6 +3,7 @@ import { onCall } from "firebase-functions/v2/https";
 import { initializeApp } from "firebase-admin/app";
 import { attemptIncrementStreak } from "./streak";
 import { addFriend, getUserData, initializeUser } from "./user";
+import { getLeaderboard } from "./leaderboard";
 
 
 initializeApp();
@@ -27,5 +28,9 @@ exports.getUserData = onCall(getUserData);
  */
 exports.addFriend = onCall(addFriend);
 
-// TODO: leaderboard
+/**
+ * Fetches the leaderboard and the current user's rank
+ */
+exports.getLeaderboard = onCall(getLeaderboard);
+
 // TODO: make login not use /auth
