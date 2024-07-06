@@ -52,7 +52,7 @@ export default function TabBar({ state, descriptors, navigation }: { state: any,
                         <View style={{
                             ...Styles.centeringContainer,
                             marginHorizontal: 20,
-                        }}>
+                        }} key={index}>
                             <Pressable
                                 onPress={onPress}
                                 onLongPress={onLongPress}
