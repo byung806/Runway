@@ -18,7 +18,8 @@ import { FirebaseProvider } from '@/utils/FirebaseProvider';
 SplashScreen.preventAutoHideAsync();
 const Stack = createStackNavigator();
 
-if (__DEV__) {
+const emulator = false;
+if (emulator) {
     console.log('from index.tsx:  Using Firebase Emulator');
     auth().useEmulator('http://localhost:9099');
     functions().useEmulator('localhost', 5001);
