@@ -2,7 +2,7 @@ import { onCall } from "firebase-functions/v2/https";
 
 import { initializeApp } from "firebase-admin/app";
 import { attemptIncrementStreak } from "./streak";
-import { addFriend, getUserData, initializeUser } from "./user";
+import { addFriend, checkUncompletedChallengeToday, getUserData, initializeUser } from "./user";
 import { getLeaderboard } from "./leaderboard";
 
 
@@ -17,6 +17,11 @@ exports.initializeUser = onCall(initializeUser);
  * Updates the user's streak and points with validation
  */
 exports.requestCompleteToday = onCall(attemptIncrementStreak);
+
+/**
+ * Checks if there is a new uncompleted challenge for the user to complete today
+ */
+exports.checkUncompletedChallengeToday = onCall(checkUncompletedChallengeToday);
 
 /**
  * Ensures the streak is updated and gets the user's data

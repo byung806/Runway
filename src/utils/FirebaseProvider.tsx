@@ -25,6 +25,7 @@ interface FirebaseContextType {
     registerUser: (username: string, email: string, password: string) => Promise<Error | null>;
     logIn: (email: string, password: string) => Promise<Error | null>;
     logOut: () => Promise<void>;
+    checkUncompletedChallengeToday: () => Promise<boolean>;
     getUserData: () => Promise<UserData | null>;
     requestCompleteToday: () => Promise<{ dataChanged: boolean }>;
     addFriend: (friend: string) => Promise<{ success: boolean }>;
@@ -47,7 +48,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
                 });
             // console.log('Registered user ' + username);
         } catch (error) {
-            console.log(error);
+            console.log(error + ' from FirebaseProvider.tsx:  registerUser');
             return error as Error;
         }
         return null;
@@ -61,7 +62,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
             await auth().signInWithEmailAndPassword(username + emailEnding, password);
             // console.log('from FirebaseProvider.tsx:  from logIn:  User signed in successfully');
         } catch (error: any) {
-            console.log(error);
+            console.log(error + ' from FirebaseProvider.tsx:  logIn');
             return error;
         }
     };
@@ -74,10 +75,24 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
             await auth().signOut();
             // console.log('from FirebaseProvider.tsx:  logOut:  User signed out successfully');
         } catch (error: any) {
-            console.log(error);
+            console.log(error + ' from FirebaseProvider.tsx:  logOut');
             return error;
         }
     };
+
+    /**
+     * Checks if there is a new uncompleted challenge for the user to complete today
+     */
+    async function checkUncompletedChallengeToday() {
+        try {
+            const data = await functions()
+                .httpsCallable('checkUncompletedChallengeToday')() as FirebaseFunctionsTypes.HttpsCallableResult<boolean>;
+            return data.data as boolean;
+        } catch (error: any) {
+            console.log(error + ' from FirebaseProvider.tsx:  checkUncompletedChallengeToday');
+            return false;
+        }
+    }
 
     /**
      * Fetches the user data for the currently logged in user
@@ -89,7 +104,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
                 .httpsCallable('getUserData')() as FirebaseFunctionsTypes.HttpsCallableResult<UserData>;
             return userData.data as UserData;
         } catch (error: any) {
-            console.log(error);
+            console.log(error + ' from FirebaseProvider.tsx:  getUserData');
             return null;
         }
     }
@@ -111,25 +126,35 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
      * @returns whether the friend was successfully added
      */
     async function addFriend(friend: string) {
-        const data = await functions()
-            .httpsCallable('addFriend')({
-                friendUsername: friend,
-            }) as FirebaseFunctionsTypes.HttpsCallableResult<{ success: boolean }>;
-        return data.data as { success: boolean };
+        try {
+            const data = await functions()
+                .httpsCallable('addFriend')({
+                    friendUsername: friend,
+                }) as FirebaseFunctionsTypes.HttpsCallableResult<{ success: boolean }>;
+            return data.data as { success: boolean };
+        } catch (error: any) {
+            console.log(error + ' from FirebaseProvider.tsx:  addFriend');
+            return { success: false };
+        }
     }
 
     /**
      * Fetches the leaderboard and the current user's rank
      */
     async function getLeaderboard(type: 'friends' | 'global') {
-        const data = await functions()
-            .httpsCallable('getLeaderboard')({
-                type: type,
-            }) as FirebaseFunctionsTypes.HttpsCallableResult<{
-                leaderboard: LeaderboardUser[];
-                rank: number;
-            }>;
-        return data.data as { leaderboard: LeaderboardUser[]; rank: number; };
+        try {
+            const data = await functions()
+                .httpsCallable('getLeaderboard')({
+                    type: type,
+                }) as FirebaseFunctionsTypes.HttpsCallableResult<{
+                    leaderboard: LeaderboardUser[];
+                    rank: number;
+                }>;
+            return data.data as { leaderboard: LeaderboardUser[]; rank: number; };
+        } catch (error: any) {
+            console.log(error + ' from FirebaseProvider.tsx:  getLeaderboard');
+            return { leaderboard: [], rank: 0 };
+        }
     }
 
     return (
@@ -137,6 +162,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
             registerUser,
             logIn,
             logOut,
+            checkUncompletedChallengeToday,
             getUserData,
             requestCompleteToday,
             addFriend,
