@@ -39,6 +39,22 @@ export const initializeUser = async (request: CallableRequest): Promise<undefine
 }
 
 /**
+ * Checks if there is a new uncompleted challenge for the user to complete today
+ */
+export const checkUncompletedChallengeToday = async (request: CallableRequest): Promise<boolean> => {
+    if (!request.auth) return false;
+    const user = await getDbDoc('users', request.auth.uid).get();
+    const today = new Date().toISOString().split('T')[0];
+
+    if (!user.exists) return false;
+
+    const userCompletedToday = user.get("point_days").includes(today)
+    const challengeExistsToday = (await getDbDoc('content', today).get()).exists;
+    
+    return !userCompletedToday && challengeExistsToday;
+}
+
+/**
  * Gets and returns the user data for the currently logged in user
  */
 export const getUserData = async (request: CallableRequest): Promise<FirebaseFirestore.DocumentData | undefined> => {
