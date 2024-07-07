@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, ScrollView, Pressable, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import Text from './Text';
 
 import { Styles } from '@/styles';
@@ -11,7 +11,7 @@ import { ThemeContext } from './ThemeProvider';
 
 export default function ContentCard({ date }: { date: string }) {
     const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [score, setScore] =useState(0);
+    const [score, setScore] = useState(0);
     const [showScore, setShowScore] = useState(false);
     const theme = useContext(ThemeContext);
 
@@ -22,31 +22,31 @@ export default function ContentCard({ date }: { date: string }) {
     const todayQuestions = snapshot?.questions;
     //console.log(snapshot, loading, error);
     const delay = async (ms: any) => {
-        return new Promise((resolve) => 
+        return new Promise((resolve) =>
             setTimeout(resolve, ms));
     };
 
-    const handleAnswer = async(selectedAnswer: boolean, index: number) => {
+    const handleAnswer = async (selectedAnswer: boolean, index: number) => {
         const newButtonColors = [...buttonColors];
         if (selectedAnswer) {
             newButtonColors[index] = 'green';
-            setScore((prevScore)=>prevScore+1);
+            setScore((prevScore) => prevScore + 1);
         } else {
             newButtonColors[index] = 'red';
         }
         setButtonColors(newButtonColors);
         await delay(1000);
         const nextQuestion = currentQuestion + 1;
-        newButtonColors[index]='white';
+        newButtonColors[index] = 'white';
         setButtonColors(newButtonColors);
-        if (nextQuestion < todayQuestions.length){
+        if (nextQuestion < todayQuestions.length) {
             setCurrentQuestion(nextQuestion);
-        }else{
+        } else {
             setShowScore(true);
         }
     };
 
-    const devReset=()=>{
+    const devReset = () => {
         setCurrentQuestion(0);
         setShowScore(false);
     }
@@ -67,30 +67,38 @@ export default function ContentCard({ date }: { date: string }) {
         )
     }
     return (
-        <View style={{...Styles.flex, ...Styles.centeringContainer}}>
+        <View style={{ ...Styles.flex, ...Styles.centeringContainer }}>
             <ScrollView>
-                <Text style = {{textAlign: 'center', fontSize: 20, color: colors.text}}>
+                <Text style={{ textAlign: 'center', fontSize: 20, color: theme.text }}>
                     {snapshot?.title}
                 </Text>
-                <Text style={{textAlign: 'center', paddingBottom: 30, paddingTop: 10, paddingLeft: 10, paddingRight: 10, fontSize: 12, color: colors.text}}>
-                   {snapshot?.body}
+                <Text style={{ textAlign: 'center', paddingBottom: 30, paddingTop: 10, paddingLeft: 10, paddingRight: 10, fontSize: 12, color: theme.text }}>
+                    {snapshot?.body}
                 </Text>
                 {showScore ? <View>
                     <Text>{score}</Text>
                 </View> :
-                <View><Text style={{fontSize:15,textAlign:'center',paddingBottom:15}}>Questions</Text>
-                <Text style={{fontSize:12,textAlign:'center'}}>{todayQuestions[currentQuestion].question}</Text>
-                {todayQuestions[currentQuestion].choices.map((c: any,index:number)=>{
-                    return <TouchableOpacity onPress={()=>handleAnswer(c.correct,index)}style = {{backgroundColor: buttonColors[index] || 'transparent',borderColor:'black',borderWidth:2,marginTop:10,marginLeft:10,marginRight:10}}>
-                        <Text style = {{fontSize:10,color:'black',padding:5}}>{c.choice}</Text>
-                    </TouchableOpacity>
-                },
-                <TouchableOpacity onPress={()=>devReset()}>
-                    <Text>RESET</Text>
-                </TouchableOpacity>
-                )}</View>
-            }
-                
+                    <View>
+                        <Text style={{ fontSize: 15, textAlign: 'center', paddingBottom: 15 }}>Questions</Text>
+                        <Text style={{ fontSize: 12, textAlign: 'center' }}>{todayQuestions[currentQuestion].question}</Text>
+                        {todayQuestions[currentQuestion].choices.map((c: any, index: number) => {
+                            return (
+                                <TouchableOpacity
+                                    onPress={() => handleAnswer(c.correct, index)}
+                                    key={index}
+                                    style={{ backgroundColor: buttonColors[index] || 'transparent', borderColor: 'black', borderWidth: 2, marginTop: 10, marginLeft: 10, marginRight: 10 }}
+                                >
+                                    <Text style={{ fontSize: 10, color: 'black', padding: 5 }}>{c.choice}</Text>
+                                </TouchableOpacity>
+                            )
+                        },
+                            <TouchableOpacity onPress={() => devReset()}>
+                                <Text>RESET</Text>
+                            </TouchableOpacity>
+                        )}
+                    </View>
+                }
+
                 {/* <Text style={{color: colors.text, ...Styles.subtitle}}>
                    {snapshot?.category}
                 </Text> */}
