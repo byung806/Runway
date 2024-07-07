@@ -6,7 +6,7 @@ import Animated, {
     useSharedValue,
     withTiming
 } from 'react-native-reanimated';
-
+import * as Haptics from 'expo-haptics';
 import { Styles } from '@/styles';
 import { ThemeContext } from './ThemeProvider';
 
@@ -31,6 +31,8 @@ export default function Button({ title, onPress, disabled = false, filled = true
     }));
 
     function onPressIn() {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
         // withTiming starts an animation with the number going to 2
         offset.value = withTiming(2, {
             duration: 30,
