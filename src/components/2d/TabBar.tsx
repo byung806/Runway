@@ -7,6 +7,8 @@ import { ThemeContext } from "./ThemeProvider";
 
 export default function TabBar({ state, descriptors, navigation }: { state: any, descriptors: any, navigation: any }) {
     const theme = useContext(ThemeContext);
+
+    let padding = 10;
     
     return (
         <View style={{
@@ -14,18 +16,17 @@ export default function TabBar({ state, descriptors, navigation }: { state: any,
             bottom: 0,
             width: '100%',
             backgroundColor: 'transparent',
-            height: 70,
+            // height: 70,
             marginVertical: 10,
             ...Styles.centeringContainer,
         }}>
             <Animated.View style={{
                 flexDirection: 'row',
-                // backgroundColor: '#ffffff33',
-                backgroundColor: theme.accent + '33',
-                borderRadius: 30,
-                height: 50,
-                margin: 10,
-                elevation: 4,
+                // backgroundColor: theme.accent + '33',
+                borderRadius: 24,
+                // height: 70,
+                padding: padding,
+                // elevation: 4,
             }}>
                 {state.routes.map((route: any, index: any) => {
                     const isFocused = state.index === index;
@@ -48,10 +49,11 @@ export default function TabBar({ state, descriptors, navigation }: { state: any,
                         });
                     };
 
+                    let spaceBetween = 30;
                     return (
                         <View style={{
                             ...Styles.centeringContainer,
-                            marginHorizontal: 20,
+                            marginLeft: index === 0 ? 0 : spaceBetween,
                         }} key={index}>
                             <Pressable
                                 onPress={onPress}

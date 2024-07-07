@@ -1,10 +1,9 @@
 import { Styles } from "@/styles";
 import { Canvas, useFrame, useThree } from "@react-three/fiber/native";
-import useControls from "r3f-native-orbitcontrols";
 import React, { Suspense, useContext, useRef } from "react";
 import { View } from "react-native";
-import { Group, MathUtils, Vector3 } from "three";
-import { ThemeContext, Button } from "~/2d";
+import { Group, Vector3 } from "three";
+import { Button, ThemeContext } from "~/2d";
 import { Ground, GroundRef } from "../Ground";
 import Particles from "../ParticleSphere";
 import { Plane, PlaneRef } from "../Plane";
@@ -71,7 +70,7 @@ export default function MainScene({ referenceSphere = false, props }: { referenc
                     </Suspense>
                 </group>
             </Canvas>
-            <Button title="new day (dev)" onPress={() => { newDay('file') }} />
+            {/* <Button title="new day (dev)" onPress={() => { newDay('file') }} /> */}
         </View>
     );
 }
