@@ -48,7 +48,7 @@ export const checkUncompletedChallengeToday = async (request: CallableRequest): 
 
     if (!user.exists) return false;
 
-    const userCompletedToday = user.get("point_days").includes(today)
+    const userCompletedToday = today in user.get("point_days");
     const challengeExistsToday = (await getDbDoc('content', today).get()).exists;
     
     return !userCompletedToday && challengeExistsToday;

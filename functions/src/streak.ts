@@ -65,7 +65,7 @@ export const updateStreak = async (uid: string, attemptIncrement: boolean): Prom
     }
     const pointDays = userData.get("point_days");
 
-    console.log('from streak.ts:  updateStreak:  pointDays:', pointDays)
+    // console.log('from streak.ts:  updateStreak:  pointDays:', pointDays)
 
     const today = dateToString(new Date());
     let lastLoggedDate = undefined;
