@@ -1,13 +1,10 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Pressable, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Loading, Text, ThemeContext } from '~/2d';
-import { MainScene } from '~/3d';
+import { View } from 'react-native';
+import { Button, Loading, Plane, Text, ThemeContext } from '~/2d';
 
 import { Styles } from '@/styles';
 import { UserData, useFirebase } from '@/utils/FirebaseProvider';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 export default function HomeScreen({ navigation, props }: { navigation: StackNavigationProp<any, any>, props?: any }) {
@@ -16,25 +13,32 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
 
     const userDataRef = useRef<UserData | null>(null);
     const [userData, setUserData] = useState<UserData | null>(null);
+
     const isFocusedRef = useRef<boolean>(false);
     const isFocused = useIsFocused();
 
-    // TODO: don't refresh user data every time isFocused changes - only when logged in/logged out changes
     // TODO: make ui for friending
     // TODO: implement content every day
+
+    // on mount get user data
+    useEffect(() => {
+        console.log('change in firebase.user detected: ' + firebase.user?.email);
+        if (!firebase.user) {
+            setUserData(null);
+            return;
+        }
+        getUserData();
+    }, [firebase.user]);
 
     useEffect(() => {
         userDataRef.current = userData;
     }, [userData]);
-    
-    // on mount get user data
+
     useEffect(() => {
         isFocusedRef.current = isFocused;
-
         if (!isFocused) {
             return;
         }
-        getUserData();
 
         // log out if no user data after 5 seconds
         setTimeout(() => {
@@ -44,6 +48,14 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
             }
         }, 5000);
     }, [isFocused]);
+
+    async function checkUncompletedChallengeToday() {
+        const uncompletedChallengeToday = await firebase.checkUncompletedChallengeToday();
+        console.log('uncompletedChallengeToday', uncompletedChallengeToday);
+        if (uncompletedChallengeToday) {
+            navigation.navigate('content');
+        }
+    }
 
     async function getUserData() {
         const data = await firebase.getUserData();
@@ -58,41 +70,19 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
     async function logOut() {
         await firebase.logOut();
         navigation.navigate('start');
-        setUserData(null);
     }
 
     if (!userData) {
         return <Loading />;
     }
     return (
-        <View style={{ flex: 1 }}>
-            <SafeAreaView style={{
-                flex: 1,
-                position: 'absolute',
-                zIndex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                margin: 20
-            }} edges={['top']}>
-                <Pressable onPress={logOut}>
-                    <Text style={{
-                        color: theme.text,
-                        ...Styles.subtitle,
-                    }}>
-                        {userData?.username}
-                    </Text>
-                </Pressable>
-                <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
-                    <MaterialCommunityIcons name="trophy" size={30} color={theme.text} />
-                    <Text style={{
-                        color: theme.text,
-                        ...Styles.subtitle,
-                    }}>
-                        {userData?.points}
-                    </Text>
-                </View>
-            </SafeAreaView>
-            <MainScene />
+        // idea: drag plane to navigate to different screens
+        // idea: pinterest circle expand menu
+        <View style={{ flex: 1, ...Styles.centeringContainer }}>
+            <Text style={{ fontSize: 50 }}>{userData?.username}</Text>
+            <Plane onPress={checkUncompletedChallengeToday} />
+            <Text style={{ fontSize: 40 }}>{userData?.points}</Text>
+            <Button onPress={logOut} title="Log Out" />
         </View>
     );
 };

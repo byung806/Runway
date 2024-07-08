@@ -25,8 +25,8 @@ export default function LeaderboardScreen() {
 
     const [index, setIndex] = React.useState(0);
     const [routes] = useState([
-        { key: 'friends', title: 'Friends' },
         { key: 'global', title: 'Global' },
+        { key: 'friends', title: 'Friends' },
     ]);
 
     return (
