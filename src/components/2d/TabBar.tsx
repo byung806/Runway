@@ -1,8 +1,7 @@
 import { Pressable, View } from "react-native";
-import AnimatedIcon from "./AnimatedIcon";
+import AnimatedIcon, { AnimatedIconRef } from "./AnimatedIcon";
 import { Styles } from "@/styles";
-import Animated from "react-native-reanimated";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { ThemeContext } from "./ThemeProvider";
 
 export default function TabBar({ state, descriptors, navigation }: { state: any, descriptors: any, navigation: any }) {
@@ -20,7 +19,7 @@ export default function TabBar({ state, descriptors, navigation }: { state: any,
             marginVertical: 10,
             ...Styles.centeringContainer,
         }}>
-            <Animated.View style={{
+            <View style={{
                 flexDirection: 'row',
                 // backgroundColor: theme.accent + '33',
                 borderRadius: 24,
@@ -30,8 +29,11 @@ export default function TabBar({ state, descriptors, navigation }: { state: any,
             }}>
                 {state.routes.map((route: any, index: any) => {
                     const isFocused = state.index === index;
+                    const iconRef = useRef<AnimatedIconRef>(null);
 
                     const onPress = () => {
+                        iconRef.current?.setActive(true);
+
                         const event = navigation.emit({
                             type: 'tabPress',
                             target: route.key,
@@ -41,6 +43,10 @@ export default function TabBar({ state, descriptors, navigation }: { state: any,
                             navigation.navigate(route.name);
                         }
                     };
+
+                    const onPressOut = () => {
+                        iconRef.current?.setActive(false);
+                    }
 
                     const onLongPress = () => {
                         navigation.emit({
@@ -57,15 +63,16 @@ export default function TabBar({ state, descriptors, navigation }: { state: any,
                         }} key={index}>
                             <Pressable
                                 onPress={onPress}
+                                onPressOut={onPressOut}
                                 onLongPress={onLongPress}
                                 style={{ alignItems: "center" }}
                             >
-                                <AnimatedIcon focused={isFocused} route={route} width={30} height={30} />
+                                <AnimatedIcon ref={iconRef} focused={isFocused} route={route} width={30} height={30} />
                             </Pressable>
                         </View>
                     );
                 })}
-            </Animated.View>
+            </View>
         </View>
     );
 }
