@@ -59,12 +59,9 @@ export default function App() {
     if (!fontsLoaded) return null;
     if (initializing) return null;
 
-    // @ts-expect-error
-    console.log('from index.tsx:  User:', user?.email);
-
     return (
         <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-            <FirebaseProvider emulator={__DEV__}>
+            <FirebaseProvider>
                 <ThemeProvider>
                     <NavigationContainer>
                         <Stack.Navigator
