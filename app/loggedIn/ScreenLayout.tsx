@@ -15,25 +15,6 @@ const Tab = createMaterialTopTabNavigator();
 
 export default function ScreenLayout({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
-    const firebase = useFirebase();
-
-    const isFocused = useIsFocused();
-
-    useEffect(() => {
-        if (!isFocused) {
-            return;
-        }
-        
-        checkUncompletedChallengeToday();
-    }, [isFocused]);
-
-    async function checkUncompletedChallengeToday() {
-        const uncompletedChallengeToday = await firebase.checkUncompletedChallengeToday();
-        console.log('uncompletedChallengeToday', uncompletedChallengeToday);
-        if (uncompletedChallengeToday) {
-            navigation.navigate('content');
-        }
-    }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }} edges={['bottom']}>

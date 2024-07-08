@@ -1,6 +1,6 @@
-import auth from '@react-native-firebase/auth';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functions';
-import React, { ReactNode, createContext, useContext } from 'react';
+import React, { ReactNode, createContext, useContext, useState } from 'react';
 
 const emailEnding = '@example.com';
 
@@ -22,6 +22,7 @@ interface LeaderboardUser {
 }
 
 interface FirebaseContextType {
+    user: FirebaseAuthTypes.User | null;
     registerUser: (username: string, email: string, password: string) => Promise<Error | null>;
     logIn: (email: string, password: string) => Promise<Error | null>;
     logOut: () => Promise<void>;
@@ -32,21 +33,27 @@ interface FirebaseContextType {
     getLeaderboard: (type: 'friends' | 'global') => Promise<{ leaderboard: LeaderboardUser[]; rank: number; }>;
 }
 
-export function FirebaseProvider({ emulator = false, children }: { emulator?: boolean, children: ReactNode }) {
+export function FirebaseProvider({ children }: { children: ReactNode }) {
+    // Tracks auth().currentUser - doesn't use onAuthStateChanged because on user creation additional initialization is needed
+    const [user, setUser] = useState<FirebaseAuthTypes.User | null>(auth().currentUser);
+
     /**
      * Registers a new user with the given username, email, and password
      */
     async function registerUser(username: string, email: string, password: string) {
         try {
+            console.log('DATABASE CALL: create user');
             await auth().createUserWithEmailAndPassword(username + emailEnding, password);
 
             // TODO: implement possibility of fail in server & here
+            console.log('DATABASE CALL: initializeUser');
             await functions()
                 .httpsCallable('initializeUser')({
                     email: email,
                     password: password,
                 });
-            // console.log('Registered user ' + username);
+
+            setUser(auth().currentUser);
         } catch (error) {
             console.log(error + ' from FirebaseProvider.tsx:  registerUser');
             return error as Error;
@@ -59,8 +66,9 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
      */
     async function logIn(username: string, password: string) {
         try {
+            console.log('DATABASE CALL: sign in');
             await auth().signInWithEmailAndPassword(username + emailEnding, password);
-            // console.log('from FirebaseProvider.tsx:  from logIn:  User signed in successfully');
+            setUser(auth().currentUser);
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  logIn');
             return error;
@@ -72,8 +80,9 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
      */
     async function logOut() {
         try {
+            console.log('DATABASE CALL: sign out');
             await auth().signOut();
-            // console.log('from FirebaseProvider.tsx:  logOut:  User signed out successfully');
+            setUser(auth().currentUser);
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  logOut');
             return error;
@@ -85,6 +94,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
      */
     async function checkUncompletedChallengeToday() {
         try {
+            console.log('DATABASE CALL: check uncompleted challenge today');
             const data = await functions()
                 .httpsCallable('checkUncompletedChallengeToday')() as FirebaseFunctionsTypes.HttpsCallableResult<boolean>;
             return data.data as boolean;
@@ -99,7 +109,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
      */
     async function getUserData() {
         try {
-            // console.log('from FirebaseProvider.tsx:  from getUserData:  getUserData called');
+            console.log('DATABASE CALL: get user data');
             const userData = await functions()
                 .httpsCallable('getUserData')() as FirebaseFunctionsTypes.HttpsCallableResult<UserData>;
             return userData.data as UserData;
@@ -114,6 +124,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
      * Fails if the user has already completed the day's challenge and it has been logged
      */
     async function requestCompleteToday() {
+        console.log('DATABASE CALL: request complete today');
         const data = await functions()
             .httpsCallable('requestCompleteToday')() as FirebaseFunctionsTypes.HttpsCallableResult<{ dataChanged: boolean }>;
         return data.data as { dataChanged: boolean };
@@ -127,6 +138,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
      */
     async function addFriend(friend: string) {
         try {
+            console.log('DATABASE CALL: add friend ' + friend);
             const data = await functions()
                 .httpsCallable('addFriend')({
                     friendUsername: friend,
@@ -143,6 +155,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
      */
     async function getLeaderboard(type: 'friends' | 'global') {
         try {
+            console.log('DATABASE CALL: get ' + type + ' leaderboard');
             const data = await functions()
                 .httpsCallable('getLeaderboard')({
                     type: type,
@@ -159,6 +172,7 @@ export function FirebaseProvider({ emulator = false, children }: { emulator?: bo
 
     return (
         <FirebaseContext.Provider value={{
+            user,
             registerUser,
             logIn,
             logOut,
