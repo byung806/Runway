@@ -1,7 +1,7 @@
-import { Pressable, View } from "react-native";
-import AnimatedIcon, { AnimatedIconRef } from "./AnimatedIcon";
 import { Styles } from "@/styles";
 import { useContext, useRef } from "react";
+import { Pressable, View } from "react-native";
+import AnimatedIcon, { AnimatedIconRef } from "./AnimatedIcon";
 import { ThemeContext } from "./ThemeProvider";
 
 export default function TabBar({ state, descriptors, navigation }: { state: any, descriptors: any, navigation: any }) {
@@ -32,7 +32,7 @@ export default function TabBar({ state, descriptors, navigation }: { state: any,
                     const iconRef = useRef<AnimatedIconRef>(null);
 
                     const onPress = () => {
-                        iconRef.current?.setActive(true);
+                        iconRef.current?.onPressIn();
 
                         const event = navigation.emit({
                             type: 'tabPress',
@@ -45,7 +45,7 @@ export default function TabBar({ state, descriptors, navigation }: { state: any,
                     };
 
                     const onPressOut = () => {
-                        iconRef.current?.setActive(false);
+                        iconRef.current?.onPressOut();
                     }
 
                     const onLongPress = () => {
