@@ -10,6 +10,7 @@ import { TabBar, ThemeContext } from '~/2d';
 import ContentScreen from './ContentScreen';
 import HomeScreen from './HomeScreen';
 import LeaderboardScreen from './LeaderboardScreen';
+import StreakScreen from './StreakScreen';
 
 const Tab = createMaterialTopTabNavigator();
 

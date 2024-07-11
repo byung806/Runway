@@ -6,6 +6,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, w
 import { Button, Text, ThemeContext } from "~/2d";
 import * as Haptics from "expo-haptics";
 import AnimatedNumbers from 'react-native-animated-numbers';
+import LottieView from 'lottie-react-native';
 
 
 // i put this screen as a tab in the app just so you can easily access it
@@ -42,14 +43,21 @@ export default function StreakScreen() {
         <View style={{
             flex: 1
         }}>
+            <LottieView
+                    source={require('@/assets/fire1.json')}
+                    autoPlay
+                    loop
+                    style={{ width: 200, height: 200 }}/>
             <Animated.View style={[{
                 flex: 1,
                 ...Styles.centeringContainer,
             }, animatedScale]}>
                 {/* all of this is just random stuff i threw together to give an example */}
                 {/* this is duolingo's animation for inspiration https://youtu.be/XL5ALfc2R-A?t=153 */}
+                <Button title="reset to 0 (dev)" onPress={() => setStreak(0)} />
+                <Button title="increment (dev)" onPress={() => setStreak(streak + 100)} />
                 <MaterialCommunityIcons name="fire" size={100} color={theme.accent} />
-                <AnimatedNumbers animateToNumber={streak} fontStyle={{color: theme.text, fontSize:100, textAlign: 'center'}}/>
+                <AnimatedNumbers animateToNumber={streak} fontStyle={{color: theme.text, fontSize:100, textAlign: 'center', fontFamily: 'Silkscreen_400Regular'}}/>
 
                 <Text style={{
                     color: theme.text,
@@ -58,8 +66,7 @@ export default function StreakScreen() {
                     marginTop: 20,
                 }}>Days in a row!</Text>
             </Animated.View>
-            <Button title="reset to 0 (dev)" onPress={() => setStreak(0)} />
-            <Button title="increment (dev)" onPress={() => setStreak(streak + 100)} />
+
         </View>
     );
 }
