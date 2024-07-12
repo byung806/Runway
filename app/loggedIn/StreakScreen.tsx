@@ -44,7 +44,7 @@ export default function StreakScreen() {
             flex: 1
         }}>
             <LottieView
-                    source={require('@/assets/pixelFire_1.json')}
+                    source={require('@/assets/pixelFire.json')}
                     autoPlay
                     loop
                     style={{ width: 200, height: 200 }}/>
