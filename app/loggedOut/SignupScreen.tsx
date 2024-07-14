@@ -62,7 +62,7 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
         setError(error);
         setLoading(false);
         if (!error) {
-            navigation.navigate('app');
+            navigation.navigate('logged_in_app');
         }
     }
 

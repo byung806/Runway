@@ -46,7 +46,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
         setError(error);
         setLoading(false);
         if (!error) {
-            navigation.navigate('app');
+            navigation.navigate('logged_in_app');
         }
     }
 

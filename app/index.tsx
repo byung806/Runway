@@ -1,7 +1,7 @@
 import { registerRootComponent } from 'expo';
 import * as SplashScreen from 'expo-splash-screen';
 import { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { ThemeProvider } from '~/2d';
 
 import { Silkscreen_400Regular, useFonts } from '@expo-google-fonts/silkscreen';
@@ -65,16 +65,16 @@ export default function App() {
                 <ThemeProvider>
                     <NavigationContainer>
                         <Stack.Navigator
-                            initialRouteName={user ? 'app' : 'start'}
+                            initialRouteName={user ? 'logged_in_app' : 'start'}
                             screenOptions={{
-                                cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
+                                cardStyleInterpolator: Platform.OS === 'ios' ? CardStyleInterpolators.forVerticalIOS : CardStyleInterpolators.forRevealFromBottomAndroid,
                             }}
                         >
                             <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
                             <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false }} />
                             <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
                             <Stack.Screen name="signup" component={SignupScreen} options={{ headerShown: false }} />
-                            <Stack.Screen name="app" component={ScreenLayout} options={{ headerShown: false }} />
+                            <Stack.Screen name="logged_in_app" component={ScreenLayout} options={{ headerShown: false }} />
                         </Stack.Navigator>
                     </NavigationContainer>
                 </ThemeProvider>
