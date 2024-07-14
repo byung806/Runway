@@ -1,11 +1,11 @@
 import { config as reactSpringConfig, useSpring } from '@react-spring/native';
 import { useState } from 'react';
 
-const useBounceAnimation = ({pressIn, pressOut, config}: {pressIn?: () => Promise<void>, pressOut?: () => Promise<void>, config?: any}) => {
+const useBounceAnimation = ({ pressIn, pressOut, scaleTo = 1.2, config }: { pressIn?: () => Promise<void>, pressOut?: () => Promise<void>, scaleTo?: number, config?: any }) => {
     const [active, setActive] = useState(false);
 
     const { scale } = useSpring({
-        scale: active ? 1.2 : 1,
+        scale: active ? scaleTo : 1,
         config: config || reactSpringConfig.wobbly,
     });
 

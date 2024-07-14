@@ -6,6 +6,7 @@ import { Button, Loading, Plane, Text, ThemeContext } from '~/2d';
 import { Styles } from '@/styles';
 import { UserData, useFirebase } from '@/utils/FirebaseProvider';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen({ navigation, props }: { navigation: StackNavigationProp<any, any>, props?: any }) {
     const theme = useContext(ThemeContext);
@@ -66,6 +67,10 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
         const { success } = await firebase.addFriend(username);
     }
 
+    async function triggerStreakScreen() {
+        navigation.navigate('streak');
+    }
+
     // TODO: better log out button
     async function logOut() {
         await firebase.logOut();
@@ -73,16 +78,35 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
     }
 
     if (!userData) {
-        return <Loading />;
+        return (
+            <View style={{ flex: 1, ...Styles.centeringContainer, backgroundColor: theme.background }}>
+                <Loading />
+            </View>
+        )
     }
     return (
         // idea: drag plane to navigate to different screens
         // idea: pinterest circle expand menu
-        <View style={{ flex: 1, ...Styles.centeringContainer }}>
-            <Text style={{ fontSize: 50 }}>{userData?.username}</Text>
-            <Plane onPress={checkUncompletedChallengeToday} />
-            <Text style={{ fontSize: 40 }}>{userData?.points}</Text>
-            <Button onPress={logOut} title="Log Out" />
+        <View style={{
+            flex: 1,
+            backgroundColor: theme.background,
+        }}>
+            <SafeAreaView style={{
+                flex: 1,
+                position: 'absolute',
+                padding: 8,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                ...Styles.borderRed
+            }} edges={['top']}>
+                <Button title="Log Out" onPress={logOut} filled={false} />
+                <Button title="streak screen (dev)" onPress={triggerStreakScreen} filled={false} />
+            </SafeAreaView>
+            <View style={{ flex: 1, ...Styles.centeringContainer }}>
+                <Text style={{ fontSize: 50 }}>{userData?.username}</Text>
+                <Plane onPress={checkUncompletedChallengeToday} />
+                <Text style={{ fontSize: 40 }}>{userData?.points}</Text>
+            </View>
         </View>
     );
 };
