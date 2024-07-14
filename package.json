@@ -40,7 +40,7 @@
     "expo-status-bar": "~1.12.1",
     "firebase-admin": "^12.2.0",
     "firebase-functions": "^5.0.1",
-    "lottie-ios": "^3.4.1",
+    "lottie-ios": "^4.4.1",
     "lottie-react-native": "^6.7.2",
     "pixelarticons": "^1.8.0",
     "prettier": "^3.2.5",
