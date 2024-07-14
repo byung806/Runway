@@ -1,10 +1,8 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import { useFirebase } from '@/utils/FirebaseProvider';
-import { useIsFocused } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useContext, useEffect } from 'react';
-import { Dimensions } from 'react-native';
+import { CardStyleInterpolators, createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
+import { useContext } from 'react';
+import { Dimensions, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TabBar, ThemeContext } from '~/2d';
 import ContentScreen from './ContentScreen';
@@ -12,9 +10,24 @@ import HomeScreen from './HomeScreen';
 import LeaderboardScreen from './LeaderboardScreen';
 import StreakScreen from './StreakScreen';
 
-const Tab = createMaterialTopTabNavigator();
+const Stack = createStackNavigator();
 
 export default function ScreenLayout({ navigation }: { navigation: StackNavigationProp<any, any> }) {
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                cardStyleInterpolator: Platform.OS === 'ios' ? CardStyleInterpolators.forVerticalIOS : CardStyleInterpolators.forRevealFromBottomAndroid,
+            }}
+        >
+            <Stack.Screen name="app" component={App} options={{ headerShown: false }} />
+            <Stack.Screen name="streak" component={StreakScreen} options={{ headerShown: false }} />
+        </Stack.Navigator>
+    )
+}
+
+const Tab = createMaterialTopTabNavigator();
+
+function App({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
 
     return (
@@ -25,7 +38,6 @@ export default function ScreenLayout({ navigation }: { navigation: StackNavigati
                 tabBarPosition="bottom"
                 initialLayout={{ width: Dimensions.get('window').width }}
             >
-                <Tab.Screen name="streak" component={StreakScreen} />
                 <Tab.Screen name="content" component={ContentScreen} />
                 <Tab.Screen name="home" component={HomeScreen} />
                 <Tab.Screen name="leaderboard" component={LeaderboardScreen} />
