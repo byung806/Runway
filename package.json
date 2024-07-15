@@ -5,8 +5,9 @@
   "scripts": {
     "prebuild": "expo prebuild",
     "firebase-emulators": "cd functions && npm run emulators",
+    "start": "expo start",
     "android": "expo run:android",
-    "ios": "expo run:ios",
+    "ios": "expo run:ios --device",
     "build-android": "eas build --profile development --platform android"
   },
   "dependencies": {
