@@ -7,7 +7,7 @@ podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties
 ENV['RCT_NEW_ARCH_ENABLED'] = podfile_properties['newArchEnabled'] == 'true' ? '1' : '0'
 ENV['EX_DEV_CLIENT_NETWORK_INSPECTOR'] = podfile_properties['EX_DEV_CLIENT_NETWORK_INSPECTOR']
 
-platform :ios, podfile_properties['ios.deploymentTarget'] || '13.4'
+platform :ios, podfile_properties['ios.deploymentTarget'] || '18.0'
 install! 'cocoapods',
   :deterministic_uuids => false
 
@@ -43,6 +43,18 @@ target 'Runway' do
       target_installation_result.resource_bundle_targets.each do |resource_bundle_target|
         resource_bundle_target.build_configurations.each do |config|
           config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        end
+      end
+    end
+
+    installer.pods_project.targets.each do |target|
+      if target.name == 'BoringSSL-GRPC'
+        target.source_build_phase.files.each do |file|
+          if file.settings && file.settings['COMPILER_FLAGS']
+            flags = file.settings['COMPILER_FLAGS'].split
+            flags.reject! { |flag| flag == '-GCC_WARN_INHIBIT_ALL_WARNINGS' }
+            file.settings['COMPILER_FLAGS'] = flags.join(' ')
+          end
         end
       end
     end
