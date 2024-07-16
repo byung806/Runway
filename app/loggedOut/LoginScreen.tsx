@@ -41,14 +41,19 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
             setErrorMessage('Please enter a password!');
             return;
         }
+        Keyboard.dismiss();
         setLoading(true);
+        // TODO: set time limit of 4 seconds
         const error = await firebase.logIn(username, password);
         setError(error);
         setLoading(false);
-        if (!error) {
-            navigation.navigate('logged_in_app');
-        }
     }
+
+    // only navigate to logged in app if user data is loaded
+    useEffect(() => {
+        // TODO: fade?
+        if (firebase.userData) navigation.navigate('logged_in_app');
+    }, [firebase.userData]);
 
     return (
         <View style={{ ...Styles.flex, backgroundColor: theme.background }}>
