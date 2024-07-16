@@ -82,11 +82,13 @@ export default function Leaderboard({ type }: LeaderboardType) {
             style={{
                 flex: 1,
                 backgroundColor: theme.background,
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
             }}>
             <FlatList
                 data={leaderboardData.leaderboard}
+                style={{
+                    padding: 10,
+                }}
+                ItemSeparatorComponent={() => <View style={{height: 10}} />}
                 keyExtractor={(item) => (item.username)}
                 renderItem={({ item, index }) => <LeaderboardEntry
                     place={index + 1}

@@ -7,6 +7,8 @@ export interface Theme {
     gray: string;
     grayDark: string;
     background: string;
+    backgroundSecondary: string;
+    backgroundInverse: string;
     text: string;
     textPlaceholder: string;
     textInverse: string;
@@ -16,7 +18,7 @@ export interface Theme {
 const CommonThemeColors = {
     white: '#ffffff',
     black: '#000000',
-    gray: '#e5e5e5',
+    gray: '#dddddd',
     grayDark: '#b0b19d',
 }
 
@@ -27,6 +29,8 @@ export const RunwayLightTheme = {
     border: '#e5e5e5',
 
     background: '#f2f2f2',
+    backgroundSecondary: '#e5e5e5',
+    backgroundInverse: '#151515',
     text: '#1c1c1c',
     textPlaceholder: '#666666',
     textInverse: '#ffffff',
@@ -43,6 +47,8 @@ export const RunwayDarkTheme = {
     border: '#aaaaaa',
 
     background: '#151515',
+    backgroundSecondary: '#222222',
+    backgroundInverse: '#f2f2f2',
     text: '#ffffff',
     textPlaceholder: '#bbbbbb',
     textInverse: '#1c1c1c',

@@ -33,7 +33,7 @@ export default function LeaderboardEntry({ place, avatar, name, points, streak }
         } else if (place == 3) {
             return "#CD7F32";
         }
-        return theme.textInverse;
+        return theme.text;
     }
 
     return (
@@ -42,6 +42,8 @@ export default function LeaderboardEntry({ place, avatar, name, points, streak }
                 flexDirection: 'row',
                 alignItems: 'center',
                 padding: 10,
+                backgroundColor: theme.backgroundSecondary,
+                borderRadius: 10,
             }}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                     <Text style={{ color: theme.text, ...Styles.bodyText, ...Styles.heavy, marginLeft: 10, marginRight: 30 }}>{place}</Text>
@@ -50,9 +52,10 @@ export default function LeaderboardEntry({ place, avatar, name, points, streak }
                 </View>
                 <View style={{
                     margin: 5,
-                    padding: 5,
+                    paddingVertical: 5,
+                    paddingHorizontal: 10,
                     borderRadius: 9999,
-                    width: 80,
+                    // width: 60,
                     backgroundColor: theme.accent,
                     ...Styles.centeringContainer,
                 }}>

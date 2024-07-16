@@ -6,7 +6,7 @@ import Book from '@/assets/svg/book.svg';
 import Home from '@/assets/svg/home.svg';
 import Trophy from '@/assets/svg/trophy.svg';
 import useBounceAnimation from "@/utils/useBounceAnimation";
-import { View } from "react-native";
+import { useColorScheme, View } from "react-native";
 
 const AnimatedView = animated(View);
 
@@ -17,6 +17,7 @@ export type AnimatedIconRef = {
 
 const AnimatedIcon = forwardRef(({ focused, route, width, height }: { focused: boolean, route: any, width: number, height: number }, ref) => {
     const theme = useContext(ThemeContext);
+    const scheme = useColorScheme();
 
     const { scale, onPressIn, onPressOut } = useBounceAnimation({});
 
@@ -29,6 +30,10 @@ const AnimatedIcon = forwardRef(({ focused, route, width, height }: { focused: b
         onPressOut,
     }));
 
+    const textColor = scheme === 'light' ?
+        (focused ? theme.textInverse : theme.text) :
+        (focused ? theme.text : theme.gray);
+
     return (
         <AnimatedView style={{ transform: [{ scale: scale }] }}>
             <AnimatedView style={{
@@ -40,9 +45,9 @@ const AnimatedIcon = forwardRef(({ focused, route, width, height }: { focused: b
                 borderRadius: 20,
                 backgroundColor: opacity.backgroundColor,
             }}>
-                {route.name === 'content' && <Book width={width} height={height} fill={focused ? theme.textInverse : theme.text} style={{ elevation: 10 }} />}
-                {route.name === 'home' && <Home width={width} height={height} fill={focused ? theme.textInverse : theme.text} />}
-                {route.name === 'leaderboard' && <Trophy width={width} height={height} fill={focused ? theme.textInverse : theme.text} />}
+                {route.name === 'content' && <Book width={width} height={height} fill={textColor} style={{ elevation: 10 }} />}
+                {route.name === 'home' && <Home width={width} height={height} fill={textColor} />}
+                {route.name === 'leaderboard' && <Trophy width={width} height={height} fill={textColor} />}
             </AnimatedView>
         </AnimatedView>
     )
