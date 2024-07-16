@@ -1,4 +1,5 @@
 import { Styles } from "@/styles";
+import * as Haptics from 'expo-haptics';
 import { useContext, useRef } from "react";
 import { Pressable, View } from "react-native";
 import AnimatedIcon, { AnimatedIconRef } from "./AnimatedIcon";
@@ -32,6 +33,8 @@ export default function TabBar({ state, descriptors, navigation }: { state: any,
                     const iconRef = useRef<AnimatedIconRef>(null);
 
                     const onPress = () => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
                         iconRef.current?.onPressIn();
 
                         const event = navigation.emit({
