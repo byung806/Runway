@@ -57,14 +57,18 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
             setErrorMessage('Please make your password at least 6 characters long!');
             return;
         }
+        Keyboard.dismiss();
         setLoading(true);
         const error = await firebase.registerUser(username, email, password);
         setError(error);
         setLoading(false);
-        if (!error) {
-            navigation.navigate('logged_in_app');
-        }
     }
+
+    // only navigate to logged in app if user data is loaded
+    useEffect(() => {
+        // TODO: fade?
+        if (firebase.userData) navigation.navigate('logged_in_app');
+    }, [firebase.userData]);
 
     // TODO: combine signup & login - enter username => check if user exists => if so, password to login, else, password to signup
     return (

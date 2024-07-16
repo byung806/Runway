@@ -1,5 +1,6 @@
 import { Styles } from "@/styles";
 import FadeIn, { FadeInRef } from "@/utils/FadeIn";
+import { useFirebase } from "@/utils/FirebaseProvider";
 import { delay } from "@/utils/utils";
 import { useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -16,8 +17,9 @@ const AnimatedButton = animated(Button);
 export default function StreakScreen({ navigation, ...props }: { navigation: StackNavigationProp<any, any> } & any) {
     const theme = useContext(ThemeContext);
     const focused = useIsFocused();
+    const firebase = useFirebase();
 
-    const [streak, setStreak] = useState(props.startingStreak || 0);
+    const [streak, setStreak] = useState(firebase.userData?.streak ?? 0);
     const [buttonClickable, setButtonClickable] = useState(false);
 
     const fadeInRef = useRef<FadeInRef>(null);
