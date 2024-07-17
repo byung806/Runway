@@ -1,7 +1,14 @@
 import { config as reactSpringConfig, useSpring } from '@react-spring/native';
 import { useState } from 'react';
+import * as Haptics from 'expo-haptics';
 
-const useBounceAnimation = ({ pressIn, pressOut, scaleTo = 1.2, config }: { pressIn?: () => Promise<void>, pressOut?: () => Promise<void>, scaleTo?: number, config?: any }) => {
+const useBounceAnimation = ({ pressIn, pressOut, scaleTo = 0.8, haptics, config }: {
+    pressIn?: () => Promise<void>,
+    pressOut?: () => Promise<void>,
+    scaleTo?: number,
+    haptics?: Haptics.ImpactFeedbackStyle,
+    config?: any
+}) => {
     const [active, setActive] = useState(false);
 
     const { scale } = useSpring({
@@ -11,6 +18,9 @@ const useBounceAnimation = ({ pressIn, pressOut, scaleTo = 1.2, config }: { pres
 
     const onPressIn = async () => {
         setActive(true);
+        if (haptics) {
+            Haptics.impactAsync(haptics);
+        }
         await pressIn?.();
     };
 
