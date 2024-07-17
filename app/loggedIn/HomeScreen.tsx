@@ -60,13 +60,13 @@ export default function HomeScreen({ navigation, props }: { navigation: StackNav
                 justifyContent: 'space-between',
                 ...Styles.borderRed
             }} edges={['top']}>
-                <Button title="Log Out" onPress={logOut} filled={false} />
-                <Button title="today" onPress={requestCompleteToday} filled={false} />
             </SafeAreaView>
             <View style={{ flex: 1, ...Styles.centeringContainer }}>
                 <Text style={{ fontSize: 50 }}>{firebase.userData?.username}</Text>
                 <Plane onPress={checkUncompletedChallengeToday} />
                 <Text style={{ fontSize: 40 }}>{firebase.userData?.points}</Text>
+                <Button title="Log Out" onPress={logOut} filled={false} />
+                <Button title="today" onPress={requestCompleteToday} filled={false} />
             </View>
         </View>
     );
