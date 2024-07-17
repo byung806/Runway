@@ -1,8 +1,6 @@
-import React, { useContext, useMemo, useState } from 'react';
-import { View } from 'react-native';
-import { CalendarProvider, WeekCalendar } from 'react-native-calendars';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ContentCard, ThemeContext } from '~/2d';
+import React, { useContext, useState } from 'react';
+import { Dimensions, FlatList, View } from 'react-native';
+import { DateCard, ThemeContext } from '~/2d';
 
 import { getTodayDate } from '@/utils/date';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -10,56 +8,59 @@ import { StackNavigationProp } from '@react-navigation/stack';
 export default function ContentScreen({ navigation, props }: { navigation: StackNavigationProp<any, any>, props?: any }) {
     const theme = useContext(ThemeContext);
 
-    const [selected, setSelected] = useState(useMemo(getTodayDate, []));
+    const [dates, setDates] = useState([
+        {
+            date: getTodayDate(),
+            color: theme.accent
+        }
+    ]);
 
-    function handleDayPress(date: string) {
-        // console.log('selected day', date);
-        setSelected(date);
+    function addPreviousDay() {
+        const newDate = new Date(dates[dates.length - 1].date);
+        newDate.setDate(newDate.getDate() - 1);
+        console.log('newDate', newDate.toISOString().split('T')[0]);
+        setDates([...dates, {
+            date: newDate.toISOString().split('T')[0],
+            color: theme.grayDark
+        }]);
     }
 
+
+    const padding = 30;
+    const boxWidth = Dimensions.get("window").width - padding * 2;
+    const boxHeight = boxWidth * 1.5;
+
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }} edges={['top']}>
-            <CalendarProvider
-                date={useMemo(getTodayDate, [])}
-                onDateChanged={handleDayPress}
+        <View style={{
+            flex: 1,
+            backgroundColor: theme.background,
+            paddingHorizontal: padding,
+        }}>
+            <FlatList
+                style={{ flex: 1 }}
 
-                style={{
-                    flex: 0,
+                data={dates}
+                contentContainerStyle={{ gap: padding, paddingTop: Dimensions.get("window").height * 0.5 - boxHeight / 2 }}
+                numColumns={1}
+                contentOffset={{ x: 0, y: -Dimensions.get("window").height * 0.5 }}
+                keyExtractor={(item) => item.date}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                // onScrollBeginDrag={() => setAllowCardPress(false)}
+                // onScrollEndDrag={() => setAllowCardPress(true)}
+                decelerationRate="fast"
+                renderItem={({ item }) => {
+                    return (
+                        <DateCard
+                            date={item.date}
+                            height={boxHeight}
+                        />
+                    )
                 }}
-            >
-                <WeekCalendar
-                    disableAllTouchEventsForDisabledDays
-                    animateScroll={false}
-                    allowSelectionOutOfRange={true}
-                    allowShadow={false}
-
-                    pastScrollRange={1}
-                    futureScrollRange={1}
-
-                    theme={{
-                        backgroundColor: theme.background,
-                        calendarBackground: theme.background,
-                        selectedDayBackgroundColor: theme.accent,
-                        selectedDayTextColor: theme.textInverse,
-                        todayTextColor: theme.accent,
-                        dayTextColor: theme.text,
-                        dotColor: theme.accent,
-                        indicatorColor: theme.accent,
-
-                        textDayFontFamily: 'Silkscreen_400Regular',
-                        textMonthFontFamily: 'Silkscreen_400Regular',
-                        textDayHeaderFontFamily: 'Silkscreen_400Regular',
-                    }}
-                />
-            </CalendarProvider>
-            <View
-                style={{
-                    flex: 1,
-                    // backgroundColor: colors.accent,
-                }}
-            >
-                <ContentCard date={selected} />
-            </View>
-        </SafeAreaView>
+                snapToInterval={boxHeight + padding}
+                onEndReached={addPreviousDay}
+                onEndReachedThreshold={0.9} // how far the user is down the current visible items
+            />
+        </View>
     );
 }

@@ -1,6 +1,6 @@
 export { default as Button } from './Button';
 export { default as ContentCard } from './ContentCard';
-export { default as LeaderboardEntry } from './LeaderboardEntry';
+export { default as DateCard } from './DateCard';
 export { default as Loading } from './Loading';
 export { default as Logo } from './Logo';
 export { default as OnboardingFooter } from './OnboardingFooter';
