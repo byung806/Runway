@@ -31,17 +31,15 @@ function App({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }} edges={['bottom']}>
-            <Tab.Navigator
-                initialRouteName="home"
-                tabBar={props => <TabBar {...props} />}
-                tabBarPosition="bottom"
-                initialLayout={{ width: Dimensions.get('window').width }}
-            >
-                <Tab.Screen name="content" component={ContentScreen} />
-                <Tab.Screen name="home" component={HomeScreen} />
-                <Tab.Screen name="leaderboard" component={LeaderboardScreen} />
-            </Tab.Navigator>
-        </SafeAreaView>
+        <Tab.Navigator
+            initialRouteName="home"
+            tabBar={props => <TabBar {...props} />}
+            tabBarPosition="bottom"
+            initialLayout={{ width: Dimensions.get('window').width }}
+        >
+            <Tab.Screen name="content" component={ContentScreen} />
+            <Tab.Screen name="home" component={HomeScreen} />
+            <Tab.Screen name="leaderboard" component={LeaderboardScreen} />
+        </Tab.Navigator>
     );
 }
