@@ -6,9 +6,10 @@ import { useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { animated } from "@react-spring/native";
 import LottieView from 'lottie-react-native';
-import { useContext, useEffect, useRef, useState } from "react";
-import { Easing, View } from "react-native";
+import { Suspense, useContext, useEffect, useRef, useState } from "react";
+import { Dimensions, Easing, View } from "react-native";
 import AnimatedNumbers from 'react-native-animated-numbers';
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Text, ThemeContext } from "~/2d";
 
 
@@ -24,25 +25,25 @@ export default function StreakScreen({ navigation, ...props }: { navigation: Sta
 
     const fadeInRef = useRef<FadeInRef>(null);
 
-    const numberAnimationDuration = 1400;
+    const numberAnimationDuration = 800;
     const fireAnimationRef = useRef<LottieView>(null);
 
-    useEffect(() => {
-        incrementStreak();
-    }, []);
+    const height = Dimensions.get('window').height;
 
     useEffect(() => {
         if (buttonClickable) fadeInRef.current?.start();
     }, [buttonClickable]);
 
     useEffect(() => {
-        if (!focused) {
+        if (focused) {
+            incrementStreak();
+        } else {
             fireAnimationRef.current?.reset();
         }
     }, [focused]);
 
     async function incrementStreak() {
-        await delay(700);
+        await delay(3000);
         setStreak(streak + 1);
         await delay(numberAnimationDuration + 100);
         fireAnimationRef.current?.play();
@@ -57,26 +58,25 @@ export default function StreakScreen({ navigation, ...props }: { navigation: Sta
         }}>
             <View style={{
                 flex: 1,
-                // ...Styles.centeringContainer,
-                // ...Styles.debugBorder,
             }}>
-                {/* all of this is just random stuff i threw together to give an example */}
-                {/* this is duolingo's animation for inspiration https://youtu.be/XL5ALfc2R-A?t=153 */}
                 <View style={{
                     flex: 1,
                     ...Styles.centeringContainer,
                 }}>
-                    <LottieView
-                        ref={fireAnimationRef}
-                        style={{
-                            width: 500,
-                            height: 500,
-                            position: 'absolute',
-                            top: 20,
-                        }}
-                        source={require('@/assets/pixelFire.json')}
-                        loop
-                    />
+                    {/* TODO: figure out suspense and why its being laggy */}
+                    <Suspense fallback={null}>
+                        <LottieView
+                            ref={fireAnimationRef}
+                            style={{
+                                width: 500,
+                                height: 500,
+                                position: 'absolute',
+                                top: height - 740,
+                            }}
+                            source={require('@/assets/pixelFire.json')}
+                            loop
+                        />
+                    </Suspense>
                     <AnimatedNumbers
                         animateToNumber={streak}
                         animationDuration={numberAnimationDuration}
@@ -97,17 +97,21 @@ export default function StreakScreen({ navigation, ...props }: { navigation: Sta
                     bottom: 0,
                     left: '5%',
                 }}>
-                    <FadeIn ref={fadeInRef}>
-                        <AnimatedButton
-                            style={{
-                                marginBottom: 20,
-                            }}
-                            disabled={!buttonClickable}
-                            title={'Continue'}
-                            filled={false}
-                            onPress={() => navigation.navigate('app')}
-                        />
-                    </FadeIn>
+                    <SafeAreaView style={{
+                        flex: 1
+                    }} edges={['bottom']}>
+                        <FadeIn ref={fadeInRef}>
+                            <AnimatedButton
+                                style={{
+                                    marginBottom: 20,
+                                }}
+                                disabled={!buttonClickable}
+                                title={'Continue'}
+                                filled={false}
+                                onPress={() => navigation.navigate('app')}
+                            />
+                        </FadeIn>
+                    </SafeAreaView>
                 </View>
             </View>
 
