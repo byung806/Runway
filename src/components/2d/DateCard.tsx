@@ -4,20 +4,24 @@ import { useFirebase } from '@/utils/FirebaseProvider';
 import useBounceAnimation from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import * as Haptics from 'expo-haptics';
-import { memo, useContext, useEffect, useState } from 'react';
+import { memo, useContext, useEffect } from 'react';
 import { Pressable, View } from 'react-native';
-import { lighten } from 'react-native-color-toolkit';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
 
 
 interface DateCardProps {
+    focused: boolean;
+    completed: boolean;
     date: string;
+    textColor: string;
+    borderColor: string;
+    backgroundColor: string;
 }
 
 const AnimatedView = animated(View);
 
-const DateCard = memo(function DateCard({ date, ...props }: DateCardProps & any) {
+const DateCard = memo(function DateCard({ focused, completed, date, textColor, borderColor, backgroundColor, ...props }: DateCardProps & any) {
     // TODO: allowpress
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
@@ -27,28 +31,13 @@ const DateCard = memo(function DateCard({ date, ...props }: DateCardProps & any)
         haptics: Haptics.ImpactFeedbackStyle.Light,
         config: config.gentle
     });
-
-    // TODO: fix flatlist making every datecard render everything
-    const [color, setColor] = useState('');
-    const [textColor, setTextColor] = useState('');
-    const [borderColor, setBorderColor] = useState('');
-    const [backgroundColor, setBackgroundColor] = useState('');
-
+    
     useEffect(() => {
-        setTextColor(lighten(color));
-        setBorderColor(lighten(color, 0.5));
-        setBackgroundColor(lighten(color, 1.2));
-    }, [color]);
-
-    useEffect(() => {
-        const point_days = firebase.userData?.point_days;
-        if (!point_days) return;
-        if (date in point_days) {
-            setColor('#03b76d');  // green
-        } else {
-            setColor('#444444');  // gray
+        if (focused) {
+            console.log('start animation for ', date);
+            // start animation
         }
-    }, []);
+    }, [focused]);
 
     // TOP LEFT
     const dateObject = stringToDate(date);
@@ -103,10 +92,11 @@ const DateCard = memo(function DateCard({ date, ...props }: DateCardProps & any)
                         fontSize: 20,
                     }}>{extra}</Text>
                 </View>
-                <Text style={{
+                {/* <Button title="Complete" filled={false} onPress={() => {}} /> */}
+                {/* <Text style={{
                     color: textColor,
                     fontSize: 40,
-                }}>{date}</Text>
+                }}>{date}</Text> */}
             </AnimatedView>
         </Pressable>
     );
