@@ -1,6 +1,6 @@
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functions';
-import React, { ReactNode, createContext, useContext, useState } from 'react';
+import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
 const emailEnding = '@example.com';
 
@@ -24,6 +24,7 @@ interface LeaderboardUser {
 interface FirebaseContextType {
     user: FirebaseAuthTypes.User | null;
     userData: UserData | null;
+    initializing: boolean;
     registerUser: (username: string, email: string, password: string) => Promise<Error | null>;
     logIn: (email: string, password: string) => Promise<Error | null>;
     logOut: () => Promise<void>;
@@ -38,6 +39,21 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     // Tracks auth().currentUser - doesn't use onAuthStateChanged because on user creation additional initialization is needed
     const [user, setUser] = useState<FirebaseAuthTypes.User | null>(auth().currentUser);
     const [userData, setUserData] = useState<UserData | null>(null);
+    const [initializing, setInitializing] = useState(true);
+
+    async function onAuthStateChanged(user: any) {
+        if (user) {
+            await getUserData();
+        } else {
+            setUserData(null);
+        }
+        setInitializing(false);
+    }
+
+    useEffect(() => {
+        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+        return subscriber; // unsubscribe on unmount
+    }, []);
 
     /**
      * Registers a new user with the given username, email, and password
@@ -56,7 +72,6 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                 });
 
             setUser(auth().currentUser);
-            await getUserData();
         } catch (error) {
             console.log(error + ' from FirebaseProvider.tsx:  registerUser');
             return error as Error;
@@ -72,7 +87,6 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             console.log('DATABASE CALL: sign in');
             await auth().signInWithEmailAndPassword(username + emailEnding, password);
             setUser(auth().currentUser);
-            await getUserData();
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  logIn');
             return error;
@@ -87,7 +101,6 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             console.log('DATABASE CALL: sign out');
             await auth().signOut();
             setUser(auth().currentUser);
-            setUserData(null);
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  logOut');
             return error;
@@ -179,6 +192,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         <FirebaseContext.Provider value={{
             user,
             userData,
+            initializing,
             registerUser,
             logIn,
             logOut,
