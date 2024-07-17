@@ -6,6 +6,7 @@ import Book from '@/assets/svg/book.svg';
 import Home from '@/assets/svg/home.svg';
 import Trophy from '@/assets/svg/trophy.svg';
 import useBounceAnimation from "@/utils/useBounceAnimation";
+import * as Haptics from 'expo-haptics';
 import { useColorScheme, View } from "react-native";
 
 const AnimatedView = animated(View);
@@ -19,7 +20,10 @@ const AnimatedIcon = forwardRef(({ focused, route, width, height }: { focused: b
     const theme = useContext(ThemeContext);
     const scheme = useColorScheme();
 
-    const { scale, onPressIn, onPressOut } = useBounceAnimation({});
+    const { scale, onPressIn, onPressOut } = useBounceAnimation({
+        scaleTo: 0.8,
+        haptics: Haptics.ImpactFeedbackStyle.Light
+    });
 
     const opacity = useSpring({
         backgroundColor: focused ? theme.accent : '#00000000',
