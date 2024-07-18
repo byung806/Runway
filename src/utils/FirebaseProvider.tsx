@@ -36,18 +36,28 @@ interface FirebaseContextType {
 }
 
 export function FirebaseProvider({ children }: { children: ReactNode }) {
-    // Tracks auth().currentUser - doesn't use onAuthStateChanged because on user creation additional initialization is needed
+    // Mirror of auth().currentUser
     const [user, setUser] = useState<FirebaseAuthTypes.User | null>(auth().currentUser);
     const [userData, setUserData] = useState<UserData | null>(null);
     const [initializing, setInitializing] = useState(true);
 
-    async function onAuthStateChanged(user: any) {
-        if (user) {
-            await getUserData();
-        } else {
-            setUserData(null);
-        }
-        setInitializing(false);
+    var debounceTimeout: NodeJS.Timeout | null;
+    const debounceTime = 200;  // ms
+
+    function onAuthStateChanged(authStateUser: FirebaseAuthTypes.User | null) {
+        setUser(authStateUser);
+
+        if (debounceTimeout) clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(async () => {
+            debounceTimeout = null;
+
+            if (user) {
+                await getUserData();
+            } else {
+                setUserData(null);
+            }
+            setInitializing(false);
+        }, debounceTime);
     }
 
     useEffect(() => {
@@ -70,8 +80,6 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                     email: email,
                     password: password,
                 });
-
-            setUser(auth().currentUser);
         } catch (error) {
             console.log(error + ' from FirebaseProvider.tsx:  registerUser');
             return error as Error;
@@ -86,7 +94,6 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         try {
             console.log('DATABASE CALL: sign in');
             await auth().signInWithEmailAndPassword(username + emailEnding, password);
-            setUser(auth().currentUser);
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  logIn');
             return error;
@@ -100,7 +107,6 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         try {
             console.log('DATABASE CALL: sign out');
             await auth().signOut();
-            setUser(auth().currentUser);
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  logOut');
             return error;
