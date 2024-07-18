@@ -46,12 +46,12 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
         // TODO: set time limit of 4 seconds
         const error = await firebase.logIn(username, password);
         setError(error);
-        setLoading(false);
     }
 
     // only navigate to logged in app if user data is loaded
     useEffect(() => {
         // TODO: fade?
+        setLoading(false);
         if (firebase.userData) navigation.navigate('logged_in_app');
     }, [firebase.userData]);
 

@@ -4,7 +4,7 @@ import { useFirebase } from '@/utils/FirebaseProvider';
 import useBounceAnimation from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import * as Haptics from 'expo-haptics';
-import { memo, useContext, useEffect } from 'react';
+import { forwardRef, memo, useContext, useEffect, useImperativeHandle } from 'react';
 import { Pressable, View } from 'react-native';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
@@ -19,10 +19,14 @@ interface DateCardProps {
     backgroundColor: string;
 }
 
+export interface DateCardRef {
+    onPressIn: () => void;
+    onPressOut: () => void;
+}
+
 const AnimatedView = animated(View);
 
-const DateCard = memo(function DateCard({ focused, completed, date, textColor, borderColor, backgroundColor, ...props }: DateCardProps & any) {
-    // TODO: allowpress
+const DateCard = forwardRef(({ focused, completed, date, textColor, borderColor, backgroundColor, ...props }: DateCardProps & any, ref) => {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
 
@@ -31,10 +35,15 @@ const DateCard = memo(function DateCard({ focused, completed, date, textColor, b
         haptics: Haptics.ImpactFeedbackStyle.Light,
         config: config.gentle
     });
-    
+
+    useImperativeHandle(ref, () => ({
+        onPressIn,
+        onPressOut,
+    }));
+
     useEffect(() => {
         if (focused) {
-            console.log('start animation for ', date);
+            console.log('start internal card slide animation for ', date);
             // start animation
         }
     }, [focused]);
@@ -55,7 +64,7 @@ const DateCard = memo(function DateCard({ focused, completed, date, textColor, b
     }
 
     return (
-        <Pressable onPressIn={onPressIn} onPressOut={onPressOut} style={{ height: props.height }}>
+        <View {...props}>
             <AnimatedView style={{
                 flex: 1,
                 borderRadius: 12,
@@ -98,8 +107,8 @@ const DateCard = memo(function DateCard({ focused, completed, date, textColor, b
                     fontSize: 40,
                 }}>{date}</Text> */}
             </AnimatedView>
-        </Pressable>
+        </View>
     );
 });
 
-export default DateCard;
+export default memo(DateCard);

@@ -61,12 +61,12 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
         setLoading(true);
         const error = await firebase.registerUser(username, email, password);
         setError(error);
-        setLoading(false);
     }
 
     // only navigate to logged in app if user data is loaded
     useEffect(() => {
         // TODO: fade?
+        setLoading(false);
         if (firebase.userData) navigation.navigate('logged_in_app');
     }, [firebase.userData]);
 
