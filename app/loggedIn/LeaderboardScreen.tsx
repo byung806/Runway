@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { Dimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, ThemeContext } from '~/2d';
+import { Button, Text, ThemeContext } from '~/2d';
 
 import { Styles } from '@/styles';
 
 import Leaderboard from '@/components/2d/Leaderboard';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { TabBar, TabView } from 'react-native-tab-view';
 
 const renderScene = ({ route }: { route: { key: string } }) => {
@@ -20,7 +21,7 @@ const renderScene = ({ route }: { route: { key: string } }) => {
 };
 
 
-export default function LeaderboardScreen() {
+export default function LeaderboardScreen({ navigation, ...props }: { navigation: StackNavigationProp<any, any> } & any) {
     const theme = useContext(ThemeContext);
 
     const [index, setIndex] = React.useState(0);
@@ -38,6 +39,7 @@ export default function LeaderboardScreen() {
                     flexShrink: 1,
                 }}>
                 <Text style={{ ...Styles.title, color: theme.text }}>Leaderboard</Text>
+                <Button title="Back" onPress={() => navigation.navigate('app')} filled={false} />
             </View>
             <TabView
                 navigationState={{ index, routes }}
