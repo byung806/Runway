@@ -69,7 +69,7 @@ function ListHeaderComponent({ focused, height }: { focused: boolean, height: nu
     );
 }
 
-interface DateType {
+interface DateCardAttributes {
     date: string;
     ref: DateCardRef | null;
     textColor: string;
@@ -78,12 +78,12 @@ interface DateType {
     outerBackgroundColor: string;
 }
 
-export default function ContentScreen({ navigation, props }: { navigation: StackNavigationProp<any, any>, props?: any }) {
+export default function ContentScreen({ navigation, ...props }: { navigation: StackNavigationProp<any, any> } & any) {
     const theme = useContext(ThemeContext);
     const today = getTodayDate();
 
-    const [focusedItem, setFocusedItem] = useState(getTodayDate());
-    const [dates, setDates] = useState<DateType[]>([
+    const [focusedDate, setFocusedDate] = useState<string | null>(getTodayDate());
+    const [dates, setDates] = useState<DateCardAttributes[]>([
         {
             date: today,
             ref: null,
@@ -94,6 +94,25 @@ export default function ContentScreen({ navigation, props }: { navigation: Stack
         }
     ]);
 
+    const backgroundColor = useSharedValue(theme.background);
+
+    // Change background color when theme changes
+    useEffect(() => {
+        backgroundColor.value = withTiming(theme.background, { duration: 200 });
+    }, [theme]);
+
+    const flatListRef = useRef<FlatList<DateCardAttributes>>(null);
+
+    const paddingAboveHeader = 50;
+    const headerHeight = Dimensions.get("window").height * 0.8;
+
+    const padding = 30;
+    const boxWidth = Dimensions.get("window").width - padding * 2;
+    const boxHeight = boxWidth * 1.6;
+
+    /**
+     * Add previous day to the list, adding a new card below the last one
+     */
     function addPreviousDay() {
         const newDate = new Date(dates[dates.length - 1].date);
         newDate.setDate(newDate.getDate() - 1);
@@ -118,36 +137,26 @@ export default function ContentScreen({ navigation, props }: { navigation: Stack
         }
     }
 
-    const backgroundColor = useSharedValue(theme.background);
-
-    // Change background color when theme changes
-    useEffect(() => {
-        backgroundColor.value = withTiming(theme.background, { duration: 200 });
-    }, [theme]);
-
-    // Update background and attributes when focused item changes
-    function focusItem(item: DateType | 'header') {
-        if (item === 'header') {
-            setFocusedItem(item);
+    /**
+     * Update background and attributes when focused item changes
+     * Called when item comes into view
+     */
+    function focusItem(item: DateCardAttributes | null) {
+        if (item === null) {
+            setFocusedDate(item);
             backgroundColor.value = withTiming(theme.background, { duration: 200 });
         } else {
-            setFocusedItem(item.date);
+            setFocusedDate(item.date);
             backgroundColor.value = withTiming(item.outerBackgroundColor, { duration: 200 });
         }
     }
 
-
-    const padding = 30;
-    const boxWidth = Dimensions.get("window").width - padding * 2;
-    const boxHeight = boxWidth * 1.6;
-    const flatListRef = useRef<FlatList<DateType>>(null);
-
+    /**
+     * Scroll to card with index
+     */
     function scrollToItem(index: number) {
         flatListRef.current?.scrollToIndex({ index, viewPosition: 0.5 });
     }
-
-    const headerHeight = Dimensions.get("window").height * 0.8;
-    const paddingAboveHeader = 50;
 
     return (
         <Animated.View style={{
@@ -157,39 +166,6 @@ export default function ContentScreen({ navigation, props }: { navigation: Stack
         }}>
             <FlatList
                 ref={flatListRef}
-                style={{ flex: 1 }}
-                onViewableItemsChanged={({ viewableItems, changed }) => {
-                    // console.log(viewableItems.map((item: any) => item.item.date));
-                    if (viewableItems.length === 0) {
-                        focusItem('header');
-                        return;
-                    }
-                    focusItem(viewableItems[0].item);
-                }}
-                viewabilityConfig={{
-                    itemVisiblePercentThreshold: 70,
-                    waitForInteraction: false
-                }}
-                data={dates}
-                // contentContainerStyle={{ gap: padding, paddingTop: Dimensions.get("window").height * 0.5 - boxHeight / 2 }}
-                contentContainerStyle={{ gap: padding, paddingTop: paddingAboveHeader }}
-                numColumns={1}
-                // contentOffset={{ x: 0, y: -Dimensions.get("window").height * 0.5 }}
-                initialScrollIndex={0}
-                keyExtractor={(item) => item.date}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                // onScrollBeginDrag={() => setAllowCardPress(false)}
-                // onScrollEndDrag={() => setAllowCardPress(true)}
-                decelerationRate="fast"
-                getItemLayout={(data, index) => {
-                    return {
-                        length: boxHeight + padding,
-                        offset: (boxHeight + padding) * index + (paddingAboveHeader + headerHeight + padding),
-                        index
-                    }
-                }}
-                ListHeaderComponent={<ListHeaderComponent focused={focusedItem === 'header'} height={headerHeight} />}
                 renderItem={({ item, index }) => {
                     return (
                         <Pressable onPress={() => {
@@ -198,7 +174,7 @@ export default function ContentScreen({ navigation, props }: { navigation: Stack
                         }} onPressOut={item.ref?.onPressOut}>
                             <DateCard
                                 ref={(ref: DateCardRef) => { item.ref = ref }}
-                                focused={focusedItem === item.date}
+                                focused={focusedDate === item.date}
                                 completed={false}  // TODO: completed
                                 date={item.date}
                                 textColor={item.textColor}
@@ -211,7 +187,34 @@ export default function ContentScreen({ navigation, props }: { navigation: Stack
                         </Pressable>
                     )
                 }}
-                // snapToInterval={boxHeight + padding}
+                data={dates}
+                ListHeaderComponent={<ListHeaderComponent focused={focusedDate === 'header'} height={headerHeight} />}
+                getItemLayout={(_, index) => {
+                    return {
+                        length: boxHeight + padding,
+                        offset: (boxHeight + padding) * index + (paddingAboveHeader + headerHeight + padding),
+                        index
+                    }
+                }}
+                initialScrollIndex={0}
+                keyExtractor={(item) => item.date}
+                numColumns={1}
+                onViewableItemsChanged={({ viewableItems }) => {
+                    if (viewableItems.length === 0) {
+                        // focus header
+                        focusItem(null);
+                    } else {
+                        focusItem(viewableItems[0].item);
+                    }
+                }}
+                viewabilityConfig={{
+                    itemVisiblePercentThreshold: 70,  // how much of the item is visible
+                    waitForInteraction: false
+                }}
+                contentContainerStyle={{ gap: padding, paddingTop: paddingAboveHeader }}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                decelerationRate="fast"
                 snapToOffsets={dates.map((_, i) =>
                     (boxHeight + padding) * i
                     + paddingAboveHeader + headerHeight + padding
@@ -220,7 +223,8 @@ export default function ContentScreen({ navigation, props }: { navigation: Stack
                 onEndReached={addPreviousDay}
                 onEndReachedThreshold={0.9} // how far the user is down the current visible items
             />
-            {focusedItem !== today && focusedItem !== 'header' && (
+
+            {focusedDate !== today && focusedDate !== null && (
                 // scroll to top button
                 <SafeAreaView style={{
                     position: 'absolute',

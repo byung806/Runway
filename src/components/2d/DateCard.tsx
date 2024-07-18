@@ -43,7 +43,7 @@ const DateCard = forwardRef(({ focused, completed, date, textColor, borderColor,
 
     useEffect(() => {
         if (focused) {
-            console.log('start internal card slide animation for ', date);
+            // console.log('start internal card slide animation for ', date);
             // start animation
         }
     }, [focused]);
