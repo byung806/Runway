@@ -53,6 +53,7 @@ function ListHeaderComponent({ focused, height }: { focused: boolean, height: nu
         }}>
             <View>
                 <Button title="Log Out" onPress={logOut} filled={false} />
+                <Button title="Leaderboard" onPress={() => navigation.navigate('leaderboard')} filled={false} />
                 {/* <Button title="today" onPress={requestCompleteToday} filled={false} /> */}
             </View>
             <View style={{
