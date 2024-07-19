@@ -1,6 +1,7 @@
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functions';
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import firestore from '@react-native-firebase/firestore';
 
 const emailEnding = '@example.com';
 
@@ -15,30 +16,66 @@ interface UserData {
     username: string;
 }
 
+export interface ContentColors {
+    textColor: string;
+    borderColor: string;
+    backgroundColor: string;
+    outerBackgroundColor: string;
+}
+
+interface ContentQuestion {
+    question: string;
+    choices: ContentQuestionChoice[];
+}
+
+interface ContentQuestionChoice {
+    choice: string;
+    correct: boolean;
+}
+
+export interface Content {
+    title: string;
+    category: string;
+    body: string;
+    questions: ContentQuestion[];
+}
+
+export type LeaderboardType = 'friends' | 'global';
+
 interface LeaderboardUser {
     username: string;
     points: number;
     streak: number;
 }
 
+interface LeaderboardData {
+    leaderboard: LeaderboardUser[];
+    rank: number;
+}
+
 interface FirebaseContextType {
     user: FirebaseAuthTypes.User | null;
     userData: UserData | null;
+    globalLeaderboard: LeaderboardData | null;
+    friendsLeaderboard: LeaderboardData | null;
     initializing: boolean;
     registerUser: (username: string, email: string, password: string) => Promise<Error | null>;
     logIn: (email: string, password: string) => Promise<Error | null>;
     logOut: () => Promise<void>;
     checkUncompletedChallengeToday: () => Promise<boolean>;
     getUserData: () => Promise<void>;
+    getContent: (date: string) => Promise<{ content: Content, colors: ContentColors } | null>;
     requestCompleteToday: () => Promise<{ dataChanged: boolean }>;
     addFriend: (friend: string) => Promise<{ success: boolean }>;
-    getLeaderboard: (type: 'friends' | 'global') => Promise<{ leaderboard: LeaderboardUser[]; rank: number; }>;
+    getLeaderboard: (type: LeaderboardType) => Promise<void>;
 }
 
 export function FirebaseProvider({ children }: { children: ReactNode }) {
     // Mirror of auth().currentUser
     const [user, setUser] = useState<FirebaseAuthTypes.User | null>(auth().currentUser);
     const [userData, setUserData] = useState<UserData | null>(null);
+    const [globalLeaderboard, setGlobalLeaderboard] = useState<LeaderboardData | null>(null);
+    const [friendsLeaderboard, setFriendsLeaderboard] = useState<LeaderboardData | null>(null);
     const [initializing, setInitializing] = useState(true);
 
     var debounceTimeout: NodeJS.Timeout | null;
@@ -53,8 +90,12 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 
             if (user) {
                 await getUserData();
+                await getLeaderboard('global');
+                await getLeaderboard('friends');
             } else {
                 setUserData(null);
+                setGlobalLeaderboard(null);
+                setFriendsLeaderboard(null);
             }
             setInitializing(false);
         }, debounceTime);
@@ -143,6 +184,25 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         }
     }
 
+    async function getContent(date: string) {
+        try {
+            console.log('DATABASE CALL: get content');
+            const doc = firestore().collection('content').doc(date)
+            const data = await doc.get();
+            if (data.exists) {
+                const values = data.data();
+                return {
+                    content: values as Content,
+                    colors: values?.colors as ContentColors,
+                };
+            }
+            return null;
+        } catch (error: any) {
+            console.log(error + ' from FirebaseProvider.tsx:  getContent');
+            return null;
+        }
+    }
+
     /**
      * Requests to the server to increment the streak and points for the logged in user
      * Fails if the user has already completed the day's challenge and it has been logged
@@ -177,7 +237,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     /**
      * Fetches the leaderboard and the current user's rank
      */
-    async function getLeaderboard(type: 'friends' | 'global') {
+    async function getLeaderboard(type: LeaderboardType) {
         try {
             console.log('DATABASE CALL: get ' + type + ' leaderboard');
             const data = await functions()
@@ -187,10 +247,13 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                     leaderboard: LeaderboardUser[];
                     rank: number;
                 }>;
-            return data.data as { leaderboard: LeaderboardUser[]; rank: number; };
+            if (type === 'friends') {
+                setFriendsLeaderboard(data.data);
+            } else {
+                setGlobalLeaderboard(data.data);
+            }
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  getLeaderboard');
-            return { leaderboard: [], rank: 0 };
         }
     }
 
@@ -198,12 +261,15 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         <FirebaseContext.Provider value={{
             user,
             userData,
+            globalLeaderboard,
+            friendsLeaderboard,
             initializing,
             registerUser,
             logIn,
             logOut,
             checkUncompletedChallengeToday,
             getUserData,
+            getContent,
             requestCompleteToday,
             addFriend,
             getLeaderboard,

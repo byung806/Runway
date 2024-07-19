@@ -1,5 +1,5 @@
 import { registerRootComponent } from 'expo';
-import { ThemeProvider } from '~/2d';
+import { ThemeProvider } from '@/components/2d';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';

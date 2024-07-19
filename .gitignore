@@ -41,3 +41,5 @@ GoogleService-Info.plist
 
 *.log
 .vscode
+
+_content

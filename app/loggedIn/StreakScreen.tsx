@@ -10,7 +10,7 @@ import { Suspense, useContext, useEffect, useRef, useState } from "react";
 import { Dimensions, Easing, View } from "react-native";
 import AnimatedNumbers from 'react-native-animated-numbers';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, Text, ThemeContext } from "~/2d";
+import { Button, Text, ThemeContext } from '@/components/2d';
 
 
 const AnimatedButton = animated(Button);
@@ -80,7 +80,7 @@ export default function StreakScreen({ navigation, ...props }: { navigation: Sta
                     <AnimatedNumbers
                         animateToNumber={streak}
                         animationDuration={numberAnimationDuration}
-                        fontStyle={{ color: theme.text, fontSize: 100, textAlign: 'center', fontFamily: 'Silkscreen_400Regular' }}
+                        fontStyle={{ color: theme.text, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
                         easing={Easing.out(Easing.cubic)}
                     />
                     <Text style={{

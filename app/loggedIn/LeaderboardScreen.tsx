@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Dimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Text, ThemeContext } from '~/2d';
+import { Button, Text, ThemeContext } from '@/components/2d';
 
 import { Styles } from '@/styles';
 

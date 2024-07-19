@@ -1,11 +1,11 @@
 import { Styles } from '@/styles';
 import { dayIsYesterday, sameDay, stringToDate } from '@/utils/date';
-import { useFirebase } from '@/utils/FirebaseProvider';
+import { Content, ContentColors, useFirebase } from '@/utils/FirebaseProvider';
 import useBounceAnimation from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import * as Haptics from 'expo-haptics';
 import { forwardRef, memo, useContext, useEffect, useImperativeHandle } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
 
@@ -14,9 +14,9 @@ interface DateCardProps {
     focused: boolean;
     completed: boolean;
     date: string;
-    textColor: string;
-    borderColor: string;
-    backgroundColor: string;
+    content: Content;
+    colors: ContentColors;
+    style: any;
 }
 
 export interface DateCardRef {
@@ -26,7 +26,7 @@ export interface DateCardRef {
 
 const AnimatedView = animated(View);
 
-const DateCard = forwardRef(({ focused, completed, date, textColor, borderColor, backgroundColor, ...props }: DateCardProps & any, ref) => {
+const DateCard = forwardRef(({ focused, completed, date, content, colors, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
 
@@ -64,13 +64,13 @@ const DateCard = forwardRef(({ focused, completed, date, textColor, borderColor,
     }
 
     return (
-        <View {...props}>
+        <View style={style}>
             <AnimatedView style={{
                 flex: 1,
                 borderRadius: 12,
                 borderWidth: 6,
-                borderColor: borderColor,
-                backgroundColor: backgroundColor,
+                borderColor: colors.borderColor,
+                backgroundColor: colors.backgroundColor,
                 ...Styles.centeringContainer,
                 transform: [{ scale: scale }]
             }}>
@@ -84,28 +84,28 @@ const DateCard = forwardRef(({ focused, completed, date, textColor, borderColor,
                 }}>
                     <View style={{
                         alignItems: 'center',
-                        // borderWidth: 2,
+                        paddingTop: 4,
                     }}>
                         <Text style={{
-                            color: textColor,
+                            color: colors.textColor,
                             fontSize: 40,
                         }}>{day}</Text>
                         <Text style={{
-                            color: textColor,
+                            color: colors.textColor,
                             fontSize: 20,
                         }}>{month}</Text>
                     </View>
                     <Text style={{
-                        color: textColor,
+                        color: colors.textColor,
                         paddingTop: 8,
                         fontSize: 20,
                     }}>{extra}</Text>
                 </View>
                 {/* <Button title="Complete" filled={false} onPress={() => {}} /> */}
-                {/* <Text style={{
-                    color: textColor,
+                <Text style={{
+                    color: colors.textColor,
                     fontSize: 40,
-                }}>{date}</Text> */}
+                }}>{content.title}</Text>
             </AnimatedView>
         </View>
     );
