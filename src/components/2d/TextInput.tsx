@@ -23,7 +23,7 @@ export default function TextInput({ placeholder, onChangeText, password = false,
             keyboardType={"default"}
             secureTextEntry={password}
             style={{
-                fontFamily: 'Silkscreen_400Regular',
+                fontFamily: 'Inter_700Bold',
                 height: INPUT_HEIGHT,
                 borderRadius: 14,
                 backgroundColor: theme.background,

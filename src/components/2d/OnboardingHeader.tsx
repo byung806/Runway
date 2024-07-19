@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { Pressable, View } from 'react-native';
 
-import ArrowLeft from '@/assets/svg/arrow-left.svg';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
-import Header from './Header';
+import { Styles } from '@/styles';
 import { ThemeContext } from './ThemeProvider';
 
 interface OnboardingHeaderProps {
@@ -15,7 +15,15 @@ export default function OnboardingHeader({ backgroundColor, prevButtonCallback }
     const theme = useContext(ThemeContext);
 
     return (
-        <Header>
+        <View
+            style={{
+                ...Styles.centeringContainer,
+                flexDirection: 'row',
+                backgroundColor: backgroundColor || theme.background,
+                paddingHorizontal: 24,
+                paddingVertical: 20,
+            }}
+        >
             <View
                 style={{
                     width: '100%',
@@ -24,10 +32,10 @@ export default function OnboardingHeader({ backgroundColor, prevButtonCallback }
             >
                 {prevButtonCallback && (
                     <Pressable onPressIn={prevButtonCallback}>
-                        <ArrowLeft width={36} height={36} fill={theme.accent} />
+                        <AntDesign name="arrowleft" size={36} color={theme.accent} />
                     </Pressable>
                 )}
             </View>
-        </Header>
+        </View>
     );
 };

@@ -1,12 +1,11 @@
 import { Styles } from '@/styles';
-import { useFirebase } from '@/utils/FirebaseProvider';
+import { LeaderboardType, useFirebase } from '@/utils/FirebaseProvider';
 import useBounceAnimation from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import * as Haptics from 'expo-haptics';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import Button from './Button';
-import Loading from './Loading';
 import Text from './Text';
 import TextInput from './TextInput';
 import { ThemeContext } from './ThemeProvider';
@@ -77,42 +76,14 @@ function LeaderboardEntry({ place, avatar, name, points, streak }: LeaderboardEn
     );
 }
 
-interface LeaderboardType {
-    type: 'friends' | 'global';
-}
-
-interface LeaderboardUser {
-    username: string;
-    points: number;
-    streak: number;
-}
-
-export default function Leaderboard({ type }: LeaderboardType) {
+export default function Leaderboard({ type }: { type: LeaderboardType }) {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
-
-    const [leaderboardData, setLeaderboardData] = useState<{ leaderboard: LeaderboardUser[]; rank: number; } | null>(null);
-
     const [friend, setFriend] = useState('');
 
-    // on mount get leaderboard data
-    useEffect(() => {
-        if (!firebase.user) {
-            setLeaderboardData({ leaderboard: [], rank: 0 });
-            return;
-        }
-        getLeaderboardData();
-    }, [firebase.user]);
+    const data = type === 'friends' ? firebase.friendsLeaderboard : firebase.globalLeaderboard;
 
-    async function getLeaderboardData() {
-        const data = await firebase.getLeaderboard(type);
-        setLeaderboardData(data);
-    }
-
-    if (!leaderboardData) {
-        return <Loading />;
-    }
-    if (type === 'friends' && leaderboardData.leaderboard.length === 0) {
+    if (type === 'friends' && data?.leaderboard.length === 0) {
         // show ui if user has no friends
         return (
             <View
@@ -138,7 +109,7 @@ export default function Leaderboard({ type }: LeaderboardType) {
                         const success = await firebase.addFriend(friend);
                         if (success) {
                             setFriend('');
-                            getLeaderboardData();
+                            firebase.getLeaderboard('friends');
                         }
                     }} />
                 </View>
@@ -153,7 +124,7 @@ export default function Leaderboard({ type }: LeaderboardType) {
                 backgroundColor: theme.background,
             }}>
             <FlatList
-                data={leaderboardData.leaderboard}
+                data={data?.leaderboard}
                 style={{
                     padding: 10,
                 }}

@@ -1,7 +1,7 @@
+import { Button, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '@/components/2d';
 import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '~/2d';
 
 import { Styles } from '@/styles';
 import { useFirebase } from '@/utils/FirebaseProvider';
@@ -67,7 +67,6 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
     useEffect(() => {
         // TODO: fade?
         setLoading(false);
-        if (firebase.userData) navigation.navigate('logged_in_app');
     }, [firebase.userData]);
 
     // TODO: combine signup & login - enter username => check if user exists => if so, password to login, else, password to signup

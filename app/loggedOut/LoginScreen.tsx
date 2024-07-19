@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '~/2d';
+import { Button, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '@/components/2d';
 
 import { Styles } from '@/styles';
 import { useFirebase } from '@/utils/FirebaseProvider';
@@ -52,7 +52,6 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
     useEffect(() => {
         // TODO: fade?
         setLoading(false);
-        if (firebase.userData) navigation.navigate('logged_in_app');
     }, [firebase.userData]);
 
     return (

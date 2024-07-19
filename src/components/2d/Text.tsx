@@ -10,7 +10,7 @@ export default function Text({ children, ...props }: TextProps & any) {
     const theme = useContext(ThemeContext);
     
     return (
-        <TextNative {...props} style={{ fontFamily: 'Silkscreen_400Regular', color: theme.text, ...props.style }}>
+        <TextNative {...props} style={{ fontFamily: 'Inter_800ExtraBold', color: theme.text, ...props.style }}>
             {children?.toString().replace('\\n', '\n')}
         </TextNative>
     );

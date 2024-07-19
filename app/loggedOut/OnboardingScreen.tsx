@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import { View } from 'react-native';
 import ViewPager from 'react-native-pager-view';
-import { OnboardingPage, Text, ThemeContext } from '~/2d';
+import { OnboardingPage, Text, ThemeContext } from '@/components/2d';
 
 import { Styles } from '@/styles';
 import { FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
