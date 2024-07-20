@@ -1,14 +1,18 @@
 import { Styles } from "@/styles";
 import { useFirebase } from "@/utils/FirebaseProvider";
+import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from "@react-navigation/native";
 import { View } from "react-native";
 import Button from "./Button";
-import Plane from "./Plane";
 import Text from "./Text";
+import { useContext } from "react";
+import { ThemeContext } from "./ThemeProvider";
+
 
 export default function ListHeaderComponent({ height }: { height: number }) {
     const firebase = useFirebase();
     const navigation = useNavigation<any>();
+    const theme = useContext(ThemeContext);
 
     async function checkUncompletedChallengeToday() {
         const uncompletedChallengeToday = await firebase.checkUncompletedChallengeToday();
@@ -59,7 +63,7 @@ export default function ListHeaderComponent({ height }: { height: number }) {
                 <Text style={{ fontSize: 100 }}>{firebase.userData?.points}</Text>
             </View>
             <View style={{ ...Styles.centeringContainer }}>
-                <Plane onPress={() => { }} />
+                <AntDesign name="down" size={40} color={theme.text} />
             </View>
         </View>
     );
