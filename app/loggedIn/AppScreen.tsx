@@ -36,15 +36,8 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
     const todayButtonTransformY = useSharedValue(0);
     const todayButtonOpacity = useSharedValue(0);
     const outerBackgroundColor = useSharedValue(theme.background);
-    const goButtonColor = useSharedValue('transparent');
-    const goButtonOpacity = useSharedValue(0);
 
-    // for GO button
-    const { scale, onPressIn, onPressOut } = useBounceAnimation({
-        scaleTo: 0.9,
-        haptics: Haptics.ImpactFeedbackStyle.Light,
-        config: config.wobbly
-    });
+    // TODO: tap to go up - scroll to index instead of scroll to element
 
     // Change background color when theme changes
     useEffect(() => {
@@ -110,13 +103,9 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
         if (item === null) {
             setFocusedDate(item);
             outerBackgroundColor.value = withTiming(theme.background, { duration: 200 });
-            goButtonColor.value = withTiming('transparent', { duration: 200 });
-            goButtonOpacity.value = withTiming(0, { duration: 200 });
         } else {
             setFocusedDate(item.date);
             outerBackgroundColor.value = withTiming(item.colors.outerBackgroundColor, { duration: 200 });
-            goButtonColor.value = withTiming(item.colors.textColor, { duration: 200 });
-            goButtonOpacity.value = withTiming(1, { duration: 200 });
         }
     }
 
@@ -192,33 +181,6 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
                 onEndReachedThreshold={0.9} // how far the user is down the current visible items
             />
 
-            {/* middle clickable go button */}
-            <ReactSpringAnimatedView style={{
-                position: 'absolute',
-                width: 220,
-                height: 50,
-                alignSelf: 'center',
-                top: '65%',
-                pointerEvents: !focusedDate ? 'none' : 'auto',
-                transform: [{ scale: scale }]
-            }}>
-                <Animated.View style={{
-                    flex: 1,
-                    borderRadius: 12,
-                    opacity: goButtonOpacity,
-                    backgroundColor: goButtonColor,
-                }}>
-                    <Pressable
-                        onPressIn={onPressIn}
-                        onPressOut={onPressOut}
-                        style={{ flex: 1, ...Styles.centeringContainer }}
-                    >
-                        <Text style={{ color: theme.text, fontSize: 20 }}>Go!</Text>
-                    </Pressable>
-                </Animated.View>
-            </ReactSpringAnimatedView>
-
-            {/* scroll to top button */}
             <SafeAreaView style={{
                 position: 'absolute',
                 justifyContent: 'flex-end',
@@ -230,12 +192,22 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
                     flex: 1,
                     borderRadius: 1000,
                     padding: 4,
-                    backgroundColor: theme.accent,
+                    backgroundColor: theme.black,
+                    shadowOpacity: 0.5,
+                    shadowRadius: 10,
+                    shadowOffset: {
+                        height: 5,
+                        width: 0
+                    },
+                    elevation: 4,
                     opacity: todayButtonOpacity,
                     transform: [{ translateY: todayButtonTransformY }]
                 }}>
-                    <Pressable onPress={() => { scrollToItem(0) }}>
-                        <AntDesign name="arrowup" size={30} color={theme.text} />
+                    <Pressable onPress={() => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                        scrollToItem(0);
+                    }}>
+                        <AntDesign name="arrowup" size={30} color={theme.white} />
                     </Pressable>
                 </Animated.View>
             </SafeAreaView>

@@ -5,7 +5,8 @@ import useBounceAnimation from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import * as Haptics from 'expo-haptics';
 import { forwardRef, memo, useContext, useEffect, useImperativeHandle } from 'react';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
+import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
 
@@ -28,23 +29,42 @@ const AnimatedView = animated(View);
 
 const DateCard = forwardRef(({ focused, completed, date, content, colors, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);
-    const firebase = useFirebase();
 
-    const { scale, onPressIn, onPressOut } = useBounceAnimation({
+    const { scale: cardScale, onPressIn: cardOnPressIn, onPressOut: cardOnPressOut } = useBounceAnimation({
         scaleTo: 0.94,
+        config: config.gentle
+    });
+
+    const { scale: buttonScale, onPressIn: buttonOnPressIn, onPressOut: buttonOnPressOut } = useBounceAnimation({
+        scaleTo: 0.9,
         haptics: Haptics.ImpactFeedbackStyle.Light,
         config: config.gentle
     });
 
+    const initialTransformY = 80;
+
+    const titleTransformY = useSharedValue(-initialTransformY);
+    const goTransformY = useSharedValue(initialTransformY);
+    const cardContentOpacity = useSharedValue(0);
+
     useImperativeHandle(ref, () => ({
-        onPressIn,
-        onPressOut,
+        onPressIn: cardOnPressIn,
+        onPressOut: cardOnPressOut,
     }));
 
     useEffect(() => {
         if (focused) {
-            // console.log('start internal card slide animation for ', date);
             // start animation
+            titleTransformY.value = withSpring(0, { duration: 600 });
+            goTransformY.value = withSpring(0, { duration: 600 });
+
+            cardContentOpacity.value = withTiming(1, { duration: 600 });
+        } else {
+            // reset animation
+            titleTransformY.value = withTiming(-initialTransformY, { duration: 600 });
+            goTransformY.value = withTiming(initialTransformY, { duration: 600 });
+
+            cardContentOpacity.value = withTiming(0, { duration: 600 });
         }
     }, [focused]);
 
@@ -72,8 +92,10 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, style 
                 borderColor: colors.borderColor,
                 backgroundColor: colors.backgroundColor,
                 ...Styles.centeringContainer,
-                transform: [{ scale: scale }]
+                transform: [{ scale: cardScale }]
             }}>
+
+                {/* date & extras (top left and right) */}
                 <View style={{
                     position: 'absolute',
                     flexDirection: 'row',
@@ -101,11 +123,45 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, style 
                         fontSize: 20,
                     }}>{extra}</Text>
                 </View>
-                {/* <Button title="Complete" filled={false} onPress={() => {}} /> */}
-                <Text style={{
-                    color: colors.textColor,
-                    fontSize: 40,
-                }}>{content.title}</Text>
+
+                {/* title */}
+                <Animated.View style={{
+                    padding: 30,
+                    opacity: cardContentOpacity,
+                    transform: [{ translateY: titleTransformY }]
+                }}>
+                    <Text style={{
+                        color: colors.textColor,
+                        fontSize: 40,
+                    }}>{content.title}</Text>
+                </Animated.View>
+
+
+                {/* go button */}
+                <AnimatedView style={{
+                    width: '80%',
+                    height: 50,
+                    alignSelf: 'center',
+                    transform: [{ scale: buttonScale }]
+                }}>
+                    <Animated.View style={{
+                        flex: 1,
+                        borderRadius: 12,
+                        opacity: cardContentOpacity,
+                        backgroundColor: colors.textColor,
+                        transform: [{ translateY: goTransformY }]
+                    }}>
+                        <Pressable
+                            onPressIn={buttonOnPressIn}
+                            onPressOut={buttonOnPressOut}
+                            style={{ flex: 1, ...Styles.centeringContainer }}
+                        >
+                            <Text style={{ color: theme.white, fontSize: 20 }}>Go!</Text>
+                        </Pressable>
+                    </Animated.View>
+                </AnimatedView>
+
+
             </AnimatedView>
         </View>
     );
