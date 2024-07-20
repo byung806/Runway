@@ -1,20 +1,12 @@
+import { DateCard, DateCardRef, ListFooterComponent, ListHeaderComponent, ThemeContext, TodayArrow } from '@/components/2d';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Dimensions, FlatList, Pressable, View } from 'react-native';
-import { DateCard, DateCardRef, ListFooterComponent, ListHeaderComponent, Text, ThemeContext } from '@/components/2d';
+import { Dimensions, FlatList, Pressable } from 'react-native';
 
-import { Styles } from '@/styles';
 import { getTodayDate, stringToDate } from '@/utils/date';
 import { Content, ContentColors, useFirebase } from '@/utils/FirebaseProvider';
-import useBounceAnimation from '@/utils/useBounceAnimation';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { animated, config } from '@react-spring/native';
-import * as Haptics from 'expo-haptics';
 import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-
-const ReactSpringAnimatedView = animated(View);
 
 interface DateCardAttributes {
     ref: DateCardRef | null;
@@ -33,8 +25,6 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
     const [loadingDate, setLoadingDate] = useState(false);
     const [reachedEndOfDates, setReachedEndOfDates] = useState(false);
 
-    const todayButtonTransformY = useSharedValue(0);
-    const todayButtonOpacity = useSharedValue(0);
     const outerBackgroundColor = useSharedValue(theme.background);
 
     // TODO: tap to go up - scroll to index instead of scroll to element
@@ -92,14 +82,6 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
      * Called when item comes into view
      */
     function focusItem(item: DateCardAttributes | null) {
-        if (item === null || item.date === today) {
-            todayButtonOpacity.value = withTiming(0, { duration: 200 });
-            todayButtonTransformY.value = withTiming(-50, { duration: 200 });
-        } else {
-            todayButtonOpacity.value = withTiming(1, { duration: 1000 });
-            todayButtonTransformY.value = withTiming(0, { duration: 1000 });
-        }
-
         if (item === null) {
             setFocusedDate(item);
             outerBackgroundColor.value = withTiming(theme.background, { duration: 200 });
@@ -112,7 +94,7 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
     /**
      * Scroll to card with index
      */
-    async function scrollToItem(index: number) {
+    function scrollToItem(index: number) {
         flatListRef.current?.scrollToIndex({ index, viewPosition: 0.5 });
     }
 
@@ -145,7 +127,9 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
                     )
                 }}
                 data={dates}
-                ListHeaderComponent={<ListHeaderComponent height={headerHeight} />}
+                ListHeaderComponent={<ListHeaderComponent height={headerHeight} arrowDown={
+                    <TodayArrow side='top' focusedDate={focusedDate} onPress={() => { scrollToItem(0); }} />
+                } />}
                 ListFooterComponent={<ListFooterComponent height={footerHeight} />}
                 getItemLayout={(_, index) => {
                     return {
@@ -181,36 +165,7 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
                 onEndReachedThreshold={0.9} // how far the user is down the current visible items
             />
 
-            <SafeAreaView style={{
-                position: 'absolute',
-                justifyContent: 'flex-end',
-                padding: 8,
-                alignSelf: 'center',
-                pointerEvents: (!focusedDate || focusedDate === today) ? 'none' : 'auto',
-            }} edges={['top']}>
-                <Animated.View style={{
-                    flex: 1,
-                    borderRadius: 1000,
-                    padding: 4,
-                    backgroundColor: theme.black,
-                    shadowOpacity: 0.5,
-                    shadowRadius: 10,
-                    shadowOffset: {
-                        height: 5,
-                        width: 0
-                    },
-                    elevation: 4,
-                    opacity: todayButtonOpacity,
-                    transform: [{ translateY: todayButtonTransformY }]
-                }}>
-                    <Pressable onPress={() => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                        scrollToItem(0);
-                    }}>
-                        <AntDesign name="arrowup" size={30} color={theme.white} />
-                    </Pressable>
-                </Animated.View>
-            </SafeAreaView>
+            <TodayArrow side='bottom' focusedDate={focusedDate} onPress={() => { scrollToItem(0); }} />
         </Animated.View>
     );
 }
