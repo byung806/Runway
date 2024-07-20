@@ -7,9 +7,10 @@ import Button from "./Button";
 import Text from "./Text";
 import { useContext } from "react";
 import { ThemeContext } from "./ThemeProvider";
+import TodayArrow from "./TodayArrow";
 
 
-export default function ListHeaderComponent({ height }: { height: number }) {
+export default function ListHeaderComponent({ height, arrowDown }: { height: number, arrowDown: JSX.Element }) {
     const firebase = useFirebase();
     const navigation = useNavigation<any>();
     const theme = useContext(ThemeContext);
@@ -28,6 +29,7 @@ export default function ListHeaderComponent({ height }: { height: number }) {
 
     async function requestCompleteToday() {
         const { dataChanged } = await firebase.requestCompleteToday();
+        console.log('dataChanged', dataChanged);
         if (dataChanged) {
             await triggerStreakScreen();
             await firebase.getUserData();
@@ -53,17 +55,17 @@ export default function ListHeaderComponent({ height }: { height: number }) {
             <View>
                 <Button title="Log Out" onPress={logOut} filled={false} />
                 <Button title="Leaderboard" onPress={() => navigation.navigate('leaderboard')} filled={false} />
-                {/* <Button title="today" onPress={requestCompleteToday} filled={false} /> */}
+                <Button title="today" onPress={requestCompleteToday} filled={false} />
             </View>
             <View style={{
                 flex: 1,
                 ...Styles.centeringContainer,
             }}>
-                <Text style={{ fontSize: 40 }}>{firebase.userData?.username}</Text>
-                <Text style={{ fontSize: 100 }}>{firebase.userData?.points}</Text>
+                <Text style={{ fontSize: 40, ...Styles.lightShadow }}>{firebase.userData?.username}</Text>
+                <Text style={{ fontSize: 100, ...Styles.lightShadow }}>{firebase.userData?.points}</Text>
             </View>
             <View style={{ ...Styles.centeringContainer }}>
-                <AntDesign name="down" size={40} color={theme.text} />
+                {arrowDown}
             </View>
         </View>
     );
