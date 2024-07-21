@@ -25,7 +25,7 @@ export interface DateCardRef {
     onPressOut: () => void;
 }
 
-const AnimatedView = animated(View);
+const ReactSpringAnimatedView = animated(View);
 
 const DateCard = forwardRef(({ focused, completed, date, content, colors, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);
@@ -85,7 +85,7 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, style 
 
     return (
         <View style={style}>
-            <AnimatedView style={{
+            <ReactSpringAnimatedView style={{
                 flex: 1,
                 borderRadius: 12,
                 borderWidth: 6,
@@ -138,7 +138,7 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, style 
 
 
                 {/* go button */}
-                <AnimatedView style={{
+                <ReactSpringAnimatedView style={{
                     width: '80%',
                     height: 50,
                     alignSelf: 'center',
@@ -159,10 +159,10 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, style 
                             <Text style={{ color: theme.white, fontSize: 20 }}>Go!</Text>
                         </Pressable>
                     </Animated.View>
-                </AnimatedView>
+                </ReactSpringAnimatedView>
 
 
-            </AnimatedView>
+            </ReactSpringAnimatedView>
         </View>
     );
 });
