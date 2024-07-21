@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '@/components/2d';
+import { Button3D, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '@/components/2d';
 
 import { Styles } from '@/styles';
 import { FirebaseError, useFirebase } from '@/utils/FirebaseProvider';
@@ -91,7 +91,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                             style={{ marginBottom: 10 }}
                             disabled={loading}
                         />
-                        <Button
+                        <Button3D
                             title={'LOGIN'}
                             disabled={loading}
                             onPress={loginCallback}
@@ -101,7 +101,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
 
                     <Text style={{ ...Styles.subtitle, textAlign: 'center', marginVertical: 10 }}>OR</Text>
 
-                    <Button
+                    <Button3D
                         title={'CREATE AN ACCOUNT'}
                         filled={false}
                         disabled={loading}

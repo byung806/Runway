@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useWindowDimensions, View } from 'react-native';
-import Button from './Button';
+import Button3D from './Button';
 
 import { Styles } from '@/styles';
 import { ThemeContext } from './ThemeProvider';
@@ -33,7 +33,7 @@ export default function OnboardingFooter({ backgroundColor, buttonLabel, buttonC
                     flexDirection: 'column',
                 }}
             >
-                <Button
+                <Button3D
                     title={buttonLabel}
                     onPress={buttonCallback}
                 />

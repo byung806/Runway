@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Logo, Text, ThemeContext } from '@/components/2d';
+import { Button3D, Logo, Text, ThemeContext } from '@/components/2d';
 
 import { Styles } from '@/styles';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -20,14 +20,14 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                     <Text style={Styles.title}>Runway</Text>
                 </View>
                 <View style={{ width: "90%" }}>
-                    <Button
+                    <Button3D
                         title={'GET STARTED'}
                         onPress={() => {
                             navigation.navigate('onboarding');
                         }}
                         style={{ marginBottom: 10 }}
                     />
-                    <Button
+                    <Button3D
                         title={'I HAVE AN ACCOUNT'}
                         onPress={() => {
                             navigation.navigate('login');

@@ -10,10 +10,10 @@ import { Suspense, useContext, useEffect, useRef, useState } from "react";
 import { Dimensions, Easing, View } from "react-native";
 import AnimatedNumbers from 'react-native-animated-numbers';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, Text, ThemeContext } from '@/components/2d';
+import { Button3D, Text, ThemeContext } from '@/components/2d';
 
 
-const AnimatedButton = animated(Button);
+const AnimatedButton = animated(Button3D);
 
 export default function StreakScreen({ navigation, ...props }: { navigation: StackNavigationProp<any, any> } & any) {
     const theme = useContext(ThemeContext);

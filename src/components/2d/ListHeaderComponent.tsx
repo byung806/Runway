@@ -1,13 +1,11 @@
 import { Styles } from "@/styles";
 import { useFirebase } from "@/utils/FirebaseProvider";
-import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from "@react-navigation/native";
-import { View } from "react-native";
-import Button from "./Button";
-import Text from "./Text";
 import { useContext } from "react";
+import { View } from "react-native";
+import Button3D from "./Button";
+import Text from "./Text";
 import { ThemeContext } from "./ThemeProvider";
-import TodayArrow from "./TodayArrow";
 
 
 export default function ListHeaderComponent({ height, arrowDown }: { height: number, arrowDown: JSX.Element }) {
@@ -53,9 +51,9 @@ export default function ListHeaderComponent({ height, arrowDown }: { height: num
             justifyContent: 'space-between',
         }}>
             <View>
-                <Button title="Log Out" onPress={logOut} filled={false} />
-                <Button title="Leaderboard" onPress={() => navigation.navigate('leaderboard')} filled={false} />
-                <Button title="today" onPress={requestCompleteToday} filled={false} />
+                <Button3D title="Log Out" onPress={logOut} filled={false} />
+                <Button3D title="Leaderboard" onPress={() => navigation.navigate('leaderboard')} filled={false} />
+                <Button3D title="today" onPress={requestCompleteToday} filled={false} />
             </View>
             <View style={{
                 flex: 1,

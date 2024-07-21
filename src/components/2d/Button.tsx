@@ -11,15 +11,17 @@ import { Styles } from '@/styles';
 import { ThemeContext } from './ThemeProvider';
 
 import Text from './Text';
+import { animated, config } from '@react-spring/native';
+import useBounceAnimation from '@/utils/useBounceAnimation';
 
-interface ButtonProps {
+interface Button3DProps {
     title: string;
     onPress: () => void;
     disabled?: boolean;
     filled?: boolean;
 }
 
-export default function Button({ title, onPress, disabled = false, filled = true, ...props }: ButtonProps & any) {
+export default function Button3D({ title, onPress, disabled = false, filled = true, ...props }: Button3DProps & any) {
     const theme = useContext(ThemeContext);
 
     // the number that's going to be animated
@@ -99,4 +101,55 @@ export default function Button({ title, onPress, disabled = false, filled = true
             </View >
         );
     }
+}
+
+
+
+interface ButtonProps {
+    title: string;
+    onPress: () => void;
+    backgroundColor: string;
+    textColor: string;
+    disabled?: boolean;
+    filled?: boolean;
+    reanimatedStyle?: any;
+    style?: any;
+}
+
+const ReactSpringAnimatedView = animated(View);
+
+export function Button({ title, onPress, backgroundColor, textColor, disabled = false, reanimatedStyle, style, ...props }: ButtonProps & any) {
+    const { scale: buttonScale, onPressIn: buttonOnPressIn, onPressOut: buttonOnPressOut } = useBounceAnimation({
+        scaleTo: 0.9,
+        haptics: Haptics.ImpactFeedbackStyle.Light,
+        config: config.gentle
+    });
+
+    return (
+        <ReactSpringAnimatedView style={{
+            // width: '80%',
+            // height: 50,
+            alignSelf: 'center',
+            transform: [{ scale: buttonScale }],
+            ...style
+        }}>
+            <Animated.View style={{
+                flex: 1,
+                borderRadius: 12,
+                // opacity: cardContentOpacity,
+                backgroundColor: backgroundColor,
+                // transform: [{ translateY: goTransformY }],
+                ...reanimatedStyle
+            }}>
+                <Pressable
+                    onPress={onPress}
+                    onPressIn={buttonOnPressIn}
+                    onPressOut={buttonOnPressOut}
+                    style={{ flex: 1, ...Styles.centeringContainer, padding: 10 }}
+                >
+                    <Text style={{ color: textColor, fontSize: 20 }}>{title}</Text>
+                </Pressable>
+            </Animated.View>
+        </ReactSpringAnimatedView>
+    );
 }
