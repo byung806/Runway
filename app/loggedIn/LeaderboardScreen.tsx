@@ -34,8 +34,9 @@ export default function LeaderboardScreen({ navigation, ...props }: { navigation
         <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundSecondary }} edges={['top']}>
             <View
                 style={{
-                    ...Styles.titleBox,
                     ...Styles.centeringContainer,
+                    padding: 10,
+                    borderRadius: 5,
                     flexShrink: 1,
                 }}>
                 <Text style={{ ...Styles.title, color: theme.text }}>Leaderboard</Text>

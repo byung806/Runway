@@ -7,16 +7,20 @@ export const INPUT_HEIGHT = 45;
 interface TextInputProps {
     placeholder: string;
     onChangeText: React.Dispatch<React.SetStateAction<string>>;
+    disabled?: boolean;
     password?: boolean;
     email?: boolean;
 }
 
-export default function TextInput({ placeholder, onChangeText, password = false, email = false, ...props }: TextInputProps & any) {
+export default function TextInput({ placeholder, onChangeText, disabled = false, password = false, email = false, ...props }: TextInputProps & any) {
     const theme = useContext(ThemeContext);
 
     return (
         <TextInputNative
             placeholder={placeholder}
+            editable={!disabled}
+            selectTextOnFocus={!disabled}
+            contextMenuHidden={disabled}
             onChangeText={onChangeText}
             // autoCapitalize='characters'
             inputMode={email ? 'email' : 'text'}
