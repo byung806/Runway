@@ -4,8 +4,9 @@ import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Styles } from '@/styles';
-import { useFirebase } from '@/utils/FirebaseProvider';
+import { FirebaseError, useFirebase } from '@/utils/FirebaseProvider';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { callWithTimeout } from '@/utils/utils';
 
 export default function SignupScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
@@ -18,30 +19,11 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
     const [errorMessage, setErrorMessage] = useState('');
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<any>();
 
     // reset error message when user changes input
     useEffect(() => {
         setErrorMessage('');
     }, [username, password, email])
-
-    // called when an error is detected on signup and should be shown to the user
-    useEffect(() => {
-        if (error) {
-            if (error.code === 'auth/email-already-in-use') {
-                setErrorMessage('Please choose another username!');
-            }
-            else if (error.code === 'auth/invalid-email') {
-                setErrorMessage('Invalid email.');
-            }
-            else if (error.code === 'auth/weak-password') {
-                setErrorMessage('Please choose a stronger password!');
-            }
-            else {
-                setErrorMessage('Error signing up. Please try again later!');
-            }
-        }
-    }, [error])
 
     // called on sign up button press
     async function signupCallback() {
@@ -59,13 +41,31 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
         }
         Keyboard.dismiss();
         setLoading(true);
-        const error = await firebase.registerUser(username, email, password);
-        setError(error);
+        const error = await callWithTimeout(8000, firebase.registerUser, username, email, password) as FirebaseError | null | 'timeout';
+
+        if (error === null) {
+            // now it's waiting for user data to load
+        } else {
+            setLoading(false);
+            if (error === 'timeout') {
+                setErrorMessage('Please try again later!');
+            } else if (error.code === 'auth/email-already-in-use') {
+                setErrorMessage('Please choose another username!');
+            }
+            else if (error.code === 'auth/invalid-email') {
+                setErrorMessage('Invalid email.');
+            }
+            else if (error.code === 'auth/weak-password') {
+                setErrorMessage('Please choose a stronger password!');
+            }
+            else {
+                setErrorMessage('Error signing up. Please try again later!');
+            }
+        }
     }
 
     // only navigate to logged in app if user data is loaded
     useEffect(() => {
-        // TODO: fade?
         setLoading(false);
     }, [firebase.userData]);
 
@@ -89,9 +89,9 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                         style={{ flex: 0, width: '90%' }}
                     >
-                        <TextInput placeholder={'Username'} onChangeText={setUsername} style={{ marginBottom: 10 }} />
-                        <TextInput placeholder={'Email'} onChangeText={setEmail} email style={{ marginBottom: 10 }} />
-                        <TextInput placeholder={'Password'} onChangeText={setPassword} password style={{ marginBottom: 10 }} />
+                        <TextInput placeholder={'Username'} onChangeText={setUsername} style={{ marginBottom: 10 }} disabled={loading} />
+                        <TextInput placeholder={'Email'} onChangeText={setEmail} email style={{ marginBottom: 10 }} disabled={loading} />
+                        <TextInput placeholder={'Password'} onChangeText={setPassword} password style={{ marginBottom: 10 }} disabled={loading} />
                         <Button
                             title={'SIGN UP'}
                             disabled={loading}

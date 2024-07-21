@@ -5,6 +5,11 @@ import firestore from '@react-native-firebase/firestore';
 
 const emailEnding = '@example.com';
 
+export interface FirebaseError {
+    code: string;
+    message: string;
+}
+
 interface UserData {
     email: string;
     friends: string[];
@@ -59,9 +64,9 @@ interface FirebaseContextType {
     globalLeaderboard: LeaderboardData | null;
     friendsLeaderboard: LeaderboardData | null;
     initializing: boolean;
-    registerUser: (username: string, email: string, password: string) => Promise<Error | null>;
-    logIn: (email: string, password: string) => Promise<Error | null>;
-    logOut: () => Promise<void>;
+    registerUser: (username: string, email: string, password: string) => Promise<FirebaseError | null>;
+    logIn: (email: string, password: string) => Promise<FirebaseError | null>;
+    logOut: () => Promise<FirebaseError | null>;
     checkUncompletedChallengeToday: () => Promise<boolean>;
     getUserData: () => Promise<void>;
     getContent: (date: string) => Promise<{ content: Content, colors: ContentColors } | null>;
@@ -90,6 +95,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 
             if (user) {
                 await getUserData();
+                setInitializing(false);
                 await getLeaderboard('global');
                 await getLeaderboard('friends');
             } else {
@@ -109,7 +115,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     /**
      * Registers a new user with the given username, email, and password
      */
-    async function registerUser(username: string, email: string, password: string) {
+    async function registerUser(username: string, email: string, password: string): Promise<FirebaseError | null> {
         try {
             console.log('DATABASE CALL: create user');
             await auth().createUserWithEmailAndPassword(username + emailEnding, password);
@@ -123,7 +129,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                 });
         } catch (error) {
             console.log(error + ' from FirebaseProvider.tsx:  registerUser');
-            return error as Error;
+            return error as FirebaseError;
         }
         return null;
     }
@@ -131,33 +137,35 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     /**
      * Tries to log in with the given username and password
      */
-    async function logIn(username: string, password: string) {
+    async function logIn(username: string, password: string): Promise<FirebaseError | null> {
         try {
             console.log('DATABASE CALL: sign in');
             await auth().signInWithEmailAndPassword(username + emailEnding, password);
+            return null;
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  logIn');
-            return error;
+            return error as FirebaseError;
         }
     };
 
     /**
      * Logs out the currently logged in user
      */
-    async function logOut() {
+    async function logOut(): Promise<FirebaseError | null> {
         try {
             console.log('DATABASE CALL: sign out');
             await auth().signOut();
+            return null;
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  logOut');
-            return error;
+            return error as FirebaseError;
         }
     };
 
     /**
      * Checks if there is a new uncompleted challenge for the user to complete today
      */
-    async function checkUncompletedChallengeToday() {
+    async function checkUncompletedChallengeToday(): Promise<boolean> {
         try {
             console.log('DATABASE CALL: check uncompleted challenge today');
             const data = await functions()
@@ -173,7 +181,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
      * Fetches the user data for the currently logged in user
      * Updates the userData state
      */
-    async function getUserData() {
+    async function getUserData(): Promise<void> {
         try {
             console.log('DATABASE CALL: get user data');
             const userData = await functions()
@@ -184,7 +192,10 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         }
     }
 
-    async function getContent(date: string) {
+    /**
+     * Fetches the content for the given date from Firestore
+     */
+    async function getContent(date: string): Promise<{ content: Content, colors: ContentColors } | null> {
         try {
             console.log('DATABASE CALL: get content');
             const doc = firestore().collection('content').doc(date)
@@ -207,7 +218,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
      * Requests to the server to increment the streak and points for the logged in user
      * Fails if the user has already completed the day's challenge and it has been logged
      */
-    async function requestCompleteToday() {
+    async function requestCompleteToday(): Promise<{ dataChanged: boolean }> {
         console.log('DATABASE CALL: request complete today');
         const data = await functions()
             .httpsCallable('requestCompleteToday')() as FirebaseFunctionsTypes.HttpsCallableResult<{ dataChanged: boolean }>;
@@ -220,7 +231,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
      * @param friend the username of the friend to add
      * @returns whether the friend was successfully added
      */
-    async function addFriend(friend: string) {
+    async function addFriend(friend: string): Promise<{ success: boolean }> {
         try {
             console.log('DATABASE CALL: add friend ' + friend);
             const data = await functions()
@@ -237,7 +248,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     /**
      * Fetches the leaderboard and the current user's rank
      */
-    async function getLeaderboard(type: LeaderboardType) {
+    async function getLeaderboard(type: LeaderboardType): Promise<void> {
         try {
             console.log('DATABASE CALL: get ' + type + ' leaderboard');
             const data = await functions()
