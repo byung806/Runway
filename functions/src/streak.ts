@@ -20,8 +20,8 @@ function stringToDate(date: string): Date {
 /**
  * Determines whether the streak can be incremented or should be resetted based on the current date and the last logged date
  */
-function whatToDoWithStreak(currentDate: string, lastLoggedDate: string | undefined) {
-    if (!lastLoggedDate) {
+function whatToDoWithStreak(currentDate: string, lastLoggedDate: string | null) {
+    if (lastLoggedDate === null) {
         return {
             canIncrement: true,
             shouldReset: false
@@ -43,7 +43,7 @@ function whatToDoWithStreak(currentDate: string, lastLoggedDate: string | undefi
         };
     }
     return {
-        canIncrement: false,
+        canIncrement: true,
         shouldReset: true
     };
 }
@@ -68,7 +68,7 @@ export const updateStreak = async (uid: string, attemptIncrement: boolean): Prom
     // console.log('from streak.ts:  updateStreak:  pointDays:', pointDays)
 
     const today = dateToString(new Date());
-    let lastLoggedDate = undefined;
+    let lastLoggedDate = null;
     if (pointDays.length !== 0) {
         lastLoggedDate = Object.keys(pointDays)
             .sort((a, b) => stringToDate(a).valueOf() - stringToDate(b).valueOf())
