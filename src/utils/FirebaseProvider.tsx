@@ -28,12 +28,12 @@ export interface ContentColors {
     outerBackgroundColor: string;
 }
 
-interface ContentQuestion {
+export interface ContentQuestion {
     question: string;
     choices: ContentQuestionChoice[];
 }
 
-interface ContentQuestionChoice {
+export interface ContentQuestionChoice {
     choice: string;
     correct: boolean;
 }
@@ -195,6 +195,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     /**
      * Fetches the content for the given date from Firestore
      */
+    // TODO: client could request content for any date, but server should only allow today and previous days
     async function getContent(date: string): Promise<{ content: Content, colors: ContentColors } | null> {
         try {
             console.log('DATABASE CALL: get content');

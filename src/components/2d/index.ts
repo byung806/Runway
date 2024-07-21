@@ -1,5 +1,4 @@
-export { default as Button } from './Button';
-export { default as ContentCard } from './ContentCard';
+export { default as Button3D, Button } from './Button';
 export { default as DateCard, DateCardRef } from './DateCard';
 export { default as ListFooterComponent } from './ListFooterComponent';
 export { default as ListHeaderComponent } from './ListHeaderComponent';

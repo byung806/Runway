@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Dimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Text, ThemeContext } from '@/components/2d';
+import { Button3D, Text, ThemeContext } from '@/components/2d';
 
 import { Styles } from '@/styles';
 
@@ -40,7 +40,7 @@ export default function LeaderboardScreen({ navigation, ...props }: { navigation
                     flexShrink: 1,
                 }}>
                 <Text style={{ ...Styles.title, color: theme.text }}>Leaderboard</Text>
-                <Button title="Back" onPress={() => navigation.navigate('app')} filled={false} />
+                <Button3D title="Back" onPress={() => navigation.navigate('app')} filled={false} />
             </View>
             <TabView
                 navigationState={{ index, routes }}

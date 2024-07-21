@@ -5,7 +5,7 @@ import { animated, config } from '@react-spring/native';
 import * as Haptics from 'expo-haptics';
 import { useContext, useState } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
-import Button from './Button';
+import Button3D from './Button';
 import Text from './Text';
 import TextInput from './TextInput';
 import { ThemeContext } from './ThemeProvider';
@@ -105,7 +105,7 @@ export default function Leaderboard({ type }: { type: LeaderboardType }) {
                         onChangeText={setFriend}
                         style={{ marginBottom: 10 }}
                     />
-                    <Button title='Add Friend' onPress={async () => {
+                    <Button3D title='Add Friend' onPress={async () => {
                         const success = await firebase.addFriend(friend);
                         if (success) {
                             setFriend('');
