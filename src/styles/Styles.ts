@@ -26,6 +26,15 @@ const styles: { [key: string]: object & StyleProp<TextStyle> } = {
     flex: {
         flex: 1
     },
+    veryLightShadow: {
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        shadowOffset: {
+            height: 5,
+            width: 0
+        },
+        elevation: 1,
+    },
     lightShadow: {
         shadowOpacity: 0.2,
         shadowRadius: 5,

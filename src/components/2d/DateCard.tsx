@@ -4,11 +4,13 @@ import { Content, ContentColors, useFirebase } from '@/utils/FirebaseProvider';
 import useBounceAnimation from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import * as Haptics from 'expo-haptics';
-import { forwardRef, memo, useContext, useEffect, useImperativeHandle } from 'react';
-import { Pressable, View } from 'react-native';
+import { forwardRef, memo, useContext, useEffect, useImperativeHandle, useState } from 'react';
+import { Modal, Pressable, View } from 'react-native';
 import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
+import ContentModal from './ContentModal';
+import { Button } from './Button';
 
 
 interface DateCardProps {
@@ -29,6 +31,8 @@ const ReactSpringAnimatedView = animated(View);
 
 const DateCard = forwardRef(({ focused, completed, date, content, colors, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);
+
+    const [contentModalVisible, setContentModalVisible] = useState(false);
 
     const { scale: cardScale, onPressIn: cardOnPressIn, onPressOut: cardOnPressOut } = useBounceAnimation({
         scaleTo: 0.94,
@@ -138,29 +142,26 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, style 
 
 
                 {/* go button */}
-                <ReactSpringAnimatedView style={{
-                    width: '80%',
-                    height: 50,
-                    alignSelf: 'center',
-                    transform: [{ scale: buttonScale }]
-                }}>
-                    <Animated.View style={{
-                        flex: 1,
-                        borderRadius: 12,
+                <Button
+                    title='Go!'
+                    backgroundColor={colors.textColor}
+                    textColor={theme.white}
+                    onPress={() => setContentModalVisible(true)}
+                    reanimatedStyle={{
                         opacity: cardContentOpacity,
-                        backgroundColor: colors.textColor,
                         transform: [{ translateY: goTransformY }]
-                    }}>
-                        <Pressable
-                            onPressIn={buttonOnPressIn}
-                            onPressOut={buttonOnPressOut}
-                            style={{ flex: 1, ...Styles.centeringContainer }}
-                        >
-                            <Text style={{ color: theme.white, fontSize: 20 }}>Go!</Text>
-                        </Pressable>
-                    </Animated.View>
-                </ReactSpringAnimatedView>
+                    }}
+                    style={{
+                        width: '80%',
+                        height: 50,
+                    }}
+                />
 
+
+                {/* content modal */}
+                <Modal visible={contentModalVisible} animationType='slide'>
+                    <ContentModal date={date} completed={completed} content={content} colors={colors} closeModal={() => setContentModalVisible(false)} />
+                </Modal>
 
             </ReactSpringAnimatedView>
         </View>

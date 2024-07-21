@@ -19,30 +19,29 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
     const today = getTodayDate();
+    // TODO: day change
 
     const [focusedDate, setFocusedDate] = useState<string | null>(getTodayDate());
     const [dates, setDates] = useState<DateCardAttributes[]>([]);
     const [loadingDate, setLoadingDate] = useState(false);
     const [reachedEndOfDates, setReachedEndOfDates] = useState(false);
 
+    // TODO: category for colors?
     const outerBackgroundColor = useSharedValue(theme.background);
-
-    // TODO: tap to go up - scroll to index instead of scroll to element
 
     // Change background color when theme changes
     useEffect(() => {
         outerBackgroundColor.value = withTiming(theme.background, { duration: 200 });
     }, [theme]);
 
+    // TODO: tap to go up - scroll to index instead of scroll to element
+    
     const flatListRef = useRef<FlatList<DateCardAttributes>>(null);
-
     const paddingAboveHeader = 50;
     const headerHeight = Dimensions.get("window").height * 0.8;
-
     const padding = 30;
     const boxWidth = Dimensions.get("window").width - padding * 2;
     const boxHeight = boxWidth * 1.6;
-
     const footerHeight = Dimensions.get("window").height * 0.8;
 
     /**
