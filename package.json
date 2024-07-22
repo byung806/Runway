@@ -33,6 +33,7 @@
     "expo-notifications": "~0.28.9",
     "expo-splash-screen": "^0.27.5",
     "expo-status-bar": "~1.12.1",
+    "i": "^0.3.7",
     "lottie-ios": "^4.4.1",
     "lottie-react-native": "^6.7.2",
     "pixelarticons": "^1.8.0",

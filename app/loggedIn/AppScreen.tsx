@@ -35,7 +35,7 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
     }, [theme]);
 
     // TODO: tap to go up - scroll to index instead of scroll to element
-    
+
     const flatListRef = useRef<FlatList<DateCardAttributes>>(null);
     const paddingAboveHeader = 50;
     const headerHeight = Dimensions.get("window").height * 0.8;

@@ -82,7 +82,7 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
                     <View style={{ ...Styles.centeringContainer, margin: 50, flex: 1 }}>
                         <Logo />
                         <Text style={Styles.title}>Sign Up!</Text>
-                        <Text style={{...Styles.subtitle, color: theme.subtext}}>Create an account to start your flight.</Text>
+                        <Text style={{ ...Styles.subtitle, color: theme.subtext }}>Create an account to start your flight.</Text>
                     </View>
 
                     <KeyboardAvoidingView
