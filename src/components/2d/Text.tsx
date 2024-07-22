@@ -8,7 +8,7 @@ interface TextProps {
 
 export default function Text({ children, ...props }: TextProps & any) {
     const theme = useContext(ThemeContext);
-    
+
     return (
         <TextNative {...props} ellipsizeMode='tail' style={{ fontFamily: 'Inter_800ExtraBold', color: theme.text, ...props.style }}>
             {children}

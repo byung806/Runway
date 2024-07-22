@@ -77,7 +77,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                 left: 20,
                 zIndex: 1,
             }}>
-                <BackArrow color={theme.white} onPress={() => {navigation.navigate('start')}} />
+                <BackArrow color={theme.white} onPress={() => { navigation.navigate('start') }} />
             </View>
 
             <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>

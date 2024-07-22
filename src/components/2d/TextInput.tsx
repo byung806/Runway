@@ -23,7 +23,7 @@ export default function TextInput({ placeholder, defaultValue = '', value, onCha
             return text.trim();
         }
         text = text.trim().toLowerCase();
-        
+
         return text.replace(/[^0-9a-z_]/g, '');
     }
 

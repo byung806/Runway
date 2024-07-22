@@ -141,7 +141,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             registeringUser.current = true;
             console.log('DATABASE CALL: create user');
             await auth().createUserWithEmailAndPassword(username.trim().toLowerCase() + emailEnding, password);
-            
+
             console.log('Expo Push Token:', notifications.expoPushToken);
             // TODO: implement possibility of fail in server & here
             console.log('DATABASE CALL: initializeUser');

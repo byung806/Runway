@@ -14,7 +14,7 @@ interface OnboardingCardAttributes extends BaseCardAttributes { }
 
 export default function OnboardingScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
-    
+
     const [username, setUsername] = useState('');
     const defaultColors = {
         outerBackgroundColor: theme.runwayOuterBackgroundColor,
