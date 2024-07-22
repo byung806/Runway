@@ -128,7 +128,7 @@ export default function Leaderboard({ type }: { type: LeaderboardType }) {
                 style={{
                     padding: 10,
                 }}
-                ItemSeparatorComponent={() => <View style={{height: 10}} />}
+                ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
                 keyExtractor={(item) => (item.username)}
                 renderItem={({ item, index }) => <LeaderboardEntry
                     place={index + 1}
