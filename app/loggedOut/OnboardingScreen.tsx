@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
-import { View, KeyboardAvoidingView, Platform, Image, Easing } from 'react-native';
+import { View, KeyboardAvoidingView, Platform, Image, Easing, TextInput } from 'react-native';
 import ViewPager from 'react-native-pager-view';
 import { OnboardingPage, Text, ThemeContext } from '@/components/2d';
 
