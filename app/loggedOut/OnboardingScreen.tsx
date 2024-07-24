@@ -132,8 +132,8 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
                         nextButtonCallback={() => { navigation.navigate("signup") }}
                     >
                         <View style={{ flex: 1, margin: 10, ...Styles.centeringContainer }}>
-                            <Text style={{fontSize: 50, marginBottom: 30, textAlign: 'center'}}>Get ready to take flight!</Text>
-                            <Logo />
+                            <Text style={{fontSize: 50, marginBottom: 0, textAlign: 'center'}}>Get ready to take flight,</Text>
+                            <Text style={{fontSize: 50, marginBottom: 30, textAlign: 'center'}}>{username}</Text>
                         </View>
                     </OnboardingPage>
                 </View>
