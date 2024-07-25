@@ -21,22 +21,31 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
     const today = getTodayDate();
     // TODO: day change
 
-    const [focusedDate, setFocusedDate] = useState<string | null>(getTodayDate());
-    const [dates, setDates] = useState<DateCardAttributes[]>([]);
-    const [loadingDate, setLoadingDate] = useState(false);
-    const [reachedEndOfDates, setReachedEndOfDates] = useState(false);
+    const [cards, setCards] = useState<DateCardAttributes[]>([]);
+    const [focusedCard, setFocusedCard] = useState<{
+        index: number | null,
+        date: string | null
+    }>({
+        index: null,
+        date: null
+    });
+
+    const [currentlyAddingCard, setCurrentlyAddingCard] = useState(false);
+    const [allContentLoaded, setAllContentLoaded] = useState(false);
 
     // TODO: category for colors?
-    const outerBackgroundColor = useSharedValue(theme.background);
+    const initialBackgroundColor = theme.accentLighter;
+    const backgroundColor = useSharedValue(initialBackgroundColor);
 
     // Change background color when theme changes
     useEffect(() => {
-        outerBackgroundColor.value = withTiming(theme.background, { duration: 200 });
+        backgroundColor.value = withTiming(initialBackgroundColor, { duration: 200 });
     }, [theme]);
 
     // TODO: tap to go up - scroll to index instead of scroll to element
 
     const flatListRef = useRef<FlatList<DateCardAttributes>>(null);
+
     const paddingAboveHeader = 50;
     const headerHeight = Dimensions.get("window").height * 0.8;
     const padding = 30;
@@ -48,27 +57,27 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
      * Add previous day to the list, adding a new card below the last one
      */
     async function addPreviousDay() {
-        if (loadingDate || reachedEndOfDates) return;
+        if (currentlyAddingCard || allContentLoaded) return;
 
         let newDate;
-        if (dates.length === 0) {
+        if (cards.length === 0) {
             newDate = stringToDate(today);
         } else {
-            newDate = stringToDate(dates[dates.length - 1].date);
+            newDate = stringToDate(cards[cards.length - 1].date);
             newDate.setDate(newDate.getDate() - 1);
         }
 
         const dateString = newDate.toISOString().split('T')[0];
 
-        setLoadingDate(true);
+        setCurrentlyAddingCard(true);
         const data = await firebase.getContent(dateString);
-        setLoadingDate(false);
+        setCurrentlyAddingCard(false);
         if (!data) {
-            setReachedEndOfDates(true);
+            setAllContentLoaded(true);
             return;
         }
 
-        setDates([...dates, {
+        setCards([...cards, {
             date: dateString,
             ref: null,
             content: data.content,
@@ -80,13 +89,19 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
      * Update background and attributes when focused item changes
      * Called when item comes into view
      */
-    function focusItem(item: DateCardAttributes | null) {
-        if (item === null) {
-            setFocusedDate(item);
-            outerBackgroundColor.value = withTiming(theme.background, { duration: 200 });
+    function focusItem(index: number | null) {
+        if (index === null) {
+            setFocusedCard({
+                index: null,
+                date: null
+            });
+            backgroundColor.value = withTiming(initialBackgroundColor, { duration: 200 });
         } else {
-            setFocusedDate(item.date);
-            outerBackgroundColor.value = withTiming(item.colors.outerBackgroundColor, { duration: 200 });
+            setFocusedCard({
+                index,
+                date: cards[index].date
+            })
+            backgroundColor.value = withTiming(cards[index].colors.outerBackgroundColor, { duration: 200 });
         }
     }
 
@@ -100,7 +115,7 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
     return (
         <Animated.View style={{
             flex: 1,
-            backgroundColor: outerBackgroundColor,
+            backgroundColor: backgroundColor,
             paddingHorizontal: padding,
         }}>
             <FlatList
@@ -109,11 +124,11 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
                     return (
                         <Pressable onPressIn={() => {
                             item.ref?.onPressIn();
-                            if (focusedDate !== item.date) scrollToItem(index);
+                            if (focusedCard.date !== item.date) scrollToItem(index);
                         }} onPressOut={item.ref?.onPressOut}>
                             <DateCard
                                 ref={(ref: DateCardRef) => { item.ref = ref }}
-                                focused={focusedDate === item.date}
+                                focused={focusedCard.date === item.date}
                                 completed={false}  // TODO: completed
                                 date={item.date}
                                 content={item.content}
@@ -125,9 +140,9 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
                         </Pressable>
                     )
                 }}
-                data={dates}
+                data={cards}
                 ListHeaderComponent={<ListHeaderComponent height={headerHeight} arrowDown={
-                    <TodayArrow side='top' focusedDate={focusedDate} onPress={() => { scrollToItem(0); }} />
+                    <TodayArrow side='top' focusedDate={focusedCard.date} onPress={() => { scrollToItem(0); }} />
                 } />}
                 ListFooterComponent={<ListFooterComponent height={footerHeight} />}
                 getItemLayout={(_, index) => {
@@ -144,7 +159,7 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
                         // focus header or footer or between items
                         focusItem(null);
                     } else {
-                        focusItem(viewableItems[0].item);
+                        focusItem(viewableItems[0].index);
                     }
                 }}
                 viewabilityConfig={{
@@ -155,7 +170,7 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 decelerationRate='fast'
-                snapToOffsets={dates.map((_, i) =>
+                snapToOffsets={cards.map((_, i) =>
                     (boxHeight + padding) * i
                     + paddingAboveHeader + headerHeight + padding
                     - Dimensions.get("window").height * 0.5 + boxHeight / 2
@@ -164,7 +179,7 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
                 onEndReachedThreshold={0.9} // how far the user is down the current visible items
             />
 
-            <TodayArrow side='bottom' focusedDate={focusedDate} onPress={() => { scrollToItem(0); }} />
+            <TodayArrow side='bottom' focusedDate={focusedCard.date} onPress={() => { scrollToItem(0); }} />
         </Animated.View>
     );
 }

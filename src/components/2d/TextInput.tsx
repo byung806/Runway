@@ -2,8 +2,6 @@ import { useContext } from 'react';
 import { TextInput as TextInputNative } from 'react-native';
 import { ThemeContext } from './ThemeProvider';
 
-export const INPUT_HEIGHT = 45;
-
 interface TextInputProps {
     placeholder: string;
     onChangeText: React.Dispatch<React.SetStateAction<string>>;
@@ -28,7 +26,6 @@ export default function TextInput({ placeholder, onChangeText, disabled = false,
             secureTextEntry={password}
             style={{
                 fontFamily: 'Inter_700Bold',
-                height: INPUT_HEIGHT,
                 borderRadius: 14,
                 backgroundColor: theme.background,
                 padding: 10,
