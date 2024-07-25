@@ -93,7 +93,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         debounceTimeout = setTimeout(async () => {
             debounceTimeout = null;
 
-            if (user) {
+            if (authStateUser) {
                 await getUserData();
                 setInitializing(false);
                 await getLeaderboard('global');
