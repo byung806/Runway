@@ -27,32 +27,7 @@ export default function ContentModal({ completed, date, content, colors, closeMo
         parseContent(content)
     );
 
-    // const [currentQuestion, setCurrentQuestion] = useState(0);
-    // const [score, setScore] = useState(0);
-    // const [showScore, setShowScore] = useState(false);
-
-    // const [buttonColors, setButtonColors] = useState<string[]>([]);
-    // const todayQuestions = content.questions;
-
-    // const handleAnswer = async (selectedAnswer: boolean, index: number) => {
-    //     const newButtonColors = [...buttonColors];
-    //     if (selectedAnswer) {
-    //         newButtonColors[index] = 'green';
-    //         setScore((prevScore) => prevScore + 1);
-    //     } else {
-    //         newButtonColors[index] = 'red';
-    //     }
-    //     setButtonColors(newButtonColors);
-    //     await delay(1000);
-    //     const nextQuestion = currentQuestion + 1;
-    //     newButtonColors[index] = 'white';
-    //     setButtonColors(newButtonColors);
-    //     if (nextQuestion < todayQuestions.length) {
-    //         setCurrentQuestion(nextQuestion);
-    //     } else {
-    //         setShowScore(true);
-    //     }
-    // };
+    const [focusedItems, setFocusedItems] = useState<number[]>([]);
 
     const flatListRef = useRef<FlatList<ContentChunk>>(null);
 
@@ -75,9 +50,10 @@ export default function ContentModal({ completed, date, content, colors, closeMo
                 ref={flatListRef}
                 data={contentChunks}
                 renderItem={({ item, index }) => {
+                    const focused = focusedItems.includes(index);
                     if (item.type === 'text') {
                         return (
-                            <TextContentChunk text={item.text} colors={colors} />
+                            <TextContentChunk focused={focused} text={item.text} colors={colors} />
                         );
                     } else if (item.type === 'paragraphSpacer') {
                         return (
@@ -89,7 +65,7 @@ export default function ContentModal({ completed, date, content, colors, closeMo
                         );
                     } else if (item.type === 'question') {
                         return (
-                            <QuestionContentChunk question={item.question} choices={item.choices} colors={colors} />
+                            <QuestionContentChunk focused={focused} question={item.question} choices={item.choices} colors={colors} />
                         )
                     }
                     return null;
@@ -98,6 +74,14 @@ export default function ContentModal({ completed, date, content, colors, closeMo
                 ListHeaderComponent={<ContentHeaderComponent content={content} colors={colors} closeModal={closeModal} scrollDownPress={() => { scrollToItem(0) }} />}
                 ListFooterComponent={<ContentFooterComponent colors={colors} closeModal={closeModal} />}
                 numColumns={1}
+                onViewableItemsChanged={({ viewableItems }) => {
+                    const focusedIndexes = viewableItems.map((item) => item.index).filter((index) => typeof index === 'number');
+                    setFocusedItems(focusedIndexes);
+                }}
+                viewabilityConfig={{
+                    itemVisiblePercentThreshold: 80,  // how much of the item is visible
+                    waitForInteraction: false
+                }}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 decelerationRate='normal'

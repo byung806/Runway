@@ -1,6 +1,7 @@
 export interface Theme {
     white: string;
     black: string;
+    accentLighter: string;
     accent: string;
     accentDarker: string;
     border: string;
@@ -23,6 +24,7 @@ const CommonThemeColors = {
 }
 
 export const RunwayLightTheme = {
+    accentLighter: '#a56cf2',  // runway light purple
     accent: '#74398a',  // runway purple
     accentDarker: '#532764',  // runway darker purple
 
@@ -41,6 +43,7 @@ export const RunwayLightTheme = {
 };
 
 export const RunwayDarkTheme = {
+    accentLighter: '#9A4FDB',
     accent: '#6C22A6',
     accentDarker: '#301934',
 
