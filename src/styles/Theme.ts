@@ -1,4 +1,10 @@
 export interface Theme {
+    runwayTextColor: string;
+    runwayBorderColor: string;
+    runwayBackgroundColor: string;
+    runwayButtonColor: string;
+    runwayOuterBackgroundColor: string;
+
     white: string;
     black: string;
     accentLighter: string;
@@ -17,6 +23,12 @@ export interface Theme {
 }
 
 const CommonThemeColors = {
+    runwayTextColor: '#edbeff',
+    runwayBorderColor: '#844a97',
+    runwayBackgroundColor: '#2f1f35',
+    runwayButtonColor: '#653173',
+    runwayOuterBackgroundColor: '#3c2b41',
+
     white: '#ffffff',
     black: '#000000',
     gray: '#dddddd',

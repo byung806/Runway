@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button3D, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '@/components/2d';
+import { Button, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '@/components/2d';
 
 import { Styles } from '@/styles';
 import { FirebaseError, useFirebase } from '@/utils/FirebaseProvider';
@@ -60,54 +60,54 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
     }, [firebase.userData]);
 
     return (
-        <View style={{ ...Styles.flex, backgroundColor: theme.background }}>
+        <View style={{ flex: 1, backgroundColor: theme.runwayBackgroundColor, borderLeftWidth: 6, borderRightWidth: 6, borderColor: theme.runwayBorderColor }}>
             <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>
-                <SafeAreaView style={{ ...Styles.centeringContainer, ...Styles.flex }}>
-                    <OnboardingHeader
-                        backgroundColor={theme.background}
-                        prevButtonCallback={() => navigation.navigate('start')}
-                    />
+                <SafeAreaView style={{ ...Styles.centeringContainer, flex: 1 }}>
 
-                    <View style={{ ...Styles.centeringContainer, margin: 50, flex: 1 }}>
+                    {/* <View style={{ ...Styles.centeringContainer, margin: 50, flex: 1 }}>
                         <Logo />
                         <Text style={Styles.title}>Welcome Back!</Text>
                         <Text style={{ ...Styles.subtitle, color: theme.subtext }}>Log in to continue your flight.</Text>
-                    </View>
+                    </View> */}
 
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                        style={{ flex: 0, width: '90%' }}
+                        style={{ width: '100%', gap: 10 }}
                     >
                         <TextInput
-                            placeholder={'Username'}
+                            placeholder={'username'}
                             onChangeText={setUsername}
-                            style={{ marginBottom: 10 }}
+                            style={{ width: '80%' }}
                             disabled={loading}
                         />
                         <TextInput
-                            placeholder={'Password'}
+                            placeholder={'password'}
                             password={true}
                             onChangeText={setPassword}
-                            style={{ marginBottom: 10 }}
+                            style={{ width: '80%' }}
                             disabled={loading}
                         />
-                        <Button3D
-                            title={'LOGIN'}
+                        <Button
+                            title={'Go!'}
                             disabled={loading}
                             onPress={loginCallback}
+                            style={{ width: '80%' }}
                         />
-                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5 }}>{errorMessage}</Text> : null}
+                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.runwayTextColor }}>{errorMessage}</Text> : null}
                     </KeyboardAvoidingView>
 
-                    <Text style={{ ...Styles.subtitle, textAlign: 'center', marginVertical: 10 }}>OR</Text>
-
-                    <Button3D
-                        title={'CREATE AN ACCOUNT'}
-                        filled={false}
-                        disabled={loading}
-                        onPress={() => navigation.navigate('signup')}
-                        style={{ marginBottom: 20 }}
-                    />
+                    <SafeAreaView style={{
+                        position: 'absolute',
+                        bottom: 0,
+                    }} edges={['bottom']}>
+                        <Button
+                            title={'Don\'t have an account?'}
+                            filled={false}
+                            disabled={loading}
+                            backgroundColor={theme.runwayBackgroundColor}
+                            onPress={() => navigation.navigate('signup')}
+                        />
+                    </SafeAreaView>
                 </SafeAreaView>
             </TouchableOpacity>
         </View>

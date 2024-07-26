@@ -26,13 +26,13 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                         color: theme.runwayTextColor,
                     }}>Runway</Text>
                 </View>
-                <View style={{ width: "90%" }}>
+                <View style={{ width: '100%', gap: 10 }}>
                     <Button
                         title={'Get Started!'}
                         onPress={() => {
                             navigation.navigate('onboarding');
                         }}
-                        style={{ marginBottom: 10 }}
+                        style={{ width: "80%" }}
                     />
                     <Button
                         title={'I have an Account'}
@@ -40,7 +40,7 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                             navigation.navigate('login');
                         }}
                         filled={false}
-                        style={{ marginBottom: 10 }}
+                        style={{ width: "80%" }}
                     />
                 </View>
             </SafeAreaView>
