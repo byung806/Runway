@@ -107,9 +107,9 @@ export default function Button3D({ title, onPress, disabled = false, filled = tr
 
 interface ButtonProps {
     title: string;
-    onPress: () => void;
-    backgroundColor: string;
-    textColor: string;
+    onPress: () => void | Promise<void>;
+    backgroundColor?: string;
+    textColor?: string;
     disabled?: boolean;
     filled?: boolean;
     reanimatedStyle?: any;
@@ -118,7 +118,9 @@ interface ButtonProps {
 
 const ReactSpringAnimatedView = animated(View);
 
-export function Button({ title, onPress, backgroundColor, textColor, disabled = false, reanimatedStyle, style, ...props }: ButtonProps & any) {
+export function Button({ title, onPress, backgroundColor, textColor, disabled = false, reanimatedStyle, style }: ButtonProps) {
+    const theme = useContext(ThemeContext);
+    
     const { scale: buttonScale, onPressIn: buttonOnPressIn, onPressOut: buttonOnPressOut } = useBounceAnimation({
         scaleTo: 0.9,
         haptics: Haptics.ImpactFeedbackStyle.Light,
@@ -134,20 +136,21 @@ export function Button({ title, onPress, backgroundColor, textColor, disabled = 
             ...style
         }}>
             <Animated.View style={{
-                flex: 1,
+                // flex: 1,
                 borderRadius: 12,
                 // opacity: cardContentOpacity,
-                backgroundColor: backgroundColor,
+                backgroundColor: backgroundColor || (disabled ? theme.gray : theme.runwayButtonColor),
                 // transform: [{ translateY: goTransformY }],
+                ...Styles.lightShadow,
                 ...reanimatedStyle
             }}>
                 <Pressable
-                    onPress={onPress}
-                    onPressIn={buttonOnPressIn}
-                    onPressOut={buttonOnPressOut}
-                    style={{ flex: 1, ...Styles.centeringContainer, padding: 10 }}
+                    onPress={disabled ? () => {} : onPress}
+                    onPressIn={disabled ? () => {} : buttonOnPressIn}
+                    onPressOut={disabled ? () => {} : buttonOnPressOut}
+                    style={{ ...Styles.centeringContainer, padding: 10, paddingHorizontal: 20 }}
                 >
-                    <Text style={{ color: textColor, fontSize: 20 }}>{title}</Text>
+                    <Text style={{ color: disabled ? '#aaaaaa' : (textColor || theme.runwayTextColor), fontSize: 18 }}>{title}</Text>
                 </Pressable>
             </Animated.View>
         </ReactSpringAnimatedView>
