@@ -9,6 +9,7 @@ import { Button } from './Button';
 import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, TextContentChunk, TextContentChunkType } from './ContentChunk';
 import parseContent from '@/utils/ContentParser';
 import TodayArrow from './TodayArrow';
+import { getTodayDate } from '@/utils/date';
 
 interface ContentModalProps {
     completed: boolean;
@@ -16,11 +17,12 @@ interface ContentModalProps {
     content: Content;
     colors: ContentColors;
     closeModal: () => void;
+    requestCompleteToday: () => Promise<void>;
 }
 
 export type ContentChunk = TextContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionContentChunkType;
 
-export default function ContentModal({ completed, date, content, colors, closeModal }: ContentModalProps) {
+export default function ContentModal({ completed, date, content, colors, closeModal, requestCompleteToday }: ContentModalProps) {
     const theme = useContext(ThemeContext);
 
     const [contentChunks, setContentChunks] = useState<ContentChunk[]>(
@@ -33,6 +35,13 @@ export default function ContentModal({ completed, date, content, colors, closeMo
 
     function scrollToItem(index: number) {
         flatListRef.current?.scrollToIndex({ index, viewPosition: 0.5 });
+    }
+
+    async function finish() {
+        if (getTodayDate() === date) {
+            await requestCompleteToday();
+        }
+        closeModal();
     }
 
     return (
@@ -72,7 +81,7 @@ export default function ContentModal({ completed, date, content, colors, closeMo
                 }}
                 keyExtractor={(item, index) => index.toString()}
                 ListHeaderComponent={<ContentHeaderComponent content={content} colors={colors} closeModal={closeModal} scrollDownPress={() => { scrollToItem(0) }} />}
-                ListFooterComponent={<ContentFooterComponent colors={colors} closeModal={closeModal} />}
+                ListFooterComponent={<ContentFooterComponent colors={colors} finish={finish} />}
                 numColumns={1}
                 onViewableItemsChanged={({ viewableItems }) => {
                     const focusedIndexes = viewableItems.map((item) => item.index).filter((index) => typeof index === 'number');
@@ -124,9 +133,19 @@ function ContentHeaderComponent({ content, colors, closeModal, scrollDownPress }
     )
 }
 
-function ContentFooterComponent({ colors, closeModal }: { colors: ContentColors, closeModal: () => void }) {
+function ContentFooterComponent({ colors, finish }: { colors: ContentColors, finish: () => Promise<void> }) {
     const height = Dimensions.get('window').height;
     const theme = useContext(ThemeContext);
+
+    const [disabled, setDisabled] = useState(false);
+
+    async function onPress() {
+        setDisabled(true);
+
+        // TODO: get question score and make that determine points added
+        await finish();
+        setDisabled(false);
+    }
 
     return (
         <View style={{ height: height, ...Styles.centeringContainer, gap: 20 }}>
@@ -137,7 +156,8 @@ function ContentFooterComponent({ colors, closeModal }: { colors: ContentColors,
                 title='Finish'
                 backgroundColor={colors.textColor}
                 textColor={theme.white}
-                onPress={closeModal}
+                onPress={onPress}
+                disabled={disabled}
                 // reanimatedStyle={{
                 //     opacity: cardContentOpacity,
                 //     transform: [{ translateY: goTransformY }]

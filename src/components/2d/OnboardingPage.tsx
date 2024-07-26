@@ -26,7 +26,7 @@ export default function OnboardingPage({ backgroundColor, buttonText = 'NEXT', p
                 flex: 1
             }}
         >
-            <SafeAreaView style={Styles.flex}>
+            <SafeAreaView style={{ flex: 1 }}>
                 <OnboardingHeader
                     prevButtonCallback={prevButtonCallback}
                 />

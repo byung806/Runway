@@ -3,7 +3,7 @@ import { useFirebase } from "@/utils/FirebaseProvider";
 import { useNavigation } from "@react-navigation/native";
 import { useContext } from "react";
 import { View } from "react-native";
-import Button3D from "./Button";
+import Button3D, { Button } from "./Button";
 import Text from "./Text";
 import { ThemeContext } from "./ThemeProvider";
 
@@ -25,21 +25,6 @@ export default function ListHeaderComponent({ height, arrowDown }: { height: num
         const { success } = await firebase.addFriend(username);
     }
 
-    async function requestCompleteToday() {
-        const { dataChanged } = await firebase.requestCompleteToday();
-        console.log('dataChanged', dataChanged);
-        if (dataChanged) {
-            await triggerStreakScreen();
-            await firebase.getUserData();
-            await firebase.getLeaderboard('global');
-            // TODO: update friends leaderboard too if rank is ever implemented
-        }
-    }
-
-    async function triggerStreakScreen() {
-        navigation.navigate('streak');
-    }
-
     // TODO: better log out button
     async function logOut() {
         await firebase.logOut();
@@ -50,17 +35,18 @@ export default function ListHeaderComponent({ height, arrowDown }: { height: num
             height,
             justifyContent: 'space-between',
         }}>
-            <View>
-                <Button3D title="Log Out" onPress={logOut} filled={false} />
-                <Button3D title="Leaderboard" onPress={() => navigation.navigate('leaderboard')} filled={false} />
-                <Button3D title="today" onPress={requestCompleteToday} filled={false} />
+            <View style={{
+                gap: 10,
+            }}>
+                <Button title="Log Out" onPress={logOut} style={{ width: '80%' }} />
+                <Button title="Leaderboard" onPress={() => navigation.navigate('leaderboard')} style={{ width: '80%' }} />
             </View>
             <View style={{
                 flex: 1,
                 ...Styles.centeringContainer,
             }}>
-                <Text style={{ fontSize: 40, ...Styles.lightShadow }}>{firebase.userData?.username}</Text>
-                <Text style={{ fontSize: 100, ...Styles.lightShadow }}>{firebase.userData?.points}</Text>
+                <Text style={{ fontSize: 40, ...Styles.lightShadow, color: theme.runwayTextColor }}>{firebase.userData?.username}</Text>
+                <Text style={{ fontSize: 100, ...Styles.lightShadow, color: theme.runwayTextColor }}>{firebase.userData?.points}</Text>
             </View>
             <View style={{ ...Styles.centeringContainer }}>
                 {arrowDown}

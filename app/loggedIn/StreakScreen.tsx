@@ -10,10 +10,9 @@ import { Suspense, useContext, useEffect, useRef, useState } from "react";
 import { Dimensions, Easing, View } from "react-native";
 import AnimatedNumbers from 'react-native-animated-numbers';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button3D, Text, ThemeContext } from '@/components/2d';
+import { Button, Text, ThemeContext } from '@/components/2d';
+import { useSharedValue, withTiming } from "react-native-reanimated";
 
-
-const AnimatedButton = animated(Button3D);
 
 export default function StreakScreen({ navigation, ...props }: { navigation: StackNavigationProp<any, any> } & any) {
     const theme = useContext(ThemeContext);
@@ -23,7 +22,7 @@ export default function StreakScreen({ navigation, ...props }: { navigation: Sta
     const [streak, setStreak] = useState(firebase.userData?.streak ?? 0);
     const [buttonClickable, setButtonClickable] = useState(false);
 
-    const fadeInRef = useRef<FadeInRef>(null);
+    const buttonOpacity = useSharedValue(0);
 
     const numberAnimationDuration = 800;
     const fireAnimationRef = useRef<LottieView>(null);
@@ -31,7 +30,7 @@ export default function StreakScreen({ navigation, ...props }: { navigation: Sta
     const height = Dimensions.get('window').height;
 
     useEffect(() => {
-        if (buttonClickable) fadeInRef.current?.start();
+        if (buttonClickable) buttonOpacity.value = withTiming(1, { duration: 300 });
     }, [buttonClickable]);
 
     useEffect(() => {
@@ -54,67 +53,56 @@ export default function StreakScreen({ navigation, ...props }: { navigation: Sta
     return (
         <View style={{
             flex: 1,
-            backgroundColor: theme.background,
+            backgroundColor: theme.runwayBackgroundColor,
+            ...Styles.centeringContainer
         }}>
             <View style={{
                 flex: 1,
+                ...Styles.centeringContainer,
             }}>
-                <View style={{
-                    flex: 1,
-                    ...Styles.centeringContainer,
-                }}>
-                    {/* TODO: figure out suspense and why its being laggy */}
-                    <Suspense fallback={null}>
-                        <LottieView
-                            ref={fireAnimationRef}
-                            style={{
-                                width: 500,
-                                height: 500,
-                                position: 'absolute',
-                                top: height - 740,
-                            }}
-                            source={require('@/assets/nonPixelFire.json')}
-                            loop
-                        />
-                    </Suspense>
-                    <AnimatedNumbers
-                        animateToNumber={streak}
-                        animationDuration={numberAnimationDuration}
-                        fontStyle={{ color: theme.text, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
-                        easing={Easing.out(Easing.cubic)}
+                <Suspense fallback={null}>
+                    <LottieView
+                        ref={fireAnimationRef}
+                        style={{
+                            width: 500,
+                            height: 500,
+                            position: 'absolute',
+                            top: height - 740,
+                        }}
+                        source={require('@/assets/pixelFire.json')}
+                        loop
                     />
-                    <Text style={{
-                        color: theme.text,
-                        fontSize: 20,
-                        textAlign: 'center',
-                        marginBottom: 20,
-                    }}>day streak</Text>
-                </View>
-
-                <View style={{
-                    width: '90%',
-                    position: 'absolute',
-                    bottom: 0,
-                    left: '5%',
-                }}>
-                    <SafeAreaView style={{
-                        flex: 1
-                    }} edges={['bottom']}>
-                        <FadeIn ref={fadeInRef}>
-                            <AnimatedButton
-                                style={{
-                                    marginBottom: 20,
-                                }}
-                                disabled={!buttonClickable}
-                                title={'Continue'}
-                                filled={false}
-                                onPress={() => navigation.navigate('app')}
-                            />
-                        </FadeIn>
-                    </SafeAreaView>
-                </View>
+                </Suspense>
+                <AnimatedNumbers
+                    animateToNumber={streak}
+                    animationDuration={numberAnimationDuration}
+                    fontStyle={{ color: theme.runwayTextColor, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
+                    easing={Easing.out(Easing.cubic)}
+                />
+                <Text style={{
+                    color: theme.runwayTextColor,
+                    fontSize: 20,
+                    textAlign: 'center',
+                    marginBottom: 20,
+                }}>day streak</Text>
             </View>
 
+            <SafeAreaView style={{
+                width: '100%',
+                position: 'absolute',
+                bottom: 0,
+            }} edges={['bottom']}>
+                <Button
+                    reanimatedStyle={{
+                        opacity: buttonOpacity
+                    }}
+                    disabled={!buttonClickable}
+                    title={'Continue'}
+                    filled={false}
+                    style={{ width: '80%', marginBottom: 20 }}
+                    onPress={() => navigation.navigate('app')}
+                />
+            </SafeAreaView>
         </View>
     );
 }

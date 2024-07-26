@@ -1,4 +1,4 @@
-import { Button3D, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '@/components/2d';
+import { Button, Button3D, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '@/components/2d';
 import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -71,9 +71,9 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
 
     // TODO: combine signup & login - enter username => check if user exists => if so, password to login, else, password to signup
     return (
-        <View style={{ ...Styles.flex, backgroundColor: theme.background }}>
+        <View style={{ flex: 1, backgroundColor: theme.background }}>
             <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>
-                <SafeAreaView style={{ ...Styles.centeringContainer, ...Styles.flex }}>
+                <SafeAreaView style={{ ...Styles.centeringContainer, flex: 1 }}>
                     <OnboardingHeader
                         backgroundColor={theme.background}
                         prevButtonCallback={() => navigation.goBack()}
@@ -92,7 +92,7 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
                         <TextInput placeholder={'Username'} onChangeText={setUsername} style={{ marginBottom: 10 }} disabled={loading} />
                         <TextInput placeholder={'Email'} onChangeText={setEmail} email style={{ marginBottom: 10 }} disabled={loading} />
                         <TextInput placeholder={'Password'} onChangeText={setPassword} password style={{ marginBottom: 10 }} disabled={loading} />
-                        <Button3D
+                        <Button
                             title={'SIGN UP'}
                             disabled={loading}
                             onPress={signupCallback}
@@ -102,7 +102,7 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
 
                     <Text style={{ ...Styles.subtitle, textAlign: 'center', marginVertical: 10 }}>OR</Text>
 
-                    <Button3D title={'I HAVE AN ACCOUNT'} filled={false} disabled={loading} onPress={() => navigation.navigate('login')} style={{ marginBottom: 20 }} />
+                    <Button title={'I HAVE AN ACCOUNT'} filled={false} disabled={loading} onPress={() => navigation.navigate('login')} style={{ marginBottom: 20 }} />
                 </SafeAreaView>
             </TouchableOpacity>
         </View>

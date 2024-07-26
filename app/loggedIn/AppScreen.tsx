@@ -19,7 +19,21 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
     const today = getTodayDate();
-    // TODO: day change
+
+    async function triggerStreakScreen() {
+        navigation.navigate('streak');
+    }
+
+    async function requestCompleteToday() {
+        const { dataChanged } = await firebase.requestCompleteToday();
+        console.log('dataChanged', dataChanged);
+        if (dataChanged) {
+            await triggerStreakScreen();
+            await firebase.getUserData();
+            await firebase.getLeaderboard('global');
+            // TODO: update friends leaderboard too if rank is ever implemented
+        }
+    }
 
     const [cards, setCards] = useState<DateCardAttributes[]>([]);
     const [focusedCard, setFocusedCard] = useState<{
@@ -34,16 +48,14 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
     const [allContentLoaded, setAllContentLoaded] = useState(false);
 
     // TODO: category for colors?
-    const initialBackgroundColor = theme.accentLighter;
+    const initialBackgroundColor = theme.runwayBackgroundColor;
     const backgroundColor = useSharedValue(initialBackgroundColor);
 
     // Change background color when theme changes
     useEffect(() => {
         backgroundColor.value = withTiming(initialBackgroundColor, { duration: 200 });
     }, [theme]);
-
-    // TODO: tap to go up - scroll to index instead of scroll to element
-
+    
     const flatListRef = useRef<FlatList<DateCardAttributes>>(null);
 
     const paddingAboveHeader = 50;
@@ -133,6 +145,7 @@ export default function AppScreen({ navigation, ...props }: { navigation: StackN
                                 date={item.date}
                                 content={item.content}
                                 colors={item.colors}
+                                requestCompleteToday={requestCompleteToday}
                                 style={{
                                     height: boxHeight
                                 }}
