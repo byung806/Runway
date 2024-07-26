@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button3D, Logo, Text, ThemeContext } from '@/components/2d';
+import { Button, Logo, Text, ThemeContext } from '@/components/2d';
 
 import { Styles } from '@/styles';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -10,25 +10,32 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
     const theme = useContext(ThemeContext);
 
     return (
-        <View style={{ ...Styles.flex, backgroundColor: theme.background }}>
+        <View style={{
+            flex: 1, backgroundColor: theme.runwayBackgroundColor,
+            borderLeftWidth: 6, borderRightWidth: 6, borderColor: theme.runwayBorderColor
+        }}>
             <SafeAreaView style={{
+                flex: 1,
                 ...Styles.centeringContainer,
-                ...Styles.flex
             }}>
-                <View style={{ ...Styles.centeringContainer, ...Styles.flex }}>
+                <View style={{ flex: 1, ...Styles.centeringContainer }}>
                     <Logo />
-                    <Text style={Styles.title}>Runway</Text>
+                    <Text style={{
+                        fontSize: 40,
+                        textAlign: 'center',
+                        color: theme.runwayTextColor,
+                    }}>Runway</Text>
                 </View>
                 <View style={{ width: "90%" }}>
-                    <Button3D
-                        title={'GET STARTED'}
+                    <Button
+                        title={'Get Started!'}
                         onPress={() => {
                             navigation.navigate('onboarding');
                         }}
                         style={{ marginBottom: 10 }}
                     />
-                    <Button3D
-                        title={'I HAVE AN ACCOUNT'}
+                    <Button
+                        title={'I have an Account'}
                         onPress={() => {
                             navigation.navigate('login');
                         }}

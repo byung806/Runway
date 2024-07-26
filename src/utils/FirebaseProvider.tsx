@@ -75,6 +75,8 @@ interface FirebaseContextType {
     getLeaderboard: (type: LeaderboardType) => Promise<void>;
 }
 
+// TODO: add complete specific day function
+
 export function FirebaseProvider({ children }: { children: ReactNode }) {
     // Mirror of auth().currentUser
     const [user, setUser] = useState<FirebaseAuthTypes.User | null>(auth().currentUser);

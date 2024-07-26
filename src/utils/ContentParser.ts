@@ -16,12 +16,14 @@ export default function parseContent(content: Content): ContentChunk[] {
         const sentences = split(paragraph);
         sentences.forEach((sentence) => {
             chunks.push({
+                focused: false,
                 type: 'text',
                 text: sentence.raw
             });
         });
         if (paragraph !== bodyParagraphChunks[bodyParagraphChunks.length - 1]) {
             chunks.push({
+                focused: false,
                 type: 'paragraphSpacer'
             });
         }
@@ -29,6 +31,7 @@ export default function parseContent(content: Content): ContentChunk[] {
 
     
     chunks.push({
+        focused: false,
         type: 'divider'
     });
 
@@ -37,6 +40,7 @@ export default function parseContent(content: Content): ContentChunk[] {
     const questions = content.questions;
     questions.forEach((question) => {
         chunks.push({
+            focused: false,
             type: 'question',
             question: question.question,
             choices: question.choices

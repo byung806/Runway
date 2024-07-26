@@ -1,5 +1,5 @@
 import { Styles } from '@/styles';
-import { dayIsYesterday, sameDay, stringToDate } from '@/utils/date';
+import { dayIsYesterday, getTodayDate, sameDay, stringToDate } from '@/utils/date';
 import { Content, ContentColors, useFirebase } from '@/utils/FirebaseProvider';
 import useBounceAnimation from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
@@ -19,6 +19,7 @@ interface DateCardProps {
     date: string;
     content: Content;
     colors: ContentColors;
+    requestCompleteToday: () => Promise<void>;
     style: any;
 }
 
@@ -29,7 +30,7 @@ export interface DateCardRef {
 
 const ReactSpringAnimatedView = animated(View);
 
-const DateCard = forwardRef(({ focused, completed, date, content, colors, style }: DateCardProps, ref) => {
+const DateCard = forwardRef(({ focused, completed, date, content, colors, requestCompleteToday, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);
 
     const [contentModalVisible, setContentModalVisible] = useState(false);
@@ -79,7 +80,7 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, style 
 
     // TOP RIGHT
     let extra = ''
-    const today = new Date();
+    const today = stringToDate(getTodayDate());
     if (sameDay(today, dateObject)) {
         extra += 'Today';
     }
@@ -160,7 +161,7 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, style 
 
                 {/* content modal */}
                 <Modal visible={contentModalVisible} animationType='slide'>
-                    <ContentModal date={date} completed={completed} content={content} colors={colors} closeModal={() => setContentModalVisible(false)} />
+                    <ContentModal date={date} completed={completed} content={content} colors={colors} closeModal={() => setContentModalVisible(false)} requestCompleteToday={requestCompleteToday} />
                 </Modal>
 
             </ReactSpringAnimatedView>

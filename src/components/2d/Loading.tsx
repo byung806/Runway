@@ -16,7 +16,7 @@ export default function Loading({ id = 0, size = 80 }: { id?: number, size?: num
     })
 
     return (
-        <View style={{...Styles.flex, ...Styles.centeringContainer}}>
+        <View style={{flex: 1, ...Styles.centeringContainer}}>
             <AnimatedView
                 style={{
                     transform: [{rotate: rotate.to([0, 1], ['0deg', '360deg'])}]

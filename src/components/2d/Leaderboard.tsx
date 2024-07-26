@@ -54,9 +54,9 @@ function LeaderboardEntry({ place, avatar, name, points, streak }: LeaderboardEn
                 transform: [{ scale: scale }],
             }}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
-                    <Text style={{ color: theme.text, ...Styles.bodyText, ...Styles.heavy, marginLeft: 10, marginRight: 30 }}>{place}</Text>
+                    <Text style={{ color: theme.text, fontSize: 15, marginLeft: 10, marginRight: 30 }}>{place}</Text>
                     {/* <Image source={{ uri }} style={{ width: 50, height: 50 }} /> */}
-                    <Text style={{ color: theme.text, ...Styles.bodyText }}>{name}</Text>
+                    <Text style={{ color: theme.text, fontSize: 15, }}>{name}</Text>
                 </View>
                 <View style={{
                     margin: 5,
