@@ -36,16 +36,16 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
     const [cards, setCards] = useState<OnboardingCardAttributes[]>([
         {
             ref: null, colors: {
-                outerBackgroundColor: "#8c62d0",
-                borderColor: "#b3a4e0",
-                backgroundColor: "#6d3b9f",
+                outerBackgroundColor: "#6b44b2",
+                borderColor: "#3f1d8a",
+                backgroundColor: "#a58aeb",
                 textColor: "#ffffff"
             }, index: 0
         }, {
             ref: null, colors: {
-                outerBackgroundColor: "#6b44b2",
-                borderColor: "#3f1d8a",
-                backgroundColor: "#a58aeb",
+                outerBackgroundColor: "#8c62d0",
+                borderColor: "#b3a4e0",
+                backgroundColor: "#6d3b9f",
                 textColor: "#ffffff"
             }, index: 1
         }, {
@@ -74,17 +74,17 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
         },
         {
             ref: null, colors: {
-                outerBackgroundColor: "#4a2583",
-                borderColor: "#6b4abf",
-                backgroundColor: "#1e0d4d",
+                outerBackgroundColor: "#3c2072",
+                borderColor: "#593d9e",
+                backgroundColor: "#190b3e",
                 textColor: "#ffffff"
             }, index: 5
         },
         {
             ref: null, colors: {
-                outerBackgroundColor: "#4a2583",
-                borderColor: "#6b4abf",
-                backgroundColor: "#1e0d4d",
+                outerBackgroundColor: "#331a61",
+                borderColor: "#4d3585",
+                backgroundColor: "#14082f",
                 textColor: "#ffffff"
             }, index: 6
         },
