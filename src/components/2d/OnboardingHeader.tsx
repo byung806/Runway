@@ -11,6 +11,7 @@ interface OnboardingHeaderProps {
     prevButtonCallback?: () => void;
 }
 
+// TODO: REMOVE COMPONENT
 export default function OnboardingHeader({ backgroundColor, prevButtonCallback }: OnboardingHeaderProps) {
     const theme = useContext(ThemeContext);
 

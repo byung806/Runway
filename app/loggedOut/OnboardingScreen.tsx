@@ -89,18 +89,7 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
             }, index: 6
         },
     ]);
-    const todayButtonTransformY = useSharedValue(0);
-    const todayButtonOpacity = useSharedValue(0);
     const outerBackgroundColor = useSharedValue(theme.background);
-    const goButtonColor = useSharedValue('transparent');
-    const goButtonOpacity = useSharedValue(0);
-
-    // for GO button
-    const { scale, onPressIn, onPressOut } = useBounceAnimation({
-        scaleTo: 0.9,
-        haptics: Haptics.ImpactFeedbackStyle.Light,
-        config: config.wobbly
-    });
 
     // Change background color when theme changes
     useEffect(() => {
@@ -118,18 +107,17 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
 
     const footerHeight = Dimensions.get("window").height * 0.8;
 
+    /**
+     * Update background and attributes when focused item changes
+     * Called when item comes into view
+     */
     function focusItem(item: OnboardingCardAttributes | null) {
-
         if (item === null) {
             setFocusedIndex(item);
             outerBackgroundColor.value = withTiming(theme.background, { duration: 200 });
-            goButtonColor.value = withTiming('transparent', { duration: 200 });
-            goButtonOpacity.value = withTiming(0, { duration: 200 });
         } else {
             setFocusedIndex(item.index);
             outerBackgroundColor.value = withTiming(item.colors.outerBackgroundColor, { duration: 200 });
-            goButtonColor.value = withTiming(item.colors.textColor, { duration: 200 });
-            goButtonOpacity.value = withTiming(1, { duration: 200 });
         }
     }
 
@@ -148,11 +136,11 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
         }}>
             <FlatList
                 ref={flatListRef}
-                renderItem={({ item, index }) => {
+                renderItem={({ item }) => {
                     return (
                         <Pressable onPressIn={() => {
                             item.ref?.onPressIn();
-                            scrollToItem(index);
+                            if (focusedIndex !== item.index) scrollToItem(item.index);
                         }} onPressOut={item.ref?.onPressOut}>
                             <OnboardingCard
                                 ref={(ref: OnboardingCardRef) => { item.ref = ref }}
@@ -201,7 +189,6 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
                     - Dimensions.get("window").height * 0.5 + boxHeight / 2
                 )}
             />
-
         </Animated.View>
     );
 }
