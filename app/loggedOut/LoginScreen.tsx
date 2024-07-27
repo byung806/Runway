@@ -88,7 +88,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                             disabled={loading}
                         />
                         <Button
-                            title={'Go!'}
+                            title={'Log In!'}
                             disabled={loading}
                             onPress={loginCallback}
                             style={{ width: '80%' }}
@@ -104,7 +104,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                             title={'Don\'t have an account?'}
                             filled={false}
                             disabled={loading}
-                            backgroundColor={theme.runwayBackgroundColor}
+                            backgroundColor='transparent'
                             onPress={() => navigation.navigate('signup')}
                         />
                     </SafeAreaView>
