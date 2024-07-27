@@ -11,6 +11,7 @@ interface OnboardingFooterProps {
     buttonCallback: () => void;
 }
 
+// TODO: REMOVE COMPONENT
 export default function OnboardingFooter({ backgroundColor, buttonLabel, buttonCallback }: OnboardingFooterProps) {
     const theme = useContext(ThemeContext);
     

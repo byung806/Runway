@@ -4,13 +4,14 @@ import { Content, ContentColors, useFirebase } from '@/utils/FirebaseProvider';
 import useBounceAnimation from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import * as Haptics from 'expo-haptics';
-import { forwardRef, memo, useContext, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, memo, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Modal, Pressable, View } from 'react-native';
 import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
 import ContentModal from './ContentModal';
 import { Button } from './Button';
+import BorderedCard, { BorderedCardRef } from './BorderedCard';
 
 
 interface DateCardProps {
@@ -33,29 +34,20 @@ const ReactSpringAnimatedView = animated(View);
 const DateCard = forwardRef(({ focused, completed, date, content, colors, requestCompleteToday, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);
 
-    const [contentModalVisible, setContentModalVisible] = useState(false);
-
-    const { scale: cardScale, onPressIn: cardOnPressIn, onPressOut: cardOnPressOut } = useBounceAnimation({
-        scaleTo: 0.94,
-        config: config.gentle
-    });
-
-    const { scale: buttonScale, onPressIn: buttonOnPressIn, onPressOut: buttonOnPressOut } = useBounceAnimation({
-        scaleTo: 0.9,
-        haptics: Haptics.ImpactFeedbackStyle.Light,
-        config: config.gentle
-    });
-
-    const initialTransformY = 80;
-
-    const titleTransformY = useSharedValue(-initialTransformY);
-    const goTransformY = useSharedValue(initialTransformY);
-    const cardContentOpacity = useSharedValue(0);
+    const borderedCardRef = useRef<BorderedCardRef>(null);
 
     useImperativeHandle(ref, () => ({
-        onPressIn: cardOnPressIn,
-        onPressOut: cardOnPressOut,
+        onPressIn: borderedCardRef.current?.onPressIn,
+        onPressOut: borderedCardRef.current?.onPressOut,
     }));
+
+    const [contentModalVisible, setContentModalVisible] = useState(false);
+
+    const initialTransformY = 80;
+    const titleTransformY = useSharedValue(-initialTransformY);
+    const goTransformY = useSharedValue(initialTransformY);
+
+    const cardContentOpacity = useSharedValue(0);
 
     useEffect(() => {
         if (focused) {
@@ -89,17 +81,8 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, reques
     }
 
     return (
-        <View style={style}>
-            <ReactSpringAnimatedView style={{
-                flex: 1,
-                borderRadius: 12,
-                borderWidth: 6,
-                borderColor: colors.borderColor,
-                backgroundColor: colors.backgroundColor,
-                ...Styles.centeringContainer,
-                transform: [{ scale: cardScale }]
-            }}>
-
+        <BorderedCard ref={borderedCardRef} style={style} colors={colors}>
+            <>
                 {/* date & extras (top left and right) */}
                 <View style={{
                     position: 'absolute',
@@ -163,9 +146,8 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, reques
                 <Modal visible={contentModalVisible} animationType='slide'>
                     <ContentModal date={date} completed={completed} content={content} colors={colors} closeModal={() => setContentModalVisible(false)} requestCompleteToday={requestCompleteToday} />
                 </Modal>
-
-            </ReactSpringAnimatedView>
-        </View>
+            </>
+        </BorderedCard>
     );
 });
 
