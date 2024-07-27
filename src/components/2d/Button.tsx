@@ -1,3 +1,5 @@
+import { Styles } from '@/styles';
+import * as Haptics from 'expo-haptics';
 import React, { useContext } from 'react';
 import { Pressable, View } from 'react-native';
 import Animated, {
@@ -6,13 +8,11 @@ import Animated, {
     useSharedValue,
     withTiming
 } from 'react-native-reanimated';
-import * as Haptics from 'expo-haptics';
-import { Styles } from '@/styles';
 import { ThemeContext } from './ThemeProvider';
 
-import Text from './Text';
-import { animated, config } from '@react-spring/native';
 import useBounceAnimation from '@/utils/useBounceAnimation';
+import { animated, config } from '@react-spring/native';
+import Text from './Text';
 
 interface Button3DProps {
     title: string;
@@ -141,7 +141,7 @@ export function Button({ title, onPress, backgroundColor, textColor, disabled = 
                 // opacity: cardContentOpacity,
                 backgroundColor: backgroundColor || (disabled ? theme.gray : theme.runwayButtonColor),
                 // transform: [{ translateY: goTransformY }],
-                ...Styles.lightShadow,
+                ...(backgroundColor === 'transparent' ? {} : Styles.lightShadow),
                 ...reanimatedStyle
             }}>
                 <Pressable
