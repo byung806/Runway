@@ -14,6 +14,7 @@ import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import OnboardingCard, { OnboardingCardRef } from '@/components/2d/OnboardingCard';
 import OnboardingHeaderComponent from '@/components/2d/OnboardingHeaderComponent';
+import OnboardingFooterComponent from '@/components/2d/OnboardingFooterComponent';
 
 
 const ReactSpringAnimatedView = animated(View);
@@ -70,7 +71,23 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
                 backgroundColor: "#1e0d4d",
                 textColor: "#ffffff"
             }, index: 4
-        }
+        },
+        {
+            ref: null, colors: {
+                outerBackgroundColor: "#4a2583",
+                borderColor: "#6b4abf",
+                backgroundColor: "#1e0d4d",
+                textColor: "#ffffff"
+            }, index: 5
+        },
+        {
+            ref: null, colors: {
+                outerBackgroundColor: "#4a2583",
+                borderColor: "#6b4abf",
+                backgroundColor: "#1e0d4d",
+                textColor: "#ffffff"
+            }, index: 6
+        },
     ]);
     const todayButtonTransformY = useSharedValue(0);
     const todayButtonOpacity = useSharedValue(0);
@@ -152,7 +169,7 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
                 }}
                 data={cards}
                 ListHeaderComponent={<OnboardingHeaderComponent height={headerHeight} setUsername={setUsername} />}
-                ListFooterComponent={<ListFooterComponent height={footerHeight} />}
+                ListFooterComponent={<OnboardingFooterComponent height={footerHeight} />}
                 getItemLayout={(_, index) => {
                     return {
                         length: boxHeight + padding,
