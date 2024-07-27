@@ -6,8 +6,9 @@ import Button from "./Button";
 import Plane from "./Plane";
 import Text from "./Text";
 import TextInput from "./TextInput";
+import { useState } from "react";
 
-export default function OnboardingHeaderComponent({ height }: { height: number }) {
+export default function OnboardingHeaderComponent({ height, setUsername }: { height: number, setUsername: Function }) {
     const firebase = useFirebase();
     const navigation = useNavigation<any>();
     return (
@@ -21,12 +22,10 @@ export default function OnboardingHeaderComponent({ height }: { height: number }
             }}>
                 <Text style={{ fontSize: 40, textAlign: 'center', marginBottom: 30 }}>What should we call you?</Text>
                 <TextInput
+                    onChangeText={setUsername}
                     placeholder={'Username'}
                     style={{ fontSize: 20, textAlign: 'center', marginBottom: 30, height: 50, width: '40%' }}
                 />
-            </View>
-            <View style={{ ...Styles.centeringContainer }}>
-                <Plane onPress={() => { }} />
             </View>
         </View>
     );
