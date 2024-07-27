@@ -14,7 +14,7 @@ interface BaseContentChunkType {
 }
 function BaseContentChunk({ focused, children, style }: { focused: boolean, children: JSX.Element, style?: any }) {
     const [viewed, setViewed] = useState(false);
-    const opacity = useSharedValue(0);
+    const opacity = useSharedValue(focused ? 1 : 0);
 
     useEffect(() => {
         if (focused) {
