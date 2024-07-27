@@ -29,25 +29,48 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
     const firebase = useFirebase();
     const today = getTodayDate();
     const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
 
     const [focusedIndex, setFocusedIndex] = useState<number | null>(0);
     const [cards, setCards] = useState<OnboardingCardAttributes[]>([
-        {ref: null, colors: {
-            outerBackgroundColor: "#ffe063",
-            borderColor: "#2cab1c",
-            backgroundColor: "#f4d03e",
-            textColor: "#aa8c16"
-            }, index: 0}, {ref: null, colors: {
-                outerBackgroundColor: "#ffe063",
-                borderColor: "#2cab1c",
-                backgroundColor: "#f4d03e",
-                textColor: "#aa8c16"
-                }, index: 1}, {ref: null, colors: {
-                    outerBackgroundColor: "#ffe063",
-                    borderColor: "#2cab1c",
-                    backgroundColor: "#f4d03e",
-                    textColor: "#aa8c16"
-                    }, index: 2}
+        {
+            ref: null, colors: {
+                outerBackgroundColor: "#8c62d0",
+                borderColor: "#b3a4e0",
+                backgroundColor: "#6d3b9f",
+                textColor: "#ffffff"
+            }, index: 0
+        }, {
+            ref: null, colors: {
+                outerBackgroundColor: "#6b44b2",
+                borderColor: "#3f1d8a",
+                backgroundColor: "#a58aeb",
+                textColor: "#ffffff"
+            }, index: 1
+        }, {
+            ref: null, colors: {
+                outerBackgroundColor: "#7453c7",
+                borderColor: "#a58aeb",
+                backgroundColor: "#3f1d8a",
+                textColor: "#ffffff"
+            }, index: 2
+        },
+        {
+            ref: null, colors: {
+                outerBackgroundColor: "#5a3494",
+                borderColor: "#8e6cbf",
+                backgroundColor: "#2e1463",
+                textColor: "#ffffff"
+            }, index: 3
+        },
+        {
+            ref: null, colors: {
+                outerBackgroundColor: "#4a2583",
+                borderColor: "#6b4abf",
+                backgroundColor: "#1e0d4d",
+                textColor: "#ffffff"
+            }, index: 4
+        }
     ]);
     const todayButtonTransformY = useSharedValue(0);
     const todayButtonOpacity = useSharedValue(0);
@@ -69,23 +92,16 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
 
     const flatListRef = useRef<FlatList<OnboardingCardAttributes>>(null);
 
-    const paddingAboveHeader = 50;
-    const headerHeight = Dimensions.get("window").height * 0.8;
+    const paddingAboveHeader = 0;
+    const headerHeight = Dimensions.get("window").height * 1;
 
     const padding = 30;
     const boxWidth = Dimensions.get("window").width - padding * 2;
     const boxHeight = boxWidth * 1.6;
 
     const footerHeight = Dimensions.get("window").height * 0.8;
-    
+
     function focusItem(item: OnboardingCardAttributes | null) {
-        if (item === null || item.index === 0) {
-            todayButtonOpacity.value = withTiming(0, { duration: 200 });
-            todayButtonTransformY.value = withTiming(-50, { duration: 200 });
-        } else {
-            todayButtonOpacity.value = withTiming(1, { duration: 1000 });
-            todayButtonTransformY.value = withTiming(0, { duration: 1000 });
-        }
 
         if (item === null) {
             setFocusedIndex(item);
@@ -128,12 +144,14 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
                                 style={{
                                     height: boxHeight
                                 }}
+                                username={username}
+                                index={item.index}
                             />
                         </Pressable>
                     )
                 }}
                 data={cards}
-                ListHeaderComponent={<OnboardingHeaderComponent height={headerHeight} />}
+                ListHeaderComponent={<OnboardingHeaderComponent height={headerHeight} setUsername={setUsername} />}
                 ListFooterComponent={<ListFooterComponent height={footerHeight} />}
                 getItemLayout={(_, index) => {
                     return {
@@ -166,7 +184,7 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
                     - Dimensions.get("window").height * 0.5 + boxHeight / 2
                 )}
             />
-            
+
         </Animated.View>
     );
 }
