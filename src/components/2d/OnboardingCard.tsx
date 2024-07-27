@@ -4,11 +4,14 @@ import { Content, ContentColors, useFirebase } from '@/utils/FirebaseProvider';
 import useBounceAnimation from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import * as Haptics from 'expo-haptics';
-import { forwardRef, memo, useContext, useEffect, useImperativeHandle, useState } from 'react';
-import { View } from 'react-native';
+import React, { forwardRef, memo, useContext, useEffect, useImperativeHandle, useState } from 'react';
+import { Easing, Pressable, View } from 'react-native';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
 import Button3D, { Button } from './Button';
+import { QuestionContentChunk } from './ContentChunk';
+import AnimatedNumbers from 'react-native-animated-numbers';
+
 
 
 interface OnboardingCardProps {
@@ -33,11 +36,16 @@ const DateCard = forwardRef(({ focused, colors, style, username, index }: Onboar
     const [wrongButtonBackground2, setWrongButtonBackground2] = useState<string>('ffffff');
     const [wrongButtonBackground3, setWrongButtonBackground3] = useState<string>('ffffff');
     const [rightButtonBackground, setRightButtonBackground] = useState<string>('ffffff');
+    const [points, setPoints] = useState(0);
     const { scale, onPressIn, onPressOut } = useBounceAnimation({
         scaleTo: 0.94,
         haptics: Haptics.ImpactFeedbackStyle.Light,
         config: config.gentle
     });
+
+    function incrementPoints() {
+        setPoints(points + 99);
+    }
 
     function wrongAnswer1() {
         setWrongButtonBackground1('#FF0000');
@@ -53,6 +61,7 @@ const DateCard = forwardRef(({ focused, colors, style, username, index }: Onboar
 
     function rightAnswer() {
         setRightButtonBackground('#00FF00');
+        setPoints(points + 99);
     }
 
     useImperativeHandle(ref, () => ({
@@ -151,14 +160,35 @@ const DateCard = forwardRef(({ focused, colors, style, username, index }: Onboar
                     }}>
                     </View>
                     {/* <Button title="Complete" filled={false} onPress={() => {}} /> */}
-                    <Text style={{
-                        color: colors.textColor,
-                        fontSize: 40, textAlign: 'center'
-                    }}>What's the chemical formula for water?</Text>
-                    <Button3D title="CO2" onPress={wrongAnswer1} filled={false} backgroundColor={wrongButtonBackground1} height={200} width='80%' style={{ padding: 3 }} />
-                    <Button3D title="NH3" onPress={wrongAnswer2} filled={false} backgroundColor={wrongButtonBackground2} height={200} width='80%' style={{ padding: 3 }} />
-                    <Button3D title="H2O" onPress={rightAnswer} filled={false} backgroundColor={rightButtonBackground} height={200} width='80%' style={{ padding: 3 }} />
-                    <Button3D title="O2" onPress={wrongAnswer3} filled={false} backgroundColor={wrongButtonBackground3} height={200} width='80%' style={{ padding: 3 }} />
+                    <View style={{ width: '100%', ...Styles.centeringContainer, padding: 30, gap: 10 }}>
+                        <Text style={{ fontSize: 30, color: theme.white, ...Styles.lightShadow, marginBottom: 30 }}>What is the chemical formula for water?</Text>
+                        <View style={{ width: '100%', gap: 3 }}>
+                            <Button onPress={() => wrongAnswer1()} title='CO2' backgroundColor={wrongButtonBackground1} textColor={theme.white} style={{
+                                width: '100%',
+                                height: 50,
+                            }} />
+                            <Button onPress={() => wrongAnswer2()} title='NH3' backgroundColor={wrongButtonBackground2} textColor={theme.white} style={{
+                                width: '100%',
+                                height: 50,
+                            }} />
+                            <Button onPress={() => rightAnswer()} title='H2O' backgroundColor={rightButtonBackground} textColor={theme.white} style={{
+                                width: '100%',
+                                height: 50,
+                            }} />
+                            <Button onPress={() => wrongAnswer3()} title='NO2' backgroundColor={wrongButtonBackground3} textColor={theme.white} style={{
+                                width: '100%',
+                                height: 50,
+                            }} />
+                        </View>
+                    </View>
+                    <Text style={{ fontSize: 30, color: theme.white, ...Styles.lightShadow, marginBottom: 0 }}>Points:</Text>
+                    <AnimatedNumbers
+                        animateToNumber={points}
+                        animationDuration={800}
+                        fontStyle={{ color: theme.white, fontSize: 30, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
+                        easing={Easing.out(Easing.cubic)}
+                    />
+
                 </AnimatedView>
             </View>
         )
@@ -188,7 +218,7 @@ const DateCard = forwardRef(({ focused, colors, style, username, index }: Onboar
                     <Text style={{
                         color: colors.textColor,
                         fontSize: 40, textAlign: 'center'
-                    }}>Earn points to climb up the global leaderboard...</Text>
+                    }}>See? You got the hang of it already!</Text>
                 </AnimatedView>
             </View>
         )
@@ -217,8 +247,14 @@ const DateCard = forwardRef(({ focused, colors, style, username, index }: Onboar
                     {/* <Button title="Complete" filled={false} onPress={() => {}} /> */}
                     <Text style={{
                         color: colors.textColor,
-                        fontSize: 40, textAlign: 'center'
-                    }}>Or compete against your friends!</Text>
+                        fontSize: 30, textAlign: 'center'
+                    }}>Answer questions correct in less tries to earn more points!</Text>
+                    <AnimatedNumbers
+                        animateToNumber={points}
+                        animationDuration={200}
+                        fontStyle={{ color: theme.white, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
+                        easing={Easing.out(Easing.cubic)}
+                    />
                 </AnimatedView>
             </View>
         )

@@ -153,3 +153,4 @@ export function Button({ title, onPress, backgroundColor, textColor, disabled = 
         </ReactSpringAnimatedView>
     );
 }
+
