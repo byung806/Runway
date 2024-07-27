@@ -43,9 +43,6 @@ const DateCard = forwardRef(({ focused, colors, style, username, index }: Onboar
         config: config.gentle
     });
 
-    function incrementPoints() {
-        setPoints(points + 99);
-    }
 
     function wrongAnswer1() {
         setWrongButtonBackground1('#FF0000');
@@ -61,7 +58,14 @@ const DateCard = forwardRef(({ focused, colors, style, username, index }: Onboar
 
     function rightAnswer() {
         setRightButtonBackground('#00FF00');
-        setPoints(points + 99);
+        setPoints(99);
+    }
+
+    function resetColors() {
+        setWrongButtonBackground1('#ffffff');
+        setWrongButtonBackground2('#ffffff');
+        setRightButtonBackground('#ffffff');
+        setWrongButtonBackground3('#ffffff');
     }
 
     useImperativeHandle(ref, () => ({
@@ -247,18 +251,176 @@ const DateCard = forwardRef(({ focused, colors, style, username, index }: Onboar
                     {/* <Button title="Complete" filled={false} onPress={() => {}} /> */}
                     <Text style={{
                         color: colors.textColor,
-                        fontSize: 30, textAlign: 'center'
-                    }}>Answer questions correct in less tries to earn more points!</Text>
-                    <AnimatedNumbers
-                        animateToNumber={points}
-                        animationDuration={200}
-                        fontStyle={{ color: theme.white, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
-                        easing={Easing.out(Easing.cubic)}
-                    />
+                        fontSize: 40, textAlign: 'center'
+                    }}>Answer questions correctly in less tries to earn more points!</Text>
                 </AnimatedView>
             </View>
         )
     }
+    else if (index === 5) {
+        return (
+            <View style={style}>
+                <AnimatedView style={{
+                    flex: 1,
+                    borderRadius: 12,
+                    borderWidth: 6,
+                    borderColor: colors.borderColor,
+                    backgroundColor: colors.backgroundColor,
+                    ...Styles.centeringContainer,
+                    transform: [{ scale: scale }]
+                }}>
+                    <View style={{
+                        position: 'absolute',
+                        flexDirection: 'row',
+                        top: 0,
+                        width: '100%',
+                        paddingHorizontal: 10,
+                        justifyContent: 'space-between',
+                    }}>
+                    </View>
+                    {/* <Button title="Complete" filled={false} onPress={() => {}} /> */}
+                    <Text style={{
+                        color: colors.textColor,
+                        fontSize: 40, textAlign: 'center', padding: 5, marginBottom: 15
+                    }}>Earn more points to beat out your friends...</Text>
+                    <View style={{
+                        flexDirection: 'row',
+                        top: 0,
+                        width: '80%', alignItems: 'center', marginBottom: 20
+                    }}>
+                        <Text style={{ flex: 1, color: '#FFD700', fontSize: 20 }}>1</Text>
+                        <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginLeft: -20 }}>{username}</Text>
+                        <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginRight: -70 }}>99</Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        top: 0,
+                        width: '80%', alignItems: 'center', marginBottom: 20
+                    }}>
+                        <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20 }}>2</Text>
+                        <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginLeft: -20 }}>bryan</Text>
+                        <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginRight: -70 }}>35</Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        top: 0,
+                        width: '80%', alignItems: 'center', marginBottom: 20
+                    }}>
+                        <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20 }}>3</Text>
+                        <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20, marginLeft: -20 }}>isabelle</Text>
+                        <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20, marginRight: -70 }}>20</Text>
+                    </View>
+                </AnimatedView>
+            </View>
+        )
+    }
+    else if (index === 6) {
+        return (
+            <View style={style}>
+                <AnimatedView style={{
+                    flex: 1,
+                    borderRadius: 12,
+                    borderWidth: 6,
+                    borderColor: colors.borderColor,
+                    backgroundColor: colors.backgroundColor,
+                    ...Styles.centeringContainer,
+                    transform: [{ scale: scale }]
+                }}>
+                    <View style={{
+                        position: 'absolute',
+                        flexDirection: 'row',
+                        top: 0,
+                        width: '100%',
+                        paddingHorizontal: 10,
+                        justifyContent: 'space-between',
+                    }}>
+                    </View>
+                    {/* <Button title="Complete" filled={false} onPress={() => {}} /> */}
+                    <Text style={{
+                        color: colors.textColor,
+                        fontSize: 40, textAlign: 'center', padding: 5, marginBottom: 15
+                    }}>Or compete against the whole world!</Text>
+                    <View style={{
+                        flexDirection: 'row',
+                        top: 0,
+                        width: '80%', alignItems: 'center', marginBottom: 20
+                    }}>
+                        <Text style={{ flex: 1, color: '#FFD700', fontSize: 20 }}>1</Text>
+                        <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginLeft: -20 }}>bobby</Text>
+                        <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginRight: -70 }}>100</Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        top: 0,
+                        width: '80%', alignItems: 'center', marginBottom: 20
+                    }}>
+                        <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20 }}>2</Text>
+                        <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginLeft: -20 }}>{username}</Text>
+                        <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginRight: -70 }}>99</Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        top: 0,
+                        width: '80%', alignItems: 'center', marginBottom: 20
+                    }}>
+                        <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20 }}>3</Text>
+                        <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20, marginLeft: -20 }}>jess</Text>
+                        <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20, marginRight: -70 }}>45</Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        top: 0,
+                        width: '80%', alignItems: 'center', marginBottom: 20
+                    }}>
+                        <Text style={{ flex: 1, color: '#ffffff', fontSize: 20 }}>4</Text>
+                        <Text style={{ flex: 1, color: '#ffffff', fontSize: 20, marginLeft: -20 }}>bryan</Text>
+                        <Text style={{ flex: 1, color: '#ffffff', fontSize: 20, marginRight: -70 }}>35</Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        top: 0,
+                        width: '80%', alignItems: 'center'
+                    }}>
+                        <Text style={{ flex: 1, color: '#ffffff', fontSize: 20 }}>5</Text>
+                        <Text style={{ flex: 1, color: '#ffffff', fontSize: 20, marginLeft: -20 }}>isabelle</Text>
+                        <Text style={{ flex: 1, color: '#ffffff', fontSize: 20, marginRight: -70 }}>20</Text>
+                    </View>
+                </AnimatedView>
+            </View>
+        )
+    }
+    else if (index === 7) {
+        return (
+            <View style={style}>
+                <AnimatedView style={{
+                    flex: 1,
+                    borderRadius: 12,
+                    borderWidth: 6,
+                    borderColor: colors.borderColor,
+                    backgroundColor: colors.backgroundColor,
+                    ...Styles.centeringContainer,
+                    transform: [{ scale: scale }]
+                }}>
+                    <View style={{
+                        position: 'absolute',
+                        flexDirection: 'row',
+                        top: 0,
+                        width: '100%',
+                        paddingHorizontal: 10,
+                        justifyContent: 'space-between',
+                    }}>
+                    </View>
+                    <Text style={{
+                        color: colors.textColor,
+                        fontSize: 40, textAlign: 'center'
+                    }}>So what are you waiting for? Let's get started!</Text>
+                </AnimatedView>
+            </View>
+        )
+    }
+
+
+
 });
 
 export default memo(DateCard);
