@@ -4,7 +4,6 @@ export { default as ListFooterComponent } from './ListFooterComponent';
 export { default as ListHeaderComponent } from './ListHeaderComponent';
 export { default as Loading } from './Loading';
 export { default as Logo } from './Logo';
-export { default as Plane } from './Plane';
 export { default as ScrollableCards, ScrollableCardsRef, BaseCardAttributes } from './ScrollableCards';
 export { default as Text } from './Text';
 export { default as TextInput } from './TextInput';
