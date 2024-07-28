@@ -60,37 +60,6 @@ export default function StreakScreen({ navigation, ...props }: { navigation: Sta
                 flex: 1,
                 ...Styles.centeringContainer,
             }}>
-                <View style={{
-                    flex: 1,
-                    ...Styles.centeringContainer,
-                }}>
-                    {/* TODO: figure out suspense and why its being laggy */}
-                    <Suspense fallback={null}>
-                        <LottieView
-                            ref={fireAnimationRef}
-                            style={{
-                                width: 500,
-                                height: 500,
-                                position: 'absolute',
-                                top: height - 740,
-                            }}
-                            source={require('@/assets/nonPixelFire.json')}
-                            loop
-                        />
-                    </Suspense>
-                    <AnimatedNumbers
-                        animateToNumber={streak}
-                        animationDuration={numberAnimationDuration}
-                        fontStyle={{ color: theme.text, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
-                        easing={Easing.out(Easing.cubic)}
-                    />
-                    <Text style={{
-                        color: theme.text,
-                        fontSize: 20,
-                        textAlign: 'center',
-                        marginBottom: 20,
-                    }}>day streak</Text>
-                </View>
                 <Suspense fallback={null}>
                     <LottieView
                         ref={fireAnimationRef}
@@ -100,7 +69,7 @@ export default function StreakScreen({ navigation, ...props }: { navigation: Sta
                             position: 'absolute',
                             top: height - 740,
                         }}
-                        source={require('@/assets/pixelFire.json')}
+                        source={require('@/assets/nonPixelFire.json')}
                         loop
                     />
                 </Suspense>

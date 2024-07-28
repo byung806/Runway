@@ -1,15 +1,13 @@
 import { Styles } from '@/styles';
-import { ContentColors, useFirebase } from '@/utils/FirebaseProvider';
-import useBounceAnimation from '@/utils/useBounceAnimation';
-import { animated, config } from '@react-spring/native';
-import * as Haptics from 'expo-haptics';
-import React, { forwardRef, memo, useContext, useEffect, useImperativeHandle, useState } from 'react';
+import { ContentColors } from '@/utils/FirebaseProvider';
+import React, { forwardRef, memo, useContext, useImperativeHandle, useState } from 'react';
 import { Easing, View } from 'react-native';
 import AnimatedNumbers from 'react-native-animated-numbers';
-import { Button } from './Button';
+import BorderedCard, { BorderedCardRef } from './BorderedCard';
+import { QuestionContentChunk } from './ContentChunk';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
-import BorderedCard, { BorderedCardRef } from './BorderedCard';
+import Button from './Button';
 
 
 
@@ -26,8 +24,6 @@ export interface OnboardingCardRef {
     onPressOut: () => void;
 }
 
-const AnimatedView = animated(View);
-
 const OnboardingCard = forwardRef(({ focused, colors, style, username, index }: OnboardingCardProps, ref) => {
     const theme = useContext(ThemeContext);
 
@@ -38,36 +34,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index }: 
         onPressOut: borderedCardRef.current?.onPressOut,
     }));
 
-    const [wrongButtonBackground1, setWrongButtonBackground1] = useState<string>('#ffffff');
-    const [wrongButtonBackground2, setWrongButtonBackground2] = useState<string>('#ffffff');
-    const [wrongButtonBackground3, setWrongButtonBackground3] = useState<string>('#ffffff');
-    const [rightButtonBackground, setRightButtonBackground] = useState<string>('#ffffff');
     const [points, setPoints] = useState(0);
-
-
-    function wrongAnswer1() {
-        setWrongButtonBackground1('#FF0000');
-    }
-
-    function wrongAnswer2() {
-        setWrongButtonBackground2('#FF0000');
-    }
-
-    function wrongAnswer3() {
-        setWrongButtonBackground3('#FF0000');
-    }
-
-    function rightAnswer() {
-        setRightButtonBackground('#00FF00');
-        setPoints(points + 99);
-    }
-
-    useEffect(() => {
-        if (focused) {
-            // console.log('start internal card slide animation for ', date);
-            // start animation
-        }
-    }, [focused]);
 
     let insides: JSX.Element = <></>;
     if (index === 0) {
@@ -77,12 +44,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index }: 
                     color: colors.textColor,
                     fontSize: 40,
                     textAlign: 'center'
-                }}>Welcome to Runway,</Text>
-                <Text style={{
-                    color: colors.textColor,
-                    fontSize: 40,
-                    textAlign: 'center'
-                }}>{username}</Text>
+                }}>Welcome to Runway, {username}!</Text>
             </>
         )
     } else if (index === 1) {
@@ -91,8 +53,19 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index }: 
                 <Text style={{
                     color: colors.textColor,
                     fontSize: 40,
-                    textAlign: 'center'
-                }}>Complete daily lessons to earn points!</Text>
+                    textAlign: 'center',
+                    marginBottom: 20
+                }}>Complete cards like these to earn points!</Text>
+                <Button
+                    title='Go!'
+                    backgroundColor={colors.textColor}
+                    textColor={theme.black}
+                    onPress={() => {}}
+                    style={{
+                        width: '80%',
+                        height: 50,
+                    }}
+                />
             </>
         )
     } else if (index === 2) {
@@ -108,27 +81,22 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index }: 
                 }}>
                 </View>
                 {/* <Button title="Complete" filled={false} onPress={() => {}} /> */}
-                <View style={{ width: '100%', ...Styles.centeringContainer, padding: 30, gap: 10 }}>
-                    <Text style={{ fontSize: 30, color: theme.white, ...Styles.lightShadow, marginBottom: 30 }}>What is the chemical formula for water?</Text>
-                    <View style={{ width: '100%', gap: 3 }}>
-                        <Button onPress={() => wrongAnswer1()} title='CO2' backgroundColor={wrongButtonBackground1} textColor={theme.white} style={{
-                            width: '100%',
-                            height: 50,
-                        }} />
-                        <Button onPress={() => wrongAnswer2()} title='NH3' backgroundColor={wrongButtonBackground2} textColor={theme.white} style={{
-                            width: '100%',
-                            height: 50,
-                        }} />
-                        <Button onPress={() => rightAnswer()} title='H2O' backgroundColor={rightButtonBackground} textColor={theme.white} style={{
-                            width: '100%',
-                            height: 50,
-                        }} />
-                        <Button onPress={() => wrongAnswer3()} title='NO2' backgroundColor={wrongButtonBackground3} textColor={theme.white} style={{
-                            width: '100%',
-                            height: 50,
-                        }} />
-                    </View>
-                </View>
+                <QuestionContentChunk
+                    question={'What is the chemical formula for water?'}
+                    choices={[
+                        { choice: 'CO2', correct: false },
+                        { choice: 'NH3', correct: false },
+                        { choice: 'H2O', correct: true },
+                        { choice: 'NO2', correct: false },
+                    ]}
+                    focused={true}
+                    colors={{
+                        textColor: colors.textColor,
+                        backgroundColor: colors.backgroundColor,
+                        borderColor: colors.borderColor,
+                        outerBackgroundColor: colors.outerBackgroundColor,
+                    }}
+                />
                 <Text style={{ fontSize: 30, color: theme.white, ...Styles.lightShadow, marginBottom: 0 }}>Points:</Text>
                 <AnimatedNumbers
                     animateToNumber={points}
@@ -162,6 +130,96 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index }: 
                     fontStyle={{ color: theme.white, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
                     easing={Easing.out(Easing.cubic)}
                 />
+            </>
+        )
+    } else if (index === 5) {
+        insides = (
+            <>
+                <Text style={{
+                    color: colors.textColor,
+                    fontSize: 40, textAlign: 'center', padding: 5, marginBottom: 15
+                }}>Earn more points to beat out your friends...</Text>
+                <View style={{
+                    flexDirection: 'row',
+                    top: 0,
+                    width: '80%', alignItems: 'center', marginBottom: 20
+                }}>
+                    <Text style={{ flex: 1, color: '#FFD700', fontSize: 20 }}>1</Text>
+                    <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginLeft: -20 }}>{username}</Text>
+                    <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginRight: -70 }}>99</Text>
+                </View>
+                <View style={{
+                    flexDirection: 'row',
+                    top: 0,
+                    width: '80%', alignItems: 'center', marginBottom: 20
+                }}>
+                    <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20 }}>2</Text>
+                    <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginLeft: -20 }}>bryan</Text>
+                    <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginRight: -70 }}>35</Text>
+                </View>
+                <View style={{
+                    flexDirection: 'row',
+                    top: 0,
+                    width: '80%', alignItems: 'center', marginBottom: 20
+                }}>
+                    <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20 }}>3</Text>
+                    <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20, marginLeft: -20 }}>isabelle</Text>
+                    <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20, marginRight: -70 }}>20</Text>
+                </View>
+            </>
+        )
+    } else if (index === 6) {
+        insides = (
+            <>
+                <Text style={{
+                    color: colors.textColor,
+                    fontSize: 40, textAlign: 'center', padding: 5, marginBottom: 15
+                }}>Or compete against the whole world!</Text>
+                <View style={{
+                    flexDirection: 'row',
+                    top: 0,
+                    width: '80%', alignItems: 'center', marginBottom: 20
+                }}>
+                    <Text style={{ flex: 1, color: '#FFD700', fontSize: 20 }}>1</Text>
+                    <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginLeft: -20 }}>bobby</Text>
+                    <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginRight: -70 }}>100</Text>
+                </View>
+                <View style={{
+                    flexDirection: 'row',
+                    top: 0,
+                    width: '80%', alignItems: 'center', marginBottom: 20
+                }}>
+                    <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20 }}>2</Text>
+                    <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginLeft: -20 }}>{username}</Text>
+                    <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginRight: -70 }}>99</Text>
+                </View>
+                <View style={{
+                    flexDirection: 'row',
+                    top: 0,
+                    width: '80%', alignItems: 'center', marginBottom: 20
+                }}>
+                    <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20 }}>3</Text>
+                    <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20, marginLeft: -20 }}>jess</Text>
+                    <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20, marginRight: -70 }}>45</Text>
+                </View>
+                <View style={{
+                    flexDirection: 'row',
+                    top: 0,
+                    width: '80%', alignItems: 'center', marginBottom: 20
+                }}>
+                    <Text style={{ flex: 1, color: '#ffffff', fontSize: 20 }}>4</Text>
+                    <Text style={{ flex: 1, color: '#ffffff', fontSize: 20, marginLeft: -20 }}>bryan</Text>
+                    <Text style={{ flex: 1, color: '#ffffff', fontSize: 20, marginRight: -70 }}>35</Text>
+                </View>
+                <View style={{
+                    flexDirection: 'row',
+                    top: 0,
+                    width: '80%', alignItems: 'center'
+                }}>
+                    <Text style={{ flex: 1, color: '#ffffff', fontSize: 20 }}>5</Text>
+                    <Text style={{ flex: 1, color: '#ffffff', fontSize: 20, marginLeft: -20 }}>isabelle</Text>
+                    <Text style={{ flex: 1, color: '#ffffff', fontSize: 20, marginRight: -70 }}>20</Text>
+                </View>
             </>
         )
     }

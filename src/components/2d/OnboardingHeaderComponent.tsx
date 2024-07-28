@@ -1,16 +1,10 @@
 import { Styles } from "@/styles";
-import { useFirebase } from "@/utils/FirebaseProvider";
-import { useNavigation } from "@react-navigation/native";
 import { View } from "react-native";
-import Button from "./Button";
-import Plane from "./Plane";
 import Text from "./Text";
 import TextInput from "./TextInput";
-import { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function OnboardingHeaderComponent({ height, setUsername }: { height: number, setUsername: Function }) {
-    const firebase = useFirebase();
-    const navigation = useNavigation<any>();
+export default function OnboardingHeaderComponent({ height, setUsername, arrowDown }: { height: number, setUsername: Function, arrowDown: JSX.Element }) {
     return (
         <View style={{
             height,
@@ -24,9 +18,12 @@ export default function OnboardingHeaderComponent({ height, setUsername }: { hei
                 <TextInput
                     onChangeText={setUsername}
                     placeholder={'Username'}
-                    style={{ fontSize: 20, textAlign: 'center', marginBottom: 30, height: 50, width: '40%' }}
+                    style={{ fontSize: 20, textAlign: 'center', marginBottom: 30, height: 50, width: '80%' }}
                 />
             </View>
+            <SafeAreaView style={{ position: 'absolute', width: '100%', bottom: 0, ...Styles.centeringContainer, padding: 20 }} edges={['bottom']}>
+                {arrowDown}
+            </SafeAreaView>
         </View>
     );
 }

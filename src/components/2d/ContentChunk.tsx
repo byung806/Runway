@@ -3,8 +3,7 @@ import { ContentColors, ContentQuestionChoice } from "@/utils/FirebaseProvider";
 import { useContext, useEffect, useState } from "react";
 import { Dimensions, View } from "react-native";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
-import { Button } from "./Button";
-import Plane from "./Plane";
+import Button from "./Button";
 import Text from "./Text";
 import { ThemeContext } from "./ThemeProvider";
 
@@ -95,7 +94,7 @@ export function QuestionContentChunk({ focused, question, choices, colors }: Que
     return (
         <BaseContentChunk focused={focused}>
             <>
-                <Text style={{ fontSize: 30, color: theme.black, ...Styles.lightShadow }}>{question}</Text>
+                <Text style={{ fontSize: 30, color: colors.textColor, ...Styles.lightShadow }}>{question}</Text>
                 <View style={{ width: '100%', gap: 10 }}>
                     {choices.map((choice, index) => {
                         return (
