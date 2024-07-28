@@ -1,38 +1,19 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Dimensions, FlatList, Pressable, View } from 'react-native';
-import { DateCard, DateCardRef, ListFooterComponent, ListHeaderComponent, Text, ThemeContext } from '@/components/2d';
+import { BaseCardAttributes, ScrollableCards, ThemeContext } from '@/components/2d';
+import React, { useContext, useState } from 'react';
+import { Dimensions } from 'react-native';
 
-import { Styles } from '@/styles';
-import { getTodayDate, stringToDate } from '@/utils/date';
-import { Content, ContentColors, useFirebase } from '@/utils/FirebaseProvider';
-import useBounceAnimation from '@/utils/useBounceAnimation';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { animated, config } from '@react-spring/native';
-import * as Haptics from 'expo-haptics';
-import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import OnboardingCard, { OnboardingCardRef } from '@/components/2d/OnboardingCard';
-import OnboardingHeaderComponent from '@/components/2d/OnboardingHeaderComponent';
+import OnboardingCard from '@/components/2d/OnboardingCard';
 import OnboardingFooterComponent from '@/components/2d/OnboardingFooterComponent';
+import OnboardingHeaderComponent from '@/components/2d/OnboardingHeaderComponent';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 
-const ReactSpringAnimatedView = animated(View);
-
-interface OnboardingCardAttributes {
-    ref: OnboardingCardRef | null;
-    colors: ContentColors;
-    index: number;
-}
+interface OnboardingCardAttributes extends BaseCardAttributes { }
 
 export default function OnboardingScreen({ navigation, ...props }: { navigation: StackNavigationProp<any, any> } & any) {
     const theme = useContext(ThemeContext);
-    const firebase = useFirebase();
-    const today = getTodayDate();
     const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
 
-    const [focusedIndex, setFocusedIndex] = useState<number | null>(0);
     const [cards, setCards] = useState<OnboardingCardAttributes[]>([
         {
             ref: null, colors: {
@@ -87,108 +68,29 @@ export default function OnboardingScreen({ navigation, ...props }: { navigation:
                 backgroundColor: "#14082f",
                 textColor: "#ffffff"
             }, index: 6
-        },
-    ]);
-    const outerBackgroundColor = useSharedValue(theme.background);
-
-    // Change background color when theme changes
-    useEffect(() => {
-        outerBackgroundColor.value = withTiming(theme.background, { duration: 200 });
-    }, [theme]);
-
-    const flatListRef = useRef<FlatList<OnboardingCardAttributes>>(null);
-
-    const paddingAboveHeader = 0;
-    const headerHeight = Dimensions.get("window").height * 1;
-
-    const padding = 30;
-    const boxWidth = Dimensions.get("window").width - padding * 2;
-    const boxHeight = boxWidth * 1.6;
-
-    const footerHeight = Dimensions.get("window").height * 0.8;
-
-    /**
-     * Update background and attributes when focused item changes
-     * Called when item comes into view
-     */
-    function focusItem(item: OnboardingCardAttributes | null) {
-        if (item === null) {
-            setFocusedIndex(item);
-            outerBackgroundColor.value = withTiming(theme.background, { duration: 200 });
-        } else {
-            setFocusedIndex(item.index);
-            outerBackgroundColor.value = withTiming(item.colors.outerBackgroundColor, { duration: 200 });
         }
-    }
-
-    /**
-     * Scroll to card with index
-     */
-    async function scrollToItem(index: number) {
-        flatListRef.current?.scrollToIndex({ index, viewPosition: 0.5 });
-    }
+    ]);
 
     return (
-        <Animated.View style={{
-            flex: 1,
-            backgroundColor: outerBackgroundColor,
-            paddingHorizontal: padding,
-        }}>
-            <FlatList
-                ref={flatListRef}
-                renderItem={({ item }) => {
-                    return (
-                        <Pressable onPressIn={() => {
-                            item.ref?.onPressIn();
-                            if (focusedIndex !== item.index) scrollToItem(item.index);
-                        }} onPressOut={item.ref?.onPressOut}>
-                            <OnboardingCard
-                                ref={(ref: OnboardingCardRef) => { item.ref = ref }}
-                                focused={focusedIndex === item.index}
-                                colors={item.colors}
-                                style={{
-                                    height: boxHeight
-                                }}
-                                username={username}
-                                index={item.index}
-                            />
-                        </Pressable>
-                    )
-                }}
-                data={cards}
-                ListHeaderComponent={<OnboardingHeaderComponent height={headerHeight} setUsername={setUsername} />}
-                ListFooterComponent={<OnboardingFooterComponent height={footerHeight} />}
-                getItemLayout={(_, index) => {
-                    return {
-                        length: boxHeight + padding,
-                        offset: (boxHeight + padding) * index + (paddingAboveHeader + headerHeight + padding),
-                        index
-                    }
-                }}
-                keyExtractor={(item) => item.index.toString()}
-                numColumns={1}
-                onViewableItemsChanged={({ viewableItems }) => {
-                    if (viewableItems.length === 0) {
-                        // focus header or footer or between items
-                        focusItem(null);
-                    } else {
-                        focusItem(viewableItems[0].item);
-                    }
-                }}
-                viewabilityConfig={{
-                    itemVisiblePercentThreshold: 75,  // how much of the item is visible
-                    waitForInteraction: false
-                }}
-                contentContainerStyle={{ gap: padding, paddingTop: paddingAboveHeader }}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                decelerationRate='fast'
-                snapToOffsets={cards.map((_, i) =>
-                    (boxHeight + padding) * i
-                    + paddingAboveHeader + headerHeight + padding
-                    - Dimensions.get("window").height * 0.5 + boxHeight / 2
-                )}
-            />
-        </Animated.View>
+        <ScrollableCards<OnboardingCardAttributes>
+            data={cards}
+            scrollable={username.length > 0}
+            header={<OnboardingHeaderComponent setUsername={setUsername} height={undefined as never} arrowDown={undefined as never}/>}
+            headerArrowDown={username.length > 0}
+            renderItem={({ item }) =>
+                <OnboardingCard
+                    username={username}
+
+                    focused={undefined as never} colors={undefined as never} style={undefined as never} index={undefined as never}
+                />
+            }
+            footer={<OnboardingFooterComponent username={username} height={undefined as never} />}
+            paddingAboveHeader={0}
+            headerHeight={Dimensions.get("window").height * 1}
+            padding={30}
+            boxHeight={(Dimensions.get("window").width - 30 * 2) * 1.6}
+            footerHeight={Dimensions.get("window").height * 0.8}
+            initialBackgroundColor={theme.background}
+        />
     );
 }
