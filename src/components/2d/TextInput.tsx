@@ -34,7 +34,7 @@ export default function TextInput({ placeholder, onChangeText, disabled = false,
                 // borderColor: theme.runwayBorderColor,
                 backgroundColor: theme.runwayOuterBackgroundColor,
                 padding: 10,
-                fontSize: 18,
+                fontSize: 20,
                 color: theme.runwayTextColor,
                 ...props.style
             }}

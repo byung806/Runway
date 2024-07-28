@@ -1,18 +1,19 @@
-import { Button, Button3D, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '@/components/2d';
+import { Button, Logo, Text, TextInput, ThemeContext } from '@/components/2d';
 import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Styles } from '@/styles';
 import { FirebaseError, useFirebase } from '@/utils/FirebaseProvider';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { callWithTimeout } from '@/utils/utils';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-export default function SignupScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
+export default function SignupScreen({ navigation, initialUsername }: { navigation: StackNavigationProp<any, any>, initialUsername?: string }) {
+    console.log(initialUsername);
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
 
-    const [username, setUsername] = useState('');
+    const [username, setUsername] = useState(initialUsername || '');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
 
@@ -69,40 +70,61 @@ export default function SignupScreen({ navigation }: { navigation: StackNavigati
         setLoading(false);
     }, [firebase.userData]);
 
-    // TODO: combine signup & login - enter username => check if user exists => if so, password to login, else, password to signup
     return (
         <View style={{ flex: 1, backgroundColor: theme.background }}>
             <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>
                 <SafeAreaView style={{ ...Styles.centeringContainer, flex: 1 }}>
-                    <OnboardingHeader
-                        backgroundColor={theme.background}
-                        prevButtonCallback={() => navigation.goBack()}
-                    />
-
-                    <View style={{ ...Styles.centeringContainer, margin: 50, flex: 1 }}>
+                    {/* <View style={{ ...Styles.centeringContainer, margin: 50, flex: 1 }}>
                         <Logo />
                         <Text style={Styles.title}>Sign Up!</Text>
                         <Text style={{ ...Styles.subtitle, color: theme.subtext }}>Create an account to start your flight.</Text>
-                    </View>
+                    </View> */}
 
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                        style={{ flex: 0, width: '90%' }}
+                        style={{ width: '100%', gap: 10 }}
                     >
-                        <TextInput placeholder={'Username'} onChangeText={setUsername} style={{ marginBottom: 10 }} disabled={loading} />
-                        <TextInput placeholder={'Email'} onChangeText={setEmail} email style={{ marginBottom: 10 }} disabled={loading} />
-                        <TextInput placeholder={'Password'} onChangeText={setPassword} password style={{ marginBottom: 10 }} disabled={loading} />
+                        <TextInput
+                            placeholder={'Username'}
+                            onChangeText={setUsername}
+                            style={{ width: '80%', height: 50 }}
+                            disabled={loading}
+                        />
+                        <TextInput
+                            placeholder={'Email'}
+                            onChangeText={setEmail}
+                            email
+                            style={{ width: '80%', height: 50 }}
+                            disabled={loading}
+                        />
+                        <TextInput
+                            placeholder={'Password'}
+                            onChangeText={setPassword}
+                            password
+                            style={{ width: '80%', height: 50 }}
+                            disabled={loading}
+                        />
                         <Button
-                            title={'SIGN UP'}
+                            title={'Take Off!'}
                             disabled={loading}
                             onPress={signupCallback}
                         />
                         {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5 }}>{errorMessage}</Text> : null}
                     </KeyboardAvoidingView>
 
-                    <Text style={{ ...Styles.subtitle, textAlign: 'center', marginVertical: 10 }}>OR</Text>
-
-                    <Button title={'I HAVE AN ACCOUNT'} filled={false} disabled={loading} onPress={() => navigation.navigate('login')} style={{ marginBottom: 20 }} />
+                    <SafeAreaView style={{
+                        position: 'absolute',
+                        bottom: 0,
+                    }} edges={['bottom']}>
+                        <Button
+                            title={'Have an account?'}
+                            filled={false}
+                            disabled={loading}
+                            textColor={theme.text}
+                            backgroundColor='transparent'
+                            onPress={() => navigation.navigate('login')}
+                        />
+                    </SafeAreaView>
                 </SafeAreaView>
             </TouchableOpacity>
         </View>

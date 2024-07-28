@@ -11,7 +11,7 @@ export default function Text({ children, ...props }: TextProps & any) {
     
     return (
         <TextNative {...props} style={{ fontFamily: 'Inter_800ExtraBold', color: theme.text, ...props.style }}>
-            {children?.toString().replace('\\n', '\n')}
+            {children}
         </TextNative>
     );
 }

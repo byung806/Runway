@@ -1,17 +1,14 @@
-import { Styles } from '@/styles';
 import { dayIsYesterday, getTodayDate, sameDay, stringToDate } from '@/utils/date';
-import { Content, ContentColors, useFirebase } from '@/utils/FirebaseProvider';
-import useBounceAnimation from '@/utils/useBounceAnimation';
-import { animated, config } from '@react-spring/native';
-import * as Haptics from 'expo-haptics';
+import { Content, ContentColors } from '@/utils/FirebaseProvider';
+import { animated } from '@react-spring/native';
 import { forwardRef, memo, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Modal, Pressable, View } from 'react-native';
+import { Modal, View } from 'react-native';
 import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import BorderedCard, { BorderedCardRef } from './BorderedCard';
+import Button from './Button';
+import ContentModal from './ContentModal';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
-import ContentModal from './ContentModal';
-import { Button } from './Button';
-import BorderedCard, { BorderedCardRef } from './BorderedCard';
 
 
 interface DateCardProps {
@@ -28,8 +25,6 @@ export interface DateCardRef {
     onPressIn: () => void;
     onPressOut: () => void;
 }
-
-const ReactSpringAnimatedView = animated(View);
 
 const DateCard = forwardRef(({ focused, completed, date, content, colors, requestCompleteToday, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);

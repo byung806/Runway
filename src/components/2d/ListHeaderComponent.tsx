@@ -3,7 +3,7 @@ import { useFirebase } from "@/utils/FirebaseProvider";
 import { useNavigation } from "@react-navigation/native";
 import { useContext } from "react";
 import { View } from "react-native";
-import Button3D, { Button } from "./Button";
+import Button from "./Button";
 import Text from "./Text";
 import { ThemeContext } from "./ThemeProvider";
 
@@ -25,7 +25,6 @@ export default function ListHeaderComponent({ height, arrowDown }: { height: num
         const { success } = await firebase.addFriend(username);
     }
 
-    // TODO: better log out button
     async function logOut() {
         await firebase.logOut();
     }

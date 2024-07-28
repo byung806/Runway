@@ -1,15 +1,15 @@
 import React, { useContext, useRef, useState } from 'react';
-import { Dimensions, FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, View } from 'react-native';
 
+import { Styles } from '@/styles';
+import parseContent from '@/utils/ContentParser';
+import { getTodayDate } from '@/utils/date';
+import { Content, ContentColors } from '@/utils/FirebaseProvider';
+import Button from './Button';
+import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, TextContentChunk, TextContentChunkType } from './ContentChunk';
+import ScrollArrow from './ScrollArrow';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
-import { Styles } from '@/styles';
-import { Content, ContentColors, ContentQuestionChoice } from '@/utils/FirebaseProvider';
-import { Button } from './Button';
-import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, TextContentChunk, TextContentChunkType } from './ContentChunk';
-import parseContent from '@/utils/ContentParser';
-import TodayArrow from './TodayArrow';
-import { getTodayDate } from '@/utils/date';
 
 interface ContentModalProps {
     completed: boolean;
@@ -126,8 +126,7 @@ function ContentHeaderComponent({ content, colors, closeModal, scrollDownPress }
                 position: 'absolute',
                 bottom: 50
             }}>
-                {/* TODO: rename TodayArrow to ScrollArrow and replace focusedDate */}
-                <TodayArrow side='top' focusedDate={null} onPress={scrollDownPress} />
+                <ScrollArrow type='down' visible={true} onPress={scrollDownPress} />
             </View>
         </View>
     )

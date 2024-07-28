@@ -21,7 +21,7 @@ interface Button3DProps {
     filled?: boolean;
 }
 
-export default function Button3D({ title, onPress, disabled = false, filled = true, ...props }: Button3DProps & any) {
+function Button3D({ title, onPress, disabled = false, filled = true, ...props }: Button3DProps & any) {
     const theme = useContext(ThemeContext);
 
     // the number that's going to be animated
@@ -118,7 +118,7 @@ interface ButtonProps {
 
 const ReactSpringAnimatedView = animated(View);
 
-export function Button({ title, onPress, backgroundColor, textColor, disabled = false, reanimatedStyle, style }: ButtonProps) {
+export default function Button({ title, onPress, backgroundColor, textColor, disabled = false, reanimatedStyle, style }: ButtonProps) {
     const theme = useContext(ThemeContext);
     
     const { scale: buttonScale, onPressIn: buttonOnPressIn, onPressOut: buttonOnPressOut } = useBounceAnimation({
@@ -150,7 +150,7 @@ export function Button({ title, onPress, backgroundColor, textColor, disabled = 
                     onPressOut={disabled ? () => {} : buttonOnPressOut}
                     style={{ ...Styles.centeringContainer, padding: 10, paddingHorizontal: 20 }}
                 >
-                    <Text style={{ color: disabled ? '#aaaaaa' : (textColor || theme.runwayTextColor), fontSize: 18 }}>{title}</Text>
+                    <Text style={{ color: disabled ? '#aaaaaa' : (textColor || theme.runwayTextColor), fontSize: 20 }}>{title}</Text>
                 </Pressable>
             </Animated.View>
         </ReactSpringAnimatedView>

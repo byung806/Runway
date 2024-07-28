@@ -1,12 +1,12 @@
+import { Button, Text, TextInput, ThemeContext } from '@/components/2d';
 import { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Logo, OnboardingHeader, Text, TextInput, ThemeContext } from '@/components/2d';
 
 import { Styles } from '@/styles';
 import { FirebaseError, useFirebase } from '@/utils/FirebaseProvider';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { callWithTimeout } from '@/utils/utils';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 export default function LoginScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
@@ -60,7 +60,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
     }, [firebase.userData]);
 
     return (
-        <View style={{ flex: 1, backgroundColor: theme.runwayBackgroundColor, borderLeftWidth: 6, borderRightWidth: 6, borderColor: theme.runwayBorderColor }}>
+        <View style={{ flex: 1, backgroundColor: theme.background }}>
             <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>
                 <SafeAreaView style={{ ...Styles.centeringContainer, flex: 1 }}>
 
@@ -75,28 +75,27 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                         style={{ width: '100%', gap: 10 }}
                     >
                         <TextInput
-                            placeholder={'username'}
                             onChangeText={setUsername}
-                            style={{ width: '80%' }}
-                            disabled={loading}
+                            placeholder={'Username'}
+                            style={{ width: '80%', height: 50 }}
                         />
                         <TextInput
-                            placeholder={'password'}
+                            placeholder={'Password'}
                             password={true}
                             onChangeText={setPassword}
-                            style={{ width: '80%' }}
+                            style={{ width: '80%', height: 50 }}
                             disabled={loading}
                         />
                         <Button
                             title={'Log In!'}
                             disabled={loading}
                             onPress={loginCallback}
-                            style={{ width: '80%' }}
+                            style={{ width: '40%', height: 50, marginTop: 10 }}
                         />
-                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.runwayTextColor }}>{errorMessage}</Text> : null}
+                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.text }}>{errorMessage}</Text> : null}
                     </KeyboardAvoidingView>
 
-                    <SafeAreaView style={{
+                    {/* <SafeAreaView style={{
                         position: 'absolute',
                         bottom: 0,
                     }} edges={['bottom']}>
@@ -104,10 +103,11 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                             title={'Don\'t have an account?'}
                             filled={false}
                             disabled={loading}
+                            textColor={theme.text}
                             backgroundColor='transparent'
                             onPress={() => navigation.navigate('signup')}
                         />
-                    </SafeAreaView>
+                    </SafeAreaView> */}
                 </SafeAreaView>
             </TouchableOpacity>
         </View>
