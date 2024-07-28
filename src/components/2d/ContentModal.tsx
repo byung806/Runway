@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
-import { Dimensions, FlatList, View } from 'react-native';
+import { Dimensions, FlatList, Modal, View } from 'react-native';
 
 import { Styles } from '@/styles';
 import parseContent from '@/utils/ContentParser';
@@ -12,19 +12,18 @@ import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
 
 interface ContentModalProps {
+    visible: boolean;
+    setVisible: (visible: boolean) => void;
     completed: boolean;
     date: string;
     content: Content;
     colors: ContentColors;
-    closeModal: () => void;
     requestCompleteToday: () => Promise<void>;
 }
 
 export type ContentChunk = TextContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionContentChunkType;
 
-export default function ContentModal({ completed, date, content, colors, closeModal, requestCompleteToday }: ContentModalProps) {
-    const theme = useContext(ThemeContext);
-
+export default function ContentModal({ visible, setVisible, completed, date, content, colors, requestCompleteToday }: ContentModalProps) {
     const [contentChunks, setContentChunks] = useState<ContentChunk[]>(
         parseContent(content)
     );
@@ -41,61 +40,63 @@ export default function ContentModal({ completed, date, content, colors, closeMo
         if (getTodayDate() === date) {
             await requestCompleteToday();
         }
-        closeModal();
+        setVisible(false);
     }
 
     return (
-        <View style={{
-            flex: 1,
-            ...Styles.centeringContainer,
-            borderColor: colors.borderColor,
-            borderLeftWidth: 6,
-            borderRightWidth: 6,
-            // borderWidth: 6,
-            // borderRadius: 42,
-            backgroundColor: colors.backgroundColor,
-        }}>
-            <FlatList
-                ref={flatListRef}
-                data={contentChunks}
-                renderItem={({ item, index }) => {
-                    const focused = focusedItems.includes(index);
-                    if (item.type === 'text') {
-                        return (
-                            <TextContentChunk focused={focused} text={item.text} colors={colors} />
-                        );
-                    } else if (item.type === 'paragraphSpacer') {
-                        return (
-                            <ParagraphSpacerContentChunk />
-                        );
-                    } else if (item.type === 'divider') {
-                        return (
-                            <DividerContentChunk />
-                        );
-                    } else if (item.type === 'question') {
-                        return (
-                            <QuestionContentChunk focused={focused} question={item.question} choices={item.choices} colors={colors} />
-                        )
-                    }
-                    return null;
-                }}
-                keyExtractor={(item, index) => index.toString()}
-                ListHeaderComponent={<ContentHeaderComponent content={content} colors={colors} closeModal={closeModal} scrollDownPress={() => { scrollToItem(0) }} />}
-                ListFooterComponent={<ContentFooterComponent colors={colors} finish={finish} />}
-                numColumns={1}
-                onViewableItemsChanged={({ viewableItems }) => {
-                    const focusedIndexes = viewableItems.map((item) => item.index).filter((index) => typeof index === 'number');
-                    setFocusedItems(focusedIndexes);
-                }}
-                viewabilityConfig={{
-                    itemVisiblePercentThreshold: 80,  // how much of the item is visible
-                    waitForInteraction: false
-                }}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                decelerationRate='normal'
-            />
-        </View>
+        <Modal visible={visible} animationType='slide'>
+            <View style={{
+                flex: 1,
+                ...Styles.centeringContainer,
+                borderColor: colors.borderColor,
+                borderLeftWidth: 6,
+                borderRightWidth: 6,
+                // borderWidth: 6,
+                // borderRadius: 42,
+                backgroundColor: colors.backgroundColor,
+            }}>
+                <FlatList
+                    ref={flatListRef}
+                    data={contentChunks}
+                    renderItem={({ item, index }) => {
+                        const focused = focusedItems.includes(index);
+                        if (item.type === 'text') {
+                            return (
+                                <TextContentChunk focused={focused} text={item.text} colors={colors} />
+                            );
+                        } else if (item.type === 'paragraphSpacer') {
+                            return (
+                                <ParagraphSpacerContentChunk />
+                            );
+                        } else if (item.type === 'divider') {
+                            return (
+                                <DividerContentChunk />
+                            );
+                        } else if (item.type === 'question') {
+                            return (
+                                <QuestionContentChunk focused={focused} question={item.question} choices={item.choices} colors={colors} />
+                            )
+                        }
+                        return null;
+                    }}
+                    keyExtractor={(item, index) => index.toString()}
+                    ListHeaderComponent={<ContentHeaderComponent content={content} colors={colors} closeModal={() => {setVisible(false)}} scrollDownPress={() => { scrollToItem(0) }} />}
+                    ListFooterComponent={<ContentFooterComponent colors={colors} finish={finish} />}
+                    numColumns={1}
+                    onViewableItemsChanged={({ viewableItems }) => {
+                        const focusedIndexes = viewableItems.map((item) => item.index).filter((index) => typeof index === 'number');
+                        setFocusedItems(focusedIndexes);
+                    }}
+                    viewabilityConfig={{
+                        itemVisiblePercentThreshold: 80,  // how much of the item is visible
+                        waitForInteraction: false
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    decelerationRate='normal'
+                />
+            </View>
+        </Modal>
     )
 }
 
@@ -157,10 +158,6 @@ function ContentFooterComponent({ colors, finish }: { colors: ContentColors, fin
                 textColor={theme.white}
                 onPress={onPress}
                 disabled={disabled}
-                // reanimatedStyle={{
-                //     opacity: cardContentOpacity,
-                //     transform: [{ translateY: goTransformY }]
-                // }}
                 style={{
                     width: '80%',
                     height: 50,

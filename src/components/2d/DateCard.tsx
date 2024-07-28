@@ -43,6 +43,7 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, reques
     const goTransformY = useSharedValue(initialTransformY);
 
     const cardContentOpacity = useSharedValue(0);
+    // TODO: gray out if completed
 
     useEffect(() => {
         if (focused) {
@@ -138,9 +139,15 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, reques
 
 
                 {/* content modal */}
-                <Modal visible={contentModalVisible} animationType='slide'>
-                    <ContentModal date={date} completed={completed} content={content} colors={colors} closeModal={() => setContentModalVisible(false)} requestCompleteToday={requestCompleteToday} />
-                </Modal>
+                <ContentModal
+                    visible={contentModalVisible}
+                    setVisible={setContentModalVisible}
+                    date={date}
+                    completed={completed}
+                    content={content}
+                    colors={colors}
+                    requestCompleteToday={requestCompleteToday}
+                />
             </>
         </BorderedCard>
     );
