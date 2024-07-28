@@ -9,6 +9,7 @@ import { callWithTimeout } from '@/utils/utils';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 export default function LoginScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
+    // TODO: add back button to start screen
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
 
@@ -63,12 +64,6 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
         <View style={{ flex: 1, backgroundColor: theme.background }}>
             <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>
                 <SafeAreaView style={{ ...Styles.centeringContainer, flex: 1 }}>
-
-                    {/* <View style={{ ...Styles.centeringContainer, margin: 50, flex: 1 }}>
-                        <Logo />
-                        <Text style={Styles.title}>Welcome Back!</Text>
-                        <Text style={{ ...Styles.subtitle, color: theme.subtext }}>Log in to continue your flight.</Text>
-                    </View> */}
 
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
