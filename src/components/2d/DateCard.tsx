@@ -1,8 +1,7 @@
 import { dayIsYesterday, getTodayDate, sameDay, stringToDate } from '@/utils/date';
 import { Content, ContentColors } from '@/utils/FirebaseProvider';
-import { animated } from '@react-spring/native';
 import { forwardRef, memo, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Modal, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import BorderedCard, { BorderedCardRef } from './BorderedCard';
 import Button from './Button';
@@ -13,11 +12,11 @@ import { ThemeContext } from './ThemeProvider';
 
 interface DateCardProps {
     focused: boolean;
-    completed: boolean;
+    cardCompleted: boolean;
     date: string;
     content: Content;
     colors: ContentColors;
-    requestCompleteToday: () => Promise<void>;
+    requestCompleteDate: (date?: string) => Promise<void>;
     style: any;
 }
 
@@ -26,7 +25,7 @@ export interface DateCardRef {
     onPressOut: () => void;
 }
 
-const DateCard = forwardRef(({ focused, completed, date, content, colors, requestCompleteToday, style }: DateCardProps, ref) => {
+const DateCard = forwardRef(({ focused, cardCompleted, date, content, colors, requestCompleteDate, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);
 
     const borderedCardRef = useRef<BorderedCardRef>(null);
@@ -108,6 +107,21 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, reques
                     }}>{extra}</Text>
                 </View>
 
+                {cardCompleted &&
+                    <View style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        marginBottom: 20,
+                        width: '100%',
+                    }}>
+                        <Text style={{
+                            color: colors.textColor,
+                            fontSize: 20,
+                            textAlign: 'center',
+                        }}>Card Completed!</Text>
+                    </View>
+                }
+
                 {/* title */}
                 <Animated.View style={{
                     padding: 30,
@@ -143,10 +157,10 @@ const DateCard = forwardRef(({ focused, completed, date, content, colors, reques
                     visible={contentModalVisible}
                     setVisible={setContentModalVisible}
                     date={date}
-                    completed={completed}
+                    cardCompleted={cardCompleted}
                     content={content}
                     colors={colors}
-                    requestCompleteToday={requestCompleteToday}
+                    requestCompleteDate={requestCompleteDate}
                 />
             </>
         </BorderedCard>

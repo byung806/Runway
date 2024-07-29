@@ -3,7 +3,6 @@ import { Dimensions, FlatList, Modal, View } from 'react-native';
 
 import { Styles } from '@/styles';
 import parseContent from '@/utils/ContentParser';
-import { getTodayDate } from '@/utils/date';
 import { Content, ContentColors } from '@/utils/FirebaseProvider';
 import Button from './Button';
 import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, TextContentChunk, TextContentChunkType } from './ContentChunk';
@@ -14,16 +13,16 @@ import { ThemeContext } from './ThemeProvider';
 interface ContentModalProps {
     visible: boolean;
     setVisible: (visible: boolean) => void;
-    completed: boolean;
+    cardCompleted: boolean;
     date: string;
     content: Content;
     colors: ContentColors;
-    requestCompleteToday: () => Promise<void>;
+    requestCompleteDate: (date?: string) => Promise<void>;
 }
 
 export type ContentChunk = TextContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionContentChunkType;
 
-export default function ContentModal({ visible, setVisible, completed, date, content, colors, requestCompleteToday }: ContentModalProps) {
+export default function ContentModal({ visible, setVisible, cardCompleted, date, content, colors, requestCompleteDate }: ContentModalProps) {
     const [contentChunks, setContentChunks] = useState<ContentChunk[]>(
         parseContent(content)
     );
@@ -37,8 +36,8 @@ export default function ContentModal({ visible, setVisible, completed, date, con
     }
 
     async function finish() {
-        if (getTodayDate() === date) {
-            await requestCompleteToday();
+        if (!cardCompleted) {  // don't need this since requestCompleteDate in AppScreen already checks if date is completed, but just in case
+            await requestCompleteDate(date);
         }
         setVisible(false);
     }
@@ -80,8 +79,8 @@ export default function ContentModal({ visible, setVisible, completed, date, con
                         return null;
                     }}
                     keyExtractor={(item, index) => index.toString()}
-                    ListHeaderComponent={<ContentHeaderComponent content={content} colors={colors} closeModal={() => {setVisible(false)}} scrollDownPress={() => { scrollToItem(0) }} />}
-                    ListFooterComponent={<ContentFooterComponent colors={colors} finish={finish} />}
+                    ListHeaderComponent={<ContentHeaderComponent content={content} colors={colors} closeModal={() => { setVisible(false) }} scrollDownPress={() => { scrollToItem(0) }} />}
+                    ListFooterComponent={<ContentFooterComponent colors={colors} cardCompleted={cardCompleted} finish={finish} />}
                     numColumns={1}
                     onViewableItemsChanged={({ viewableItems }) => {
                         const focusedIndexes = viewableItems.map((item) => item.index).filter((index) => typeof index === 'number');
@@ -133,7 +132,7 @@ function ContentHeaderComponent({ content, colors, closeModal, scrollDownPress }
     )
 }
 
-function ContentFooterComponent({ colors, finish }: { colors: ContentColors, finish: () => Promise<void> }) {
+function ContentFooterComponent({ colors, cardCompleted, finish }: { colors: ContentColors, cardCompleted: boolean, finish: () => Promise<void> }) {
     const height = Dimensions.get('window').height;
     const theme = useContext(ThemeContext);
 
@@ -163,6 +162,9 @@ function ContentFooterComponent({ colors, finish }: { colors: ContentColors, fin
                     height: 50,
                 }}
             />
+            {cardCompleted &&
+                <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>You've already completed this card!</Text>
+            }
         </View>
     )
 }
