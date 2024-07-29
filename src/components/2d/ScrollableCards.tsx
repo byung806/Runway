@@ -159,7 +159,7 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                     - Dimensions.get("window").height * 0.5 + boxHeight / 2
                 )}
                 onEndReached={onEndReached}
-                onEndReachedThreshold={0.9}
+                onEndReachedThreshold={2}
             />
 
             {floatingArrowUp ? (
