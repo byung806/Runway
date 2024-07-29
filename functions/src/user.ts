@@ -59,13 +59,15 @@ export const checkUncompletedChallengeToday = async (request: CallableRequest): 
  */
 export const getUserData = async (request: CallableRequest): Promise<FirebaseFirestore.DocumentData | undefined> => {
     if (!request.auth) return;
-    // TODO: limit updates per user to once per day
-    await updateStreak(request.auth.uid, false);
-
+    
     const userData = await getDbDoc('users', request.auth.uid).get();
     if (!userData.exists) {
         return;
     }
+
+    // reset streak if needed
+    await updateStreak(request.auth.uid, userData);
+
     return userData.data();
 }
 

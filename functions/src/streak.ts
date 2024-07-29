@@ -1,6 +1,7 @@
 import { CallableRequest } from "firebase-functions/v2/https";
 import { getDbDoc } from "./utils";
 import { updateLeaderboard } from "./leaderboard";
+import { pointsToAddForPastContent, pointsToAddForToday } from "./points";
 
 /**
  * Converts a Date object to a string in the format 'YYYY-MM-DD'
@@ -23,8 +24,8 @@ function stringToDate(date: string): Date {
 function whatToDoWithStreak(currentDate: string, lastLoggedDate: string | null) {
     if (lastLoggedDate === null) {
         return {
-            canIncrement: true,
-            shouldReset: false
+            canIncrementStreak: true,
+            shouldResetStreak: false
         };
     }
     const diff = Math.abs(stringToDate(currentDate).valueOf() - stringToDate(lastLoggedDate).valueOf());
@@ -32,100 +33,110 @@ function whatToDoWithStreak(currentDate: string, lastLoggedDate: string | null) 
 
     if (diffDays <= 0) {
         return {
-            canIncrement: false,
-            shouldReset: false
+            canIncrementStreak: false,
+            shouldResetStreak: false
         };
     }
     if (diffDays === 1) {
         return {
-            canIncrement: true,
-            shouldReset: false
+            canIncrementStreak: true,
+            shouldResetStreak: false
         };
     }
     return {
-        canIncrement: true,
-        shouldReset: true
+        canIncrementStreak: true,
+        shouldResetStreak: true
     };
 }
 
 /**
- * Updates the streak and points
- * Resets the streak to 0 if the user misses a day
- * 
- * @param uid the user's uid
- * @param attemptIncrement whether to attempt to increment the streak
+ * internal function - not callable directly from the client
+ * Ensures streak is reset if needed, and returns whether the streak can be incremented for today
  */
-export const updateStreak = async (uid: string, attemptIncrement: boolean): Promise<{ dataChanged: boolean }> => {
-    // console.log('from streak.ts:  updateStreak:  attemptIncrement:', attemptIncrement)
-    let dataChanged = false;
-
-    const userData = await getDbDoc('users', uid).get();
-    if (!userData.exists) {
-        return { dataChanged };
-    }
+export const updateStreak = async (uid: string, userData: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>): Promise<{ canIncrementStreak: boolean, streakReset: boolean }> => {
     const pointDays = userData.get("point_days");
-
-    // console.log('from streak.ts:  updateStreak:  pointDays:', pointDays)
-
-    const today = dateToString(new Date());
     let lastLoggedDate = null;
     if (pointDays.length !== 0) {
         lastLoggedDate = Object.keys(pointDays)
             .sort((a, b) => stringToDate(a).valueOf() - stringToDate(b).valueOf())
             .reverse()[0];
     }
-
-    const { canIncrement, shouldReset } = whatToDoWithStreak(today, lastLoggedDate);
-
-    if (shouldReset) {
-        // console.log('from streak.ts:  updateStreak:  reset streak!!!')
-        if (userData.get('streak') !== 0) {
-            await getDbDoc('users', uid).update({
-                streak: 0,
-            });
-            dataChanged = true;
-
-            await updateLeaderboard(userData.get('username'), userData.get('points'), 0);
-        }
-    }
-
-    if (canIncrement && attemptIncrement) {
-        // console.log('from streak.ts:  updateStreak:  incremented streak!!!!')
-        // TODO: vary by streak and day
-        const pointsToday = 500;
-
-        const updatedPointDays = {
-            ...pointDays,
-            [today]: pointsToday
-        };
-
-        const updatedStreak = shouldReset ? 1 : userData.get("streak") + 1;
-        const updatedPoints = userData.get("points") + pointsToday;
-
+    const today = dateToString(new Date());
+    const { canIncrementStreak, shouldResetStreak } = whatToDoWithStreak(today, lastLoggedDate);
+    if (shouldResetStreak) {
         await getDbDoc('users', uid).update({
-            streak: shouldReset ? 1 : userData.get("streak") + 1,
-            points: userData.get("points") + pointsToday,
-            point_days: updatedPointDays,
+            streak: 0,
         });
-
-        dataChanged = true;
-
-        await updateLeaderboard(userData.get('username'), updatedPoints, updatedStreak);
+        return { canIncrementStreak, streakReset: true };
     }
-
-    // console.log('from streak.ts:  updateStreak:  dataChanged:', dataChanged)
-    return { dataChanged };
+    return { canIncrementStreak, streakReset: false };
 }
 
 /**
- * Attempts to increment the streak and update the points.
- * Fails if the specific user has already completed the day's challenge and it has been logged.
- * 
- * @param request the request object
+ * Attempts to update the streak and points when a user completes a challenge with a specific date
+ * Called from the client as `requestCompleteDate`
  */
-export const attemptIncrementStreak = async (request: CallableRequest): Promise<{ dataChanged: boolean }> => {
-    if (!request.auth) return { dataChanged: false };
-    // TODO: a little wasteful getting uid and then requesting user data again when it's here
-    const { dataChanged } = await updateStreak(request.auth.uid, true);
-    return { dataChanged };
+export const requestCompleteDate = async (request: CallableRequest): Promise<{ success: boolean }> => {
+    if (!request.auth) return { success: false };
+
+    const userData = await getDbDoc('users', request.auth.uid).get();
+    if (!userData.exists) {
+        return { success: false };
+    }
+
+    const today = dateToString(new Date());
+
+    if (!request.data.date || request.data.date === today) {
+        // requesting for today, so streak should be considered in points calculation
+
+        // verify streak is reset to 0 if needed
+        const { canIncrementStreak, streakReset } = await updateStreak(request.auth.uid, userData);
+
+        const streak = streakReset ? 0 : userData.get('streak');
+        const pointsToAdd = pointsToAddForToday(streak);
+
+
+        // update streak and points
+        if (canIncrementStreak) {
+            const newStreak = streak + 1;
+            const newPoints = userData.get("points") + pointsToAdd;
+            await getDbDoc('users', request.auth.uid).update({
+                streak: newStreak,
+                points: newPoints,
+                point_days: {
+                    ...userData.get("point_days"),
+                    [today]: pointsToAdd
+                }
+            });
+
+            await updateLeaderboard(userData.get('username'), newPoints, newStreak);
+        }
+    } else {
+        // completing a challenge from a previous day, so streak should not be considered in points calculation
+        // verify date is valid
+        const dateObject = stringToDate(request.data.date);
+        if (dateObject.toString() === 'Invalid Date') {
+            return { success: false };
+        }
+        const dateToAttemptAdd = dateToString(dateObject);
+
+        const pointsToAdd = pointsToAddForPastContent(dateToAttemptAdd);
+
+        if (dateToAttemptAdd in userData.get('point_days')) {
+            return { success: false };
+        }
+
+        const newPoints = userData.get("points") + pointsToAdd;
+        await getDbDoc('users', request.auth.uid).update({
+            points: userData.get("points") + pointsToAdd,
+            point_days: {
+                ...userData.get('point_days'),
+                [dateToAttemptAdd]: pointsToAdd
+            }
+        });
+
+        await updateLeaderboard(userData.get('username'), newPoints, userData.get('streak'));
+    }
+
+    return { success: true };
 }
