@@ -70,7 +70,7 @@ interface FirebaseContextType {
     checkUncompletedChallengeToday: () => Promise<boolean>;
     getUserData: () => Promise<void>;
     getContent: (date: string) => Promise<{ content: Content, colors: ContentColors } | null>;
-    requestCompleteToday: () => Promise<{ dataChanged: boolean }>;
+    requestCompleteDate: (date?: string) => Promise<{ success: boolean }>;
     addFriend: (friend: string) => Promise<{ success: boolean }>;
     getLeaderboard: (type: LeaderboardType) => Promise<void>;
 }
@@ -200,7 +200,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     // TODO: client could request content for any date, but server should only allow today and previous days
     async function getContent(date: string): Promise<{ content: Content, colors: ContentColors } | null> {
         try {
-            console.log('DATABASE CALL: get content');
+            console.log('DATABASE CALL: get content for', date);
             const doc = firestore().collection('content').doc(date)
             const data = await doc.get();
             if (data.exists) {
@@ -221,11 +221,14 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
      * Requests to the server to increment the streak and points for the logged in user
      * Fails if the user has already completed the day's challenge and it has been logged
      */
-    async function requestCompleteToday(): Promise<{ dataChanged: boolean }> {
-        console.log('DATABASE CALL: request complete today');
+    async function requestCompleteDate(date?: string): Promise<{ success: boolean }> {
+        console.log('DATABASE CALL: request complete date', date);
         const data = await functions()
-            .httpsCallable('requestCompleteToday')() as FirebaseFunctionsTypes.HttpsCallableResult<{ dataChanged: boolean }>;
-        return data.data as { dataChanged: boolean };
+            .httpsCallable('requestCompleteDate')({
+                date: date,
+            }) as FirebaseFunctionsTypes.HttpsCallableResult<{ success: boolean }>;
+        console.log('request complete date result', data.data);
+        return data.data as { success: boolean };
     }
 
     /**
@@ -284,7 +287,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             checkUncompletedChallengeToday,
             getUserData,
             getContent,
-            requestCompleteToday,
+            requestCompleteDate,
             addFriend,
             getLeaderboard,
         }}>

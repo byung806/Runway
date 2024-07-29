@@ -38,14 +38,16 @@ export default function parseContent(content: Content): ContentChunk[] {
 
     // Questions
     const questions = content.questions;
-    questions.forEach((question) => {
-        chunks.push({
-            focused: false,
-            type: 'question',
-            question: question.question,
-            choices: question.choices
+    if (questions) {
+        questions.forEach((question) => {
+            chunks.push({
+                focused: false,
+                type: 'question',
+                question: question.question,
+                choices: question.choices
+            });
         });
-    });
+    }
 
     return chunks;
 }

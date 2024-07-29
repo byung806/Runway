@@ -21,11 +21,20 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
         navigation.navigate('streak');
     }
 
-    async function requestCompleteToday() {
-        const { dataChanged } = await firebase.requestCompleteToday();
-        console.log('dataChanged', dataChanged);
-        if (dataChanged) {
-            await triggerStreakScreen();
+    async function requestCompleteDate(date?: string) {
+        if (!date) date = today;
+        // if a card for a date is already completed, don't make request
+        if (firebase.userData?.point_days && date in firebase.userData.point_days) {
+            return;
+        }
+        // TODO: to make request complete faster for backfilled days - instead of waiting for the response, just update the points locally
+        // by checking if completed date is in point_days and close modal and update points immediately. then wait for this response and update user data if needed
+        const { success } = await firebase.requestCompleteDate(date);
+        console.log('dataChanged', success);
+        if (success) {
+            if (date === today) {
+                triggerStreakScreen();
+            }
             await firebase.getUserData();
             await firebase.getLeaderboard('global');
             // TODO: update friends leaderboard too if rank is ever implemented
@@ -96,10 +105,10 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                 floatingArrowUp
                 renderItem={({ item }) =>
                     <DateCard
-                        completed={false} // TODO: completed
+                        cardCompleted={item.date in (firebase.userData?.point_days ?? {})}
                         date={item.date}
                         content={item.content}
-                        requestCompleteToday={requestCompleteToday}
+                        requestCompleteDate={requestCompleteDate}
 
                         // for attributes that are injected by the ScrollableCards component (parent)
                         focused={undefined as never} colors={undefined as never} style={undefined as never}
