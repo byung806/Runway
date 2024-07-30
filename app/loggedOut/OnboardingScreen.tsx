@@ -15,15 +15,22 @@ interface OnboardingCardAttributes extends BaseCardAttributes { }
 export default function OnboardingScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
     const [username, setUsername] = useState('');
+    const defaultColors = {
+        outerBackgroundColor: theme.runwayOuterBackgroundColor,
+        borderColor: theme.runwayBorderColor,
+        backgroundColor: theme.runwayBackgroundColor,
+        textColor: theme.runwayTextColor
+    }
 
     const scrollableCardsRef = React.useRef<ScrollableCardsRef<OnboardingCardAttributes>>(null);
     const [cards, setCards] = useState<OnboardingCardAttributes[]>([
         {
             ref: null, colors: {
-                outerBackgroundColor: "#6b44b2",
-                borderColor: "#3f1d8a",
-                backgroundColor: "#a58aeb",
-                textColor: "#ffffff"
+                // outerBackgroundColor: "#6b44b2",
+                // borderColor: "#3f1d8a",
+                // backgroundColor: "#a58aeb",
+                // textColor: "#ffffff"
+                ...defaultColors
             }, index: 0
         }, {
             ref: null, colors: {
@@ -79,34 +86,38 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
         // },
         {
             ref: null, colors: {
-                outerBackgroundColor: "#5a3494",
-                borderColor: "#8e6cbf",
-                backgroundColor: "#2e1463",
-                textColor: "#ffffff"
+                // outerBackgroundColor: "#5a3494",
+                // borderColor: "#8e6cbf",
+                // backgroundColor: "#2e1463",
+                // textColor: "#ffffff"
+                ...defaultColors
             }, index: 2
         },
         {
             ref: null, colors: {
-                outerBackgroundColor: "#4a2583",
-                borderColor: "#6b4abf",
-                backgroundColor: "#1e0d4d",
-                textColor: "#ffffff"
+                // outerBackgroundColor: "#4a2583",
+                // borderColor: "#6b4abf",
+                // backgroundColor: "#1e0d4d",
+                // textColor: "#ffffff"
+                ...defaultColors
             }, index: 3
         },
         {
             ref: null, colors: {
-                outerBackgroundColor: "#3c2072",
-                borderColor: "#593d9e",
-                backgroundColor: "#190b3e",
-                textColor: "#ffffff"
+                // outerBackgroundColor: "#3c2072",
+                // borderColor: "#593d9e",
+                // backgroundColor: "#190b3e",
+                // textColor: "#ffffff"
+                ...defaultColors
             }, index: 4
         },
         {
             ref: null, colors: {
-                outerBackgroundColor: "#331a61",
-                borderColor: "#4d3585",
-                backgroundColor: "#14082f",
-                textColor: "#ffffff"
+                // outerBackgroundColor: "#331a61",
+                // borderColor: "#4d3585",
+                // backgroundColor: "#14082f",
+                // textColor: "#ffffff"
+                ...defaultColors
             }, index: 5
         }
     ]
@@ -141,12 +152,12 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
             <ScrollableCards<OnboardingCardAttributes>
                 ref={scrollableCardsRef}
                 data={cards}
-                scrollable={username.length > 0}
+                scrollable={username.length >= 3}
                 header={<OnboardingHeaderComponent setUsername={setUsername} height={undefined as never} arrowDown={undefined as never} />}
-                headerArrowDown={username.length > 0}
+                headerArrowDown={username.length >= 3}
                 renderItem={({ item }) =>
                     <OnboardingCard
-                        username={username} openOnboardingContentModal={openOnboardingContentModal} closeOnboardingContentModal={closeOnboardingContentModal}
+                        username={username} openOnboardingContentModal={openOnboardingContentModal}
 
                         focused={undefined as never} colors={undefined as never} style={undefined as never} index={undefined as never}
                     />

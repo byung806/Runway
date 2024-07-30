@@ -105,7 +105,7 @@ function ContentHeaderComponent({ content, colors, onboarding, closeModal, scrol
     const height = Dimensions.get('window').height;
 
     return (
-        <View style={{ height, ...Styles.centeringContainer, gap: 20 }}>
+        <View style={{ height, ...Styles.centeringContainer, padding: 20, gap: 20 }}>
             <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor }}>
                 {content.title}
             </Text>
@@ -150,7 +150,7 @@ function ContentFooterComponent({ colors, cardCompleted, onboarding, finish }: {
     }
 
     return (
-        <View style={{ height: height, ...Styles.centeringContainer, gap: 20 }}>
+        <View style={{ height: height, ...Styles.centeringContainer, padding: 20, gap: 20 }}>
             <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor }}>
                 { onboarding ? 'You\'re done! Let\'s see how many points you earned.' : 'You\'re all done!' }
             </Text>

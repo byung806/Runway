@@ -2,6 +2,7 @@ import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functions';
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
+import { delay } from './utils';
 
 const emailEnding = '@example.com';
 
@@ -84,6 +85,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     const [globalLeaderboard, setGlobalLeaderboard] = useState<LeaderboardData | null>(null);
     const [friendsLeaderboard, setFriendsLeaderboard] = useState<LeaderboardData | null>(null);
     const [initializing, setInitializing] = useState(true);
+    const [registeringUser, setRegisteringUser] = useState(false);
 
     var debounceTimeout: NodeJS.Timeout | null;
     const debounceTime = 200;  // ms
@@ -97,6 +99,11 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 
             if (authStateUser) {
                 await getUserData();
+                while (registeringUser) {
+                    await delay(300);
+                    console.log('waiting for registering user to finish');
+                    // in this loop when firebase auth user is registered but user data is not yet initialized
+                }
                 setInitializing(false);
                 await getLeaderboard('global');
                 await getLeaderboard('friends');
@@ -119,6 +126,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
      */
     async function registerUser(username: string, email: string, password: string): Promise<FirebaseError | null> {
         try {
+            setRegisteringUser(true);
             console.log('DATABASE CALL: create user');
             await auth().createUserWithEmailAndPassword(username + emailEnding, password);
 
@@ -129,6 +137,8 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                     email: email,
                     password: password,
                 });
+
+            setRegisteringUser(false);
         } catch (error) {
             console.log(error + ' from FirebaseProvider.tsx:  registerUser');
             return error as FirebaseError;

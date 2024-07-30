@@ -1,11 +1,13 @@
 import { ContentColors } from '@/utils/FirebaseProvider';
-import React, { forwardRef, memo, useContext, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, memo, useContext, useEffect, useImperativeHandle, useState } from 'react';
 import { Easing, View } from 'react-native';
 import AnimatedNumbers from 'react-native-animated-numbers';
 import BorderedCard, { BorderedCardRef } from './BorderedCard';
 import Button from './Button';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
+import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
+import { Styles } from '@/styles';
 
 
 interface OnboardingCardProps {
@@ -15,7 +17,6 @@ interface OnboardingCardProps {
     username: string;
     index: number;
     openOnboardingContentModal: () => void;
-    closeOnboardingContentModal: () => void;
 }
 
 export interface OnboardingCardRef {
@@ -23,7 +24,7 @@ export interface OnboardingCardRef {
     onPressOut: () => void;
 }
 
-const OnboardingCard = forwardRef(({ focused, colors, style, username, index, openOnboardingContentModal, closeOnboardingContentModal }: OnboardingCardProps, ref) => {
+const OnboardingCard = forwardRef(({ focused, colors, style, username, index, openOnboardingContentModal }: OnboardingCardProps, ref) => {
     const theme = useContext(ThemeContext);
 
     const borderedCardRef = React.useRef<BorderedCardRef>(null);
@@ -32,6 +33,17 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
         onPressIn: borderedCardRef.current?.onPressIn,
         onPressOut: borderedCardRef.current?.onPressOut,
     }));
+
+    const [points, setPoints] = useState(0);
+
+    const opacity = useSharedValue(0);
+    useEffect(() => {
+        if (focused) {
+            opacity.value = withTiming(1, { duration: 600 });
+        } else {
+            opacity.value = withTiming(0, { duration: 600 });
+        }
+    }, [focused]);
 
     let insides: JSX.Element = <></>;
     if (index === 0) {
@@ -66,6 +78,12 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
             </>
         )
     } else if (index === 2) {
+        useEffect(() => {
+            if (focused) {
+                setPoints(200);
+            }
+        }, [focused]);
+
         insides = (
             <>
                 <Text style={{
@@ -74,8 +92,8 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                     textAlign: 'center'
                 }}>You got</Text>
                 <AnimatedNumbers
-                    animateToNumber={200}
-                    animationDuration={200}
+                    animateToNumber={points}
+                    animationDuration={800}
                     fontStyle={{ color: theme.white, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
                     easing={Easing.out(Easing.cubic)}
                 />
@@ -96,7 +114,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                 }}>Answer questions correct in less tries to earn more points!</Text>
             </>
         )
-    }else if (index === 4) {
+    } else if (index === 4) {
         insides = (
             <>
                 <Text style={{
@@ -190,7 +208,9 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
 
     return (
         <BorderedCard ref={borderedCardRef} style={{ ...style, padding: 20 }} colors={colors}>
-            {insides}
+            <Animated.View style={{ width: '100%', ...Styles.centeringContainer, opacity }}>
+                {insides}
+            </Animated.View>
         </BorderedCard>
     );
 });
