@@ -150,7 +150,7 @@ export default function Button({ title, onPress, backgroundColor, textColor, dis
                     onPressOut={disabled ? () => {} : buttonOnPressOut}
                     style={{ ...Styles.centeringContainer, padding: 10, paddingHorizontal: 20 }}
                 >
-                    <Text style={{ color: disabled ? '#aaaaaa' : (textColor || theme.runwayTextColor), fontSize: 20 }}>{title}</Text>
+                    <Text style={{ color: disabled ? '#aaaaaa' : (textColor || theme.runwayTextColor), fontSize: 20, ...Styles.lightShadow }}>{title}</Text>
                 </Pressable>
             </Animated.View>
         </ReactSpringAnimatedView>

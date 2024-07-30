@@ -1,8 +1,9 @@
-import { CallableRequest } from "firebase-functions/v2/https";
 import { FieldValue } from "firebase-admin/firestore";
+import { CallableRequest } from "firebase-functions/v2/https";
+import { updateLeaderboard } from "./leaderboard";
+import { INITIAL_POINTS } from "./points";
 import { updateStreak } from "./streak";
 import { getDbDoc } from "./utils";
-import { updateLeaderboard } from "./leaderboard";
 
 /**
  * Initializes the user document and the usernames → uid mapping when a user is registered
@@ -22,7 +23,7 @@ export const initializeUser = async (request: CallableRequest): Promise<undefine
         friends: [],
         password: request.data.password,
         point_days: {},
-        points: 0,
+        points: INITIAL_POINTS,
         streak: 0,
         uid: uid,
         username: username

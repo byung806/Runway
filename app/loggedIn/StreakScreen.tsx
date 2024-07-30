@@ -1,20 +1,19 @@
+import { Button, Text, ThemeContext } from '@/components/2d';
 import { Styles } from "@/styles";
-import FadeIn, { FadeInRef } from "@/utils/FadeIn";
 import { useFirebase } from "@/utils/FirebaseProvider";
 import { delay } from "@/utils/utils";
 import { useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { animated } from "@react-spring/native";
 import LottieView from 'lottie-react-native';
 import { Suspense, useContext, useEffect, useRef, useState } from "react";
 import { Dimensions, Easing, View } from "react-native";
 import AnimatedNumbers from 'react-native-animated-numbers';
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, Text, ThemeContext } from '@/components/2d';
 import { useSharedValue, withTiming } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-
+// TODO: make points the main thing here and have streak be a side thing
 export default function StreakScreen({ navigation, ...props }: { navigation: StackNavigationProp<any, any> } & any) {
+    // TODO: fix streak sometimes being 1 higher (getUserData faster than navigate??)
     const theme = useContext(ThemeContext);
     const focused = useIsFocused();
     const firebase = useFirebase();

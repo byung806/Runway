@@ -9,11 +9,11 @@ import ScrollArrow from './ScrollArrow';
 interface ScrollableCardsProps<T> {
     data: T[],
     scrollable?: boolean,
-    header: JSX.Element,
+    header?: JSX.Element,
     headerArrowDown?: boolean,
     floatingArrowUp?: boolean,
     renderItem: ({ item }: { item: T }) => JSX.Element,
-    footer: JSX.Element,
+    footer?: JSX.Element,
     paddingAboveHeader: number,
     headerHeight: number,
     padding: number,
@@ -117,17 +117,18 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                     )
                 }}
                 data={data}
-                ListHeaderComponent={cloneElement(header, {
-                    height: headerHeight,
-                    arrowDown: headerArrowDown ? (
-                        <ScrollArrow
-                            type='down'
-                            visible={focusedIndex === null}
-                            onPress={() => { scrollToIndex(0); }}
-                        />
-                    ) : undefined
-                })}
-                ListFooterComponent={cloneElement(footer, { height: footerHeight })}
+                ListHeaderComponent={
+                    header && cloneElement(header, {
+                        height: headerHeight,
+                        arrowDown: headerArrowDown ? (
+                            <ScrollArrow
+                                type='down'
+                                visible={focusedIndex === null}
+                                onPress={() => { scrollToIndex(0); }}
+                            />
+                        ) : undefined
+                    })}
+                ListFooterComponent={footer && cloneElement(footer, { height: footerHeight })}
                 getItemLayout={(_, index) => {
                     return {
                         length: boxHeight + padding,
@@ -149,7 +150,7 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                     itemVisiblePercentThreshold: 75,  // how much of the item is visible
                     waitForInteraction: false
                 }}
-                contentContainerStyle={{ gap: padding, paddingTop: paddingAboveHeader }}
+                contentContainerStyle={{ gap: padding, paddingTop: paddingAboveHeader, paddingBottom: footer ? 0 : (Dimensions.get("window").height - boxHeight) / 2 }}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 decelerationRate='fast'
