@@ -101,7 +101,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                         arrowDown={undefined as never}
                     />
                 }
-                headerArrowDown
+                {...(cards.length !== 0 && {headerArrowDown: true})}
                 floatingArrowUp
                 renderItem={({ item }) =>
                     <DateCard
@@ -114,7 +114,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                         focused={undefined as never} colors={undefined as never} style={undefined as never}
                     />
                 }
-                footer={<ListFooterComponent height={undefined as never} />}
+                footer={cards.length !== 0 ? undefined : <ListFooterComponent height={undefined as never} />}
                 {...heights}
                 initialBackgroundColor={theme.runwayBackgroundColor}
                 onEndReached={addPreviousDay}
