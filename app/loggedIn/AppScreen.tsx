@@ -52,8 +52,6 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
     async function addPreviousDay() {
         if (currentlyAddingCard || allContentLoaded) return;
 
-        console.log('addPreviousDay');
-
         let newDate;
         if (cards.length === 0) {
             newDate = stringToDate(today);

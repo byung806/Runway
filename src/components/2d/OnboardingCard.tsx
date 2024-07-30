@@ -128,7 +128,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                 }}>
                     <Text style={{ flex: 1, color: '#FFD700', fontSize: 20 }}>1</Text>
                     <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginLeft: -20 }}>{username}</Text>
-                    <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginRight: -70 }}>99</Text>
+                    <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginRight: -70 }}>200</Text>
                 </View>
                 <View style={{
                     flexDirection: 'row',
@@ -137,7 +137,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                 }}>
                     <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20 }}>2</Text>
                     <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginLeft: -20 }}>bryan</Text>
-                    <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginRight: -70 }}>35</Text>
+                    <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginRight: -70 }}>110</Text>
                 </View>
                 <View style={{
                     flexDirection: 'row',
@@ -146,7 +146,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                 }}>
                     <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20 }}>3</Text>
                     <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20, marginLeft: -20 }}>isabelle</Text>
-                    <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20, marginRight: -70 }}>20</Text>
+                    <Text style={{ flex: 1, color: '#CD7F32', fontSize: 20, marginRight: -70 }}>45</Text>
                 </View>
             </>
         )
@@ -164,7 +164,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                 }}>
                     <Text style={{ flex: 1, color: '#FFD700', fontSize: 20 }}>1</Text>
                     <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginLeft: -20 }}>bobby</Text>
-                    <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginRight: -70 }}>100</Text>
+                    <Text style={{ flex: 1, color: '#FFD700', fontSize: 20, marginRight: -70 }}>650</Text>
                 </View>
                 <View style={{
                     flexDirection: 'row',
@@ -173,7 +173,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                 }}>
                     <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20 }}>2</Text>
                     <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginLeft: -20 }}>{username}</Text>
-                    <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginRight: -70 }}>99</Text>
+                    <Text style={{ flex: 1, color: '#BCC6CC', fontSize: 20, marginRight: -70 }}>200</Text>
                 </View>
                 <View style={{
                     flexDirection: 'row',
