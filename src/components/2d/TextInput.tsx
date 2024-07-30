@@ -5,18 +5,21 @@ import { Styles } from '@/styles';
 
 interface TextInputProps {
     placeholder: string;
+    defaultValue?: string;
     onChangeText: React.Dispatch<React.SetStateAction<string>>;
     disabled?: boolean;
     password?: boolean;
     email?: boolean;
+    style?: any;
 }
 
-export default function TextInput({ placeholder, onChangeText, disabled = false, password = false, email = false, ...props }: TextInputProps & any) {
+export default function TextInput({ placeholder, defaultValue = '', onChangeText, disabled = false, password = false, email = false, style }: TextInputProps) {
     const theme = useContext(ThemeContext);
 
     return (
         <TextInputNative
             placeholder={placeholder}
+            defaultValue={defaultValue}
             editable={!disabled}
             selectTextOnFocus={!disabled}
             contextMenuHidden={disabled}
@@ -36,7 +39,7 @@ export default function TextInput({ placeholder, onChangeText, disabled = false,
                 padding: 10,
                 fontSize: 20,
                 color: theme.runwayTextColor,
-                ...props.style
+                ...style,
             }}
             placeholderTextColor={theme.textPlaceholder}
         />

@@ -155,7 +155,7 @@ const DateCard = forwardRef(({ focused, cardCompleted, date, content, colors, re
                 {/* content modal */}
                 <ContentModal
                     visible={contentModalVisible}
-                    setVisible={setContentModalVisible}
+                    closeModal={() => { setContentModalVisible(false) }}
                     date={date}
                     cardCompleted={cardCompleted}
                     content={content}

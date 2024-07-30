@@ -12,7 +12,8 @@ import { ThemeContext } from './ThemeProvider';
 
 interface ContentModalProps {
     visible: boolean;
-    setVisible: (visible: boolean) => void;
+    closeModal: () => void;
+    onboarding?: boolean;
     cardCompleted: boolean;
     date: string;
     content: Content;
@@ -22,7 +23,7 @@ interface ContentModalProps {
 
 export type ContentChunk = TextContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionContentChunkType;
 
-export default function ContentModal({ visible, setVisible, cardCompleted, date, content, colors, requestCompleteDate }: ContentModalProps) {
+export default function ContentModal({ visible, closeModal, onboarding, cardCompleted, date, content, colors, requestCompleteDate }: ContentModalProps) {
     const [contentChunks, setContentChunks] = useState<ContentChunk[]>(
         parseContent(content)
     );
@@ -36,10 +37,10 @@ export default function ContentModal({ visible, setVisible, cardCompleted, date,
     }
 
     async function finish() {
-        if (!cardCompleted) {  // don't need this since requestCompleteDate in AppScreen already checks if date is completed, but just in case
+        if (!cardCompleted && !onboarding) {  // don't need this since requestCompleteDate in AppScreen already checks if date is completed, but just in case
             await requestCompleteDate(date);
         }
-        setVisible(false);
+        closeModal();
     }
 
     return (
@@ -79,8 +80,8 @@ export default function ContentModal({ visible, setVisible, cardCompleted, date,
                         return null;
                     }}
                     keyExtractor={(item, index) => index.toString()}
-                    ListHeaderComponent={<ContentHeaderComponent content={content} colors={colors} closeModal={() => { setVisible(false) }} scrollDownPress={() => { scrollToItem(0) }} />}
-                    ListFooterComponent={<ContentFooterComponent colors={colors} cardCompleted={cardCompleted} finish={finish} />}
+                    ListHeaderComponent={<ContentHeaderComponent content={content} colors={colors} onboarding={onboarding} closeModal={closeModal} scrollDownPress={() => { scrollToItem(0) }} />}
+                    ListFooterComponent={<ContentFooterComponent colors={colors} cardCompleted={cardCompleted} onboarding={onboarding} finish={finish} />}
                     numColumns={1}
                     onViewableItemsChanged={({ viewableItems }) => {
                         const focusedIndexes = viewableItems.map((item) => item.index).filter((index) => typeof index === 'number');
@@ -99,7 +100,7 @@ export default function ContentModal({ visible, setVisible, cardCompleted, date,
     )
 }
 
-function ContentHeaderComponent({ content, colors, closeModal, scrollDownPress }: { content: Content, colors: ContentColors, closeModal: () => void, scrollDownPress: () => void }) {
+function ContentHeaderComponent({ content, colors, onboarding, closeModal, scrollDownPress }: { content: Content, colors: ContentColors, onboarding?: boolean, closeModal: () => void, scrollDownPress: () => void }) {
     const theme = useContext(ThemeContext);
     const height = Dimensions.get('window').height;
 
@@ -108,20 +109,22 @@ function ContentHeaderComponent({ content, colors, closeModal, scrollDownPress }
             <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor }}>
                 {content.title}
             </Text>
-            <Button
-                title='Back'
-                backgroundColor={colors.textColor}
-                textColor={theme.white}
-                onPress={closeModal}
-                // reanimatedStyle={{
-                //     opacity: cardContentOpacity,
-                //     transform: [{ translateY: goTransformY }]
-                // }}
-                style={{
-                    width: '80%',
-                    height: 50,
-                }}
-            />
+            {!onboarding &&
+                <Button
+                    title='Back'
+                    backgroundColor={colors.textColor}
+                    textColor={theme.white}
+                    onPress={closeModal}
+                    // reanimatedStyle={{
+                    //     opacity: cardContentOpacity,
+                    //     transform: [{ translateY: goTransformY }]
+                    // }}
+                    style={{
+                        width: '80%',
+                        height: 50,
+                    }}
+                />
+            }
             <View style={{
                 position: 'absolute',
                 bottom: 50
@@ -132,7 +135,7 @@ function ContentHeaderComponent({ content, colors, closeModal, scrollDownPress }
     )
 }
 
-function ContentFooterComponent({ colors, cardCompleted, finish }: { colors: ContentColors, cardCompleted: boolean, finish: () => Promise<void> }) {
+function ContentFooterComponent({ colors, cardCompleted, onboarding, finish }: { colors: ContentColors, cardCompleted: boolean, onboarding?: boolean, finish: () => Promise<void> }) {
     const height = Dimensions.get('window').height;
     const theme = useContext(ThemeContext);
 
@@ -149,7 +152,7 @@ function ContentFooterComponent({ colors, cardCompleted, finish }: { colors: Con
     return (
         <View style={{ height: height, ...Styles.centeringContainer, gap: 20 }}>
             <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor }}>
-                You're all done!
+                { onboarding ? 'You\'re done! Let\'s see how many points you earned.' : 'You\'re all done!' }
             </Text>
             <Button
                 title='Finish'

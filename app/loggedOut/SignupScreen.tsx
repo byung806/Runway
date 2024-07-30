@@ -1,4 +1,4 @@
-import { Button, Logo, Text, TextInput, ThemeContext } from '@/components/2d';
+import { Button, Text, TextInput, ThemeContext } from '@/components/2d';
 import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,8 +8,9 @@ import { FirebaseError, useFirebase } from '@/utils/FirebaseProvider';
 import { callWithTimeout } from '@/utils/utils';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-export default function SignupScreen({ navigation, initialUsername }: { navigation: StackNavigationProp<any, any>, initialUsername?: string }) {
-    console.log(initialUsername);
+export default function SignupScreen({ route, navigation }: { route: any, navigation: StackNavigationProp<any, any> }) {
+    const initialUsername = route.params?.initialUsername;
+
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
 
@@ -86,6 +87,7 @@ export default function SignupScreen({ navigation, initialUsername }: { navigati
                     >
                         <TextInput
                             placeholder={'Username'}
+                            defaultValue={username}
                             onChangeText={setUsername}
                             style={{ width: '80%', height: 50 }}
                             disabled={loading}

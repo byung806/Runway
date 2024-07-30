@@ -1,14 +1,11 @@
-import { Styles } from '@/styles';
 import { ContentColors } from '@/utils/FirebaseProvider';
 import React, { forwardRef, memo, useContext, useImperativeHandle, useState } from 'react';
 import { Easing, View } from 'react-native';
 import AnimatedNumbers from 'react-native-animated-numbers';
 import BorderedCard, { BorderedCardRef } from './BorderedCard';
-import { QuestionContentChunk } from './ContentChunk';
+import Button from './Button';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
-import Button from './Button';
-
 
 
 interface OnboardingCardProps {
@@ -17,6 +14,8 @@ interface OnboardingCardProps {
     style: any;
     username: string;
     index: number;
+    openOnboardingContentModal: () => void;
+    closeOnboardingContentModal: () => void;
 }
 
 export interface OnboardingCardRef {
@@ -24,7 +23,7 @@ export interface OnboardingCardRef {
     onPressOut: () => void;
 }
 
-const OnboardingCard = forwardRef(({ focused, colors, style, username, index }: OnboardingCardProps, ref) => {
+const OnboardingCard = forwardRef(({ focused, colors, style, username, index, openOnboardingContentModal, closeOnboardingContentModal }: OnboardingCardProps, ref) => {
     const theme = useContext(ThemeContext);
 
     const borderedCardRef = React.useRef<BorderedCardRef>(null);
@@ -33,8 +32,6 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index }: 
         onPressIn: borderedCardRef.current?.onPressIn,
         onPressOut: borderedCardRef.current?.onPressOut,
     }));
-
-    const [points, setPoints] = useState(0);
 
     let insides: JSX.Element = <></>;
     if (index === 0) {
@@ -60,7 +57,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index }: 
                     title='Go!'
                     backgroundColor={colors.textColor}
                     textColor={theme.black}
-                    onPress={() => {}}
+                    onPress={openOnboardingContentModal}
                     style={{
                         width: '80%',
                         height: 50,
@@ -71,39 +68,22 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index }: 
     } else if (index === 2) {
         insides = (
             <>
-                <View style={{
-                    position: 'absolute',
-                    flexDirection: 'row',
-                    top: 0,
-                    width: '100%',
-                    paddingHorizontal: 10,
-                    justifyContent: 'space-between',
-                }}>
-                </View>
-                {/* <Button title="Complete" filled={false} onPress={() => {}} /> */}
-                <QuestionContentChunk
-                    question={'What is the chemical formula for water?'}
-                    choices={[
-                        { choice: 'CO2', correct: false },
-                        { choice: 'NH3', correct: false },
-                        { choice: 'H2O', correct: true },
-                        { choice: 'NO2', correct: false },
-                    ]}
-                    focused={true}
-                    colors={{
-                        textColor: colors.textColor,
-                        backgroundColor: colors.backgroundColor,
-                        borderColor: colors.borderColor,
-                        outerBackgroundColor: colors.outerBackgroundColor,
-                    }}
-                />
-                <Text style={{ fontSize: 30, color: theme.white, ...Styles.lightShadow, marginBottom: 0 }}>Points:</Text>
+                <Text style={{
+                    color: colors.textColor,
+                    fontSize: 30,
+                    textAlign: 'center'
+                }}>You got</Text>
                 <AnimatedNumbers
-                    animateToNumber={points}
-                    animationDuration={800}
-                    fontStyle={{ color: theme.white, fontSize: 30, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
+                    animateToNumber={200}
+                    animationDuration={200}
+                    fontStyle={{ color: theme.white, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
                     easing={Easing.out(Easing.cubic)}
                 />
+                <Text style={{
+                    color: colors.textColor,
+                    fontSize: 30,
+                    textAlign: 'center'
+                }}>points!</Text>
             </>
         )
     } else if (index === 3) {
@@ -111,33 +91,17 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index }: 
             <>
                 <Text style={{
                     color: colors.textColor,
-                    fontSize: 40,
-                    textAlign: 'center'
-                }}>See? You got the hang of it already!</Text>
-            </>
-        )
-    } else if (index === 4) {
-        insides = (
-            <>
-                <Text style={{
-                    color: colors.textColor,
-                    fontSize: 30,
+                    fontSize: 35,
                     textAlign: 'center'
                 }}>Answer questions correct in less tries to earn more points!</Text>
-                <AnimatedNumbers
-                    animateToNumber={points}
-                    animationDuration={200}
-                    fontStyle={{ color: theme.white, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
-                    easing={Easing.out(Easing.cubic)}
-                />
             </>
         )
-    } else if (index === 5) {
+    }else if (index === 4) {
         insides = (
             <>
                 <Text style={{
                     color: colors.textColor,
-                    fontSize: 40, textAlign: 'center', padding: 5, marginBottom: 15
+                    fontSize: 35, textAlign: 'center', padding: 5, marginBottom: 15
                 }}>Earn more points to beat out your friends...</Text>
                 <View style={{
                     flexDirection: 'row',
@@ -168,12 +132,12 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index }: 
                 </View>
             </>
         )
-    } else if (index === 6) {
+    } else if (index === 5) {
         insides = (
             <>
                 <Text style={{
                     color: colors.textColor,
-                    fontSize: 40, textAlign: 'center', padding: 5, marginBottom: 15
+                    fontSize: 35, textAlign: 'center', padding: 5, marginBottom: 15
                 }}>Or compete against the whole world!</Text>
                 <View style={{
                     flexDirection: 'row',
