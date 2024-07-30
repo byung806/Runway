@@ -98,12 +98,12 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             debounceTimeout = null;
 
             if (authStateUser) {
-                await getUserData();
                 while (registeringUser) {
-                    await delay(300);
                     console.log('waiting for registering user to finish');
+                    await delay(300);
                     // in this loop when firebase auth user is registered but user data is not yet initialized
                 }
+                await getUserData();
                 setInitializing(false);
                 await getLeaderboard('global');
                 await getLeaderboard('friends');

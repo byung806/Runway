@@ -30,6 +30,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
     // called on sign up button press
     async function signupCallback() {
         if (username.length < 3) {
+            // TODO: filter explicit usernames
             setErrorMessage('Please make your username at least 3 characters long!');
             return;
         }
