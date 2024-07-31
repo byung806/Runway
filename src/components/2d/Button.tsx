@@ -1,6 +1,6 @@
 import { Styles } from '@/styles';
 import * as Haptics from 'expo-haptics';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import Animated, {
     Easing,
@@ -13,6 +13,7 @@ import { ThemeContext } from './ThemeProvider';
 import useBounceAnimation from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import Text from './Text';
+import { Audio } from 'expo-av';
 
 interface Button3DProps {
     title: string;
@@ -120,11 +121,12 @@ const ReactSpringAnimatedView = animated(View);
 
 export default function Button({ title, onPress, backgroundColor, textColor, disabled = false, reanimatedStyle, style }: ButtonProps) {
     const theme = useContext(ThemeContext);
-    
+
     const { scale: buttonScale, onPressIn: buttonOnPressIn, onPressOut: buttonOnPressOut } = useBounceAnimation({
         scaleTo: 0.9,
         haptics: Haptics.ImpactFeedbackStyle.Light,
-        config: config.gentle
+        config: config.gentle,
+        doSound: true
     });
 
     return (
@@ -145,9 +147,9 @@ export default function Button({ title, onPress, backgroundColor, textColor, dis
                 ...reanimatedStyle
             }}>
                 <Pressable
-                    onPress={disabled ? () => {} : onPress}
-                    onPressIn={disabled ? () => {} : buttonOnPressIn}
-                    onPressOut={disabled ? () => {} : buttonOnPressOut}
+                    onPress={disabled ? () => { } : onPress}
+                    onPressIn={disabled ? () => { } : buttonOnPressIn}
+                    onPressOut={disabled ? () => { } : buttonOnPressOut}
                     style={{ ...Styles.centeringContainer, padding: 10, paddingHorizontal: 20 }}
                 >
                     <Text style={{ color: disabled ? '#aaaaaa' : (textColor || theme.runwayTextColor), fontSize: 20, ...Styles.lightShadow }}>{title}</Text>

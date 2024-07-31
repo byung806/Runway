@@ -3,8 +3,9 @@ import { View } from "react-native";
 import Text from "./Text";
 import TextInput from "./TextInput";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Dispatch, SetStateAction } from "react";
 
-export default function OnboardingHeaderComponent({ height, setUsername, arrowDown }: { height: number, setUsername: Function, arrowDown: JSX.Element }) {
+export default function OnboardingHeaderComponent({ height, setUsername, arrowDown }: { height: number, setUsername: Dispatch<SetStateAction<string>>, arrowDown: JSX.Element }) {
     return (
         <View style={{
             height,

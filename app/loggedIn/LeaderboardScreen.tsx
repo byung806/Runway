@@ -39,7 +39,7 @@ export default function LeaderboardScreen({ navigation, ...props }: { navigation
                     borderRadius: 5,
                     flexShrink: 1,
                 }}>
-                <Text style={{ ...Styles.title, color: theme.text }}>Leaderboard</Text>
+                <Text style={{ ...Styles.title, color: theme.text, fontSize: 40 }}>Leaderboard</Text>
                 <Button title="Back" onPress={() => navigation.navigate('app')} filled={false} />
             </View>
             <TabView
