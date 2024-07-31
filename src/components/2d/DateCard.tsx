@@ -1,5 +1,5 @@
 import { dayIsYesterday, getTodayDate, sameDay, stringToDate } from '@/utils/date';
-import { Content, ContentColors } from '@/utils/FirebaseProvider';
+import { Content, ContentColors, useFirebase } from '@/utils/FirebaseProvider';
 import { forwardRef, memo, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { View } from 'react-native';
 import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
@@ -8,15 +8,16 @@ import Button from './Button';
 import ContentModal from './ContentModal';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
+import { ContentProvider } from './ContentProvider';
 
 
 interface DateCardProps {
-    focused: boolean;
-    cardCompleted: boolean;
     date: string;
     content: Content;
     colors: ContentColors;
-    requestCompleteDate: (date?: string) => Promise<void>;
+
+    focused: boolean;
+
     style: any;
 }
 
@@ -25,8 +26,9 @@ export interface DateCardRef {
     onPressOut: () => void;
 }
 
-const DateCard = forwardRef(({ focused, cardCompleted, date, content, colors, requestCompleteDate, style }: DateCardProps, ref) => {
+const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);
+    const firebase = useFirebase();
 
     const borderedCardRef = useRef<BorderedCardRef>(null);
 
@@ -34,6 +36,8 @@ const DateCard = forwardRef(({ focused, cardCompleted, date, content, colors, re
         onPressIn: borderedCardRef.current?.onPressIn,
         onPressOut: borderedCardRef.current?.onPressOut,
     }));
+
+    const cardCompleted = firebase.userData?.point_days && date in firebase.userData.point_days;
 
     const [contentModalVisible, setContentModalVisible] = useState(false);
 
@@ -44,6 +48,7 @@ const DateCard = forwardRef(({ focused, cardCompleted, date, content, colors, re
     const cardContentOpacity = useSharedValue(0);
     // TODO: gray out if completed
 
+    // Fade animation
     useEffect(() => {
         if (focused) {
             // start animation
@@ -153,15 +158,15 @@ const DateCard = forwardRef(({ focused, cardCompleted, date, content, colors, re
 
 
                 {/* content modal */}
-                <ContentModal
-                    visible={contentModalVisible}
-                    closeModal={() => { setContentModalVisible(false) }}
+                <ContentProvider
                     date={date}
-                    cardCompleted={cardCompleted}
                     content={content}
                     colors={colors}
-                    requestCompleteDate={requestCompleteDate}
-                />
+                    openContentModal={() => setContentModalVisible(true)}
+                    closeContentModal={() => setContentModalVisible(false)}
+                >
+                    <ContentModal visible={contentModalVisible} />
+                </ContentProvider>
             </>
         </BorderedCard>
     );

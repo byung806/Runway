@@ -3,7 +3,7 @@ import { Content } from "./FirebaseProvider";
 import { split } from "sentence-splitter";
 
 
-export default function parseContent(content: Content): ContentChunk[] {
+export default function parseContent(content: Content, totalPoints: number): ContentChunk[] {
     const chunks: ContentChunk[] = [];
     const body = content.body;
 
@@ -39,12 +39,14 @@ export default function parseContent(content: Content): ContentChunk[] {
     // Questions
     const questions = content.questions;
     if (questions) {
+        const points = totalPoints / questions.length;
         questions.forEach((question) => {
             chunks.push({
                 focused: false,
                 type: 'question',
                 question: question.question,
-                choices: question.choices
+                choices: question.choices,
+                possiblePoints: points
             });
         });
     }
