@@ -1,12 +1,14 @@
 import { Styles } from "@/styles";
 import { useFirebase } from "@/utils/FirebaseProvider";
 import { useNavigation } from "@react-navigation/native";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { View } from "react-native";
 import Button from "./Button";
 import Text from "./Text";
 import { ThemeContext } from "./ThemeProvider";
 import AddFriendModal from "./AddFriendModal";
+import { Audio } from 'expo-av';
+import { SoundObject } from "expo-av/build/Audio";
 
 
 export default function ListHeaderComponent({ height, arrowDown }: { height: number, arrowDown: JSX.Element }) {

@@ -40,7 +40,7 @@ function LeaderboardEntry({ place, avatar, name, points, streak }: LeaderboardEn
         } else if (place == 3) {
             return "#CD7F32";
         }
-        return theme.text;
+        return "#ffffff";
     }
 
     return (
