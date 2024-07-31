@@ -71,7 +71,7 @@ interface FirebaseContextType {
     checkUncompletedChallengeToday: () => Promise<boolean>;
     getUserData: () => Promise<void>;
     getContent: (date: string) => Promise<{ content: Content, colors: ContentColors } | null>;
-    requestCompleteDate: (date?: string) => Promise<{ success: boolean }>;
+    requestCompleteDate: (date?: string, percent?: number) => Promise<{ success: boolean }>;
     addFriend: (friend: string) => Promise<{ success: boolean }>;
     getLeaderboard: (type: LeaderboardType) => Promise<void>;
 }

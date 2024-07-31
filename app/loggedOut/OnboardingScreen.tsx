@@ -8,6 +8,7 @@ import OnboardingHeaderComponent from '@/components/2d/OnboardingHeaderComponent
 import { StackNavigationProp } from '@react-navigation/stack';
 import ContentModal from '@/components/2d/ContentModal';
 import { Content } from '@/utils/FirebaseProvider';
+import { ContentProvider } from '@/components/2d/ContentProvider';
 
 
 interface OnboardingCardAttributes extends BaseCardAttributes { }
@@ -169,25 +170,17 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
                 initialBackgroundColor={theme.background}
             />
 
-            <ContentModal
-                visible={onboardingContentModalVisible}
-                closeModal={closeOnboardingContentModal}
-                onboarding={true}
-                date={''}
-                cardCompleted={false}
+            <ContentProvider
+                isOnboardingContent={true}
                 content={onboardingContent}
-                colors={{
-                    // outerBackgroundColor: "#6b44b2",
-                    // borderColor: "#3f1d8a",
-                    // backgroundColor: "#a58aeb",
-                    // textColor: "#ffffff"
-                    outerBackgroundColor: theme.runwayOuterBackgroundColor,
-                    borderColor: theme.runwayBorderColor,
-                    backgroundColor: theme.runwayBackgroundColor,
-                    textColor: theme.runwayTextColor
-                }}
-                requestCompleteDate={async () => { }}
-            />
+                colors={defaultColors}
+                openContentModal={openOnboardingContentModal}
+                closeContentModal={closeOnboardingContentModal}
+            >
+                <ContentModal
+                    visible={onboardingContentModalVisible}
+                />
+            </ContentProvider>
         </>
     );
 }

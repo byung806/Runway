@@ -9,23 +9,15 @@ import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChu
 import ScrollArrow from './ScrollArrow';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
-
-interface ContentModalProps {
-    visible: boolean;
-    closeModal: () => void;
-    onboarding?: boolean;
-    cardCompleted: boolean;
-    date: string;
-    content: Content;
-    colors: ContentColors;
-    requestCompleteDate: (date?: string) => Promise<void>;
-}
+import { useContent } from './ContentProvider';
 
 export type ContentChunk = TextContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionContentChunkType;
 
-export default function ContentModal({ visible, closeModal, onboarding, cardCompleted, date, content, colors, requestCompleteDate }: ContentModalProps) {
+export default function ContentModal({ visible }: { visible: boolean }) {
+    const { content, colors, earnablePointsWithoutStreak } = useContent();
+
     const [contentChunks, setContentChunks] = useState<ContentChunk[]>(
-        parseContent(content)
+        parseContent(content, earnablePointsWithoutStreak)  // TODO: memo
     );
 
     const [focusedItems, setFocusedItems] = useState<number[]>([]);
@@ -34,13 +26,6 @@ export default function ContentModal({ visible, closeModal, onboarding, cardComp
 
     function scrollToItem(index: number) {
         flatListRef.current?.scrollToIndex({ index, viewPosition: 0.5 });
-    }
-
-    async function finish() {
-        if (!cardCompleted && !onboarding) {  // don't need this since requestCompleteDate in AppScreen already checks if date is completed, but just in case
-            await requestCompleteDate(date);
-        }
-        closeModal();
     }
 
     return (
@@ -62,7 +47,10 @@ export default function ContentModal({ visible, closeModal, onboarding, cardComp
                         const focused = focusedItems.includes(index);
                         if (item.type === 'text') {
                             return (
-                                <TextContentChunk focused={focused} text={item.text} colors={colors} />
+                                <TextContentChunk
+                                    focused={focused}
+                                    text={item.text}
+                                />
                             );
                         } else if (item.type === 'paragraphSpacer') {
                             return (
@@ -74,14 +62,19 @@ export default function ContentModal({ visible, closeModal, onboarding, cardComp
                             );
                         } else if (item.type === 'question') {
                             return (
-                                <QuestionContentChunk focused={focused} question={item.question} choices={item.choices} colors={colors} />
+                                <QuestionContentChunk
+                                    focused={focused}
+                                    question={item.question}
+                                    choices={item.choices}
+                                    possiblePoints={item.possiblePoints}
+                                />
                             )
                         }
                         return null;
                     }}
                     keyExtractor={(item, index) => index.toString()}
-                    ListHeaderComponent={<ContentHeaderComponent content={content} colors={colors} onboarding={onboarding} closeModal={closeModal} scrollDownPress={() => { scrollToItem(0) }} />}
-                    ListFooterComponent={<ContentFooterComponent colors={colors} cardCompleted={cardCompleted} onboarding={onboarding} finish={finish} />}
+                    ListHeaderComponent={<ContentHeaderComponent scrollDownPress={() => { scrollToItem(0) }} />}
+                    ListFooterComponent={<ContentFooterComponent />}
                     numColumns={1}
                     onViewableItemsChanged={({ viewableItems }) => {
                         const focusedIndexes = viewableItems.map((item) => item.index).filter((index) => typeof index === 'number');
@@ -100,8 +93,12 @@ export default function ContentModal({ visible, closeModal, onboarding, cardComp
     )
 }
 
-function ContentHeaderComponent({ content, colors, onboarding, closeModal, scrollDownPress }: { content: Content, colors: ContentColors, onboarding?: boolean, closeModal: () => void, scrollDownPress: () => void }) {
+function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => void }) {
     const theme = useContext(ThemeContext);
+    const { isOnboardingContent, content, colors, back } = useContent();
+
+    const [arrowVisible, setArrowVisible] = useState(true);
+
     const height = Dimensions.get('window').height;
 
     return (
@@ -109,16 +106,12 @@ function ContentHeaderComponent({ content, colors, onboarding, closeModal, scrol
             <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor }}>
                 {content.title}
             </Text>
-            {!onboarding &&
+            {!isOnboardingContent &&
                 <Button
                     title='Back'
                     backgroundColor={colors.textColor}
                     textColor={theme.white}
-                    onPress={closeModal}
-                    // reanimatedStyle={{
-                    //     opacity: cardContentOpacity,
-                    //     transform: [{ translateY: goTransformY }]
-                    // }}
+                    onPress={back}
                     style={{
                         width: '80%',
                         height: 50,
@@ -129,37 +122,41 @@ function ContentHeaderComponent({ content, colors, onboarding, closeModal, scrol
                 position: 'absolute',
                 bottom: 50
             }}>
-                <ScrollArrow type='down' visible={true} onPress={scrollDownPress} />
+                <ScrollArrow type='down' visible={arrowVisible} onPress={() => { scrollDownPress(); setArrowVisible(false); }} />
             </View>
         </View>
     )
 }
 
-function ContentFooterComponent({ colors, cardCompleted, onboarding, finish }: { colors: ContentColors, cardCompleted: boolean, onboarding?: boolean, finish: () => Promise<void> }) {
+function ContentFooterComponent() {
     const height = Dimensions.get('window').height;
     const theme = useContext(ThemeContext);
+    const { isOnboardingContent, cardCompleted, colors, allQuestionsCompleted, finish } = useContent();
 
-    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     async function onPress() {
-        setDisabled(true);
-
-        // TODO: get question score and make that determine points added
+        setLoading(true);
         await finish();
-        setDisabled(false);
+        setLoading(false);
     }
 
     return (
         <View style={{ height: height, ...Styles.centeringContainer, padding: 20, gap: 20 }}>
-            <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor }}>
-                { onboarding ? 'You\'re done! Let\'s see how many points you earned.' : 'You\'re all done!' }
-            </Text>
+            {allQuestionsCompleted ?
+                <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor }}>
+                    {isOnboardingContent ? 'You\'re done! Let\'s see how many points you earned.' : 'You\'re all done!'}
+                </Text>
+                :
+                <Text style={{ textAlign: 'center', fontSize: 35, color: colors.textColor }}>
+                    Complete all the questions to finish!
+                </Text>}
             <Button
                 title='Finish'
                 backgroundColor={colors.textColor}
                 textColor={theme.white}
                 onPress={onPress}
-                disabled={disabled}
+                disabled={!allQuestionsCompleted || loading}
                 style={{
                     width: '80%',
                     height: 50,

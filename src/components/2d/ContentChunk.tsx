@@ -6,6 +6,7 @@ import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import Button from "./Button";
 import Text from "./Text";
 import { ThemeContext } from "./ThemeProvider";
+import { useContent } from "./ContentProvider";
 
 
 interface BaseContentChunkType {
@@ -37,7 +38,9 @@ export interface TextContentChunkType extends BaseContentChunkType {
     type?: "text";
     text: string;
 }
-export function TextContentChunk({ focused, text, colors }: TextContentChunkType & { colors: ContentColors }) {
+export function TextContentChunk({ focused, text }: TextContentChunkType) {
+    const { colors } = useContent();
+
     return (
         <BaseContentChunk focused={focused} style={Styles.centeringContainer}>
             <Text style={{ fontSize: 22, color: colors.textColor }}>{text}</Text>
@@ -78,17 +81,42 @@ export interface QuestionContentChunkType extends BaseContentChunkType {
     type?: "question";
     question: string;
     choices: ContentQuestionChoice[];
+    possiblePoints: number;
 }
-export function QuestionContentChunk({ focused, question, choices, colors }: QuestionContentChunkType & { colors: ContentColors }) {
+export function QuestionContentChunk({ focused, question, choices, possiblePoints }: QuestionContentChunkType) {
     const theme = useContext(ThemeContext);
+    const { isOnboardingContent, colors, cardCompleted, completeQuestion } = useContent();
     const buttonBackgroundColors = choices.map(() => useSharedValue(colors.textColor));
 
-    function handleAnswer(correct: boolean, index: number) {
+    const [pointsEarned, setPointsEarned] = useState<number>(0);  // TODO: display points earned
+    const [tries, setTries] = useState(0);
+    const [done, setDone] = useState(false);
+
+    const opacity = useSharedValue(0);
+
+    function handleAnswer(selectedIndex: number, correct: boolean) {
         for (let i = 0; i < buttonBackgroundColors.length; i++) {
-            if (i === index && correct) {
-                buttonBackgroundColors[i].value = withTiming(theme.accent, { duration: 200 });
+            if (i === selectedIndex) {
+                if (correct) {
+                    buttonBackgroundColors[i].value = withTiming(theme.questionCorrectColor, { duration: 200 });
+
+                    let pointsEarned;
+                    if (isOnboardingContent) {
+                        pointsEarned = possiblePoints;
+                    } else {
+                        pointsEarned = possiblePoints * (1 - tries / choices.length);
+                    }
+                    setPointsEarned(pointsEarned);
+                    opacity.value = withTiming(1, { duration: 400 });
+
+                    completeQuestion(pointsEarned, possiblePoints);
+                    setDone(true);
+                } else {
+                    buttonBackgroundColors[i].value = withTiming(theme.questionIncorrectColor, { duration: 200 });
+                }
             }
         }
+        setTries(tries + 1);
     }
 
     return (
@@ -101,8 +129,8 @@ export function QuestionContentChunk({ focused, question, choices, colors }: Que
                             <Button
                                 key={index}
                                 title={choice.choice}
-                                onPress={() => handleAnswer(choice.correct, index)}
-                                // backgroundColor={buttonBackgroundColors[index]}
+                                disabled={done}
+                                onPress={() => handleAnswer(index, choice.correct)}
                                 textColor={theme.white}
                                 style={{
                                     width: '100%',
@@ -115,6 +143,13 @@ export function QuestionContentChunk({ focused, question, choices, colors }: Que
                         );
                     })}
                 </View>
+                {cardCompleted ? null :
+                    <Animated.View style={{ opacity: opacity, marginTop: 10 }}>
+                        <Text style={{ fontSize: 20, color: colors.textColor, textAlign: 'center' }}>
+                            +{Math.round(pointsEarned)}
+                        </Text>
+                    </Animated.View>
+                }
             </>
         </BaseContentChunk>
     );
