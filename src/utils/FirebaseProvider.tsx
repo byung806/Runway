@@ -231,11 +231,12 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
      * Requests to the server to increment the streak and points for the logged in user
      * Fails if the user has already completed the day's challenge and it has been logged
      */
-    async function requestCompleteDate(date?: string): Promise<{ success: boolean }> {
+    async function requestCompleteDate(date?: string, percent?: number): Promise<{ success: boolean }> {
         console.log('DATABASE CALL: request complete date', date);
         const data = await functions()
             .httpsCallable('requestCompleteDate')({
                 date: date,
+                percent: percent,
             }) as FirebaseFunctionsTypes.HttpsCallableResult<{ success: boolean }>;
         console.log('request complete date result', data.data);
         return data.data as { success: boolean };
