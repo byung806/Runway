@@ -34,7 +34,7 @@ export const initializeUser = async (request: CallableRequest): Promise<undefine
         uid: uid
     });
 
-    await updateLeaderboard(username, 0, 0);
+    await updateLeaderboard(username, INITIAL_POINTS, 0);
 
     return;
 }

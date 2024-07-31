@@ -85,16 +85,19 @@ export const requestCompleteDate = async (request: CallableRequest): Promise<{ s
     }
 
     const today = dateToString(new Date());
+    const requestedDate = request.data.date as string | undefined;
+    let percentOfPoints = request.data.percent as number | undefined;
+    if (!percentOfPoints) { percentOfPoints = 100; }
+    if (percentOfPoints < 0 || percentOfPoints > 100) { return { success: false }; }
 
-    if (!request.data.date || request.data.date === today) {
+    if (!requestedDate || requestedDate === today) {
         // requesting for today, so streak should be considered in points calculation
 
         // verify streak is reset to 0 if needed
         const { canIncrementStreak, streakReset } = await updateStreak(request.auth.uid, userData);
 
         const streak = streakReset ? 0 : userData.get('streak');
-        const pointsToAdd = pointsToAddForToday(streak);
-
+        const pointsToAdd = pointsToAddForToday(streak) * percentOfPoints / 100;
 
         // update streak and points
         if (canIncrementStreak) {
@@ -120,7 +123,7 @@ export const requestCompleteDate = async (request: CallableRequest): Promise<{ s
         }
         const dateToAttemptAdd = dateToString(dateObject);
 
-        const pointsToAdd = pointsToAddForPastContent(dateToAttemptAdd);
+        const pointsToAdd = pointsToAddForPastContent(dateToAttemptAdd) * percentOfPoints / 100;
 
         if (dateToAttemptAdd in userData.get('point_days')) {
             return { success: false };
