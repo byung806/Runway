@@ -2,12 +2,14 @@ import Text from './Text';
 import { Modal, View } from 'react-native';
 import TextInput from './TextInput';
 import Button from './Button';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useFirebase } from '@/utils/FirebaseProvider';
 import { Styles } from '@/styles';
+import { ThemeContext } from './ThemeProvider';
 
 export default function AddFriendModal({ visible, setVisible }: { visible: boolean, setVisible: (visible: boolean) => void }) {
     const firebase = useFirebase();
+    const theme = useContext(ThemeContext);
 
     const [username, setUsername] = useState('');
     const [addingFriend, setAddingFriend] = useState(false);
@@ -31,6 +33,7 @@ export default function AddFriendModal({ visible, setVisible }: { visible: boole
             <View style={{
                 flex: 1,
                 gap: 10,
+                backgroundColor: theme.runwayBackgroundColor,
                 ...Styles.centeringContainer
             }}>
                 <Text style={{ fontSize: 40, textAlign: 'center', marginBottom: 30 }}>Add Friend</Text>
