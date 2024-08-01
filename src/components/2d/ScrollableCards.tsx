@@ -98,7 +98,7 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                 renderItem={({ item }) => {
                     // TODO context: can convert focused, colors, style, index to context and read context inside card
                     return (
-                        <Pressable onPressIn={() => {
+                        <Pressable android_disableSound={true} onPressIn={() => {
                             item.ref?.onPressIn();
                             if (focusedIndex !== item.index) scrollToIndex(item.index);
                         }} onPressOut={item.ref?.onPressOut}>

@@ -15,7 +15,7 @@ export default function Logo({ size = 120, animated = true }: { size?: number, a
 
     if (animated) {
         return (
-            <Pressable onPressIn={press} onPressOut={onPressOut}>
+            <Pressable android_disableSound={true} onPressIn={press} onPressOut={onPressOut}>
                 <AnimatedView style={{transform: [{scale: scale}]}}>
                     <Image source={require('@/assets/logo.png')} style={{ width: size, height: size }} />
                 </AnimatedView>

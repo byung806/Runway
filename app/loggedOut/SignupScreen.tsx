@@ -121,7 +121,6 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                     }} edges={['bottom']}>
                         <Button
                             title={'Have an account?'}
-                            filled={false}
                             disabled={loading}
                             textColor={theme.text}
                             backgroundColor='transparent'

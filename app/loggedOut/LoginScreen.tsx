@@ -89,20 +89,6 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                         />
                         {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.text }}>{errorMessage}</Text> : null}
                     </KeyboardAvoidingView>
-
-                    {/* <SafeAreaView style={{
-                        position: 'absolute',
-                        bottom: 0,
-                    }} edges={['bottom']}>
-                        <Button
-                            title={'Don\'t have an account?'}
-                            filled={false}
-                            disabled={loading}
-                            textColor={theme.text}
-                            backgroundColor='transparent'
-                            onPress={() => navigation.navigate('signup')}
-                        />
-                    </SafeAreaView> */}
                 </SafeAreaView>
             </TouchableOpacity>
         </View>
