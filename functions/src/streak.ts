@@ -97,7 +97,7 @@ export const requestCompleteDate = async (request: CallableRequest): Promise<{ s
         const { canIncrementStreak, streakReset } = await updateStreak(request.auth.uid, userData);
 
         const streak = streakReset ? 0 : userData.get('streak');
-        const pointsToAdd = pointsToAddForToday(streak) * percentOfPoints / 100;
+        const pointsToAdd = Math.round(pointsToAddForToday(streak) * percentOfPoints / 100);
 
         // update streak and points
         if (canIncrementStreak) {
@@ -123,7 +123,7 @@ export const requestCompleteDate = async (request: CallableRequest): Promise<{ s
         }
         const dateToAttemptAdd = dateToString(dateObject);
 
-        const pointsToAdd = pointsToAddForPastContent(dateToAttemptAdd) * percentOfPoints / 100;
+        const pointsToAdd = Math.round(pointsToAddForPastContent(dateToAttemptAdd) * percentOfPoints / 100);
 
         if (dateToAttemptAdd in userData.get('point_days')) {
             return { success: false };

@@ -38,6 +38,7 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
     }));
 
     const cardCompleted = firebase.userData?.point_days && date in firebase.userData.point_days;
+    const pointsEarnedIfCompleted = cardCompleted ? firebase.userData?.point_days[date] : 0;
 
     const [contentModalVisible, setContentModalVisible] = useState(false);
 
@@ -124,6 +125,11 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
                             fontSize: 20,
                             textAlign: 'center',
                         }}>Card Completed!</Text>
+                        <Text style={{
+                            color: colors.textColor,
+                            fontSize: 15,
+                            textAlign: 'center',
+                        }}>+{pointsEarnedIfCompleted}</Text>
                     </View>
                 }
 
