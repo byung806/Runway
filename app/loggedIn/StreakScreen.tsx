@@ -66,7 +66,7 @@ export default function StreakScreen({ navigation, ...props }: { navigation: Sta
                             width: 500,
                             height: 500,
                             position: 'absolute',
-                            top: height - 740,
+                            top: height - 720,
                         }}
                         source={require('@/assets/nonPixelFire.json')}
                         loop

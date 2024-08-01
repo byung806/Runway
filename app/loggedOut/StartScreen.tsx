@@ -22,7 +22,7 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                     <Text style={{
                         fontSize: 40,
                         textAlign: 'center',
-                        color: theme.runwayTextColor,
+                        color: theme.black,
                     }}>Runway</Text>
                 </View>
                 <View style={{ width: '100%', gap: 10 }}>
@@ -39,7 +39,7 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                             navigation.navigate('login');
                         }}
                         filled={false}
-                        style={{ width: "80%" }}
+                        style={{ width: "80%", padding: 10 }}
                     />
                 </View>
             </SafeAreaView>
