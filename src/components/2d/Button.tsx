@@ -10,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { ThemeContext } from './ThemeProvider';
 
-import useBounceAnimation from '@/utils/useBounceAnimation';
+import useBounceAnimation, { SoundType } from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import Text from './Text';
 import { Audio } from 'expo-av';
@@ -112,21 +112,21 @@ interface ButtonProps {
     backgroundColor?: string;
     textColor?: string;
     disabled?: boolean;
-    filled?: boolean;
+    sound?: SoundType;
     reanimatedStyle?: any;
     style?: any;
 }
 
 const ReactSpringAnimatedView = animated(View);
 
-export default function Button({ title, onPress, backgroundColor, textColor, disabled = false, reanimatedStyle, style }: ButtonProps) {
+export default function Button({ title, onPress, backgroundColor, textColor, disabled = false, sound = 'button', reanimatedStyle, style }: ButtonProps) {
     const theme = useContext(ThemeContext);
 
     const { scale: buttonScale, onPressIn: buttonOnPressIn, onPressOut: buttonOnPressOut } = useBounceAnimation({
         scaleTo: 0.9,
         haptics: Haptics.ImpactFeedbackStyle.Light,
         config: config.gentle,
-        doSound: true
+        playSound: sound
     });
 
     return (
@@ -147,6 +147,7 @@ export default function Button({ title, onPress, backgroundColor, textColor, dis
                 ...reanimatedStyle
             }}>
                 <Pressable
+                    android_disableSound={true}
                     onPress={disabled ? () => { } : onPress}
                     onPressIn={disabled ? () => { } : buttonOnPressIn}
                     onPressOut={disabled ? () => { } : buttonOnPressOut}

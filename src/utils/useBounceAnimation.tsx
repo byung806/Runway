@@ -1,47 +1,24 @@
 import { config as reactSpringConfig, useSpring } from '@react-spring/native';
-import { useEffect, useState } from 'react';
 import * as Haptics from 'expo-haptics';
-import { Audio } from 'expo-av';
+import { useState } from 'react';
+import useSound, { PlaySoundFunction, PossibleSounds } from './useSound';
 
-const useBounceAnimation = ({ pressIn, pressOut, scaleTo = 0.8, haptics, config, doSound, doQuizSoundCorrect, doQuizSoundWrong }: {
+export type SoundType = undefined | 'none' | PossibleSounds;
+
+const useBounceAnimation = ({ pressIn, pressOut, scaleTo = 0.8, haptics, config, playSound }: {
     pressIn?: () => Promise<void>,
     pressOut?: () => Promise<void>,
     scaleTo?: number,
     haptics?: Haptics.ImpactFeedbackStyle,
-    config?: any
-    doSound?: boolean
-    doQuizSoundCorrect?: boolean
-    doQuizSoundWrong?: boolean
+    config?: any,
+    playSound?: SoundType
 }) => {
-    const [sound, setSound] = useState<Audio.Sound>();
-
-    async function playSound() {
-        const { sound } = await Audio.Sound.createAsync(
-            require('@/assets/buttonSound.mp3'));
-        setSound(sound);
-        await sound.playAsync();
-    }
-
-    async function playQuizSoundCorrect() {
-        const { sound } = await Audio.Sound.createAsync(
-            require('@/assets/success.mp3'));
-        setSound(sound);
-        await sound.playAsync();
-    }
-
-    async function playQuizSoundWrong() {
-        const { sound } = await Audio.Sound.createAsync(
-            require('@/assets/failure.mp3'));
-        setSound(sound);
-        await sound.playAsync();
-    }
-
-    useEffect(() => {
-        return sound ? () => {
-            sound.unloadAsync();
-        }
-            : undefined;
-    }, [sound])
+    let playButtonSound: PlaySoundFunction;
+    let playQuizSoundCorrect: PlaySoundFunction;
+    let playQuizSoundWrong: PlaySoundFunction;
+    if (playSound === 'button') { playButtonSound = useSound('button'); }
+    if (playSound === 'quizCorrect') { playQuizSoundCorrect = useSound('quizCorrect'); }
+    if (playSound === 'quizWrong') { playQuizSoundWrong = useSound('quizWrong'); }
 
     const [active, setActive] = useState(false);
 
@@ -56,16 +33,14 @@ const useBounceAnimation = ({ pressIn, pressOut, scaleTo = 0.8, haptics, config,
             Haptics.impactAsync(haptics);
         }
 
-        if (doSound) {
-            playSound();
+        if (playSound === 'button') {
+            await playButtonSound();
         }
-
-        if (doQuizSoundCorrect) {
-            playQuizSoundCorrect();
+        if (playSound === 'quizCorrect') {
+            await playQuizSoundCorrect();
         }
-
-        if (doQuizSoundWrong) {
-            playQuizSoundWrong();
+        if (playSound === 'quizWrong') {
+            await playQuizSoundWrong();
         }
         await pressIn?.();
 

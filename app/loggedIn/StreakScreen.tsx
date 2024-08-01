@@ -97,7 +97,6 @@ export default function StreakScreen({ navigation, ...props }: { navigation: Sta
                     }}
                     disabled={!buttonClickable}
                     title={'Continue'}
-                    filled={false}
                     style={{ width: '80%', marginBottom: 20 }}
                     onPress={() => navigation.navigate('app')}
                 />

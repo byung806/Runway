@@ -38,7 +38,6 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                         onPress={() => {
                             navigation.navigate('login');
                         }}
-                        filled={false}
                         style={{ width: "80%", padding: 10 }}
                     />
                 </View>

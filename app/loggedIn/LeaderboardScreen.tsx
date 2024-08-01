@@ -40,7 +40,7 @@ export default function LeaderboardScreen({ navigation, ...props }: { navigation
                     flexShrink: 1,
                 }}>
                 <Text style={{ ...Styles.title, color: theme.text, fontSize: 40 }}>Leaderboard</Text>
-                <Button title="Back" onPress={() => navigation.navigate('app')} filled={false} />
+                <Button title="Back" onPress={() => navigation.navigate('app')} />
             </View>
             <TabView
                 navigationState={{ index, routes }}

@@ -132,9 +132,7 @@ export function QuestionContentChunk({ focused, question, choices, possiblePoint
                                 disabled={done}
                                 onPress={() => handleAnswer(index, choice.correct)}
                                 textColor={theme.white}
-                                sound={false}
-                                correctSound={choice.correct}
-                                wrongSound={!choice.correct}
+                                sound={choice.correct ? 'quizCorrect' : 'quizWrong'}
                                 style={{
                                     width: '100%',
                                     // height: 50,
