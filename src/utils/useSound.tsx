@@ -4,9 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 export type PossibleSounds = 'button' | 'quizCorrect' | 'quizWrong';
 
 const soundFiles = {
-    button: require('@/assets/buttonSound.mp3'),
-    quizCorrect: require('@/assets/success.mp3'),
-    quizWrong: require('@/assets/failure.mp3'),
+    button: require('@/assets/sounds/buttonSound.mp3'),
+    quizCorrect: require('@/assets/sounds/success.mp3'),
+    quizWrong: require('@/assets/sounds/failure.mp3'),
 };
 
 export type PlaySoundFunction = () => Promise<void>;

@@ -132,7 +132,7 @@ export default function Leaderboard({ type }: { type: LeaderboardType }) {
                 keyExtractor={(item) => (item.username)}
                 renderItem={({ item, index }) => <LeaderboardEntry
                     place={index + 1}
-                    avatar={"@/assets/favicon.png"}
+                    avatar={''}
                     name={item.username}
                     points={item.points}
                     streak={item.streak}

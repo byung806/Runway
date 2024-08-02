@@ -416,7 +416,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.byung806.runway;
-				PRODUCT_NAME = "Runway";
+				PRODUCT_NAME = Runway;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runway/Runway-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -449,7 +449,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.byung806.runway;
-				PRODUCT_NAME = "Runway";
+				PRODUCT_NAME = Runway;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runway/Runway-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

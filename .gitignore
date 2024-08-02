@@ -34,7 +34,7 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-src/components/game_unused
+**/unused/
 
 google-services.json
 GoogleService-Info.plist

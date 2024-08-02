@@ -17,12 +17,12 @@ export default function Logo({ size = 120, animated = true }: { size?: number, a
         return (
             <Pressable android_disableSound={true} onPressIn={press} onPressOut={onPressOut}>
                 <AnimatedView style={{transform: [{scale: scale}]}}>
-                    <Image source={require('@/assets/logo.png')} style={{ width: size, height: size }} />
+                    <Image source={require('@/assets/icon.png')} style={{ width: size, height: size }} />
                 </AnimatedView>
             </Pressable>
         )
     }
     return (
-        <Image source={require('@/assets/logo.png')} style={{ width: size, height: size }} />
+        <Image source={require('@/assets/icon.png')} style={{ width: size, height: size }} />
     )
 }
