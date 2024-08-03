@@ -9,6 +9,7 @@ import Button from './Button';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
 import AddFriendModal from './AddFriendModal';
+import { Tabs } from 'react-native-collapsible-tab-view';
 
 interface LeaderboardEntryProps {
     place: number;
@@ -50,7 +51,7 @@ function LeaderboardEntry({ place, avatar, name, points, streak }: LeaderboardEn
                 flexDirection: 'row',
                 alignItems: 'center',
                 padding: 10,
-                backgroundColor: firebase.userData?.username === name ? theme.runwayBackgroundColor : theme.runwayBackgroundColor,
+                backgroundColor: firebase.userData?.username === name ? theme.runwayOuterBackgroundColor : theme.runwayOuterBackgroundColor,
                 borderColor: firebase.userData?.username === name ? theme.runwayTextColor : 'transparent',
                 borderWidth: 4,
                 borderRadius: 10,
@@ -115,26 +116,24 @@ export default function Leaderboard({ type }: { type: LeaderboardType }) {
     }
 
     return (
-        <View
+        <Tabs.FlatList
+            data={data?.leaderboard}
             style={{
-                flex: 1,
-                backgroundColor: theme.runwayBackgroundColor,
-            }}>
-            <FlatList
-                data={data?.leaderboard}
-                style={{
-                    padding: 10,
-                }}
-                ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-                keyExtractor={(item) => (item.username)}
-                renderItem={({ item, index }) => <LeaderboardEntry
+                padding: 10,
+            }}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+            keyExtractor={(item) => (item.username)}
+            renderItem={({ item, index }) =>
+                <LeaderboardEntry
                     place={index + 1}
                     avatar={''}
                     name={item.username}
                     points={item.points}
                     streak={item.streak}
-                />}
-            />
-        </View>
+                />
+            }
+        />
     );
 }
