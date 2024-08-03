@@ -5,10 +5,10 @@ import { animated, config } from '@react-spring/native';
 import * as Haptics from 'expo-haptics';
 import { useContext, useState } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
-import Button3D from './Button';
+import Button from './Button';
 import Text from './Text';
-import TextInput from './TextInput';
 import { ThemeContext } from './ThemeProvider';
+import AddFriendModal from './AddFriendModal';
 
 interface LeaderboardEntryProps {
     place: number;
@@ -23,6 +23,7 @@ const AnimatedView = animated(View);
 
 function LeaderboardEntry({ place, avatar, name, points, streak }: LeaderboardEntryProps) {
     const theme = useContext(ThemeContext);
+    const firebase = useFirebase();
 
     const { scale, onPressIn, onPressOut } = useBounceAnimation({
         scaleTo: 0.95,
@@ -49,14 +50,16 @@ function LeaderboardEntry({ place, avatar, name, points, streak }: LeaderboardEn
                 flexDirection: 'row',
                 alignItems: 'center',
                 padding: 10,
-                backgroundColor: theme.backgroundSecondary,
+                backgroundColor: firebase.userData?.username === name ? theme.runwayBackgroundColor : theme.runwayBackgroundColor,
+                borderColor: firebase.userData?.username === name ? theme.runwayTextColor : 'transparent',
+                borderWidth: 4,
                 borderRadius: 10,
                 transform: [{ scale: scale }],
             }}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
-                    <Text style={{ color: theme.text, fontSize: 15, marginLeft: 10, marginRight: 30 }}>{place}</Text>
+                    <Text style={{ color: theme.runwayTextColor, fontSize: 15, marginLeft: 10, marginRight: 30 }}>{place}</Text>
                     {/* <Image source={{ uri }} style={{ width: 50, height: 50 }} /> */}
-                    <Text style={{ color: theme.text, fontSize: 15, }}>{name}</Text>
+                    <Text style={{ color: theme.runwayTextColor, fontSize: 15, }}>{name}</Text>
                 </View>
                 <View style={{
                     margin: 5,
@@ -79,7 +82,7 @@ function LeaderboardEntry({ place, avatar, name, points, streak }: LeaderboardEn
 export default function Leaderboard({ type }: { type: LeaderboardType }) {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
-    const [friend, setFriend] = useState('');
+    const [addFriendModalVisible, setAddFriendModalVisible] = useState(false);
 
     const data = type === 'friends' ? firebase.friendsLeaderboard : firebase.globalLeaderboard;
 
@@ -89,7 +92,7 @@ export default function Leaderboard({ type }: { type: LeaderboardType }) {
             <View
                 style={{
                     flex: 1,
-                    backgroundColor: theme.background,
+                    backgroundColor: theme.runwayBackgroundColor,
                     borderTopLeftRadius: 10,
                     borderTopRightRadius: 10,
                 }}>
@@ -99,20 +102,14 @@ export default function Leaderboard({ type }: { type: LeaderboardType }) {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                    <Text style={{ color: theme.text, fontSize: 20 }}>You have no friends yet!</Text>
-                    <TextInput
-                        placeholder={'Friend Username'}
-                        onChangeText={setFriend}
-                        style={{ marginBottom: 10 }}
-                    />
-                    <Button3D title='Add Friend' onPress={async () => {
-                        const success = await firebase.addFriend(friend);
-                        if (success) {
-                            setFriend('');
-                            firebase.getLeaderboard('friends');
-                        }
-                    }} />
+                    <Text style={{ color: theme.runwayTextColor, fontSize: 20, marginBottom: 20 }}>You have no friends yet!</Text>
+                    <Button title='Add Friend' onPress={() => { setAddFriendModalVisible(true) }} />
                 </View>
+
+                <AddFriendModal
+                    visible={addFriendModalVisible}
+                    setVisible={setAddFriendModalVisible}
+                />
             </View>
         )
     }
@@ -121,7 +118,7 @@ export default function Leaderboard({ type }: { type: LeaderboardType }) {
         <View
             style={{
                 flex: 1,
-                backgroundColor: theme.background,
+                backgroundColor: theme.runwayBackgroundColor,
             }}>
             <FlatList
                 data={data?.leaderboard}

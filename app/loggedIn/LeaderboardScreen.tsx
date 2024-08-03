@@ -31,15 +31,16 @@ export default function LeaderboardScreen({ navigation, ...props }: { navigation
     ]);
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: theme.backgroundSecondary }} edges={['top']}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.runwayBackgroundColor }} edges={['top']}>
             <View
                 style={{
                     ...Styles.centeringContainer,
                     padding: 10,
                     borderRadius: 5,
                     flexShrink: 1,
+                    gap: 10,
                 }}>
-                <Text style={{ ...Styles.title, color: theme.text, fontSize: 40 }}>Leaderboard</Text>
+                <Text style={{ ...Styles.title, color: theme.runwayTextColor, fontSize: 40 }}>Leaderboard</Text>
                 <Button title="Back" onPress={() => navigation.navigate('app')} />
             </View>
             <TabView
@@ -51,12 +52,12 @@ export default function LeaderboardScreen({ navigation, ...props }: { navigation
                     return (
                         <TabBar
                             {...props}
-                            indicatorStyle={{ backgroundColor: theme.accent }}
-                            style={{ backgroundColor: theme.backgroundSecondary }}
+                            indicatorStyle={{ backgroundColor: theme.runwayTextColor }}
+                            style={{ backgroundColor: theme.runwayBackgroundColor }}
                             bounces={true}
                             pressColor={'transparent'}
                             renderLabel={({ route, focused, color }) => (
-                                <Text style={{ color: theme.text }}>{route.title}</Text>
+                                <Text style={{ color: theme.runwayTextColor }}>{route.title}</Text>
                             )}
                         />
                     )

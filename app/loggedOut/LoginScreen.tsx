@@ -61,7 +61,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
     }, [firebase.userData]);
 
     return (
-        <View style={{ flex: 1, backgroundColor: theme.background }}>
+        <View style={{ flex: 1, backgroundColor: theme.runwayBackgroundColor }}>
             <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>
                 <SafeAreaView style={{ ...Styles.centeringContainer, flex: 1 }}>
 

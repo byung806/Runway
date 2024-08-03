@@ -11,7 +11,7 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
 
     return (
         <View style={{
-            flex: 1, backgroundColor: theme.background,
+            flex: 1, backgroundColor: theme.runwayBackgroundColor,
         }}>
             <SafeAreaView style={{
                 flex: 1,
