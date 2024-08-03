@@ -131,7 +131,7 @@ function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => vo
 function ContentFooterComponent() {
     const height = Dimensions.get('window').height;
     const theme = useContext(ThemeContext);
-    const { isOnboardingContent, cardCompleted, colors, allQuestionsCompleted, finish } = useContent();
+    const { isOnboardingContent, isToday, cardCompleted, colors, earnedPointsWithoutStreak, earnedStreakBonus, earnablePointsWithoutStreak, allQuestionsCompleted, finish } = useContent();
 
     const [loading, setLoading] = useState(false);
 
@@ -143,7 +143,7 @@ function ContentFooterComponent() {
 
     return (
         <View style={{ height: height, ...Styles.centeringContainer, padding: 20, gap: 20 }}>
-            {allQuestionsCompleted ?
+            {allQuestionsCompleted || cardCompleted ?
                 <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor }}>
                     {isOnboardingContent ? 'You\'re done! Let\'s see how many points you earned.' : 'You\'re all done!'}
                 </Text>
@@ -151,20 +151,26 @@ function ContentFooterComponent() {
                 <Text style={{ textAlign: 'center', fontSize: 35, color: colors.textColor }}>
                     Complete all the questions to finish!
                 </Text>}
+            {!cardCompleted && allQuestionsCompleted &&
+                <>
+                    <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>Points Earned: +{Math.round(earnedPointsWithoutStreak)}</Text>
+                    { isToday && <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>Streak Bonus: +{Math.round(earnedStreakBonus)}</Text> }
+                </>
+            }
+            {cardCompleted &&
+                <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>You only earn points for cards you haven't seen before!</Text>
+            }
             <Button
                 title='Finish'
                 backgroundColor={colors.textColor}
                 textColor={theme.white}
                 onPress={onPress}
-                disabled={!allQuestionsCompleted || loading}
+                disabled={(!allQuestionsCompleted || loading) && !cardCompleted}
                 style={{
                     width: '80%',
                     height: 50,
                 }}
             />
-            {cardCompleted &&
-                <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>You've already completed this card!</Text>
-            }
         </View>
     )
 }

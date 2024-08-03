@@ -13,8 +13,11 @@ interface ContentContextType {
     isOnboardingContent?: boolean;
 
     date: string;
+    isToday: boolean;
     content: Content;
     colors: ContentColors;
+    earnedPointsWithoutStreak: number;
+    earnedStreakBonus: number;
     earnablePointsWithoutStreak: number;
     allQuestionsCompleted: boolean;
     cardCompleted: boolean;
@@ -47,13 +50,17 @@ export function ContentProvider(props: ContentProviderProps) {
     const navigation = useNavigation<any>();
 
     const today = getTodayDate();
+    const isToday = date === today;
     const [cardCompleted, setCardCompleted] = useState(getCardCompleted());
 
     useEffect(() => {
         setCardCompleted(getCardCompleted());
     }, [firebase.userData]);
 
+    const [earnedPointsWithoutStreak, setEarnedPointsWithoutStreak] = useState(0);
+    const [earnedStreakBonus, setEarnedStreakBonus] = useState(0);
     const earnablePointsWithoutStreak = date === today ? 300 : 200;
+
     const [allQuestionsCompleted, setAllQuestionsCompleted] = useState(false);
     const [questionScores, setQuestionScores] = useState<{
         earned: number;
@@ -72,6 +79,8 @@ export function ContentProvider(props: ContentProviderProps) {
         closeContentModal();
         setAllQuestionsCompleted(false);
         setQuestionScores([]);
+        setEarnedPointsWithoutStreak(0);
+        setEarnedStreakBonus(0);
     }
 
     /**
@@ -85,6 +94,10 @@ export function ContentProvider(props: ContentProviderProps) {
             earned,
             possible
         }]);
+        if (isToday) {
+            setEarnedStreakBonus((earnedPointsWithoutStreak + earned) * (Math.min((firebase.userData?.streak?? 0) * 0.01, 1.3)));
+        }
+        setEarnedPointsWithoutStreak(earnedPointsWithoutStreak + earned);
     }
 
     /**
@@ -94,6 +107,8 @@ export function ContentProvider(props: ContentProviderProps) {
         if (!cardCompleted && !isOnboardingContent) {  // don't need this since requestCompleteDate in AppScreen already checks if date is completed, but just in case
             const pointsEarned = questionScores.reduce((acc, curr) => acc + curr.earned, 0);
             const pointsPossible = questionScores.reduce((acc, curr) => acc + curr.possible, 0);
+
+            console.log('pointsEarned', pointsEarned, pointsPossible);
 
             const { success } = await firebase.requestCompleteDate(date, pointsEarned / pointsPossible * 100);
 
@@ -109,14 +124,19 @@ export function ContentProvider(props: ContentProviderProps) {
         closeContentModal();
         setAllQuestionsCompleted(false);
         setQuestionScores([]);
+        setEarnedPointsWithoutStreak(0);
+        setEarnedStreakBonus(0);
     }
 
     return (
         <ContentContext.Provider value={{
             isOnboardingContent,
             date: date ?? '',
+            isToday,
             content,
             colors,
+            earnedPointsWithoutStreak,
+            earnedStreakBonus,
             earnablePointsWithoutStreak,
             allQuestionsCompleted,
             cardCompleted,
