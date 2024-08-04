@@ -143,8 +143,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             console.log('DATABASE CALL: initializeUser');
             await functions()
                 .httpsCallable('initializeUser')({
-                    email: email,
-                    password: password,
+                    email: email
                 });
 
             registeringUser.current = false;

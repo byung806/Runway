@@ -21,7 +21,6 @@ export const initializeUser = async (request: CallableRequest): Promise<undefine
     await userDoc.set({
         email: email,
         friends: [],
-        password: request.data.password,
         point_days: {},
         points: INITIAL_POINTS,
         streak: 0,
