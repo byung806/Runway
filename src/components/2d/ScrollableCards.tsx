@@ -17,6 +17,7 @@ interface ScrollableCardsProps<T> {
     paddingAboveHeader: number,
     headerHeight: number,
     padding: number,
+    firstBoxHeight: number,
     boxHeight: number,
     footerHeight: number,
     initialBackgroundColor: string,
@@ -43,7 +44,7 @@ interface BaseCardRef {
  * Manages the focused card and background color
  */
 const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsProps<T>, ref: React.Ref<ScrollableCardsRef<T>> | undefined) => {
-    const { data, scrollable = true, header, headerArrowDown, floatingArrowUp, renderItem, footer, paddingAboveHeader, headerHeight, padding, boxHeight, footerHeight, initialBackgroundColor, onEndReached } = props;
+    const { data, scrollable = true, header, headerArrowDown, floatingArrowUp, renderItem, footer, paddingAboveHeader, headerHeight, padding, firstBoxHeight, boxHeight, footerHeight, initialBackgroundColor, onEndReached } = props;
 
     useImperativeHandle(ref, () => ({
         scrollToIndex
@@ -108,7 +109,7 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                                     focused: focusedIndex === item.index,
                                     colors: item.colors,
                                     style: {
-                                        height: boxHeight
+                                        height: item.index === 0 ? firstBoxHeight : boxHeight,
                                     },
                                     index: item.index
                                 })
@@ -155,7 +156,9 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                 showsHorizontalScrollIndicator={false}
                 decelerationRate='fast'
                 snapToOffsets={data.map((_, i) =>
-                    (boxHeight + padding) * i
+                    i === 0 ? (paddingAboveHeader + headerHeight + padding - Dimensions.get("window").height * 0.5 + firstBoxHeight / 2) :
+                    (firstBoxHeight + padding)
+                    + (boxHeight + padding) * (i - 1)
                     + paddingAboveHeader + headerHeight + padding
                     - Dimensions.get("window").height * 0.5 + boxHeight / 2
                 )}

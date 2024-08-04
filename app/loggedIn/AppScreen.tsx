@@ -74,7 +74,8 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
         paddingAboveHeader: 50,
         headerHeight: Dimensions.get("window").height * 0.8,
         padding: 30,
-        boxHeight: (Dimensions.get("window").width - 30 * 2) * 1.6,
+        firstBoxHeight: (Dimensions.get("window").width - 30 * 2) * 1.6,
+        boxHeight: (Dimensions.get("window").width - 30 * 2) * 1.2,
         footerHeight: Dimensions.get("window").height * 0.8,
     };
 
