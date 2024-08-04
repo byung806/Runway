@@ -1,6 +1,6 @@
 import { BaseCardAttributes, DateCard, ListFooterComponent, ListHeaderComponent, ScrollableCards, ThemeContext } from '@/components/2d';
-import React, { useContext, useState } from 'react';
-import { Dimensions } from 'react-native';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Dimensions, View } from 'react-native';
 
 import { getTodayDate, stringToDate } from '@/utils/date';
 import { Content, useFirebase } from '@/utils/FirebaseProvider';
@@ -19,14 +19,23 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
 
     const [cards, setCards] = useState<DateCardAttributes[]>([]);
 
-    const [currentlyAddingCard, setCurrentlyAddingCard] = useState(false);
-    const [allContentLoaded, setAllContentLoaded] = useState(false);
+    const currentlyAddingCard = useRef(false);
+    const canLoadMoreDays = useRef(true);
+    // const [allContentLoaded, setAllContentLoaded] = useState(false);
+
+    useEffect(() => {
+        console.log('AppScreen useEffect');
+        if (today in (firebase.userData?.point_days ?? {})) {
+            canLoadMoreDays.current = true;
+            addPreviousDay();
+        }
+    }, [firebase.userData]);
 
     /**
      * Add previous day to the list, adding a new card below the last one
      */
     async function addPreviousDay() {
-        if (currentlyAddingCard || allContentLoaded) return;
+        if (currentlyAddingCard.current || !canLoadMoreDays.current) return;
 
         let newDate;
         if (cards.length === 0) {
@@ -38,11 +47,17 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
 
         const dateString = newDate.toISOString().split('T')[0];
 
-        setCurrentlyAddingCard(true);
+        console.log('Adding day', dateString);
+
+        if (dateString === today && !(today in (firebase.userData?.point_days ?? {}))) {
+            canLoadMoreDays.current = false;
+        }
+
+        currentlyAddingCard.current = true;
         const data = await firebase.getContent(dateString);
-        setCurrentlyAddingCard(false);
+        currentlyAddingCard.current = false;
         if (!data) {
-            setAllContentLoaded(true);
+            canLoadMoreDays.current = false;
             return;
         }
 
@@ -75,8 +90,8 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                         arrowDown={undefined as never}
                     />
                 }
-                {...(cards.length !== 0 && {headerArrowDown: true})}
-                floatingArrowUp
+                {...(cards.length !== 0 && { headerArrowDown: true })}
+                // floatingArrowUp
                 renderItem={({ item }) =>
                     <DateCard
                         date={item.date}

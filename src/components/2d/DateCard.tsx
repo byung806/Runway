@@ -37,7 +37,7 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
         onPressOut: borderedCardRef.current?.onPressOut,
     }));
 
-    const cardCompleted = firebase.userData?.point_days && date in firebase.userData.point_days;
+    const cardCompleted = date in (firebase.userData?.point_days ?? {});
     const pointsEarnedIfCompleted = cardCompleted ? firebase.userData?.point_days[date] : 0;
 
     const [contentModalVisible, setContentModalVisible] = useState(false);
