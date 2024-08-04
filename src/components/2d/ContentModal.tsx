@@ -6,9 +6,11 @@ import parseContent from '@/utils/ContentParser';
 import Button from './Button';
 import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, TextContentChunk, TextContentChunkType, TextSpacerContentChunk, TextSpacerContentChunkType } from './ContentChunk';
 import { useContent } from './ContentProvider';
-import ScrollArrow from './ScrollArrow';
+import { BackArrow, ScrollArrow } from './Arrow';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
+import { stringToDate } from '@/utils/date';
+import CategoryIcon from './CategoryIcon';
 
 export type ContentChunk = TextContentChunkType | TextSpacerContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionContentChunkType;
 
@@ -101,29 +103,45 @@ export default function ContentModal({ visible }: { visible: boolean }) {
 
 function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => void }) {
     const theme = useContext(ThemeContext);
-    const { isOnboardingContent, content, colors, back } = useContent();
+    const { isOnboardingContent, date, content, colors, back } = useContent();
 
     const [arrowVisible, setArrowVisible] = useState(true);
 
     const height = Dimensions.get('window').height;
 
+    const dateObject = stringToDate(date);
+    const month = dateObject.toLocaleString('default', { month: 'short' });
+    const day = dateObject.getDate();
+
     return (
         <View style={{ height, ...Styles.centeringContainer, padding: 20, gap: 20 }}>
+            {!isOnboardingContent &&
+                <View style={{
+                    position: 'absolute',
+                    top: 50,
+                    left: 20,
+                }}>
+                    <BackArrow onPress={back} />
+                </View>
+            }
+
             <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor }}>
                 {content.title}
             </Text>
-            {!isOnboardingContent &&
-                <Button
-                    title='Back'
-                    backgroundColor={colors.textColor}
-                    textColor={theme.white}
-                    onPress={back}
-                    style={{
-                        width: '80%',
-                        height: 50,
-                    }}
-                />
-            }
+            <View
+                style={{
+                    backgroundColor: '#A2A2A2',
+                    height: 2,
+                    // width: 165
+                    alignSelf: 'stretch',
+                }}
+            />
+            {/* <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>
+                {month} {day}
+            </Text> */}
+            
+            <CategoryIcon category={content.category} size={40} color={colors.textColor} />
+
             <View style={{
                 position: 'absolute',
                 bottom: 50
@@ -151,7 +169,7 @@ function ContentFooterComponent() {
         <View style={{ height: height, ...Styles.centeringContainer, padding: 20, gap: 20 }}>
             {allQuestionsCompleted || cardCompleted ?
                 <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor }}>
-                    {isOnboardingContent ? 'You\'re done! Let\'s see how many points you earned.' : 'You\'re all done!'}
+                    You're all done!
                 </Text>
                 :
                 <Text style={{ textAlign: 'center', fontSize: 35, color: colors.textColor }}>
@@ -160,7 +178,7 @@ function ContentFooterComponent() {
             {!cardCompleted && allQuestionsCompleted &&
                 <>
                     <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>Points Earned: +{Math.round(earnedPointsWithoutStreak)}</Text>
-                    { isToday && <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>Streak Bonus: +{Math.round(earnedStreakBonus)}</Text> }
+                    {isToday && <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>Streak Bonus: +{Math.round(earnedStreakBonus)}</Text>}
                 </>
             }
             {cardCompleted &&

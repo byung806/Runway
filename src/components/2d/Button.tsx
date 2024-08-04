@@ -122,7 +122,7 @@ const ReactSpringAnimatedView = animated(View);
 export default function Button({ title, onPress, backgroundColor, textColor, disabled = false, sound = 'button', reanimatedStyle, style }: ButtonProps) {
     const theme = useContext(ThemeContext);
 
-    const { scale: buttonScale, onPressIn: buttonOnPressIn, onPressOut: buttonOnPressOut } = useBounceAnimation({
+    const { scale: buttonScale, onPressIn: buttonOnPressIn, onPress: buttonOnPress, onPressOut: buttonOnPressOut } = useBounceAnimation({
         scaleTo: 0.9,
         haptics: Haptics.ImpactFeedbackStyle.Light,
         config: config.gentle,
@@ -148,7 +148,7 @@ export default function Button({ title, onPress, backgroundColor, textColor, dis
             }}>
                 <Pressable
                     android_disableSound={true}
-                    onPress={disabled ? () => { } : onPress}
+                    onPress={disabled ? () => { } : () => { buttonOnPress(); onPress(); }}
                     onPressIn={disabled ? () => { } : buttonOnPressIn}
                     onPressOut={disabled ? () => { } : buttonOnPressOut}
                     style={{ ...Styles.centeringContainer, padding: 10, paddingHorizontal: 20 }}

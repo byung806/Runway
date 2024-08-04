@@ -1,8 +1,8 @@
 import { BaseCardAttributes, DateCard, ListFooterComponent, ListHeaderComponent, ScrollableCards, ThemeContext } from '@/components/2d';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions } from 'react-native';
 
-import { getTodayDate, stringToDate } from '@/utils/date';
+import { stringToDate } from '@/utils/date';
 import { Content, useFirebase } from '@/utils/FirebaseProvider';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -15,7 +15,6 @@ interface DateCardAttributes extends BaseCardAttributes {
 export default function AppScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
-    const today = getTodayDate();
 
     const [cards, setCards] = useState<DateCardAttributes[]>([]);
 
@@ -25,11 +24,11 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
 
     useEffect(() => {
         console.log('AppScreen useEffect');
-        if (today in (firebase.userData?.point_days ?? {})) {
+        if (firebase.todayCompleted) {
             canLoadMoreDays.current = true;
             addPreviousDay();
         }
-    }, [firebase.userData]);
+    }, [firebase.todayCompleted]);
 
     /**
      * Add previous day to the list, adding a new card below the last one
@@ -39,7 +38,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
 
         let newDate;
         if (cards.length === 0) {
-            newDate = stringToDate(today);
+            newDate = stringToDate(firebase.today);
         } else {
             newDate = stringToDate(cards[cards.length - 1].date);
             newDate.setDate(newDate.getDate() - 1);
@@ -47,9 +46,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
 
         const dateString = newDate.toISOString().split('T')[0];
 
-        console.log('Adding day', dateString);
-
-        if (dateString === today && !(today in (firebase.userData?.point_days ?? {}))) {
+        if (dateString === firebase.today && !firebase.todayCompleted) {
             canLoadMoreDays.current = false;
         }
 

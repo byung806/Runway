@@ -1,10 +1,14 @@
 import React, { cloneElement, forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Dimensions, FlatList, Pressable } from 'react-native';
+import { Dimensions, FlatList, Pressable, View } from 'react-native';
 
 import { ContentColors } from '@/utils/FirebaseProvider';
 import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 import { ThemeContext } from './ThemeProvider';
-import ScrollArrow from './ScrollArrow';
+import { ScrollArrow } from './Arrow';
+import { Styles } from '@/styles';
+import Text from './Text';
+
+import * as Haptics from 'expo-haptics';
 
 interface ScrollableCardsProps<T> {
     data: T[],
@@ -99,10 +103,15 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                 renderItem={({ item }) => {
                     // TODO context: can convert focused, colors, style, index to context and read context inside card
                     return (
-                        <Pressable android_disableSound={true} onPressIn={() => {
-                            item.ref?.onPressIn();
-                            if (focusedIndex !== item.index) scrollToIndex(item.index);
-                        }} onPressOut={item.ref?.onPressOut}>
+                        <Pressable
+                            android_disableSound={true}
+                            onPressIn={item.ref?.onPressIn}
+                            onPress={() => {
+                                if (focusedIndex !== item.index) scrollToIndex(item.index);
+                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                            }}
+                            onPressOut={item.ref?.onPressOut}
+                        >
                             {
                                 cloneElement(renderItem({ item }), {
                                     ref: (ref: BaseCardRef) => { item.ref = ref },
@@ -124,17 +133,26 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                         arrowDown: headerArrowDown ? (
                             <ScrollArrow
                                 type='down'
-                                visible={focusedIndex === null}
+                                // visible={focusedIndex === null}
+                                visible
                                 onPress={() => { scrollToIndex(0); }}
                             />
                         ) : undefined
                     })}
                 ListFooterComponent={footer && cloneElement(footer, { height: footerHeight })}
                 getItemLayout={(_, index) => {
-                    return {
-                        length: boxHeight + padding,
-                        offset: (boxHeight + padding) * index + (paddingAboveHeader + headerHeight + padding),
-                        index
+                    if (index === 0) {
+                        return {
+                            length: firstBoxHeight + padding,
+                            offset: paddingAboveHeader + headerHeight + padding,
+                            index
+                        }
+                    } else {
+                        return {
+                            length: boxHeight + padding,
+                            offset: (boxHeight + padding) * (index - 1) + (paddingAboveHeader + headerHeight + padding + firstBoxHeight + padding),
+                            index
+                        }
                     }
                 }}
                 keyExtractor={(item) => item.index.toString()}
@@ -157,10 +175,10 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                 decelerationRate='fast'
                 snapToOffsets={data.map((_, i) =>
                     i === 0 ? (paddingAboveHeader + headerHeight + padding - Dimensions.get("window").height * 0.5 + firstBoxHeight / 2) :
-                    (firstBoxHeight + padding)
-                    + (boxHeight + padding) * (i - 1)
-                    + paddingAboveHeader + headerHeight + padding
-                    - Dimensions.get("window").height * 0.5 + boxHeight / 2
+                        (firstBoxHeight + padding)
+                        + (boxHeight + padding) * (i - 1)
+                        + paddingAboveHeader + headerHeight + padding
+                        - Dimensions.get("window").height * 0.5 + boxHeight / 2
                 )}
                 onEndReached={onEndReached}
                 onEndReachedThreshold={2}

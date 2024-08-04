@@ -7,8 +7,6 @@ export default function parseContent(content: Content, totalPoints: number): Con
     const chunks: ContentChunk[] = [];
     const body = content.body;
 
-    console.log('parsing content');
-
     // TODO: rn everything's in order but we might want to add a way to reorder the content
 
     const bodyParagraphChunks = body.split('\n');

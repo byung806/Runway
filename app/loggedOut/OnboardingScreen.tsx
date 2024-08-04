@@ -39,18 +39,23 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
                 // borderColor: "#b3a4e0",
                 // backgroundColor: "#6d3b9f",
                 // textColor: "#ffffff"
-                outerBackgroundColor: theme.runwayOuterBackgroundColor,
-                borderColor: theme.runwayBorderColor,
-                backgroundColor: theme.runwayBackgroundColor,
-                textColor: theme.runwayTextColor
+                ...defaultColors
             }, index: 1
+        }, {
+            ref: null, colors: {
+                // outerBackgroundColor: "#8c62d0",
+                // borderColor: "#b3a4e0",
+                // backgroundColor: "#6d3b9f",
+                // textColor: "#ffffff"
+                ...defaultColors
+            }, index: 2
         }
     ]);
 
     const onboardingContent: Content = {
         title: username + '\'s first lesson!',
         category: 'onboarding',
-        body: 'You\'ll get a new science topic daily in a short lesson like this. Let\'s do an example! Water is everywhere and is essential for life. But let\'s look at what water really is. Water is a made of hydrogen and oxygen - H₂O.',
+        body: 'Water is everywhere and is essential for life. But let\'s look at what water really is. Water is a made of hydrogen and oxygen - H₂O.',
         questions: [
             {
                 question: 'What is the chemical formula for water?',
@@ -92,7 +97,7 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
                 // backgroundColor: "#2e1463",
                 // textColor: "#ffffff"
                 ...defaultColors
-            }, index: 2
+            }, index: 3
         },
         {
             ref: null, colors: {
@@ -101,7 +106,7 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
                 // backgroundColor: "#1e0d4d",
                 // textColor: "#ffffff"
                 ...defaultColors
-            }, index: 3
+            }, index: 4
         },
         {
             ref: null, colors: {
@@ -110,7 +115,7 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
                 // backgroundColor: "#190b3e",
                 // textColor: "#ffffff"
                 ...defaultColors
-            }, index: 4
+            }, index: 5
         },
         {
             ref: null, colors: {
@@ -119,7 +124,7 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
                 // backgroundColor: "#14082f",
                 // textColor: "#ffffff"
                 ...defaultColors
-            }, index: 5
+            }, index: 6
         }
     ]
 
@@ -136,7 +141,7 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
 
     function closeOnboardingContentModal() {
         setOnboardingContentModalVisible(false);
-        scrollableCardsRef.current?.scrollToIndex(2);
+        scrollableCardsRef.current?.scrollToIndex(3);
         setDoneWithExampleQuestion(true);
     }
 
@@ -144,18 +149,20 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
         paddingAboveHeader: 0,
         headerHeight: Dimensions.get("window").height * 1,
         padding: 30,
+        firstBoxHeight: (Dimensions.get("window").width - 30 * 2) * 1.6,
         boxHeight: (Dimensions.get("window").width - 30 * 2) * 1.6,
         footerHeight: Dimensions.get("window").height * 0.8,
     }
 
+    // TODO: add swipe hint arrow
     return (
         <>
             <ScrollableCards<OnboardingCardAttributes>
                 ref={scrollableCardsRef}
                 data={cards}
-                scrollable={username.length >= 3}
+                scrollable={username.length >= 3 && username.length <= 10}
                 header={<OnboardingHeaderComponent setUsername={setUsername} height={undefined as never} arrowDown={undefined as never} />}
-                headerArrowDown={username.length >= 3}
+                headerArrowDown={username.length >= 3 && username.length <= 10}
                 renderItem={({ item }) =>
                     <OnboardingCard
                         username={username} openOnboardingContentModal={openOnboardingContentModal}

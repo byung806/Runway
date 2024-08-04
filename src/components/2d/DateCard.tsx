@@ -1,14 +1,16 @@
-import { dayIsYesterday, getTodayDate, sameDay, stringToDate } from '@/utils/date';
+import { sameDay, stringToDate } from '@/utils/date';
 import { Content, ContentColors, useFirebase } from '@/utils/FirebaseProvider';
+import { AntDesign } from "@expo/vector-icons";
 import { forwardRef, memo, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { View } from 'react-native';
 import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import BorderedCard, { BorderedCardRef } from './BorderedCard';
 import Button from './Button';
 import ContentModal from './ContentModal';
+import { ContentProvider } from './ContentProvider';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
-import { ContentProvider } from './ContentProvider';
+
 
 
 interface DateCardProps {
@@ -73,7 +75,7 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
 
     // TOP RIGHT
     let extra = ''
-    const today = stringToDate(getTodayDate());
+    const today = stringToDate(firebase.today);
     if (sameDay(today, dateObject)) {
         extra += 'Today';
     }
@@ -93,7 +95,7 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
                     paddingHorizontal: 10,
                     justifyContent: 'space-between',
                 }}>
-                    <View style={{
+                    {/* <View style={{
                         alignItems: 'center',
                         paddingTop: 4,
                     }}>
@@ -105,12 +107,17 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
                             color: colors.textColor,
                             fontSize: 20,
                         }}>{month}</Text>
-                    </View>
+                    </View> */}
                     <Text style={{
                         color: colors.textColor,
                         paddingTop: 8,
                         fontSize: 20,
                     }}>{extra}</Text>
+                    {cardCompleted &&
+                        <View style={{ paddingTop: 8 }}>
+                            <AntDesign name={'checkcircle'} size={30} color={theme.black} />
+                        </View>
+                    }
                 </View>
 
                 {cardCompleted &&
@@ -142,7 +149,7 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
                     <Text style={{
                         color: colors.textColor,
                         fontSize: 40,
-                    }}>{content.title}</Text>
+                    }} numberOfLines={2}>{content.title}</Text>
                 </Animated.View>
 
 
@@ -152,7 +159,7 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
                     height: 50,
                 }}>
                     <Button
-                        title='Go!'
+                        title='Learn!'
                         backgroundColor={colors.textColor}
                         textColor={theme.white}
                         onPress={() => setContentModalVisible(true)}

@@ -1,4 +1,3 @@
-import { getTodayDate } from "@/utils/date";
 import { Content, ContentColors, useFirebase } from "@/utils/FirebaseProvider";
 import { useNavigation } from "@react-navigation/native";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
@@ -49,8 +48,7 @@ export function ContentProvider(props: ContentProviderProps) {
     const firebase = useFirebase();
     const navigation = useNavigation<any>();
 
-    const today = getTodayDate();
-    const isToday = date === today;
+    const isToday = date === firebase.today;
     const [cardCompleted, setCardCompleted] = useState(getCardCompleted());
 
     useEffect(() => {
@@ -59,7 +57,7 @@ export function ContentProvider(props: ContentProviderProps) {
 
     const [earnedPointsWithoutStreak, setEarnedPointsWithoutStreak] = useState(0);
     const [earnedStreakBonus, setEarnedStreakBonus] = useState(0);
-    const earnablePointsWithoutStreak = date === today ? 300 : 200;
+    const earnablePointsWithoutStreak = isToday ? 300 : 200;
 
     const [allQuestionsCompleted, setAllQuestionsCompleted] = useState(false);
     const [questionScores, setQuestionScores] = useState<{
@@ -113,7 +111,7 @@ export function ContentProvider(props: ContentProviderProps) {
             const { success } = await firebase.requestCompleteDate(date, pointsEarned / pointsPossible * 100);
 
             if (success) {
-                if (date === today) {
+                if (isToday) {
                     navigation.navigate('streak');
                 }
                 await firebase.getUserData();

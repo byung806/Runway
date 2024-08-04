@@ -8,4 +8,4 @@ export { default as ScrollableCards, ScrollableCardsRef, BaseCardAttributes } fr
 export { default as Text } from './Text';
 export { default as TextInput } from './TextInput';
 export { ThemeContext, ThemeProvider } from './ThemeProvider';
-export { default as ScrollArrow } from './ScrollArrow';
+export { ScrollArrow, BackArrow } from './Arrow';

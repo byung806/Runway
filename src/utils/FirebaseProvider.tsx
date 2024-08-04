@@ -3,6 +3,7 @@ import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functi
 import React, { ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
 import { delay } from './utils';
+import { getTodayDate } from './date';
 
 const emailEnding = '@example.com';
 
@@ -60,15 +61,19 @@ interface LeaderboardData {
 }
 
 interface FirebaseContextType {
+    today: string;
+
     user: FirebaseAuthTypes.User | null;
     userData: UserData | null;
+    todayCompleted: boolean;
     globalLeaderboard: LeaderboardData | null;
     friendsLeaderboard: LeaderboardData | null;
+
     initializing: boolean;
+
     registerUser: (username: string, email: string, password: string) => Promise<FirebaseError | null>;
     logIn: (email: string, password: string) => Promise<FirebaseError | null>;
     logOut: () => Promise<FirebaseError | null>;
-    checkUncompletedChallengeToday: () => Promise<boolean>;
     getUserData: () => Promise<void>;
     getContent: (date: string) => Promise<{ content: Content, colors: ContentColors } | null>;
     requestCompleteDate: (date?: string, percent?: number) => Promise<{ success: boolean }>;
@@ -79,11 +84,15 @@ interface FirebaseContextType {
 // TODO: add complete specific day function
 
 export function FirebaseProvider({ children }: { children: ReactNode }) {
+    const [today, setToday] = useState(getTodayDate());  // TODO: day change
+
     // Mirror of auth().currentUser
     const [user, setUser] = useState<FirebaseAuthTypes.User | null>(auth().currentUser);
     const [userData, setUserData] = useState<UserData | null>(null);
+    const [todayCompleted, setTodayCompleted] = useState(false);
     const [globalLeaderboard, setGlobalLeaderboard] = useState<LeaderboardData | null>(null);
     const [friendsLeaderboard, setFriendsLeaderboard] = useState<LeaderboardData | null>(null);
+
     const [initializing, setInitializing] = useState(true);
     const registeringUser = useRef(false);
 
@@ -108,6 +117,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                 await getLeaderboard('friends');
             } else {
                 setUserData(null);
+                setTodayCompleted(false);
                 setGlobalLeaderboard(null);
                 setFriendsLeaderboard(null);
             }
@@ -174,21 +184,6 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     };
 
     /**
-     * Checks if there is a new uncompleted challenge for the user to complete today
-     */
-    async function checkUncompletedChallengeToday(): Promise<boolean> {
-        try {
-            console.log('DATABASE CALL: check uncompleted challenge today');
-            const data = await functions()
-                .httpsCallable('checkUncompletedChallengeToday')() as FirebaseFunctionsTypes.HttpsCallableResult<boolean>;
-            return data.data as boolean;
-        } catch (error: any) {
-            console.log(error + ' from FirebaseProvider.tsx:  checkUncompletedChallengeToday');
-            return false;
-        }
-    }
-
-    /**
      * Fetches the user data for the currently logged in user
      * Updates the userData state
      */
@@ -198,6 +193,8 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             const userData = await functions()
                 .httpsCallable('getUserData')() as FirebaseFunctionsTypes.HttpsCallableResult<UserData>;
             setUserData(userData.data);
+            setTodayCompleted(today in (userData.data?.point_days ?? {}));
+            console.log('today completed', today in (userData.data?.point_days ?? {}));
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  getUserData');
         }
@@ -286,15 +283,19 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 
     return (
         <FirebaseContext.Provider value={{
+            today,
+
             user,
             userData,
+            todayCompleted,
             globalLeaderboard,
             friendsLeaderboard,
+
             initializing,
+
             registerUser,
             logIn,
             logOut,
-            checkUncompletedChallengeToday,
             getUserData,
             getContent,
             requestCompleteDate,

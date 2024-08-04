@@ -34,6 +34,10 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
             setErrorMessage('Please make your username at least 3 characters long!');
             return;
         }
+        if (username.length > 10) {
+            setErrorMessage('Please make your username at most 10 characters long!');
+            return;
+        }
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
             setErrorMessage('Please enter a valid email!');
             return;
@@ -112,7 +116,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                             disabled={loading}
                             onPress={signupCallback}
                         />
-                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5 }}>{errorMessage}</Text> : null}
+                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.white }}>{errorMessage}</Text> : null}
                     </KeyboardAvoidingView>
 
                     <SafeAreaView style={{

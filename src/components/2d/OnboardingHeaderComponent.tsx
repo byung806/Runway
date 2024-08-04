@@ -25,9 +25,13 @@ export default function OnboardingHeaderComponent({ height, setUsername, arrowDo
                     style={{ fontSize: 20, textAlign: 'center', marginBottom: 30, height: 50, width: '80%' }}
                 />
             </View>
-            <SafeAreaView style={{ position: 'absolute', width: '100%', bottom: 0, ...Styles.centeringContainer, padding: 20 }} edges={['bottom']}>
-                {arrowDown}
-            </SafeAreaView>
+            {arrowDown ?
+                <SafeAreaView style={{ position: 'absolute', width: '100%', bottom: 0, ...Styles.centeringContainer, padding: 20, gap: 10 }} edges={['bottom']}>
+                    <Text style={{ color: theme.white, fontSize: 20 }}>Swipe</Text>
+                    {arrowDown}
+                </SafeAreaView>
+                : null
+            }
         </View>
     );
 }

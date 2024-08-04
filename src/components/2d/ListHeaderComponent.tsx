@@ -1,14 +1,12 @@
 import { Styles } from "@/styles";
 import { useFirebase } from "@/utils/FirebaseProvider";
 import { useNavigation } from "@react-navigation/native";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { View } from "react-native";
+import AddFriendModal from "./AddFriendModal";
 import Button from "./Button";
 import Text from "./Text";
 import { ThemeContext } from "./ThemeProvider";
-import AddFriendModal from "./AddFriendModal";
-import { Audio } from 'expo-av';
-import { SoundObject } from "expo-av/build/Audio";
 
 
 export default function ListHeaderComponent({ height, arrowDown }: { height: number, arrowDown: JSX.Element }) {
@@ -17,14 +15,6 @@ export default function ListHeaderComponent({ height, arrowDown }: { height: num
     const theme = useContext(ThemeContext);
 
     const [addFriendModalVisible, setAddFriendModalVisible] = useState(false);
-
-    async function checkUncompletedChallengeToday() {
-        const uncompletedChallengeToday = await firebase.checkUncompletedChallengeToday();
-        console.log('uncompletedChallengeToday', uncompletedChallengeToday);
-        if (uncompletedChallengeToday) {
-            navigation.navigate('content');
-        }
-    }
 
     async function logOut() {
         await firebase.logOut();
@@ -47,14 +37,25 @@ export default function ListHeaderComponent({ height, arrowDown }: { height: num
                 flex: 1,
                 ...Styles.centeringContainer,
             }}>
-                <Text style={{ fontSize: 40, ...Styles.lightShadow, color: theme.runwayTextColor }}>{firebase.userData?.username}</Text>
+                <Text style={{ fontSize: 40, textAlign: 'center', color: theme.white }}>
+                    {/* Welcome back, */}
+                    <Text style={{ color: theme.runwayTextColor }}> {firebase.userData?.username}</Text>
+                    {/* ! */}
+                </Text>
                 <Text style={{ fontSize: 100, ...Styles.lightShadow, color: theme.runwayTextColor }}>{firebase.userData?.points}</Text>
                 <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.runwayTextColor }}>points</Text>
                 <Button title="Leaderboard" onPress={() => navigation.navigate('leaderboard')} style={{ width: '80%', marginTop: 20 }} />
             </View>
-            <View style={{ ...Styles.centeringContainer }}>
-                {arrowDown}
-            </View>
+
+            {!firebase.todayCompleted && (
+                <View style={{ ...Styles.centeringContainer }}>
+                    <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.runwayTextColor, textAlign: 'center' }}>
+                        {/* {firebase.userData?.username} */}
+                        <Text style={{ color: theme.white }}>New challenge available!</Text>
+                    </Text>
+                    {arrowDown}
+                </View>
+            )}
 
             <AddFriendModal
                 visible={addFriendModalVisible}

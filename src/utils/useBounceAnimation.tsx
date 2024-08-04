@@ -5,8 +5,9 @@ import useSound, { PlaySoundFunction, PossibleSounds } from './useSound';
 
 export type SoundType = undefined | 'none' | PossibleSounds;
 
-const useBounceAnimation = ({ pressIn, pressOut, scaleTo = 0.8, haptics, config, playSound }: {
+const useBounceAnimation = ({ pressIn, press, pressOut, scaleTo = 0.8, haptics, config, playSound }: {
     pressIn?: () => Promise<void>,
+    press?: () => Promise<void>,
     pressOut?: () => Promise<void>,
     scaleTo?: number,
     haptics?: Haptics.ImpactFeedbackStyle,
@@ -29,6 +30,11 @@ const useBounceAnimation = ({ pressIn, pressOut, scaleTo = 0.8, haptics, config,
 
     const onPressIn = async () => {
         setActive(true);
+        await pressIn?.();
+
+    };
+
+    const onPress = async () => {
         if (haptics) {
             Haptics.impactAsync(haptics);
         }
@@ -42,9 +48,8 @@ const useBounceAnimation = ({ pressIn, pressOut, scaleTo = 0.8, haptics, config,
         if (playSound === 'quizWrong') {
             await playQuizSoundWrong();
         }
-        await pressIn?.();
-
-    };
+        await press?.();
+    }
 
     const onPressOut = async () => {
         setActive(false);
@@ -54,6 +59,7 @@ const useBounceAnimation = ({ pressIn, pressOut, scaleTo = 0.8, haptics, config,
     return {
         scale,
         onPressIn,
+        onPress,
         onPressOut,
     };
 };

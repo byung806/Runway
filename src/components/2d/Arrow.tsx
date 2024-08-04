@@ -14,10 +14,10 @@ interface ScrollArrowProps {
     onPress: () => void;
 }
 
-export default function ScrollArrow({ type, visible, onPress }: ScrollArrowProps) {
+export function ScrollArrow({ type, visible, onPress }: ScrollArrowProps) {
     if (type === 'down') {
         return (
-            <Arrow type={type} visible={visible} onPress={onPress} />
+            <Arrow filled type={type} visible={visible} onPress={onPress} />
         )
     }
     if (type === 'upFloating') {
@@ -30,13 +30,26 @@ export default function ScrollArrow({ type, visible, onPress }: ScrollArrowProps
                 // pointerEvents: (!focusedDate || focusedDate === today) ? 'none' : 'auto',
                 pointerEvents: visible ? 'auto' : 'none',
             }} edges={['top']}>
-                <Arrow type={type} visible={visible} onPress={onPress} />
+                <Arrow filled type={type} visible={visible} onPress={onPress} />
             </SafeAreaView>
         )
     }
 }
 
-function Arrow({ type, visible, onPress }: ScrollArrowProps) {
+
+export function BackArrow({ onPress }: { onPress: () => void }) {
+    return <Arrow filled={false} type='left' visible={true} onPress={onPress} />
+}
+
+
+interface ArrowProps {
+    filled: boolean;
+    type: 'upFloating' | 'down' | 'left' | 'right';
+    visible: boolean;
+    onPress: () => void;
+}
+
+function Arrow({ filled, type, visible, onPress }: ArrowProps) {
     const theme = useContext(ThemeContext);
 
     const arrowOpacity = useSharedValue(type === 'upFloating' ? 0 : 1);
@@ -61,32 +74,14 @@ function Arrow({ type, visible, onPress }: ScrollArrowProps) {
         }
     }, [visible]);
 
-    // useEffect(() => {
-    //     if (type === 'up') {
-    //         if (focusedDate === null || focusedDate === today || focusedDate === yesterday) {
-    //             arrowOpacity.value = withTiming(0, { duration: 200 });
-    //             arrowTransformY.value = withTiming(-80, { duration: 200 });
-    //         } else {
-    //             arrowOpacity.value = withTiming(1, { duration: 1000 });
-    //             arrowTransformY.value = withTiming(0, { duration: 1000 });
-    //         }
-    //     } else {
-    //         if (focusedDate !== null) {
-    //             arrowOpacity.value = withTiming(0, { duration: 300 });            
-    //         } else {
-    //             arrowOpacity.value = withTiming(1, { duration: 200 });
-    //         }
-    //     }
-    // }, [focusedDate]);
-
     return (
         <Animated.View style={{
             height: 40,
             width: 40,
             borderRadius: 1000,
             padding: 4,
-            backgroundColor: theme.black,
-            ...Styles.shadow,
+            backgroundColor: filled ? theme.black : 'transparent',
+            ...(filled ? Styles.shadow : {}),
             opacity: arrowOpacity,
             ...Styles.centeringContainer,
             transform: [{ translateY: arrowTransformY }, { scale: arrowScale }]
@@ -98,7 +93,12 @@ function Arrow({ type, visible, onPress }: ScrollArrowProps) {
                     onPress();
                 }}
             >
-                <AntDesign name={type === 'upFloating' ? 'arrowup' : 'arrowdown'} size={30} color={theme.white} />
+                <AntDesign name={
+                    type === 'upFloating' ? 'arrowup' :
+                        type === 'down' ? 'arrowdown' :
+                            type === 'left' ? 'arrowleft' :
+                                type === 'right' ? 'arrowright' : 'arrowdown'
+                } size={30} color={filled ? theme.white : theme.black} />
             </Pressable>
         </Animated.View>
     )

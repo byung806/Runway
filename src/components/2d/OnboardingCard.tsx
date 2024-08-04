@@ -40,8 +40,6 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
     useEffect(() => {
         if (focused) {
             opacity.value = withTiming(1, { duration: 600 });
-        } else {
-            opacity.value = withTiming(0, { duration: 600 });
         }
     }, [focused]);
 
@@ -50,13 +48,30 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
         insides = (
             <>
                 <Text style={{
-                    color: colors.textColor,
+                    color: theme.white,
                     fontSize: 40,
                     textAlign: 'center'
-                }}>Welcome to Runway, {username}!</Text>
+                }}>
+                    Welcome to Runway,
+                    <Text style={{ color: colors.textColor }}> {username}</Text>
+                    !
+                </Text>
             </>
         )
     } else if (index === 1) {
+        insides = (
+            <>
+                <Text style={{
+                    color: theme.white,
+                    fontSize: 40,
+                    textAlign: 'center'
+                }}>
+                    Every day, a new lesson will appear.
+                    <Text style={{ color: colors.textColor, }}> Let's try one out!</Text>
+                </Text>
+            </>
+        )
+    } else if (index === 2) {
         insides = (
             <>
                 <Text style={{
@@ -64,9 +79,9 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                     fontSize: 40,
                     textAlign: 'center',
                     marginBottom: 20
-                }}>Complete cards like these to earn points!</Text>
+                }}>Water</Text>
                 <Button
-                    title='Go!'
+                    title='Learn!'
                     backgroundColor={colors.textColor}
                     textColor={theme.black}
                     onPress={openOnboardingContentModal}
@@ -77,7 +92,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                 />
             </>
         )
-    } else if (index === 2) {
+    } else if (index === 3) {
         useEffect(() => {
             if (focused) {
                 setPoints(200);
@@ -104,17 +119,17 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                 }}>points!</Text>
             </>
         )
-    } else if (index === 3) {
+    } else if (index === 4) {
         insides = (
             <>
                 <Text style={{
-                    color: colors.textColor,
+                    color: theme.white,
                     fontSize: 35,
                     textAlign: 'center'
                 }}>Answer questions correct in less tries to earn more points!</Text>
             </>
         )
-    } else if (index === 4) {
+    } else if (index === 5) {
         insides = (
             <>
                 <Text style={{
@@ -150,7 +165,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                 </View>
             </>
         )
-    } else if (index === 5) {
+    } else if (index === 6) {
         insides = (
             <>
                 <Text style={{
@@ -206,12 +221,20 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
         )
     }
 
+
+    if (index === 2) {
+        return (
+            <BorderedCard ref={borderedCardRef} style={{ ...style, padding: 20 }} colors={colors}>
+                <Animated.View style={{ width: '100%', ...Styles.centeringContainer, opacity }}>
+                    {insides}
+                </Animated.View>
+            </BorderedCard>
+        );
+    }
     return (
-        <BorderedCard ref={borderedCardRef} style={{ ...style, padding: 20 }} colors={colors}>
-            <Animated.View style={{ width: '100%', ...Styles.centeringContainer, opacity }}>
-                {insides}
-            </Animated.View>
-        </BorderedCard>
+        <Animated.View style={{ ...style, width: '100%', ...Styles.centeringContainer, opacity }}>
+            {insides}
+        </Animated.View>
     );
 });
 
