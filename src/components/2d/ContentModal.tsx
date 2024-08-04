@@ -1,24 +1,25 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useMemo, useRef, useState } from 'react';
 import { Dimensions, FlatList, Modal, View } from 'react-native';
 
 import { Styles } from '@/styles';
 import parseContent from '@/utils/ContentParser';
-import { Content, ContentColors } from '@/utils/FirebaseProvider';
 import Button from './Button';
-import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, TextContentChunk, TextContentChunkType } from './ContentChunk';
+import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, TextContentChunk, TextContentChunkType, TextSpacerContentChunk, TextSpacerContentChunkType } from './ContentChunk';
+import { useContent } from './ContentProvider';
 import ScrollArrow from './ScrollArrow';
 import Text from './Text';
 import { ThemeContext } from './ThemeProvider';
-import { useContent } from './ContentProvider';
 
-export type ContentChunk = TextContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionContentChunkType;
+export type ContentChunk = TextContentChunkType | TextSpacerContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionContentChunkType;
 
 export default function ContentModal({ visible }: { visible: boolean }) {
     const { content, colors, earnablePointsWithoutStreak } = useContent();
 
     const [contentChunks, setContentChunks] = useState<ContentChunk[]>(
-        parseContent(content, earnablePointsWithoutStreak)  // TODO: memo
+        useMemo(() => parseContent(content, earnablePointsWithoutStreak), [content])
     );
+
+    // console.log(JSON.stringify(contentChunks, undefined, 2));
 
     const [focusedItems, setFocusedItems] = useState<number[]>([]);
 
@@ -50,7 +51,12 @@ export default function ContentModal({ visible }: { visible: boolean }) {
                                 <TextContentChunk
                                     focused={focused}
                                     text={item.text}
+                                    side={item.side}
                                 />
+                            );
+                        } else if (item.type === 'textSpacer') {
+                            return (
+                                <TextSpacerContentChunk />
                             );
                         } else if (item.type === 'paragraphSpacer') {
                             return (

@@ -37,14 +37,25 @@ function BaseContentChunk({ focused, children, style }: { focused: boolean, chil
 export interface TextContentChunkType extends BaseContentChunkType {
     type?: "text";
     text: string;
+    side: "left" | "right";
 }
-export function TextContentChunk({ focused, text }: TextContentChunkType) {
+export function TextContentChunk({ focused, text, side }: TextContentChunkType) {
     const { colors } = useContent();
 
     return (
-        <BaseContentChunk focused={focused} style={Styles.centeringContainer}>
-            <Text style={{ fontSize: 22, color: colors.textColor }}>{text}</Text>
+        <BaseContentChunk focused={focused}>
+            <Text style={{ fontSize: 22, color: colors.textColor, textAlign: side }}>{text}</Text>
         </BaseContentChunk>
+    );
+}
+
+
+export interface TextSpacerContentChunkType extends BaseContentChunkType {
+    type?: "textSpacer";
+}
+export function TextSpacerContentChunk() {
+    return (
+        <View style={{ height: Dimensions.get("window").height * 0.1 }} />
     );
 }
 
@@ -54,7 +65,7 @@ export interface ParagraphSpacerContentChunkType extends BaseContentChunkType {
 }
 export function ParagraphSpacerContentChunk() {
     return (
-        <View style={{ height: Dimensions.get("window").height * 0.3 }} />
+        <View style={{ height: Dimensions.get("window").height * 0.2 }} />
     );
 }
 
@@ -67,7 +78,7 @@ export function DividerContentChunk() {
 
     return (
         <View style={{
-            height: Dimensions.get("window").height * 0.5,
+            height: Dimensions.get("window").height * 0.3,
             ...Styles.centeringContainer,
             paddingHorizontal: 20,
         }}>

@@ -7,19 +7,31 @@ export default function parseContent(content: Content, totalPoints: number): Con
     const chunks: ContentChunk[] = [];
     const body = content.body;
 
+    console.log('parsing content');
+
     // TODO: rn everything's in order but we might want to add a way to reorder the content
 
     const bodyParagraphChunks = body.split('\n');
 
     // Text
+    let count = 0;
     bodyParagraphChunks.forEach((paragraph) => {
+        count = 0;
         const sentences = split(paragraph);
         sentences.forEach((sentence) => {
-            chunks.push({
-                focused: false,
-                type: 'text',
-                text: sentence.raw
-            });
+            if (sentence.type === 'Sentence') {
+                chunks.push({
+                    focused: false,
+                    type: 'textSpacer'
+                });
+                chunks.push({
+                    focused: false,
+                    type: 'text',
+                    text: sentence.raw,
+                    side: count % 2 === 0 ? 'left' : 'right'
+                });
+                count++;
+            }
         });
         if (paragraph !== bodyParagraphChunks[bodyParagraphChunks.length - 1]) {
             chunks.push({
@@ -29,7 +41,7 @@ export default function parseContent(content: Content, totalPoints: number): Con
         }
     });
 
-    
+
     chunks.push({
         focused: false,
         type: 'divider'
@@ -51,5 +63,6 @@ export default function parseContent(content: Content, totalPoints: number): Con
         });
     }
 
+    // console.log(JSON.stringify(chunks, undefined, 2));
     return chunks;
 }
