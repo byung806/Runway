@@ -77,9 +77,9 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
     if (sameDay(today, dateObject)) {
         extra += 'Today';
     }
-    if (dayIsYesterday(today, dateObject)) {
-        extra += 'Yesterday';
-    }
+    // if (dayIsYesterday(today, dateObject)) {
+    //     extra += 'Yesterday';
+    // }
 
     return (
         <BorderedCard ref={borderedCardRef} style={style} colors={colors}>
@@ -147,20 +147,24 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
 
 
                 {/* go button */}
-                <Button
-                    title='Go!'
-                    backgroundColor={colors.textColor}
-                    textColor={theme.white}
-                    onPress={() => setContentModalVisible(true)}
-                    reanimatedStyle={{
-                        opacity: cardContentOpacity,
-                        transform: [{ translateY: goTransformY }]
-                    }}
-                    style={{
-                        width: '80%',
-                        height: 50,
-                    }}
-                />
+                <View pointerEvents={focused ? 'auto' : 'none'} style={{
+                    width: '80%',
+                    height: 50,
+                }}>
+                    <Button
+                        title='Go!'
+                        backgroundColor={colors.textColor}
+                        textColor={theme.white}
+                        onPress={() => setContentModalVisible(true)}
+                        reanimatedStyle={{
+                            opacity: cardContentOpacity,
+                            transform: [{ translateY: goTransformY }]
+                        }}
+                        style={{
+                            width: '100%',
+                        }}
+                    />
+                </View>
 
 
                 {/* content modal */}

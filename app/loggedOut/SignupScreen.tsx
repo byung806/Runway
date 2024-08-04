@@ -73,7 +73,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
     }, [firebase.userData]);
 
     return (
-        <View style={{ flex: 1, backgroundColor: theme.background }}>
+        <View style={{ flex: 1, backgroundColor: theme.runwayBackgroundColor }}>
             <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>
                 <SafeAreaView style={{ ...Styles.centeringContainer, flex: 1 }}>
                     {/* <View style={{ ...Styles.centeringContainer, margin: 50, flex: 1 }}>

@@ -167,7 +167,7 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
                     doneWithExampleQuestion ? <OnboardingFooterComponent username={username} height={undefined as never} /> : undefined
                 }
                 {...heights}
-                initialBackgroundColor={theme.background}
+                initialBackgroundColor={theme.runwayBackgroundColor}
             />
 
             <ContentProvider

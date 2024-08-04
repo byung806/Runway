@@ -1,11 +1,14 @@
 import { Styles } from "@/styles";
+import { Dispatch, SetStateAction, useContext } from "react";
 import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Text from "./Text";
 import TextInput from "./TextInput";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Dispatch, SetStateAction } from "react";
+import { ThemeContext } from "./ThemeProvider";
 
 export default function OnboardingHeaderComponent({ height, setUsername, arrowDown }: { height: number, setUsername: Dispatch<SetStateAction<string>>, arrowDown: JSX.Element }) {
+    const theme = useContext(ThemeContext);
+
     return (
         <View style={{
             height,
@@ -15,7 +18,7 @@ export default function OnboardingHeaderComponent({ height, setUsername, arrowDo
                 flex: 1,
                 ...Styles.centeringContainer,
             }}>
-                <Text style={{ fontSize: 40, textAlign: 'center', marginBottom: 30 }}>What should we call you?</Text>
+                <Text style={{ fontSize: 40, textAlign: 'center', marginBottom: 30, color: theme.white }}>What should we call you?</Text>
                 <TextInput
                     onChangeText={setUsername}
                     placeholder={'Username'}

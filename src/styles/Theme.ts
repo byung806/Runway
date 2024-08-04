@@ -4,6 +4,7 @@ export interface Theme {
     runwayBackgroundColor: string;
     runwayButtonColor: string;
     runwayOuterBackgroundColor: string;
+    runwaySplashScreenBackgroundColor: string;
 
     questionCorrectColor: string;
     questionIncorrectColor: string;
@@ -31,6 +32,7 @@ const CommonThemeColors = {
     runwayBackgroundColor: '#2f1f35',
     runwayButtonColor: '#653173',
     runwayOuterBackgroundColor: '#3c2b41',
+    runwaySplashScreenBackgroundColor: '#8b45a4',
 
     questionCorrectColor: '#00ff00',
     questionIncorrectColor: '#ff0000',

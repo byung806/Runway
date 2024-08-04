@@ -9,13 +9,56 @@ import { NavigationContainer } from '@react-navigation/native';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';
 import { useCallback } from 'react';
-import { Platform, View } from 'react-native';
+import { Animated, Easing, Platform, View } from 'react-native';
 import { AppScreen, LeaderboardScreen, StreakScreen } from './loggedIn';
 import { LoginScreen, OnboardingScreen, SignupScreen, StartScreen } from './loggedOut';
 
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createStackNavigator();
+
+const cardStyleInterpolator = ({
+    current,
+    next,
+    inverted,
+    layouts: { screen }
+}: any) => {
+    const progress = Animated.add(
+        current.progress.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1],
+            extrapolate: "clamp"
+        }),
+        next
+            ? next.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 1],
+                extrapolate: "clamp"
+            })
+            : 0
+    );
+
+    return {
+        cardStyle: {
+            transform: [
+                {
+                    translateX: Animated.multiply(
+                        progress.interpolate({
+                            inputRange: [0, 1, 2],
+                            outputRange: [
+                                screen.width, // Focused, but offscreen in the beginning
+                                0, // Fully focused
+                                -screen.width
+                            ],
+                            extrapolate: "clamp"
+                        }),
+                        inverted
+                    )
+                }
+            ]
+        }
+    };
+};
 
 export default function Layout() {
     // TODO: push notifications
@@ -31,12 +74,12 @@ export default function Layout() {
     });
 
     const onLayoutRootView = useCallback(async () => {
-        if (fontsLoaded && !firebase.initializing) {
+        if (fontsLoaded) {
             await SplashScreen.hideAsync();
         }
-    }, [fontsLoaded, firebase.initializing]);
+    }, [fontsLoaded]);
 
-    if (!fontsLoaded || firebase.initializing) return;
+    if (!fontsLoaded) return;
 
     return (
         <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
@@ -44,7 +87,7 @@ export default function Layout() {
                 <Stack.Navigator
                     initialRouteName={firebase.userData ? 'app' : 'start'}
                     screenOptions={{
-                        cardStyleInterpolator: Platform.OS === 'ios' ? CardStyleInterpolators.forVerticalIOS : CardStyleInterpolators.forRevealFromBottomAndroid,
+                        cardStyleInterpolator: cardStyleInterpolator,
                     }}
                 >
                     {firebase.userData ?
@@ -56,8 +99,8 @@ export default function Layout() {
                             </>
                         ) : (
                             <>
-                                <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
                                 <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false, gestureEnabled: false }} />
+                                <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
                                 <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
                                 <Stack.Screen name="signup" component={SignupScreen} options={{ headerShown: false }} />
                             </>
