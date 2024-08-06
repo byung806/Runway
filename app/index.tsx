@@ -1,11 +1,10 @@
 import { registerRootComponent } from 'expo';
-import { ThemeProvider } from '@/components/2d';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
 
-import { FirebaseProvider } from '@/utils/FirebaseProvider';
+import { FirebaseProvider, NotificationProvider, ThemeProvider } from '@/providers';
 import Layout from './Layout';
 
 const emulator = false;
@@ -19,9 +18,11 @@ if (emulator) {
 export default function App() {
     return (
         <FirebaseProvider>
-            <ThemeProvider>
-                <Layout />
-            </ThemeProvider>
+            <NotificationProvider>
+                <ThemeProvider>
+                    <Layout />
+                </ThemeProvider>
+            </NotificationProvider>
         </FirebaseProvider>
     );
 }

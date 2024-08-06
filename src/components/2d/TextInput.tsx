@@ -1,7 +1,6 @@
+import { ThemeContext } from '@/providers';
 import { useContext } from 'react';
 import { TextInput as TextInputNative } from 'react-native';
-import { ThemeContext } from './ThemeProvider';
-import { Styles } from '@/styles';
 
 interface TextInputProps {
     placeholder: string;

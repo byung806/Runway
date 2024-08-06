@@ -1,4 +1,6 @@
-import { useFirebase } from '@/utils/FirebaseProvider';
+import { Text } from '@/components/2d';
+import { useFirebase } from '@/providers';
+import { usePushNotifications } from '@/utils/usePushNotifications';
 import {
     Inter_700Bold,
     Inter_800ExtraBold,
@@ -6,10 +8,10 @@ import {
     useFonts,
 } from '@expo-google-fonts/inter';
 import { NavigationContainer } from '@react-navigation/native';
-import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';
 import { useCallback } from 'react';
-import { Animated, Easing, Platform, View } from 'react-native';
+import { Animated, View } from 'react-native';
 import { AppScreen, LeaderboardScreen, StreakScreen } from './loggedIn';
 import { LoginScreen, OnboardingScreen, SignupScreen, StartScreen } from './loggedOut';
 

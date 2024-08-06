@@ -2,8 +2,8 @@ import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functions';
 import React, { ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
 import firestore from '@react-native-firebase/firestore';
-import { delay } from './utils';
-import { getTodayDate } from './date';
+import { getTodayDate } from '@/utils/date';
+import { delay } from '@/utils/utils';
 
 const emailEnding = '@example.com';
 
@@ -137,7 +137,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         try {
             registeringUser.current = true;
             console.log('DATABASE CALL: create user');
-            await auth().createUserWithEmailAndPassword(username + emailEnding, password);
+            await auth().createUserWithEmailAndPassword(username.trim() + emailEnding, password);
 
             // TODO: implement possibility of fail in server & here
             console.log('DATABASE CALL: initializeUser');

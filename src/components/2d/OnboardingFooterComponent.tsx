@@ -1,10 +1,10 @@
+import { ThemeContext } from "@/providers";
 import { Styles } from "@/styles";
 import { useNavigation } from "@react-navigation/native";
+import { useContext } from "react";
 import { View } from "react-native";
 import Button from "./Button";
 import Text from "./Text";
-import { useContext } from "react";
-import { ThemeContext } from "./ThemeProvider";
 
 export default function OnboardingFooterComponent({ height, username }: { height: number, username: string }) {
     const navigation = useNavigation<any>();
@@ -21,7 +21,6 @@ export default function OnboardingFooterComponent({ height, username }: { height
                 <Text style={{ fontSize: 40, textAlign: 'center', marginBottom: 30, color: theme.white }}>Let's get started!</Text>
                 <Button
                     title="Sign Up"
-                    // TODO!!!: fix prop not passing
                     onPress={() => navigation.navigate('signup', { initialUsername: username })}
                     style={{ width: '80%', height: 50, marginBottom: 100 }}
                 />

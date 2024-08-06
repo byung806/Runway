@@ -2,7 +2,7 @@
   "expo": {
     "name": "Runway",
     "slug": "runway",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "src/assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -16,11 +16,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.byung806.runway",
-      "googleServicesFile": "GoogleService-Info.plist"
+      "bundleIdentifier": "com.hackclub.runway",
+      "googleServicesFile": "GoogleService-Info.plist",
+      "entitlements": {
+        "aps-environment": "development"
+      }
     },
     "android": {
-      "package": "com.byung806.runway",
+      "package": "com.hackclub.runway",
       "googleServicesFile": "google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "src/assets/adaptive-icon.png",

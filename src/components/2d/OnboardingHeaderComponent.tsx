@@ -1,10 +1,10 @@
+import { ThemeContext } from "@/providers";
 import { Styles } from "@/styles";
 import { Dispatch, SetStateAction, useContext } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Text from "./Text";
 import TextInput from "./TextInput";
-import { ThemeContext } from "./ThemeProvider";
 
 export default function OnboardingHeaderComponent({ height, setUsername, arrowDown }: { height: number, setUsername: Dispatch<SetStateAction<string>>, arrowDown: JSX.Element }) {
     const theme = useContext(ThemeContext);

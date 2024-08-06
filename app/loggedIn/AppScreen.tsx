@@ -1,9 +1,9 @@
-import { BaseCardAttributes, DateCard, ListFooterComponent, ListHeaderComponent, ScrollableCards, ThemeContext } from '@/components/2d';
+import { BaseCardAttributes, DateCard, ListFooterComponent, ListHeaderComponent, ScrollableCards } from '@/components/2d';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions } from 'react-native';
 
+import { Content, ThemeContext, useFirebase, usePushNotifications } from '@/providers';
 import { stringToDate } from '@/utils/date';
-import { Content, useFirebase } from '@/utils/FirebaseProvider';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 
@@ -23,7 +23,6 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
     // const [allContentLoaded, setAllContentLoaded] = useState(false);
 
     useEffect(() => {
-        console.log('AppScreen useEffect');
         if (firebase.todayCompleted) {
             canLoadMoreDays.current = true;
             addPreviousDay();

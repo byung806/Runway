@@ -1,12 +1,9 @@
 import React, { cloneElement, forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Dimensions, FlatList, Pressable, View } from 'react-native';
+import { Dimensions, FlatList, Pressable } from 'react-native';
 
-import { ContentColors } from '@/utils/FirebaseProvider';
+import { ContentColors, ThemeContext } from '@/providers';
 import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
-import { ThemeContext } from './ThemeProvider';
 import { ScrollArrow } from './Arrow';
-import { Styles } from '@/styles';
-import Text from './Text';
 
 import * as Haptics from 'expo-haptics';
 

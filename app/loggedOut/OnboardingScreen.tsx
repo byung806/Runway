@@ -1,20 +1,21 @@
-import { BaseCardAttributes, ScrollableCards, ScrollableCardsRef, ThemeContext } from '@/components/2d';
+import { BaseCardAttributes, ScrollableCards, ScrollableCardsRef } from '@/components/2d';
 import React, { useContext, useState } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions } from 'react-native';
 
+import ContentModal from '@/components/2d/ContentModal';
 import OnboardingCard from '@/components/2d/OnboardingCard';
 import OnboardingFooterComponent from '@/components/2d/OnboardingFooterComponent';
 import OnboardingHeaderComponent from '@/components/2d/OnboardingHeaderComponent';
+import { Content, ContentProvider, ThemeContext, usePushNotifications } from '@/providers';
 import { StackNavigationProp } from '@react-navigation/stack';
-import ContentModal from '@/components/2d/ContentModal';
-import { Content } from '@/utils/FirebaseProvider';
-import { ContentProvider } from '@/components/2d/ContentProvider';
 
 
 interface OnboardingCardAttributes extends BaseCardAttributes { }
 
 export default function OnboardingScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
+    const notifications = usePushNotifications();
+    
     const [username, setUsername] = useState('');
     const defaultColors = {
         outerBackgroundColor: theme.runwayOuterBackgroundColor,

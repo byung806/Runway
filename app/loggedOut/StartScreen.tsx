@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { Image, View } from 'react-native';
+import { Button, Text } from '@/components/2d';
+import React, { useContext, useEffect } from 'react';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Logo, Text, ThemeContext } from '@/components/2d';
 
+import { ThemeContext, useFirebase } from '@/providers';
 import { Styles } from '@/styles';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useFirebase } from '@/utils/FirebaseProvider';
 import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 
 

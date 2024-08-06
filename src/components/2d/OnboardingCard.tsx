@@ -1,13 +1,12 @@
-import { ContentColors } from '@/utils/FirebaseProvider';
+import { ContentColors, ThemeContext } from '@/providers';
+import { Styles } from '@/styles';
 import React, { forwardRef, memo, useContext, useEffect, useImperativeHandle, useState } from 'react';
 import { Easing, View } from 'react-native';
 import AnimatedNumbers from 'react-native-animated-numbers';
+import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 import BorderedCard, { BorderedCardRef } from './BorderedCard';
 import Button from './Button';
 import Text from './Text';
-import { ThemeContext } from './ThemeProvider';
-import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
-import { Styles } from '@/styles';
 
 
 interface OnboardingCardProps {

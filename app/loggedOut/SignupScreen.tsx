@@ -1,10 +1,10 @@
-import { Button, Text, TextInput, ThemeContext } from '@/components/2d';
+import { Button, Text, TextInput } from '@/components/2d';
 import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { FirebaseError, ThemeContext, useFirebase, usePushNotifications } from '@/providers';
 import { Styles } from '@/styles';
-import { FirebaseError, useFirebase } from '@/utils/FirebaseProvider';
 import { callWithTimeout } from '@/utils/utils';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -13,6 +13,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
 
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
+    const notifications = usePushNotifications();
 
     const [username, setUsername] = useState(initialUsername || '');
     const [password, setPassword] = useState('');
@@ -60,7 +61,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                 setErrorMessage('Please choose another username!');
             }
             else if (error.code === 'auth/invalid-email') {
-                setErrorMessage('Invalid email.');
+                setErrorMessage('Please choose another username.');
             }
             else if (error.code === 'auth/weak-password') {
                 setErrorMessage('Please choose a stronger password!');
@@ -74,6 +75,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
     // only navigate to logged in app if user data is loaded
     useEffect(() => {
         setLoading(false);
+        notifications.requestPermissions();
     }, [firebase.userData]);
 
     return (

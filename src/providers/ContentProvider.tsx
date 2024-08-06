@@ -1,6 +1,6 @@
-import { Content, ContentColors, useFirebase } from "@/utils/FirebaseProvider";
 import { useNavigation } from "@react-navigation/native";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
+import { Content, ContentColors, useFirebase } from "./FirebaseProvider";
 
 export type ContentQuestionScores = {
     earned: number;

@@ -1,8 +1,8 @@
+import { ThemeContext } from "@/providers";
 import React, { useContext, useEffect } from "react";
 import { Pressable } from "react-native";
 import Animated, { useSharedValue, withSequence, withSpring, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemeContext } from "./ThemeProvider";
 
 import { Styles } from "@/styles";
 import { AntDesign } from "@expo/vector-icons";

@@ -1,5 +1,6 @@
+import { ContentProvider, ThemeContext } from '@/providers';
+import { Content, ContentColors, useFirebase } from '@/providers/FirebaseProvider';
 import { sameDay, stringToDate } from '@/utils/date';
-import { Content, ContentColors, useFirebase } from '@/utils/FirebaseProvider';
 import { AntDesign } from "@expo/vector-icons";
 import { forwardRef, memo, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { View } from 'react-native';
@@ -7,9 +8,7 @@ import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-r
 import BorderedCard, { BorderedCardRef } from './BorderedCard';
 import Button from './Button';
 import ContentModal from './ContentModal';
-import { ContentProvider } from './ContentProvider';
 import Text from './Text';
-import { ThemeContext } from './ThemeProvider';
 
 
 

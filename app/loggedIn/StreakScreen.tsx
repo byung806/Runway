@@ -1,6 +1,6 @@
-import { Button, Text, ThemeContext } from '@/components/2d';
+import { Button, Text } from '@/components/2d';
+import { ThemeContext, useFirebase } from "@/providers";
 import { Styles } from "@/styles";
-import { useFirebase } from "@/utils/FirebaseProvider";
 import { delay } from "@/utils/utils";
 import { useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";

@@ -5,10 +5,9 @@ import { Styles } from '@/styles';
 import parseContent from '@/utils/ContentParser';
 import Button from './Button';
 import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, TextContentChunk, TextContentChunkType, TextSpacerContentChunk, TextSpacerContentChunkType } from './ContentChunk';
-import { useContent } from './ContentProvider';
+import { useContent, ThemeContext } from '@/providers';
 import { BackArrow, ScrollArrow } from './Arrow';
 import Text from './Text';
-import { ThemeContext } from './ThemeProvider';
 import { stringToDate } from '@/utils/date';
 import CategoryIcon from './CategoryIcon';
 

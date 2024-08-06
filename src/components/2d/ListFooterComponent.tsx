@@ -2,7 +2,7 @@ import { Styles } from "@/styles";
 import { useContext } from "react";
 import { View } from "react-native";
 import Text from "./Text";
-import { ThemeContext } from "./ThemeProvider";
+import { ThemeContext } from "@/providers";
 
 export default function ListFooterComponent({ height }: { height: number }) {
     const theme = useContext(ThemeContext);

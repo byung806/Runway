@@ -1,6 +1,6 @@
 import { Styles } from '@/styles';
 import * as Haptics from 'expo-haptics';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Pressable, View } from 'react-native';
 import Animated, {
     Easing,
@@ -8,12 +8,11 @@ import Animated, {
     useSharedValue,
     withTiming
 } from 'react-native-reanimated';
-import { ThemeContext } from './ThemeProvider';
+import { ThemeContext } from '@/providers/ThemeProvider';
 
 import useBounceAnimation, { SoundType } from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import Text from './Text';
-import { Audio } from 'expo-av';
 
 interface Button3DProps {
     title: string;

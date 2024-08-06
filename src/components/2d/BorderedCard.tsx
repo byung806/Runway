@@ -1,5 +1,5 @@
 import { Styles } from "@/styles";
-import { ContentColors } from "@/utils/FirebaseProvider";
+import { ContentColors } from "@/providers";
 import useBounceAnimation from "@/utils/useBounceAnimation";
 import { animated, config } from "@react-spring/native";
 import { forwardRef, useImperativeHandle } from "react";

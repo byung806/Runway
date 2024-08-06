@@ -1,6 +1,6 @@
+import { ThemeContext } from '@/providers';
 import { ReactNode, useContext } from 'react';
 import { Text as TextNative } from 'react-native';
-import { ThemeContext } from './ThemeProvider';
 
 interface TextProps {
     children: ReactNode;

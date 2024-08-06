@@ -1,11 +1,10 @@
-import Text from './Text';
-import { Modal, View } from 'react-native';
-import TextInput from './TextInput';
-import Button from './Button';
-import { useContext, useState } from 'react';
-import { useFirebase } from '@/utils/FirebaseProvider';
+import { ThemeContext, useFirebase } from '@/providers';
 import { Styles } from '@/styles';
-import { ThemeContext } from './ThemeProvider';
+import { useContext, useState } from 'react';
+import { Modal, View } from 'react-native';
+import Button from './Button';
+import Text from './Text';
+import TextInput from './TextInput';
 
 export default function AddFriendModal({ visible, setVisible }: { visible: boolean, setVisible: (visible: boolean) => void }) {
     const firebase = useFirebase();

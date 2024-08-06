@@ -1,12 +1,10 @@
+import { ContentQuestionChoice, ThemeContext, useContent } from "@/providers";
 import { Styles } from "@/styles";
-import { ContentColors, ContentQuestionChoice } from "@/utils/FirebaseProvider";
 import { useContext, useEffect, useState } from "react";
 import { Dimensions, View } from "react-native";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import Button from "./Button";
 import Text from "./Text";
-import { ThemeContext } from "./ThemeProvider";
-import { useContent } from "./ContentProvider";
 
 
 interface BaseContentChunkType {
