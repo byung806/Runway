@@ -11,14 +11,11 @@ import AnimatedNumbers from 'react-native-animated-numbers';
 import { useSharedValue, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-// TODO: make points the main thing here and have streak be a side thing
-export default function StreakScreen({ navigation, ...props }: { navigation: StackNavigationProp<any, any> } & any) {
-    // TODO: fix streak sometimes being 1 higher (getUserData faster than navigate??)
+export default function StreakScreen({ route, navigation }: { route: any, navigation: StackNavigationProp<any, any> } ) {
     const theme = useContext(ThemeContext);
     const focused = useIsFocused();
-    const firebase = useFirebase();
 
-    const [streak, setStreak] = useState(firebase.userData?.streak ?? 0);
+    const [streak, setStreak] = useState(route.params?.streak ?? 0);
     const [buttonClickable, setButtonClickable] = useState(false);
 
     const buttonOpacity = useSharedValue(0);

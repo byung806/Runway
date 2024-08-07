@@ -112,7 +112,7 @@ export function ContentProvider(props: ContentProviderProps) {
 
             if (success) {
                 if (isToday) {
-                    navigation.navigate('streak');
+                    navigation.navigate('streak', { initialStreak: firebase.userData?.streak ?? 0 });
                 }
                 await firebase.getUserData();
                 await firebase.getLeaderboard('global');
