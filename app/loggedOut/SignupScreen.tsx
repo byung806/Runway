@@ -7,6 +7,7 @@ import { FirebaseError, ThemeContext, useFirebase, usePushNotifications } from '
 import { Styles } from '@/styles';
 import { callWithTimeout } from '@/utils/utils';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { matcher } from '@/utils/ProfanityChecker';
 
 export default function SignupScreen({ route, navigation }: { route: any, navigation: StackNavigationProp<any, any> }) {
     const initialUsername = route.params?.initialUsername;
@@ -38,6 +39,10 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
         if (username.length > 10) {
             setErrorMessage('Please make your username at most 10 characters long!');
             return;
+        }
+        if (matcher.hasMatch(username)) {
+            setErrorMessage('Please choose another username!');
+            return
         }
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
             setErrorMessage('Please enter a valid email!');
