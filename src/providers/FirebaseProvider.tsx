@@ -42,6 +42,7 @@ export interface ContentQuestionChoice {
 
 export interface Content {
     title: string;
+    author: string;
     category: string;
     body: string;
     questions: ContentQuestion[];

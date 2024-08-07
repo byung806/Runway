@@ -128,18 +128,22 @@ function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => vo
             <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor }}>
                 {content.title}
             </Text>
+
+            {content.author &&
+                <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>
+                    by {content.author}
+                </Text>
+            }
+
             <View
                 style={{
                     backgroundColor: '#A2A2A2',
                     height: 2,
-                    // width: 165
-                    alignSelf: 'stretch',
+                    width: 165,
+                    // alignSelf: 'stretch',
                 }}
             />
-            {/* <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>
-                {month} {day}
-            </Text> */}
-            
+
             <CategoryIcon category={content.category} size={40} color={colors.textColor} />
 
             <View style={{
