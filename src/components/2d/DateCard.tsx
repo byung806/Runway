@@ -27,6 +27,7 @@ export interface DateCardRef {
     onPressOut: () => void;
 }
 
+// TODO: show streak indicator on card
 const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
@@ -48,7 +49,6 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
     const goTransformY = useSharedValue(initialTransformY);
 
     const cardContentOpacity = useSharedValue(0);
-    // TODO: gray out if completed
 
     // Fade animation
     useEffect(() => {

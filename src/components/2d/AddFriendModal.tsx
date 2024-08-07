@@ -6,6 +6,7 @@ import Button from './Button';
 import Text from './Text';
 import TextInput from './TextInput';
 
+// TODO: MAKE BETTER
 export default function AddFriendModal({ visible, setVisible }: { visible: boolean, setVisible: (visible: boolean) => void }) {
     const firebase = useFirebase();
     const theme = useContext(ThemeContext);

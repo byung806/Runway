@@ -1,4 +1,4 @@
-import { Button, Text, ThemeContext } from '@/components/2d';
+import { Button, Text } from '@/components/2d';
 import React, { useContext } from 'react';
 import { Dimensions, Image, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import { Styles } from '@/styles';
 import Leaderboard from '@/components/2d/Leaderboard';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MaterialTabBar, Tabs } from 'react-native-collapsible-tab-view';
+import { ThemeContext } from '@/providers';
 
 
 export default function LeaderboardScreen({ navigation, ...props }: { navigation: StackNavigationProp<any, any> } & any) {

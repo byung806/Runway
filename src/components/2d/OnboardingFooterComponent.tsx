@@ -9,7 +9,7 @@ import Text from "./Text";
 export default function OnboardingFooterComponent({ height, username }: { height: number, username: string }) {
     const navigation = useNavigation<any>();
     const theme = useContext(ThemeContext);
-    // TODO context: use signup context
+
     return (
         <View style={{
             height,

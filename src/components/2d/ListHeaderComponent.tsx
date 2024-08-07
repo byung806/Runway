@@ -47,7 +47,7 @@ export default function ListHeaderComponent({ height, arrowDown }: { height: num
             </View>
 
             {!firebase.todayCompleted && (
-                <View style={{ ...Styles.centeringContainer }}>
+                <View style={{ ...Styles.centeringContainer, gap: 10 }}>
                     <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.runwayTextColor, textAlign: 'center' }}>
                         {/* {firebase.userData?.username} */}
                         <Text style={{ color: theme.white }}>New challenge available!</Text>

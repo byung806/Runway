@@ -81,7 +81,6 @@ interface FirebaseContextType {
     getLeaderboard: (type: LeaderboardType) => Promise<void>;
 }
 
-// TODO: add complete specific day function
 
 export function FirebaseProvider({ children }: { children: ReactNode }) {
     const [today, setToday] = useState(getTodayDate());  // TODO: day change

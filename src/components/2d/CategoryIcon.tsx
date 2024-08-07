@@ -9,6 +9,7 @@ interface CategoryIconProps {
 }
 
 export default function CategoryIcon({ category, size=30, color='black' }: CategoryIconProps) {
+    category = category.toLowerCase();
 
     if (category === 'random') {
         return (

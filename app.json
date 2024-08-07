@@ -1,54 +1,57 @@
 {
-  "expo": {
-    "name": "Runway",
-    "slug": "runway",
-    "version": "0.0.1",
-    "orientation": "portrait",
-    "icon": "src/assets/icon.png",
-    "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "src/assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.hackclub.runway",
-      "googleServicesFile": "GoogleService-Info.plist",
-      "entitlements": {
-        "aps-environment": "development"
-      }
-    },
-    "android": {
-      "package": "com.hackclub.runway",
-      "googleServicesFile": "google-services.json",
-      "adaptiveIcon": {
-        "foregroundImage": "src/assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "plugins": [
-      "@react-native-firebase/app",
-      "@react-native-firebase/auth",
-      [
-        "expo-build-properties",
-        {
-          "ios": {
-            "useFrameworks": "static"
-          }
-        }
-      ],
-      "expo-font"
-    ],
-    "scheme": "runway",
-    "extra": {
-      "eas": {
-        "projectId": "35a43238-3d11-4db6-b7da-15358a8579fb"
-      }
-    },
-    "owner": "byung806"
-  }
+    "expo": {
+        "name": "Runway",
+        "slug": "runway",
+        "version": "0.0.1",
+        "orientation": "portrait",
+        "icon": "src/assets/icon.png",
+        "userInterfaceStyle": "automatic",
+        "splash": {
+            "image": "src/assets/splash.png",
+            "resizeMode": "cover",
+            "backgroundColor": "#ffffff"
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.hackclub.runway",
+            "googleServicesFile": "GoogleService-Info.plist",
+            "entitlements": {
+                "aps-environment": "development"
+            },
+            "config": {
+                "usesNonExemptEncryption": false
+            }
+        },
+        "android": {
+            "package": "com.hackclub.runway",
+            "googleServicesFile": "google-services.json",
+            "adaptiveIcon": {
+                "foregroundImage": "src/assets/adaptive-icon.png",
+                "backgroundColor": "#ffffff"
+            }
+        },
+        "plugins": [
+            "@react-native-firebase/app",
+            "@react-native-firebase/auth",
+            [
+                "expo-build-properties",
+                {
+                    "ios": {
+                        "useFrameworks": "static"
+                    }
+                }
+            ],
+            "expo-font"
+        ],
+        "scheme": "runway",
+        "extra": {
+            "eas": {
+                "projectId": "35a43238-3d11-4db6-b7da-15358a8579fb"
+            }
+        },
+        "owner": "byung806"
+    }
 }

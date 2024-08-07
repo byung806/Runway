@@ -38,4 +38,3 @@ exports.addFriend = onCall(addFriend);
  */
 exports.getLeaderboard = onCall(getLeaderboard);
 
-// TODO: make login not use /auth

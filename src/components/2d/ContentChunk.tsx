@@ -97,7 +97,7 @@ export function QuestionContentChunk({ focused, question, choices, possiblePoint
     const { isOnboardingContent, colors, cardCompleted, completeQuestion } = useContent();
     const buttonBackgroundColors = choices.map(() => useSharedValue(colors.textColor));
 
-    const [pointsEarned, setPointsEarned] = useState<number>(0);  // TODO: display points earned
+    const [pointsEarned, setPointsEarned] = useState<number>(0);
     const [tries, setTries] = useState(0);
     const [done, setDone] = useState(false);
 

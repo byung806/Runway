@@ -1,4 +1,4 @@
-package com.byung806.runway
+package com.hackclub.runway
 
 import android.os.Build
 import android.os.Bundle

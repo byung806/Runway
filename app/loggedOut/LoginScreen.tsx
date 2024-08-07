@@ -11,7 +11,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 
 export default function LoginScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
-    // TODO: add back button to start screen
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
     const focused = useIsFocused();
@@ -29,6 +28,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
 
     // called on sign up button press
     async function loginCallback() {
+        // TODO: put all these checks in a util somewhere
         if (username.length == 0) {
             setErrorMessage('Please enter a username!');
             return;
@@ -44,7 +44,6 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
         setErrorMessage('');
         Keyboard.dismiss();
         setLoading(true);
-        //TODO: login keeps running after 8 second timeout so it could just login after 8 seconds
         const error = await callWithTimeout(8000, firebase.logIn, username, password) as FirebaseError | null | 'timeout';
 
         if (error === null) {

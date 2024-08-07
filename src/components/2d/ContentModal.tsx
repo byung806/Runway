@@ -11,6 +11,7 @@ import Text from './Text';
 import { stringToDate } from '@/utils/date';
 import CategoryIcon from './CategoryIcon';
 
+//TODO: only show 1 question at a time
 export type ContentChunk = TextContentChunkType | TextSpacerContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionContentChunkType;
 
 export default function ContentModal({ visible }: { visible: boolean }) {

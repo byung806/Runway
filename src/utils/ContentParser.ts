@@ -1,5 +1,5 @@
 import { ContentChunk } from "@/components/2d/ContentModal";
-import { Content } from "./FirebaseProvider";
+import { Content } from "@/providers";
 import { split } from "sentence-splitter";
 
 

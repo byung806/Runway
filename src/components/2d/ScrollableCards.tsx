@@ -98,7 +98,6 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                 ref={flatListRef}
                 scrollEnabled={scrollable}
                 renderItem={({ item }) => {
-                    // TODO context: can convert focused, colors, style, index to context and read context inside card
                     return (
                         <Pressable
                             android_disableSound={true}
