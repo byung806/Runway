@@ -188,6 +188,7 @@ function ContentFooterComponent() {
             {cardCompleted && !allQuestionsCompleted &&
                 <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>You only earn points for cards you haven't done before!</Text>
             }
+            {/* TODO: fix flickering card completed text after challenge complete */}
             <Button
                 title={cardCompleted ? 'Continue' : 'Get Points!'}
                 backgroundColor={colors.textColor}

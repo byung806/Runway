@@ -20,14 +20,11 @@ export default function TextInput({ placeholder, defaultValue = '', value, onCha
 
     function validateValue(text: string) {
         if (email || password) {
-            return text;
+            return text.trim();
         }
         text = text.trim().toLowerCase();
-        if (text.match(/^[0-9a-z]+$/)) {
-            return text;
-        } else {
-            return value;
-        }
+        
+        return text.replace(/[^0-9a-z_]/g, '');
     }
 
     return (
