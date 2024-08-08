@@ -34,8 +34,8 @@ const CommonThemeColors = {
     runwayOuterBackgroundColor: '#3c2b41',
     runwaySplashScreenBackgroundColor: '#8b45a4',
 
-    questionCorrectColor: '#00ff00',
-    questionIncorrectColor: '#ff0000',
+    questionCorrectColor: '#66bb5c',
+    questionIncorrectColor: '#ff5343',
 
     white: '#ffffff',
     black: '#000000',
