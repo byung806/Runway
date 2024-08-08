@@ -18,9 +18,9 @@ export default function OnboardingFooterComponent({ height, username }: { height
                 flex: 1,
                 ...Styles.centeringContainer,
             }}>
-                <Text style={{ fontSize: 40, textAlign: 'center', marginBottom: 30, color: theme.white }}>Let's get started!</Text>
+                <Text style={{ fontSize: 40, textAlign: 'center', marginBottom: 30, color: theme.white }}>Create an account to save your points!</Text>
                 <Button
-                    title="Sign Up"
+                    title="Create Account"
                     onPress={() => navigation.navigate('signup', { initialUsername: username })}
                     style={{ width: '80%', height: 50, marginBottom: 100 }}
                 />

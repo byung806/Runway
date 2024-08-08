@@ -125,7 +125,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                     color: theme.white,
                     fontSize: 35,
                     textAlign: 'center'
-                }}>Answer questions correct in less tries to earn more points!</Text>
+                }}>Answer questions correctly in less tries to earn more points!</Text>
             </>
         )
     } else if (index === 5) {

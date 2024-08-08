@@ -158,7 +158,7 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
                     height: 50,
                 }}>
                     <Button
-                        title='Learn!'
+                        title={cardCompleted ? 'Review!' : 'Learn!'}
                         backgroundColor={colors.textColor}
                         textColor={theme.white}
                         onPress={() => setContentModalVisible(true)}

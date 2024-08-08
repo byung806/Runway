@@ -93,7 +93,8 @@ export function ContentProvider(props: ContentProviderProps) {
             possible
         }]);
         if (isToday) {
-            setEarnedStreakBonus((earnedPointsWithoutStreak + earned) * (Math.min((firebase.userData?.streak?? 0) * 0.01, 1.3)));
+            // need this for float rounding errors
+            setEarnedStreakBonus(Math.round((earnedPointsWithoutStreak + earned) * (1 + Math.min((firebase.userData?.streak ?? 0) * 0.01, 1.3)) - (earnedPointsWithoutStreak + earned)));
         }
         setEarnedPointsWithoutStreak(earnedPointsWithoutStreak + earned);
     }
@@ -108,15 +109,23 @@ export function ContentProvider(props: ContentProviderProps) {
 
             console.log('pointsEarned', pointsEarned, pointsPossible);
 
-            const { success } = await firebase.requestCompleteDate(date, pointsEarned / pointsPossible * 100);
-
-            if (success) {
-                if (isToday) {
-                    navigation.navigate('streak', { initialStreak: firebase.userData?.streak ?? 0 });
+            if (isToday) {
+                navigation.navigate('streak', {
+                    initialStreak: firebase.userData?.streak ?? 0,
+                    date: date,
+                    pointsEarned: pointsEarned,
+                    pointsPossible: pointsPossible,
+                    earnedStreakBonus: earnedStreakBonus,
+                });
+            } else {
+                // TODO: move this to firebaseprovider and combine with the call on streakscreen?
+                const { success } = await firebase.requestCompleteDate(date, pointsEarned / pointsPossible * 100);
+                if (success) {
+                    await firebase.getUserData();
+                    await firebase.getLeaderboard('global');
+                } else {
+                    console.log('Something went wrong - today completed but database request failed');
                 }
-                await firebase.getUserData();
-                await firebase.getLeaderboard('global');
-                // TODO: update friends leaderboard too if rank is ever implemented
             }
         }
         closeContentModal();

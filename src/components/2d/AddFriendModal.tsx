@@ -20,7 +20,10 @@ export default function AddFriendModal({ visible, setVisible }: { visible: boole
         const { success } = await firebase.addFriend(username);
         if (success) {
             setMessage('Friend added!');
+        } else if (username in (firebase.userData?.friends ?? [])) {
+            setMessage('You are already friends with this user!');
         }
+        // TODO: already friended
         else {
             setMessage('Failed to add friend!');
         }
@@ -37,9 +40,10 @@ export default function AddFriendModal({ visible, setVisible }: { visible: boole
                 ...Styles.centeringContainer
             }}>
                 <Text style={{ fontSize: 40, textAlign: 'center', marginBottom: 30 }}>Add Friend</Text>
-                <TextInput placeholder="Enter username" onChangeText={setUsername} style={{ width: '80%', height: 50 }} />
+                <TextInput value={username} placeholder="Enter username" onChangeText={setUsername} style={{ width: '80%', height: 50 }} />
                 <Button title="Add" onPress={addFriend} style={{ width: '80%', height: 50 }} disabled={addingFriend} />
                 {message ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5 }}>{message}</Text> : null}
+                {/* TODO: close button instead of cancel */}
                 <Button title="Cancel" backgroundColor='transparent' onPress={() => { setVisible(false) }} />
             </View>
         </Modal>
