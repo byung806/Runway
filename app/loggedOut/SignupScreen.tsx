@@ -5,9 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FirebaseError, ThemeContext, useFirebase, usePushNotifications } from '@/providers';
 import { Styles } from '@/styles';
+import { matcher } from '@/utils/ProfanityChecker';
 import { callWithTimeout } from '@/utils/utils';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { matcher } from '@/utils/ProfanityChecker';
 
 export default function SignupScreen({ route, navigation }: { route: any, navigation: StackNavigationProp<any, any> }) {
     const initialUsername = route.params?.initialUsername;

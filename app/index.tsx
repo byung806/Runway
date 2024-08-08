@@ -17,13 +17,13 @@ if (emulator) {
 
 export default function App() {
     return (
-        <FirebaseProvider>
-            <NotificationProvider>
+        <NotificationProvider>
+            <FirebaseProvider>
                 <ThemeProvider>
                     <Layout />
                 </ThemeProvider>
-            </NotificationProvider>
-        </FirebaseProvider>
+            </FirebaseProvider>
+        </NotificationProvider>
     );
 }
 

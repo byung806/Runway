@@ -1,6 +1,4 @@
-import { Text } from '@/components/2d';
 import { useFirebase } from '@/providers';
-import { usePushNotifications } from '@/utils/usePushNotifications';
 import {
     Inter_700Bold,
     Inter_800ExtraBold,
@@ -63,11 +61,6 @@ const cardStyleInterpolator = ({
 };
 
 export default function Layout() {
-    // TODO: push notifications
-    // const { expoPushToken, notification } = usePushNotifications()
-    // const data = JSON.stringify(notification, undefined, 2)
-    // token: expoPushToken?.data ?? ""
-
     const firebase = useFirebase();
     const [fontsLoaded] = useFonts({
         Inter_700Bold,

@@ -1,4 +1,4 @@
-import { Button, Text, TextInput } from '@/components/2d';
+import { BackArrow, Button, Text, TextInput } from '@/components/2d';
 import { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -71,6 +71,15 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
 
     return (
         <View style={{ flex: 1, backgroundColor: theme.runwayBackgroundColor }}>
+            <View style={{
+                position: 'absolute',
+                top: 60,
+                left: 20,
+                zIndex: 1,
+            }}>
+                <BackArrow color={theme.white} onPress={() => {navigation.navigate('start')}} />
+            </View>
+
             <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>
                 <SafeAreaView style={{ ...Styles.centeringContainer, flex: 1 }}>
 

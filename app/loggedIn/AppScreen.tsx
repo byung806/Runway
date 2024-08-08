@@ -2,7 +2,7 @@ import { BaseCardAttributes, DateCard, ListFooterComponent, ListHeaderComponent,
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions } from 'react-native';
 
-import { Content, ThemeContext, useFirebase, usePushNotifications } from '@/providers';
+import { Content, ThemeContext, useFirebase } from '@/providers';
 import { stringToDate } from '@/utils/date';
 import { StackNavigationProp } from '@react-navigation/stack';
 

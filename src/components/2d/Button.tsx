@@ -8,7 +8,7 @@ import Animated from 'react-native-reanimated';
 import useBounceAnimation, { SoundType } from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import Text from './Text';
-
+import { FontAwesome } from "@expo/vector-icons";
 
 interface ButtonProps {
     title: string;
@@ -68,3 +68,21 @@ export default function Button({ title, onPress, backgroundColor, textColor, for
     );
 }
 
+
+export function CloseButton({ color, onPress }: { color?: string, onPress: () => void }) {
+    const theme = useContext(ThemeContext);
+
+    return (
+        <Animated.View style={{
+            height: 40,
+            width: 40,
+        }}>
+            <Pressable onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                onPress();
+            }}>
+                <FontAwesome name={'close'} size={30} color={color || theme.black} />
+            </Pressable>
+        </Animated.View>
+    )
+}

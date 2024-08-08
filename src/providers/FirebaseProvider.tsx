@@ -1,9 +1,10 @@
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functions';
-import React, { ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
-import firestore from '@react-native-firebase/firestore';
 import { getTodayDate } from '@/utils/date';
 import { delay } from '@/utils/utils';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functions';
+import React, { ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
+import { usePushNotifications } from './NotificationProvider';
 
 const emailEnding = '@example.com';
 
@@ -84,6 +85,8 @@ interface FirebaseContextType {
 
 
 export function FirebaseProvider({ children }: { children: ReactNode }) {
+    const notifications = usePushNotifications();
+
     const [today, setToday] = useState(getTodayDate());  // TODO: day change
 
     // Mirror of auth().currentUser
@@ -137,13 +140,15 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         try {
             registeringUser.current = true;
             console.log('DATABASE CALL: create user');
-            await auth().createUserWithEmailAndPassword(username.trim() + emailEnding, password);
-
+            await auth().createUserWithEmailAndPassword(username.trim().toLowerCase() + emailEnding, password);
+            
+            console.log('Expo Push Token:', notifications.expoPushToken);
             // TODO: implement possibility of fail in server & here
             console.log('DATABASE CALL: initializeUser');
             await functions()
                 .httpsCallable('initializeUser')({
                     email: email
+                    // TODO: add push notification thing here
                 });
 
             registeringUser.current = false;
@@ -160,7 +165,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     async function logIn(username: string, password: string): Promise<FirebaseError | null> {
         try {
             console.log('DATABASE CALL: sign in');
-            await auth().signInWithEmailAndPassword(username + emailEnding, password);
+            await auth().signInWithEmailAndPassword(username.trim().toLowerCase() + emailEnding, password);
             return null;
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  logIn');

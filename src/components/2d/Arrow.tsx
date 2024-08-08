@@ -37,19 +37,20 @@ export function ScrollArrow({ type, visible, onPress }: ScrollArrowProps) {
 }
 
 
-export function BackArrow({ onPress }: { onPress: () => void }) {
-    return <Arrow filled={false} type='left' visible={true} onPress={onPress} />
+export function BackArrow({ color, onPress }: { color?: string, onPress: () => void }) {
+    return <Arrow color={color} filled={false} type='left' visible={true} onPress={onPress} />
 }
 
 
 interface ArrowProps {
     filled: boolean;
+    color?: string;
     type: 'upFloating' | 'down' | 'left' | 'right';
     visible: boolean;
     onPress: () => void;
 }
 
-function Arrow({ filled, type, visible, onPress }: ArrowProps) {
+function Arrow({ filled, color, type, visible, onPress }: ArrowProps) {
     const theme = useContext(ThemeContext);
 
     const arrowOpacity = useSharedValue(type === 'upFloating' ? 0 : 1);
@@ -98,7 +99,7 @@ function Arrow({ filled, type, visible, onPress }: ArrowProps) {
                         type === 'down' ? 'arrowdown' :
                             type === 'left' ? 'arrowleft' :
                                 type === 'right' ? 'arrowright' : 'arrowdown'
-                } size={30} color={filled ? theme.white : theme.black} />
+                } size={30} color={color || (filled ? theme.white : theme.black)} />
             </Pressable>
         </Animated.View>
     )

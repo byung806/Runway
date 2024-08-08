@@ -6,7 +6,7 @@ import { Styles } from '@/styles';
 import parseContent from '@/utils/ContentParser';
 import { stringToDate } from '@/utils/date';
 import { BackArrow, ScrollArrow } from './Arrow';
-import Button from './Button';
+import Button, { CloseButton } from './Button';
 import CategoryIcon from './CategoryIcon';
 import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, TextContentChunk, TextContentChunkType, TextSpacerContentChunk, TextSpacerContentChunkType } from './ContentChunk';
 import Text from './Text';
@@ -118,10 +118,10 @@ function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => vo
             {!isOnboardingContent &&
                 <View style={{
                     position: 'absolute',
-                    top: 50,
+                    top: 60,
                     left: 20,
                 }}>
-                    <BackArrow onPress={back} />
+                    <CloseButton color={colors.textColor} onPress={back} />
                 </View>
             }
 

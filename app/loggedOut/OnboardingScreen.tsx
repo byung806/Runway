@@ -6,7 +6,7 @@ import ContentModal from '@/components/2d/ContentModal';
 import OnboardingCard from '@/components/2d/OnboardingCard';
 import OnboardingFooterComponent from '@/components/2d/OnboardingFooterComponent';
 import OnboardingHeaderComponent from '@/components/2d/OnboardingHeaderComponent';
-import { Content, ContentProvider, ThemeContext, usePushNotifications } from '@/providers';
+import { Content, ContentProvider, ThemeContext } from '@/providers';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 
