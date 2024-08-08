@@ -76,15 +76,17 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
 
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                        style={{ width: '100%', gap: 10 }}
+                        style={{ width: '100%', gap: 10, ...Styles.centeringContainer }}
                     >
                         <Text style={{ color: theme.white, fontSize: 40, textAlign: 'center', margin: 20 }}>Enter your username and password!</Text>
                         <TextInput
+                            value={username}
                             onChangeText={setUsername}
                             placeholder={'Username'}
                             style={{ width: '80%', height: 50 }}
                         />
                         <TextInput
+                            value={password}
                             placeholder={'Password'}
                             password={true}
                             onChangeText={setPassword}

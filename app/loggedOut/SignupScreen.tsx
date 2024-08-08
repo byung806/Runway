@@ -32,13 +32,16 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
     // called on sign up button press
     async function signupCallback() {
         if (username.length < 3) {
-            // TODO: filter explicit usernames
             setErrorMessage('Please make your username at least 3 characters long!');
             return;
         }
-        if (username.length > 10) {
-            setErrorMessage('Please make your username at most 10 characters long!');
+        if (username.length > 15) {
+            setErrorMessage('Please make your username at most 15 characters long!');
             return;
+        }
+        if (!username.match(/^[0-9a-z]+$/)) {
+            setErrorMessage('Please only use letters and numbers in your username!');
+            return
         }
         if (matcher.hasMatch(username)) {
             setErrorMessage('Please choose another username!');
@@ -63,7 +66,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
             if (error === 'timeout') {
                 setErrorMessage('Please try again later!');
             } else if (error.code === 'auth/email-already-in-use') {
-                setErrorMessage('Please choose another username!');
+                setErrorMessage('Username is already taken! Please choose another one.');
             }
             else if (error.code === 'auth/invalid-email') {
                 setErrorMessage('Please choose another username.');
@@ -95,16 +98,20 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
 
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                        style={{ width: '100%', gap: 10 }}
+                        style={{ width: '100%', gap: 10, ...Styles.centeringContainer }}
                     >
                         <TextInput
+                            value={username}
                             placeholder={'Username'}
                             defaultValue={username}
                             onChangeText={setUsername}
+                            maxLength={16}
                             style={{ width: '80%', height: 50 }}
                             disabled={loading}
                         />
+                        {/* TODO: figure out ask for email or not */}
                         <TextInput
+                            value={email}
                             placeholder={'Email'}
                             onChangeText={setEmail}
                             email
@@ -112,6 +119,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                             disabled={loading}
                         />
                         <TextInput
+                            value={password}
                             placeholder={'Password'}
                             onChangeText={setPassword}
                             password

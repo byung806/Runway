@@ -14,7 +14,6 @@ interface OnboardingCardAttributes extends BaseCardAttributes { }
 
 export default function OnboardingScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
-    const notifications = usePushNotifications();
     
     const [username, setUsername] = useState('');
     const defaultColors = {
@@ -56,6 +55,7 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
     const onboardingContent: Content = {
         title: username + '\'s first lesson!',
         category: 'onboarding',
+        author: '',
         body: 'Water is everywhere and is essential for life. But let\'s look at what water really is. Water is a made of hydrogen and oxygen - H₂O.',
         questions: [
             {
@@ -161,9 +161,9 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
             <ScrollableCards<OnboardingCardAttributes>
                 ref={scrollableCardsRef}
                 data={cards}
-                scrollable={username.length >= 3 && username.length <= 10}
-                header={<OnboardingHeaderComponent setUsername={setUsername} height={undefined as never} arrowDown={undefined as never} />}
-                headerArrowDown={username.length >= 3 && username.length <= 10}
+                scrollable={username.length >= 3 && username.length <= 15}
+                header={<OnboardingHeaderComponent username={username} setUsername={setUsername} height={undefined as never} arrowDown={undefined as never} />}
+                headerArrowDown={username.length >= 3 && username.length <= 15}
                 renderItem={({ item }) =>
                     <OnboardingCard
                         username={username} openOnboardingContentModal={openOnboardingContentModal}
