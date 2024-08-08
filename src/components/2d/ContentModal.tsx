@@ -1,15 +1,15 @@
 import React, { useContext, useMemo, useRef, useState } from 'react';
 import { Dimensions, FlatList, Modal, View } from 'react-native';
 
+import { ThemeContext, useContent } from '@/providers';
 import { Styles } from '@/styles';
 import parseContent from '@/utils/ContentParser';
-import Button from './Button';
-import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, TextContentChunk, TextContentChunkType, TextSpacerContentChunk, TextSpacerContentChunkType } from './ContentChunk';
-import { useContent, ThemeContext } from '@/providers';
-import { BackArrow, ScrollArrow } from './Arrow';
-import Text from './Text';
 import { stringToDate } from '@/utils/date';
+import { BackArrow, ScrollArrow } from './Arrow';
+import Button from './Button';
 import CategoryIcon from './CategoryIcon';
+import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, TextContentChunk, TextContentChunkType, TextSpacerContentChunk, TextSpacerContentChunkType } from './ContentChunk';
+import Text from './Text';
 
 //TODO: only show 1 question at a time
 export type ContentChunk = TextContentChunkType | TextSpacerContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionContentChunkType;
@@ -177,19 +177,19 @@ function ContentFooterComponent() {
                 </Text>
                 :
                 <Text style={{ textAlign: 'center', fontSize: 35, color: colors.textColor }}>
-                    Complete all the questions to finish!
+                    You have uncompleted questions!
                 </Text>}
-            {!cardCompleted && allQuestionsCompleted &&
+            {!cardCompleted && allQuestionsCompleted && !isToday &&
                 <>
                     <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>Points Earned: +{Math.round(earnedPointsWithoutStreak)}</Text>
                     {isToday && <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>Streak Bonus: +{Math.round(earnedStreakBonus)}</Text>}
                 </>
             }
-            {cardCompleted &&
-                <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>You only earn points for cards you haven't seen before!</Text>
+            {cardCompleted && !allQuestionsCompleted &&
+                <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>You only earn points for cards you haven't done before!</Text>
             }
             <Button
-                title='Finish'
+                title={cardCompleted ? 'Continue' : 'Get Points!'}
                 backgroundColor={colors.textColor}
                 textColor={theme.white}
                 onPress={onPress}
