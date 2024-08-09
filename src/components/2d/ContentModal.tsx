@@ -195,6 +195,7 @@ function ContentFooterComponent() {
                 textColor={theme.white}
                 onPress={onPress}
                 disabled={(!allQuestionsCompleted || loading) && !cardCompleted}
+                showLoadingSpinner={loading}
                 style={{
                     width: '80%',
                     height: 50,

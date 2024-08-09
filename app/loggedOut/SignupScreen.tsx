@@ -83,7 +83,9 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
     // only navigate to logged in app if user data is loaded
     useEffect(() => {
         setLoading(false);
-        notifications.requestPermissions();
+        if (firebase.userData) {
+            notifications.requestPermissions();
+        }
     }, [firebase.userData]);
 
     return (
@@ -129,6 +131,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                         <Button
                             title={'Take Off!'}
                             disabled={loading}
+                            showLoadingSpinner={loading}
                             onPress={signupCallback}
                         />
                         {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.white }}>{errorMessage}</Text> : null}

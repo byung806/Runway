@@ -105,6 +105,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                         <Button
                             title={'Log In!'}
                             disabled={loading}
+                            showLoadingSpinner={loading}
                             onPress={loginCallback}
                             style={{ width: '40%', height: 50, marginTop: 10 }}
                         />

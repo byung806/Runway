@@ -2,7 +2,7 @@ import { ThemeContext } from '@/providers/ThemeProvider';
 import { Styles } from '@/styles';
 import * as Haptics from 'expo-haptics';
 import React, { useContext } from 'react';
-import { Pressable, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import useBounceAnimation, { SoundType } from '@/utils/useBounceAnimation';
@@ -17,6 +17,7 @@ interface ButtonProps {
     textColor?: string;
     forceTextColor?: boolean;
     disabled?: boolean;
+    showLoadingSpinner?: boolean;
     sound?: SoundType;
     reanimatedStyle?: any;
     style?: any;
@@ -24,7 +25,7 @@ interface ButtonProps {
 
 const ReactSpringAnimatedView = animated(View);
 
-export default function Button({ title, onPress, backgroundColor, textColor, forceTextColor, disabled = false, sound = 'button', reanimatedStyle, style }: ButtonProps) {
+export default function Button({ title, onPress, backgroundColor, textColor, forceTextColor, disabled = false, showLoadingSpinner = false, sound = 'button', reanimatedStyle, style }: ButtonProps) {
     const theme = useContext(ThemeContext);
 
     const { scale: buttonScale, onPressIn: buttonOnPressIn, onPress: buttonOnPress, onPressOut: buttonOnPressOut } = useBounceAnimation({
@@ -43,7 +44,6 @@ export default function Button({ title, onPress, backgroundColor, textColor, for
             ...style
         }}>
             <Animated.View style={{
-                // flex: 1,
                 borderRadius: 12,
                 // opacity: cardContentOpacity,
                 backgroundColor: disabled ? '#bbbbbb' : backgroundColor || theme.runwayButtonColor,
@@ -53,15 +53,21 @@ export default function Button({ title, onPress, backgroundColor, textColor, for
             }}>
                 <Pressable
                     android_disableSound={true}
-                    onPress={disabled ? () => { } : () => { buttonOnPress(); onPress(); }}
-                    onPressIn={disabled ? () => { } : buttonOnPressIn}
-                    onPressOut={disabled ? () => { } : buttonOnPressOut}
+                    onPress={disabled ? null : () => { buttonOnPress(); onPress(); }}
+                    onPressIn={disabled ? null : buttonOnPressIn}
+                    onPressOut={disabled ? null : buttonOnPressOut}
                     style={{ ...Styles.centeringContainer, padding: 10, paddingHorizontal: 20 }}
                 >
                     <Text style={{
                         color: (forceTextColor || !disabled) ? (textColor || theme.runwayTextColor) : '#999999',
-                        fontSize: 20, ...Styles.lightShadow
+                        fontSize: 20, ...Styles.lightShadow, opacity: showLoadingSpinner ? 0 : 1
                     }}>{title}</Text>
+
+                    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, ...Styles.centeringContainer }}>
+                        <ActivityIndicator color={theme.black} style={{
+                            opacity: showLoadingSpinner ? 1 : 0,
+                        }} />
+                    </View>
                 </Pressable>
             </Animated.View>
         </ReactSpringAnimatedView>
