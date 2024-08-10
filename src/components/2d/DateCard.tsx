@@ -141,14 +141,15 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
 
                 {/* title */}
                 <Animated.View style={{
-                    padding: 30,
+                    paddingBottom: 20,
+                    paddingHorizontal: 30,
                     opacity: cardContentOpacity,
                     transform: [{ translateY: titleTransformY }]
                 }}>
                     <Text style={{
                         color: colors.textColor,
                         fontSize: 40,
-                    }} numberOfLines={2}>{content.title}</Text>
+                    }} numberOfLines={3}>{content.title}</Text>
                 </Animated.View>
 
 

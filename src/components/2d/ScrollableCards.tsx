@@ -81,6 +81,10 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
         }
     }
 
+    async function scrollToOffset(offset: number) {
+        flatListRef.current?.scrollToOffset({ offset, animated: true });
+    }
+
     /**
      * Scroll to card with index
      */
@@ -135,7 +139,16 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                             />
                         ) : undefined
                     })}
-                ListFooterComponent={footer && cloneElement(footer, { height: footerHeight })}
+                ListFooterComponent={footer && cloneElement(footer, {
+                    height: footerHeight,
+                    arrowUp: (
+                        <ScrollArrow
+                            type='up'
+                            visible={true}
+                            onPress={() => { scrollToOffset(0); }}
+                        />
+                    )
+                })}
                 getItemLayout={(_, index) => {
                     if (index === 0) {
                         return {
@@ -183,8 +196,8 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
             {floatingArrowUp ? (
                 <ScrollArrow
                     type='upFloating'
-                    visible={focusedIndex !== null && focusedIndex !== 0 && focusedIndex !== 1}
-                    onPress={() => { scrollToIndex(0); }}
+                    visible={focusedIndex !== null && focusedIndex !== 0}
+                    onPress={() => { scrollToOffset(0); }}
                 />
             ) : null}
         </Animated.View>

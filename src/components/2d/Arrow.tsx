@@ -9,13 +9,18 @@ import { AntDesign } from "@expo/vector-icons";
 import * as Haptics from 'expo-haptics';
 
 interface ScrollArrowProps {
-    type: 'upFloating' | 'down';
+    type: 'upFloating' | 'up' | 'down';
     visible: boolean;
     onPress: () => void;
 }
 
 export function ScrollArrow({ type, visible, onPress }: ScrollArrowProps) {
     if (type === 'down') {
+        return (
+            <Arrow filled type={type} visible={visible} onPress={onPress} />
+        )
+    }
+    if (type === 'up') {
         return (
             <Arrow filled type={type} visible={visible} onPress={onPress} />
         )
@@ -45,7 +50,7 @@ export function BackArrow({ color, onPress }: { color?: string, onPress: () => v
 interface ArrowProps {
     filled: boolean;
     color?: string;
-    type: 'upFloating' | 'down' | 'left' | 'right';
+    type: 'upFloating' | 'up' | 'down' | 'left' | 'right';
     visible: boolean;
     onPress: () => void;
 }
@@ -96,9 +101,10 @@ function Arrow({ filled, color, type, visible, onPress }: ArrowProps) {
             >
                 <AntDesign name={
                     type === 'upFloating' ? 'arrowup' :
-                        type === 'down' ? 'arrowdown' :
-                            type === 'left' ? 'arrowleft' :
-                                type === 'right' ? 'arrowright' : 'arrowdown'
+                        type === 'up' ? 'arrowup' :
+                            type === 'down' ? 'arrowdown' :
+                                type === 'left' ? 'arrowleft' :
+                                    type === 'right' ? 'arrowright' : 'arrowdown'
                 } size={30} color={color || (filled ? theme.white : theme.black)} />
             </Pressable>
         </Animated.View>

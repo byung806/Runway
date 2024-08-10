@@ -69,12 +69,12 @@ export default function Layout() {
     });
 
     const onLayoutRootView = useCallback(async () => {
-        if (fontsLoaded) {
+        if (fontsLoaded && !firebase.initializing) {
             await SplashScreen.hideAsync();
         }
-    }, [fontsLoaded]);
+    }, [fontsLoaded, firebase.initializing]);
 
-    if (!fontsLoaded) return;
+    if (!fontsLoaded || firebase.initializing) return;
 
     return (
         <View style={{ flex: 1 }} onLayout={onLayoutRootView}>

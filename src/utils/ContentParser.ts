@@ -58,6 +58,12 @@ export default function parseContent(content: Content, totalPoints: number): Con
                 choices: question.choices,
                 possiblePoints: points
             });
+            if (question !== questions[questions.length - 1]) {
+                chunks.push({
+                    focused: false,
+                    type: 'questionSpacer'
+                });
+            }
         });
     }
 

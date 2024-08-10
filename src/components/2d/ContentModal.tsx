@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useRef, useState } from 'react';
-import { Dimensions, FlatList, Modal, View } from 'react-native';
+import { Dimensions, FlatList, Linking, Modal, View } from 'react-native';
 
 import { ThemeContext, useContent } from '@/providers';
 import { Styles } from '@/styles';
@@ -8,11 +8,11 @@ import { stringToDate } from '@/utils/date';
 import { BackArrow, ScrollArrow } from './Arrow';
 import Button, { CloseButton } from './Button';
 import CategoryIcon from './CategoryIcon';
-import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, TextContentChunk, TextContentChunkType, TextSpacerContentChunk, TextSpacerContentChunkType } from './ContentChunk';
+import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, QuestionSpacerContentChunk, QuestionSpacerContentChunkType, TextContentChunk, TextContentChunkType, TextSpacerContentChunk, TextSpacerContentChunkType } from './ContentChunk';
 import Text from './Text';
 
 //TODO: only show 1 question at a time
-export type ContentChunk = TextContentChunkType | TextSpacerContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionContentChunkType;
+export type ContentChunk = TextContentChunkType | TextSpacerContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionSpacerContentChunkType | QuestionContentChunkType;
 
 export default function ContentModal({ visible }: { visible: boolean }) {
     const { content, colors, earnablePointsWithoutStreak } = useContent();
@@ -68,6 +68,10 @@ export default function ContentModal({ visible }: { visible: boolean }) {
                             return (
                                 <DividerContentChunk />
                             );
+                        } else if (item.type === 'questionSpacer') {
+                            return (
+                                <QuestionSpacerContentChunk />
+                            );
                         } else if (item.type === 'question') {
                             return (
                                 <QuestionContentChunk
@@ -89,7 +93,7 @@ export default function ContentModal({ visible }: { visible: boolean }) {
                         setFocusedItems(focusedIndexes);
                     }}
                     viewabilityConfig={{
-                        itemVisiblePercentThreshold: 80,  // how much of the item is visible
+                        itemVisiblePercentThreshold: 70,  // how much of the item is visible
                         waitForInteraction: false
                     }}
                     showsVerticalScrollIndicator={false}
@@ -103,7 +107,7 @@ export default function ContentModal({ visible }: { visible: boolean }) {
 
 function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => void }) {
     const theme = useContext(ThemeContext);
-    const { isOnboardingContent, date, content, colors, back } = useContent();
+    const { isOnboardingContent, isToday, date, content, colors, back } = useContent();
 
     const [arrowVisible, setArrowVisible] = useState(true);
 
@@ -120,6 +124,7 @@ function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => vo
                     position: 'absolute',
                     top: 60,
                     left: 20,
+                    justifyContent: 'space-between',
                 }}>
                     <CloseButton color={colors.textColor} onPress={back} />
                 </View>
@@ -129,9 +134,9 @@ function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => vo
                 {content.title}
             </Text>
 
-            {content.author &&
+            {!isNaN(day) &&
                 <Text style={{ textAlign: 'center', fontSize: 20, color: colors.textColor }}>
-                    by {content.author}
+                    {isToday ? 'Today' : `from ${month} ${day}`}
                 </Text>
             }
 
@@ -159,7 +164,7 @@ function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => vo
 function ContentFooterComponent() {
     const height = Dimensions.get('window').height;
     const theme = useContext(ThemeContext);
-    const { isOnboardingContent, isToday, cardCompleted, colors, earnedPointsWithoutStreak, earnedStreakBonus, earnablePointsWithoutStreak, allQuestionsCompleted, finish } = useContent();
+    const { isOnboardingContent, isToday, content, cardCompleted, colors, earnedPointsWithoutStreak, earnedStreakBonus, earnablePointsWithoutStreak, allQuestionsCompleted, finish } = useContent();
 
     const [loading, setLoading] = useState(false);
 
@@ -201,6 +206,29 @@ function ContentFooterComponent() {
                     height: 50,
                 }}
             />
+
+            {!isOnboardingContent && allQuestionsCompleted &&
+                <Button
+                    title='Want to create content?'
+                    onPress={() => {
+                        Linking.openURL('mailto:byung806@gmail.com?subject=Runway Possible Content Creator&body=I would like to create content for Runway!\n\nHere are some ideas I have:\n- ');
+                    }}
+                    backgroundColor='transparent'
+                    textColor={theme.white}
+                />
+            }
+
+            {content.author &&
+                <View style={{
+                    position: 'absolute',
+                    bottom: 50,
+                    gap: 10
+                }}>
+                    <Text style={{ textAlign: 'center', fontSize: 18, color: colors.textColor }}>
+                        This lesson created by {content.author}
+                    </Text>
+                </View>
+            }
         </View>
     )
 }

@@ -36,6 +36,11 @@ export default function CategoryIcon({ category, size=30, color='black' }: Categ
             <FontAwesome5 name='cloud-moon' size={size} color={color} />
         )
     }
+    if (category === 'geology' || category === 'earth science') {
+        return (
+            <FontAwesome5 name='mountain' size={size} color={color} />
+        )
+    }
     return (
         <FontAwesome5 name='book' size={size} color={color} />
     );

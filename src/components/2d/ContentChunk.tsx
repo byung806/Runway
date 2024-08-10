@@ -53,7 +53,7 @@ export interface TextSpacerContentChunkType extends BaseContentChunkType {
 }
 export function TextSpacerContentChunk() {
     return (
-        <View style={{ height: Dimensions.get("window").height * 0.1 }} />
+        <View style={{ height: Dimensions.get("window").height * 0.3 }} />
     );
 }
 
@@ -82,6 +82,16 @@ export function DividerContentChunk() {
         }}>
             {/* <Text style={{ fontSize: 30, color: theme.black }}>Question time!</Text> */}
         </View>
+    );
+}
+
+
+export interface QuestionSpacerContentChunkType extends BaseContentChunkType {
+    type?: "questionSpacer";
+}
+export function QuestionSpacerContentChunk() {
+    return (
+        <View style={{ height: Dimensions.get("window").height * 0.2 }} />
     );
 }
 

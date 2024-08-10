@@ -4,8 +4,26 @@ import { View } from "react-native";
 import Text from "./Text";
 import { ThemeContext } from "@/providers";
 
-export default function ListFooterComponent({ height }: { height: number }) {
+export default function ListFooterComponent({ height, arrowUp, showError }: { height: number, arrowUp: JSX.Element, showError: boolean }) {
     const theme = useContext(ThemeContext);
+
+    if (!showError) {
+        return (
+            <View style={{
+                height,
+                gap: 20,
+                ...Styles.centeringContainer,
+            }}>
+                <View style={{ ...Styles.centeringContainer, gap: 10 }}>
+                    {arrowUp}
+                    <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.runwayTextColor, textAlign: 'center' }}>
+                        {/* {firebase.userData?.username} */}
+                        <Text style={{ color: theme.white }}>Great job! You reached the end of available content!</Text>
+                    </Text>
+                </View>
+            </View>
+        );
+    }
     return (
         <View style={{
             height,
