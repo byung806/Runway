@@ -79,7 +79,7 @@ interface FirebaseContextType {
     getUserData: () => Promise<void>;
     getContent: (date: string) => Promise<{ content: Content, colors: ContentColors } | null>;
     requestCompleteDate: (date?: string, percent?: number) => Promise<{ success: boolean }>;
-    addFriend: (friend: string) => Promise<{ success: boolean }>;
+    addFriend: (friend: string) => Promise<{ success: boolean, errorMessage: string }>;
     getLeaderboard: (type: LeaderboardType) => Promise<void>;
 
     sendExpoPushToken: (token: string) => Promise<void>;
@@ -256,17 +256,17 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
      * @param friend the username of the friend to add
      * @returns whether the friend was successfully added
      */
-    async function addFriend(friend: string): Promise<{ success: boolean }> {
+    async function addFriend(friend: string): Promise<{ success: boolean, errorMessage: string }> {
         try {
             console.log('DATABASE CALL: add friend ' + friend);
             const data = await functions()
                 .httpsCallable('addFriend')({
                     friendUsername: friend,
-                }) as FirebaseFunctionsTypes.HttpsCallableResult<{ success: boolean }>;
-            return data.data as { success: boolean };
+                }) as FirebaseFunctionsTypes.HttpsCallableResult<{ success: boolean, errorMessage: string }>;
+            return data.data as { success: boolean, errorMessage: string };
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  addFriend');
-            return { success: false };
+            return { success: false, errorMessage: 'Failed to add friend!' };
         }
     }
 

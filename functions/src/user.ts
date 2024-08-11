@@ -58,19 +58,23 @@ export const getUserData = async (request: CallableRequest): Promise<FirebaseFir
 /**
  * Adds a friend to the current logged in user's friends list (and vice versa)
  */
-export const addFriend = async (request: CallableRequest): Promise<{ success: boolean }> => {
-    if (!request.auth) return { success: false };
+export const addFriend = async (request: CallableRequest): Promise<{ success: boolean, errorMessage: string }> => {
+    if (!request.auth) return { success: false, errorMessage: 'Unauthorized!' };
     const user = await getDbDoc('users', request.auth.uid).get();
     const username = user.get("username");
-    if (!request.data.friendUsername) return { success: false };
+    if (!request.data.friendUsername) return { success: false, errorMessage: 'No friend username!' };
     const friend = await getDbDoc('usernames', request.data.friendUsername).get();
     if (!friend.exists) {
-        return { success: false };
+        return { success: false, errorMessage: 'Friend not found!' };
+    }
+
+    if (username === request.data.friendUsername) {
+        return { success: false, errorMessage: 'You can\'t friend yourself!' };
     }
 
     // check if friend is already friended
     if (user.get("friends").includes(request.data.friendUsername)) {
-        return { success: false };
+        return { success: false, errorMessage: request.data.friendUsername + ' is already friended!' };
     }
 
     // update user's friends field
@@ -83,7 +87,7 @@ export const addFriend = async (request: CallableRequest): Promise<{ success: bo
         friends: FieldValue.arrayUnion(username)
     });
 
-    return { success: true };
+    return { success: true, errorMessage: '' };
 }
 
 /**
