@@ -63,7 +63,7 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                                 style={{ width: "80%" }}
                             />
                             <Button
-                                title={'I have an Account'}
+                                title={'I have an account'}
                                 onPress={() => {
                                     navigation.navigate('login');
                                 }}

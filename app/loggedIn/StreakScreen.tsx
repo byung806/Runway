@@ -10,6 +10,7 @@ import { Easing, View } from "react-native";
 import AnimatedNumbers from 'react-native-animated-numbers';
 import { useSharedValue, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
+import LottieView from 'lottie-react-native';
 
 export default function StreakScreen({ route, navigation }: { route: any, navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
@@ -76,19 +77,15 @@ export default function StreakScreen({ route, navigation }: { route: any, naviga
                 ...Styles.centeringContainer,
                 gap: 40,
             }}>
-                {/* <Suspense fallback={null}>
-                    <LottieView
-                        ref={fireAnimationRef}
-                        style={{
-                            width: 500,
-                            height: 500,
-                            position: 'absolute',
-                            top: height - 720,
-                        }}
-                        source={require('@/assets/animations/nonPixelFire.json')}
-                        loop
-                    />
-                </Suspense> */}
+                <LottieView
+                    style={{
+                        width: 500,
+                        height: 500,
+                        position: 'absolute',
+                    }}
+                    source={require('@/assets/animations/fire.json')}
+                    loop
+                />
 
                 <Text style={{
                     color: theme.white,
@@ -128,6 +125,7 @@ export default function StreakScreen({ route, navigation }: { route: any, naviga
                             fontStyle={{ color: theme.runwayTextColor, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
                             easing={Easing.out(Easing.cubic)}
                         />
+                        <Button title="streak screen" onPress={() => navigation.navigate('leaderboard')} style={{ width: '80%', marginTop: 20 }} />
                     </View>
                 </View>
             </View>

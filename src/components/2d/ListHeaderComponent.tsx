@@ -44,6 +44,7 @@ export default function ListHeaderComponent({ height, arrowDown }: { height: num
                 <Text style={{ fontSize: 100, ...Styles.lightShadow, color: theme.runwayTextColor }}>{firebase.userData?.points}</Text>
                 <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.runwayTextColor }}>points</Text>
                 <Button title="Leaderboard" onPress={() => navigation.navigate('leaderboard')} style={{ width: '80%', marginTop: 20 }} />
+                <Button title="streak screen" onPress={() => navigation.navigate('streak')} style={{ width: '80%', marginTop: 20 }} />
             </View>
 
             {!firebase.todayCompleted && (
