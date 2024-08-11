@@ -9,13 +9,14 @@ interface TextInputProps {
     onChangeText: React.Dispatch<React.SetStateAction<string>>;
     disabled?: boolean;
     autoCorrect?: boolean;
+    autoComplete?: string | any;
     maxLength?: number;
     password?: boolean;
     email?: boolean;
     style?: any;
 }
 
-export default function TextInput({ placeholder, defaultValue = '', value, onChangeText, disabled = false, autoCorrect = false, maxLength, password = false, email = false, style }: TextInputProps) {
+export default function TextInput({ placeholder, defaultValue = '', value, onChangeText, disabled = false, autoCorrect = false, autoComplete, maxLength, password = false, email = false, style }: TextInputProps) {
     const theme = useContext(ThemeContext);
 
     function validateValue(text: string) {
@@ -32,6 +33,7 @@ export default function TextInput({ placeholder, defaultValue = '', value, onCha
             placeholder={placeholder}
             defaultValue={defaultValue}
             autoCorrect={autoCorrect}
+            autoComplete={autoComplete}
             editable={!disabled}
             selectTextOnFocus={!disabled}
             contextMenuHidden={disabled}

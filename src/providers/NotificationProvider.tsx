@@ -14,17 +14,15 @@ Notifications.setNotificationHandler({
 });
 
 interface NotificationContextType {
-    hasPermission: boolean | undefined;
-
     expoPushToken?: Notifications.ExpoPushToken;
     notification?: Notifications.Notification;
 
     requestPermissions: () => Promise<void>;
-    scheduleNotification: () => Promise<void>;
+    // scheduleNotification: () => Promise<void>;
 }
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
-    const [hasPermission, setHasPermission] = useState<boolean | undefined>(undefined)
+    const [hasPermission, setHasPermission] = useState<boolean | undefined>(undefined)  // TODO: implement
 
     const [expoPushToken, setExpoPushToken] = useState<Notifications.ExpoPushToken | undefined>()
     const [notification, setNotification] = useState<Notifications.Notification | undefined>()
@@ -33,17 +31,9 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     const responseListener = useRef<Notifications.Subscription>()
 
     async function requestPermissions() {
-        registerForPushNotificationsAsync().then(token => setExpoPushToken(token))
-    }
-
-    async function registerForPushNotificationsAsync() {
-        let token;
-
         if (Device.isDevice) {
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
             let finalStatus = existingStatus;
-
-            setHasPermission(existingStatus === 'granted')
 
             if (existingStatus !== 'granted') {
                 const { status } = await Notifications.requestPermissionsAsync()
@@ -51,10 +41,21 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
             }
 
             if (finalStatus !== 'granted') {
-                alert('Failed to get push token for push notification!')
+                console.log('Required push notification permissions not granted')
+            } else {
+                getExpoPushTokenAsync().then(token => setExpoPushToken(token))
+            }
+        }
+    }
+
+    async function getExpoPushTokenAsync(): Promise<Notifications.ExpoPushToken | undefined> {
+        if (Device.isDevice) {
+            const { status } = await Notifications.getPermissionsAsync();
+            if (status !== 'granted') {
+                return
             }
 
-            token = await Notifications.getExpoPushTokenAsync({
+            const token = await Notifications.getExpoPushTokenAsync({
                 projectId: Constants.expoConfig?.extra?.eas?.projectId,
             });
 
@@ -67,7 +68,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
                 });
             }
 
-            console.log(token)
+            console.log('expoPushToken:', token.data)
 
             return token;
         } else {
@@ -75,18 +76,20 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
         }
     }
 
-    async function scheduleNotification() {
-        await Notifications.scheduleNotificationAsync({
-            content: {
-                title: "You've got mail! 📬",
-                body: 'Here is the notification body',
-                data: { data: 'goes here' },
-            },
-            trigger: { seconds: 2 },
-        });
-    }
+    // async function scheduleNotification() {
+    //     await Notifications.scheduleNotificationAsync({
+    //         content: {
+    //             title: "You've got mail! 📬",
+    //             body: 'Here is the notification body',
+    //             data: { data: 'goes here' },
+    //         },
+    //         trigger: { seconds: 2 },
+    //     });
+    // }
 
     useEffect(() => {
+        getExpoPushTokenAsync().then(token => setExpoPushToken(token))
+
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification)
         })
@@ -103,11 +106,10 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 
     return (
         <NotificationContext.Provider value={{
-            hasPermission,
             expoPushToken,
             notification,
             requestPermissions,
-            scheduleNotification,
+            // scheduleNotification,
         }}>
             {children}
         </NotificationContext.Provider>

@@ -2,7 +2,7 @@ import { onCall } from "firebase-functions/v2/https";
 
 import { initializeApp } from "firebase-admin/app";
 import { requestCompleteDate } from "./streak";
-import { addFriend, checkUncompletedChallengeToday, getUserData, initializeUser } from "./user";
+import { addFriend, getUserData, initializeUser, sendExpoPushToken } from "./user";
 import { getLeaderboard } from "./leaderboard";
 
 
@@ -19,11 +19,6 @@ exports.initializeUser = onCall(initializeUser);
 exports.requestCompleteDate = onCall(requestCompleteDate);
 
 /**
- * Checks if there is a new uncompleted challenge for the user to complete today
- */
-exports.checkUncompletedChallengeToday = onCall(checkUncompletedChallengeToday);
-
-/**
  * Ensures the streak is updated and gets the user's data
  */
 exports.getUserData = onCall(getUserData);
@@ -38,3 +33,7 @@ exports.addFriend = onCall(addFriend);
  */
 exports.getLeaderboard = onCall(getLeaderboard);
 
+/**
+ * Updates the user's expo push token
+ */
+exports.sendExpoPushToken = onCall(sendExpoPushToken);

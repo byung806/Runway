@@ -1,15 +1,17 @@
 import React, { useContext, useMemo, useRef, useState } from 'react';
-import { Dimensions, FlatList, Linking, Modal, View } from 'react-native';
+import { Dimensions, FlatList, Linking, Modal, Pressable, View } from 'react-native';
 
 import { ThemeContext, useContent } from '@/providers';
 import { Styles } from '@/styles';
 import parseContent from '@/utils/ContentParser';
 import { stringToDate } from '@/utils/date';
-import { BackArrow, ScrollArrow } from './Arrow';
+import { ScrollArrow } from './Arrow';
 import Button, { CloseButton } from './Button';
 import CategoryIcon from './CategoryIcon';
 import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, QuestionSpacerContentChunk, QuestionSpacerContentChunkType, TextContentChunk, TextContentChunkType, TextSpacerContentChunk, TextSpacerContentChunkType } from './ContentChunk';
 import Text from './Text';
+import Foundation from '@expo/vector-icons/Foundation';
+
 
 //TODO: only show 1 question at a time
 export type ContentChunk = TextContentChunkType | TextSpacerContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionSpacerContentChunkType | QuestionContentChunkType;
@@ -142,7 +144,7 @@ function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => vo
 
             <View
                 style={{
-                    backgroundColor: '#A2A2A2',
+                    backgroundColor: theme.black,
                     height: 2,
                     width: 165,
                     // alignSelf: 'stretch',
@@ -207,26 +209,26 @@ function ContentFooterComponent() {
                 }}
             />
 
-            {!isOnboardingContent && allQuestionsCompleted &&
-                <Button
-                    title='Want to create content?'
-                    onPress={() => {
-                        Linking.openURL('mailto:byung806@gmail.com?subject=Runway Possible Content Creator&body=I would like to create content for Runway!\n\nHere are some ideas I have:\n- ');
-                    }}
-                    backgroundColor='transparent'
-                    textColor={theme.white}
-                />
-            }
-
             {content.author &&
                 <View style={{
                     position: 'absolute',
                     bottom: 50,
-                    gap: 10
+                    gap: 30
                 }}>
                     <Text style={{ textAlign: 'center', fontSize: 18, color: colors.textColor }}>
                         This lesson created by {content.author}
                     </Text>
+
+                    {!isOnboardingContent && allQuestionsCompleted &&
+                        <Pressable onPress={() => {
+                            Linking.openURL('mailto:byung806@gmail.com?subject=Runway Possible Content Creator&body=I would like to create content for Runway!\n\nHere are some ideas I have:\n- ');
+                        }} style={{ gap: 8, flexDirection: 'row', ...Styles.centeringContainer }}>
+                            <Foundation name="mail" size={24} color="black" />
+                            <Text style={{ textAlign: 'center', fontSize: 14, color: theme.black }}>
+                                Want to create content for Runway?
+                            </Text>
+                        </Pressable>
+                    }
                 </View>
             }
         </View>

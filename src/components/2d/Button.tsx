@@ -46,7 +46,7 @@ export default function Button({ title, onPress, backgroundColor, textColor, for
             <Animated.View style={{
                 borderRadius: 12,
                 // opacity: cardContentOpacity,
-                backgroundColor: disabled ? '#bbbbbb' : backgroundColor || theme.runwayButtonColor,
+                backgroundColor: disabled ? (backgroundColor === 'transparent' ? 'transparent' : '#bbbbbb') : backgroundColor || theme.runwayButtonColor,
                 // transform: [{ translateY: goTransformY }],
                 ...(backgroundColor === 'transparent' ? {} : Styles.lightShadow),
                 ...reanimatedStyle,

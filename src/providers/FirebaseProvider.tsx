@@ -16,12 +16,12 @@ export interface FirebaseError {
 interface UserData {
     email: string;
     friends: string[];
-    password: string;
     point_days: { [date: string]: number };
     points: number;
     streak: number;
     uid: string;
     username: string;
+    expoPushToken?: string;
 }
 
 export interface ContentColors {
@@ -81,6 +81,8 @@ interface FirebaseContextType {
     requestCompleteDate: (date?: string, percent?: number) => Promise<{ success: boolean }>;
     addFriend: (friend: string) => Promise<{ success: boolean }>;
     getLeaderboard: (type: LeaderboardType) => Promise<void>;
+
+    sendExpoPushToken: (token: string) => Promise<void>;
 }
 
 
@@ -111,13 +113,21 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 
             if (authStateUser) {
                 while (registeringUser.current) {
-                    await delay(300);
                     // in this loop when firebase auth user is registered but user data is not yet initialized
+                    await delay(300);
                 }
                 setInitializing(false);
+
                 await getUserData();
-                await getLeaderboard('global');
-                await getLeaderboard('friends');
+
+                if (notifications.expoPushToken) {
+                    if (userData?.expoPushToken !== notifications.expoPushToken.data) {
+                        sendExpoPushToken(notifications.expoPushToken.data);
+                    }
+                }
+
+                getLeaderboard('global');
+                getLeaderboard('friends');
             } else {
                 setUserData(null);
                 setTodayCompleted(false);
@@ -148,7 +158,6 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             await functions()
                 .httpsCallable('initializeUser')({
                     email: email
-                    // TODO: add push notification thing here
                 });
 
             registeringUser.current = false;
@@ -198,7 +207,6 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                 .httpsCallable('getUserData')() as FirebaseFunctionsTypes.HttpsCallableResult<UserData>;
             setUserData(userData.data);
             setTodayCompleted(today in (userData.data?.point_days ?? {}));
-            console.log('today completed', today in (userData.data?.point_days ?? {}));
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  getUserData');
         }
@@ -285,6 +293,17 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         }
     }
 
+    /**
+     * Sends the expo push token to the server
+     */
+    async function sendExpoPushToken(token: string): Promise<void> {
+        console.log('DATABASE CALL: send expo push token', token);
+        await functions()
+            .httpsCallable('sendExpoPushToken')({
+                token: token,
+            });
+    }
+
     return (
         <FirebaseContext.Provider value={{
             today,
@@ -305,6 +324,8 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             requestCompleteDate,
             addFriend,
             getLeaderboard,
+
+            sendExpoPushToken,
         }}>
             {children}
         </FirebaseContext.Provider>

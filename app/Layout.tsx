@@ -62,6 +62,7 @@ const cardStyleInterpolator = ({
 
 export default function Layout() {
     const firebase = useFirebase();
+    
     const [fontsLoaded] = useFonts({
         Inter_700Bold,
         Inter_800ExtraBold,

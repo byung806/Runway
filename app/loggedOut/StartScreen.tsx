@@ -47,7 +47,6 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                         ...Styles.centeringContainer,
                     }}>
                         <View style={{ flex: 1, ...Styles.centeringContainer }}>
-                            {/* <Logo /> */}
                             <Text style={{
                                 fontSize: 40,
                                 textAlign: 'center',

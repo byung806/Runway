@@ -144,7 +144,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                         <Button
                             title={'Have an account?'}
                             disabled={loading}
-                            textColor={theme.text}
+                            textColor={theme.white}
                             backgroundColor='transparent'
                             onPress={() => navigation.navigate('login')}
                         />
