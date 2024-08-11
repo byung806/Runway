@@ -1,11 +1,33 @@
 import { ContentQuestionChoice, ThemeContext, useContent } from "@/providers";
 import { Styles } from "@/styles";
-import { useContext, useEffect, useState } from "react";
-import { Dimensions, View } from "react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
+import React, { useContext, useEffect, useState } from "react";
+import { Dimensions, Image, View } from "react-native";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import Button from "./Button";
 import Text from "./Text";
 
+export type ContentChunkType = TextContentChunkType | ImageContentChunkType | TextSpacerContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionSpacerContentChunkType | QuestionContentChunkType;
+export function ContentChunk({ focused, chunk }: { focused: boolean, chunk: ContentChunkType }) {
+    switch (chunk.type) {
+        case "text":
+            return <TextContentChunk focused={focused} text={chunk.text} side={chunk.side} />;
+        case "image":
+            return <ImageContentChunk focused={focused} uri={chunk.uri} />;
+        case "textSpacer":
+            return <TextSpacerContentChunk />;
+        case "paragraphSpacer":
+            return <ParagraphSpacerContentChunk />;
+        case "divider":
+            return <DividerContentChunk />;
+        case "questionSpacer":
+            return <QuestionSpacerContentChunk />;
+        case "question":
+            return <QuestionContentChunk focused={focused} question={chunk.question} choices={chunk.choices} possiblePoints={chunk.possiblePoints} />;
+        default:
+            return null;
+    }
+}
 
 interface BaseContentChunkType {
     focused: boolean;
@@ -48,6 +70,36 @@ export function TextContentChunk({ focused, text, side }: TextContentChunkType) 
 }
 
 
+export interface ImageContentChunkType extends BaseContentChunkType {
+    type?: "image";
+    uri: string;
+}
+export function ImageContentChunk({ focused, uri }: ImageContentChunkType) {
+    return (
+        <BaseContentChunk focused={focused}>
+            <View style={{ width: '80%', aspectRatio: 1 }}>
+                <Image source={{ uri }} style={{ width: '100%', height: '100%' }} />
+            </View>
+        </BaseContentChunk>
+    );
+}
+
+
+export interface IconContentChunkType extends BaseContentChunkType {
+    type?: "icon";
+    icon: string;
+}
+export function IconContentChunk({ focused, icon }: IconContentChunkType) {
+    const { colors } = useContent();
+
+    return (
+        <BaseContentChunk focused={focused}>
+            <FontAwesome5 name={icon} size={40} color={colors.textColor} />
+        </BaseContentChunk>
+    );
+}
+
+
 export interface TextSpacerContentChunkType extends BaseContentChunkType {
     type?: "textSpacer";
 }
@@ -72,8 +124,6 @@ export interface DividerContentChunkType extends BaseContentChunkType {
     type?: "divider";
 }
 export function DividerContentChunk() {
-    const theme = useContext(ThemeContext);
-
     return (
         <View style={{
             height: Dimensions.get("window").height * 0.3,

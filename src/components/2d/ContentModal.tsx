@@ -8,18 +8,17 @@ import { stringToDate } from '@/utils/date';
 import { ScrollArrow } from './Arrow';
 import Button, { CloseButton } from './Button';
 import CategoryIcon from './CategoryIcon';
-import { DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, QuestionSpacerContentChunk, QuestionSpacerContentChunkType, TextContentChunk, TextContentChunkType, TextSpacerContentChunk, TextSpacerContentChunkType } from './ContentChunk';
+import { ContentChunk, ContentChunkType, DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, QuestionSpacerContentChunk, QuestionSpacerContentChunkType, TextContentChunk, TextContentChunkType, TextSpacerContentChunk, TextSpacerContentChunkType } from './ContentChunk';
 import Text from './Text';
 import Foundation from '@expo/vector-icons/Foundation';
 
 
 //TODO: only show 1 question at a time
-export type ContentChunk = TextContentChunkType | TextSpacerContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionSpacerContentChunkType | QuestionContentChunkType;
 
 export default function ContentModal({ visible }: { visible: boolean }) {
     const { content, colors, earnablePointsWithoutStreak } = useContent();
 
-    const [contentChunks, setContentChunks] = useState<ContentChunk[]>(
+    const [contentChunks, setContentChunks] = useState<ContentChunkType[]>(
         useMemo(() => parseContent(content, earnablePointsWithoutStreak), [content])
     );
 
@@ -27,7 +26,7 @@ export default function ContentModal({ visible }: { visible: boolean }) {
 
     const [focusedItems, setFocusedItems] = useState<number[]>([]);
 
-    const flatListRef = useRef<FlatList<ContentChunk>>(null);
+    const flatListRef = useRef<FlatList<ContentChunkType>>(null);
 
     function scrollToItem(index: number) {
         flatListRef.current?.scrollToIndex({ index, viewPosition: 0.5 });
@@ -50,41 +49,9 @@ export default function ContentModal({ visible }: { visible: boolean }) {
                     data={contentChunks}
                     renderItem={({ item, index }) => {
                         const focused = focusedItems.includes(index);
-                        if (item.type === 'text') {
-                            return (
-                                <TextContentChunk
-                                    focused={focused}
-                                    text={item.text}
-                                    side={item.side}
-                                />
-                            );
-                        } else if (item.type === 'textSpacer') {
-                            return (
-                                <TextSpacerContentChunk />
-                            );
-                        } else if (item.type === 'paragraphSpacer') {
-                            return (
-                                <ParagraphSpacerContentChunk />
-                            );
-                        } else if (item.type === 'divider') {
-                            return (
-                                <DividerContentChunk />
-                            );
-                        } else if (item.type === 'questionSpacer') {
-                            return (
-                                <QuestionSpacerContentChunk />
-                            );
-                        } else if (item.type === 'question') {
-                            return (
-                                <QuestionContentChunk
-                                    focused={focused}
-                                    question={item.question}
-                                    choices={item.choices}
-                                    possiblePoints={item.possiblePoints}
-                                />
-                            )
-                        }
-                        return null;
+                        return (
+                            <ContentChunk focused={focused} chunk={item} />
+                        )
                     }}
                     keyExtractor={(item, index) => index.toString()}
                     ListHeaderComponent={<ContentHeaderComponent scrollDownPress={() => { scrollToItem(0) }} />}
