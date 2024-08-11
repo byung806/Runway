@@ -55,7 +55,7 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                         </View>
                         <View style={{ width: '100%', gap: 10, marginBottom: 20 }}>
                             <Button
-                                title={'Get Started!'}
+                                title={'Get started!'}
                                 onPress={() => {
                                     navigation.navigate('onboarding');
                                 }}

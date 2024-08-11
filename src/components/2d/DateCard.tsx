@@ -75,7 +75,8 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
     // TOP RIGHT
     let extra = ''
     const today = stringToDate(firebase.today);
-    if (sameDay(today, dateObject)) {
+    const isToday = sameDay(today, dateObject);
+    if (isToday) {
         extra += 'Today';
     }
     // if (dayIsYesterday(today, dateObject)) {
@@ -83,7 +84,7 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
     // }
 
     return (
-        <BorderedCard ref={borderedCardRef} style={style} colors={colors}>
+        <BorderedCard ref={borderedCardRef} style={style} newBadge={isToday && !cardCompleted} colors={colors}>
             <>
                 {/* date & extras (top left and right) */}
                 <View style={{

@@ -13,15 +13,15 @@ interface ScrollableCardsProps<T> {
     header?: JSX.Element,
     headerArrowDown?: boolean,
     floatingArrowUp?: boolean,
-    renderItem: ({ item }: { item: T }) => JSX.Element,
+    renderItem: ({ item, index }: { item: T, index: number }) => JSX.Element,
     footer?: JSX.Element,
     paddingAboveHeader: number,
     headerHeight: number,
     padding: number,
-    firstBoxHeight: number,
     boxHeight: number,
     footerHeight: number,
     initialBackgroundColor: string,
+    initialIndex?: number,
     onEndReached?: () => void | Promise<void>
 }
 
@@ -45,7 +45,7 @@ interface BaseCardRef {
  * Manages the focused card and background color
  */
 const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsProps<T>, ref: React.Ref<ScrollableCardsRef<T>> | undefined) => {
-    const { data, scrollable = true, header, headerArrowDown, floatingArrowUp, renderItem, footer, paddingAboveHeader, headerHeight, padding, firstBoxHeight, boxHeight, footerHeight, initialBackgroundColor, onEndReached } = props;
+    const { data, scrollable = true, header, headerArrowDown, floatingArrowUp, renderItem, footer, paddingAboveHeader, headerHeight, padding, boxHeight, footerHeight, initialBackgroundColor, initialIndex, onEndReached } = props;
 
     useImperativeHandle(ref, () => ({
         scrollToIndex
@@ -62,6 +62,12 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
     useEffect(() => {
         outerBackgroundColor.value = withTiming(initialBackgroundColor, { duration: 200 });
     }, [theme]);
+
+    useEffect(() => {
+        if (initialIndex && data.length > initialIndex) {
+            scrollToIndex(initialIndex);
+        }
+    }, [data]);
 
     const flatListRef = useRef<FlatList<T>>(null);
 
@@ -101,7 +107,8 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
             <FlatList
                 ref={flatListRef}
                 scrollEnabled={scrollable}
-                renderItem={({ item }) => {
+                renderItem={({ item, index }) => {
+                    // TODO context: can convert focused, colors, style, index to context and read context inside card
                     return (
                         <Pressable
                             android_disableSound={true}
@@ -113,12 +120,12 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                             onPressOut={item.ref?.onPressOut}
                         >
                             {
-                                cloneElement(renderItem({ item }), {
+                                cloneElement(renderItem({ item, index }), {
                                     ref: (ref: BaseCardRef) => { item.ref = ref },
                                     focused: focusedIndex === item.index,
                                     colors: item.colors,
                                     style: {
-                                        height: item.index === 0 ? firstBoxHeight : boxHeight,
+                                        height: boxHeight
                                     },
                                     index: item.index
                                 })
@@ -127,18 +134,16 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                     )
                 }}
                 data={data}
-                ListHeaderComponent={
-                    header && cloneElement(header, {
-                        height: headerHeight,
-                        arrowDown: headerArrowDown ? (
-                            <ScrollArrow
-                                type='down'
-                                // visible={focusedIndex === null}
-                                visible
-                                onPress={() => { scrollToIndex(0); }}
-                            />
-                        ) : undefined
-                    })}
+                ListHeaderComponent={header && cloneElement(header, {
+                    height: headerHeight,
+                    arrowDown: headerArrowDown ? (
+                        <ScrollArrow
+                            type='down'
+                            visible={focusedIndex === null}
+                            onPress={() => { scrollToIndex(0); }}
+                        />
+                    ) : undefined
+                })}
                 ListFooterComponent={footer && cloneElement(footer, {
                     height: footerHeight,
                     arrowUp: (
@@ -150,18 +155,10 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                     )
                 })}
                 getItemLayout={(_, index) => {
-                    if (index === 0) {
-                        return {
-                            length: firstBoxHeight + padding,
-                            offset: paddingAboveHeader + headerHeight + padding,
-                            index
-                        }
-                    } else {
-                        return {
-                            length: boxHeight + padding,
-                            offset: (boxHeight + padding) * (index - 1) + (paddingAboveHeader + headerHeight + padding + firstBoxHeight + padding),
-                            index
-                        }
+                    return {
+                        length: boxHeight + padding,
+                        offset: (boxHeight + padding) * index + (paddingAboveHeader + headerHeight + padding),
+                        index
                     }
                 }}
                 keyExtractor={(item) => item.index.toString()}
@@ -183,11 +180,9 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                 showsHorizontalScrollIndicator={false}
                 decelerationRate='fast'
                 snapToOffsets={data.map((_, i) =>
-                    i === 0 ? (paddingAboveHeader + headerHeight + padding - Dimensions.get("window").height * 0.5 + firstBoxHeight / 2) :
-                        (firstBoxHeight + padding)
-                        + (boxHeight + padding) * (i - 1)
-                        + paddingAboveHeader + headerHeight + padding
-                        - Dimensions.get("window").height * 0.5 + boxHeight / 2
+                    (boxHeight + padding) * i
+                    + paddingAboveHeader + headerHeight + padding
+                    - Dimensions.get("window").height * 0.5 + boxHeight / 2
                 )}
                 onEndReached={onEndReached}
                 onEndReachedThreshold={2}
@@ -196,8 +191,8 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
             {floatingArrowUp ? (
                 <ScrollArrow
                     type='upFloating'
-                    visible={focusedIndex !== null && focusedIndex !== 0}
-                    onPress={() => { scrollToOffset(0); }}
+                    visible={focusedIndex !== null && focusedIndex !== 0 && focusedIndex !== 1}
+                    onPress={() => { scrollToIndex(0); }}
                 />
             ) : null}
         </Animated.View>

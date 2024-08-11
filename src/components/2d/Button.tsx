@@ -92,3 +92,42 @@ export function CloseButton({ color, onPress }: { color?: string, onPress: () =>
         </Animated.View>
     )
 }
+
+
+export function LeaderboardButton({ onPress }: { onPress: () => void }) {
+    const theme = useContext(ThemeContext);
+
+    const { scale: buttonScale, onPressIn: buttonOnPressIn, onPress: buttonOnPress, onPressOut: buttonOnPressOut } = useBounceAnimation({
+        scaleTo: 0.9,
+        haptics: Haptics.ImpactFeedbackStyle.Light,
+        config: config.gentle
+    });
+
+    return (
+        <ReactSpringAnimatedView style={{
+            alignSelf: 'center',
+            position: 'absolute',
+            bottom: 30,
+            left: 20,
+            // @ts-ignore
+            transform: [{ scale: buttonScale }],
+
+            height: 60,
+            width: 60,
+            borderRadius: 20,
+            backgroundColor: theme.black,
+            ...Styles.shadow,
+            ...Styles.centeringContainer,
+        }}>
+            <Pressable
+                android_disableSound={true}
+                onPress={() => { buttonOnPress(); onPress(); }}
+                onPressIn={buttonOnPressIn}
+                onPressOut={buttonOnPressOut}
+                style={{ ...Styles.centeringContainer }}
+            >
+                <FontAwesome name={'trophy'} size={30} color={theme.white} />
+            </Pressable>
+        </ReactSpringAnimatedView>
+    )
+}

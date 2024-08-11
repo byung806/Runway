@@ -2,7 +2,6 @@ import { Button, Text } from '@/components/2d';
 import { ThemeContext, useFirebase } from "@/providers";
 import { Styles } from "@/styles";
 import { delay } from "@/utils/utils";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -18,20 +17,20 @@ export default function StreakScreen({ route, navigation }: { route: any, naviga
     const firebase = useFirebase();
 
     useEffect(() => {
-        // async function requestStreak() {
-        //     if (!route.params?.date || !route.params?.pointsEarned || !route.params?.pointsPossible) {
-        //         return;
-        //     }
-        //     const { success } = await firebase.requestCompleteDate(route.params?.date, route.params?.pointsEarned / route.params?.pointsPossible * 100);
-        //     if (success) {
-        //         await firebase.getUserData();
-        //         await firebase.getLeaderboard('global');
-        //         // TODO: update friends leaderboard too if rank is ever implemented
-        //     } else {
-        //         console.log('Something went wrong - today completed but database request failed');
-        //     }
-        // }
-        // requestStreak();
+        async function requestStreak() {
+            if (!route.params?.date || !route.params?.pointsEarned || !route.params?.pointsPossible) {
+                return;
+            }
+            const { success } = await firebase.requestCompleteDate(route.params?.date, route.params?.pointsEarned / route.params?.pointsPossible * 100);
+            if (success) {
+                await firebase.getUserData();
+                await firebase.getLeaderboard('global');
+                // TODO: update friends leaderboard too if rank is ever implemented
+            } else {
+                console.log('Something went wrong - today completed but database request failed');
+            }
+        }
+        requestStreak();
     }, []);
 
     const opacityStreak = useSharedValue(1);

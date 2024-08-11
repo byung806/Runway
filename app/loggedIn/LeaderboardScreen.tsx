@@ -1,6 +1,6 @@
-import { Button, Text } from '@/components/2d';
-import React, { useContext } from 'react';
-import { Dimensions, Image, View } from 'react-native';
+import { BackArrow, Button, Text } from '@/components/2d';
+import React, { useContext, useState } from 'react';
+import { Dimensions, Image, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Styles } from '@/styles';
@@ -8,11 +8,17 @@ import { Styles } from '@/styles';
 import Leaderboard from '@/components/2d/Leaderboard';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { MaterialTabBar, Tabs } from 'react-native-collapsible-tab-view';
-import { ThemeContext } from '@/providers';
+import { ThemeContext, useFirebase } from '@/providers';
+import AddFriendModal from '@/components/2d/AddFriendModal';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 
-export default function LeaderboardScreen({ navigation, ...props }: { navigation: StackNavigationProp<any, any> } & any) {
+
+export default function LeaderboardScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
+    const firebase = useFirebase();
+
+    const [addFriendModalVisible, setAddFriendModalVisible] = useState(false);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: theme.runwayBackgroundColor }} edges={['top']}>
@@ -20,28 +26,72 @@ export default function LeaderboardScreen({ navigation, ...props }: { navigation
                 renderHeader={(props) => {
                     return (
                         <>
-                            <Image
-                                source={require('@/assets/unused/goldMedal.png')}
-                                style={{
+                            {/* Back arrow */}
+                            <View style={{
+                                position: 'absolute',
+                                top: 0,
+                                paddingHorizontal: 20,
+                                zIndex: 1,
+                                width: '100%',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                // gap: 5,
+                                justifyContent: 'space-between',
+                            }}>
+                                <BackArrow color={theme.white} onPress={() => { navigation.navigate('app') }} />
+                                {/* <Text style={{ color: theme.white, fontSize: 20, ...Styles.shadow }}>Back</Text> */}
+                                <Pressable onPress={() => { firebase.logOut(); }}>
+                                    <MaterialIcons name="exit-to-app" size={30} color={theme.white} />
+                                </Pressable>
+                                {/* <Button title="Log Out" onPress={() => { firebase.logOut(); }} backgroundColor='transparent' /> */}
+                            </View>
+
+                            {/* Profile */}
+                            <View style={{
+                                paddingVertical: 140,
+                                pointerEvents: 'box-none',
+                            }}>
+                                <View style={{
+                                    pointerEvents: 'none',
                                     position: 'absolute',
                                     top: -100,
                                     width: 300,
                                     height: 300,
                                     alignSelf: 'center',
-                                }}
-                            />
-                            <View
-                                style={{
+                                }}>
+                                    <Image
+                                        source={require('@/assets/unused/goldMedal.png')}
+                                        style={{
+                                            width: 300,
+                                            height: 300,
+                                        }}
+                                    />
+                                </View>
+
+                                <View style={{
+                                    flex: 1,
                                     ...Styles.centeringContainer,
-                                    height: Dimensions.get('window').height * 1 / 2,
-                                    padding: 10,
-                                    gap: 20,
-                                }}
-                                pointerEvents='box-none'
-                            >
-                                <Text style={{ ...Styles.title, color: theme.runwayTextColor, fontSize: 40 }}>Leaderboard</Text>
-                                <Button style={{ width: '80%', height: 50 }} title="Back" onPress={() => navigation.navigate('app')} />
+                                    pointerEvents: 'box-none',
+                                    gap: 10,
+                                }}>
+                                    <View style={{ pointerEvents: 'none', ...Styles.centeringContainer, }}>
+                                        <Text style={{ fontSize: 40, textAlign: 'center', color: theme.white }}>
+                                            {/* Welcome back, */}
+                                            <Text style={{ color: theme.runwayTextColor }}> {firebase.userData?.username}</Text>
+                                            {/* ! */}
+                                        </Text>
+                                        <Text style={{ fontSize: 100, ...Styles.lightShadow, color: theme.runwayTextColor }}>{firebase.userData?.points}</Text>
+                                        <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.runwayTextColor }}>points</Text>
+                                    </View>
+                                    <Button title="Add Friend" onPress={() => { setAddFriendModalVisible(true); }} style={{ width: '80%', marginTop: 20 }} />
+                                </View>
                             </View>
+
+                            {/* Add friend modal */}
+                            <AddFriendModal
+                                visible={addFriendModalVisible}
+                                setVisible={setAddFriendModalVisible}
+                            />
                         </>
                     );
                 }}
@@ -72,48 +122,6 @@ export default function LeaderboardScreen({ navigation, ...props }: { navigation
                     <Leaderboard type='friends' />
                 </Tabs.Tab>
             </Tabs.Container>
-            {/* <SafeAreaView style={{ flex: 1, backgroundColor: theme.runwayBackgroundColor }} edges={['top']}>
-            <FlatList
-                data={[0]}
-                keyExtractor={(item) => item.toString()}
-                ListHeaderComponent={() =>
-                    <View
-                        style={{
-                            ...Styles.centeringContainer,
-                            padding: 10,
-                            borderRadius: 5,
-                            flexShrink: 1,
-                            gap: 10,
-                        }}>
-                        <Text style={{ ...Styles.title, color: theme.runwayTextColor, fontSize: 40 }}>Leaderboard</Text>
-                        <Button title="Back" onPress={() => navigation.navigate('app')} />
-                    </View>
-                }
-                renderItem={() =>
-                    <TabView
-                        style={{ height: 5000 }}
-                        navigationState={{ index, routes }}
-                        renderScene={renderScene}
-                        onIndexChange={setIndex}
-                        initialLayout={{ width: Dimensions.get('window').width }}
-                        renderTabBar={(props) => {
-                            return (
-                                <TabBar
-                                    {...props}
-                                    indicatorStyle={{ backgroundColor: theme.runwayTextColor }}
-                                    style={{ backgroundColor: theme.runwayBackgroundColor }}
-                                    bounces={true}
-                                    pressColor={'transparent'}
-                                    renderLabel={({ route, focused, color }) => (
-                                        <Text style={{ color: theme.runwayTextColor }}>{route.title}</Text>
-                                    )}
-                                />
-                            )
-                        }}
-                    />
-                }
-            />
-        </SafeAreaView> */}
         </SafeAreaView>
     );
 }

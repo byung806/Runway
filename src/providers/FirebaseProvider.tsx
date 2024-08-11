@@ -116,9 +116,9 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                     // in this loop when firebase auth user is registered but user data is not yet initialized
                     await delay(300);
                 }
-                setInitializing(false);
-
+                
                 await getUserData();
+                setInitializing(false);
 
                 if (notifications.expoPushToken) {
                     if (userData?.expoPushToken !== notifications.expoPushToken.data) {

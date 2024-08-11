@@ -67,7 +67,7 @@ function LeaderboardEntry({ place, avatar, name, points, streak }: LeaderboardEn
                     paddingHorizontal: 10,
                     borderRadius: 9999,
                     // width: 60,
-                    backgroundColor: theme.accent,
+                    backgroundColor: theme.runwayBackgroundColor,
                     ...Styles.centeringContainer,
                 }}>
                     <Text style={{
@@ -82,7 +82,6 @@ function LeaderboardEntry({ place, avatar, name, points, streak }: LeaderboardEn
 export default function Leaderboard({ type }: { type: LeaderboardType }) {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
-    const [addFriendModalVisible, setAddFriendModalVisible] = useState(false);
 
     const data = type === 'friends' ? firebase.friendsLeaderboard : firebase.globalLeaderboard;
 
@@ -102,14 +101,8 @@ export default function Leaderboard({ type }: { type: LeaderboardType }) {
                         justifyContent: 'center',
                         alignItems: 'center',
                     }}>
-                    <Text style={{ color: theme.runwayTextColor, fontSize: 20, marginBottom: 20 }}>You have no friends yet!</Text>
-                    <Button title='Add Friend' onPress={() => { setAddFriendModalVisible(true) }} />
+                    <Text style={{ color: theme.runwayTextColor, fontSize: 20, marginBottom: 20 }}>Add your first friend above!</Text>
                 </View>
-
-                <AddFriendModal
-                    visible={addFriendModalVisible}
-                    setVisible={setAddFriendModalVisible}
-                />
             </View>
         )
     }
