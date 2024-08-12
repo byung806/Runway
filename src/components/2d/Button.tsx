@@ -126,7 +126,7 @@ export function LeaderboardButton({ onPress }: { onPress: () => void }) {
                 onPressOut={buttonOnPressOut}
                 style={{ ...Styles.centeringContainer }}
             >
-                <FontAwesome name={'trophy'} size={30} color={theme.white} />
+                <FontAwesome name={'trophy'} size={30} color={theme.trophyYellow} />
             </Pressable>
         </ReactSpringAnimatedView>
     )

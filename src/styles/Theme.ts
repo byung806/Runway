@@ -9,6 +9,8 @@ export interface Theme {
     questionCorrectColor: string;
     questionIncorrectColor: string;
 
+    trophyYellow: string;
+
     white: string;
     black: string;
     accentLighter: string;
@@ -36,6 +38,8 @@ const CommonThemeColors = {
 
     questionCorrectColor: '#66bb5c',
     questionIncorrectColor: '#ff5343',
+
+    trophyYellow: '#fcc201',
 
     white: '#ffffff',
     black: '#000000',

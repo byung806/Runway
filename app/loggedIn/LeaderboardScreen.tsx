@@ -12,6 +12,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as Haptics from 'expo-haptics';
 import { MaterialTabBar, Tabs } from 'react-native-collapsible-tab-view';
+import { FontAwesome } from '@expo/vector-icons';
 
 
 export default function LeaderboardScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
@@ -48,24 +49,17 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
 
                             {/* Profile */}
                             <View style={{
-                                paddingVertical: 140,
                                 pointerEvents: 'box-none',
+                                gap: 20,
+                                marginBottom: 20,
                             }}>
                                 <View style={{
                                     pointerEvents: 'none',
-                                    position: 'absolute',
-                                    top: -100,
-                                    width: 300,
-                                    height: 300,
+
                                     alignSelf: 'center',
+                                    ...Styles.centeringContainer,
                                 }}>
-                                    <Image
-                                        source={require('@/assets/unused/goldMedal.png')}
-                                        style={{
-                                            width: 300,
-                                            height: 300,
-                                        }}
-                                    />
+                                    <FontAwesome name={'trophy'} size={160} color={theme.trophyYellow} />
                                 </View>
 
                                 <View style={{
