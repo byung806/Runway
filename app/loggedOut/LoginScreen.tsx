@@ -13,7 +13,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 export default function LoginScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
-    const focused = useIsFocused();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -87,7 +86,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                         style={{ width: '100%', gap: 10, ...Styles.centeringContainer }}
                     >
-                        <Text style={{ color: theme.white, fontSize: 40, textAlign: 'center', margin: 20 }}>Enter your username and password!</Text>
+                        {/* <Text style={{ color: theme.white, fontSize: 40, textAlign: 'center', margin: 20 }}>Enter your username and password!</Text> */}
                         <TextInput
                             value={username}
                             onChangeText={setUsername}

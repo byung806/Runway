@@ -155,7 +155,6 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
         footerHeight: Dimensions.get("window").height * 0.8,
     }
 
-    // TODO: add swipe hint arrow
     return (
         <>
             <ScrollableCards<OnboardingCardAttributes>

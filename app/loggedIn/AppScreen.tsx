@@ -1,4 +1,4 @@
-import { BaseCardAttributes, DateCard, FloatingProfile, LeaderboardButton, ListFooterComponent, ListHeaderComponent, ScrollableCards, Text } from '@/components/2d';
+import { BaseCardAttributes, DateCard, FloatingProfile, LeaderboardButton, ListFooterComponent, ListHeaderComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions, View } from 'react-native';
 
@@ -9,6 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 // @ts-ignore
 import CountDown from 'react-native-countdown-component';
 import { secondsUntilTomorrowUTC } from '@/utils/date';
+import { delay } from '@/utils/utils';
 
 
 interface DateCardAttributes extends BaseCardAttributes {
@@ -20,31 +21,48 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
 
-    const [floatingProfileVisible, setFloatingProfileVisible] = useState(true);  // TODO:implement
+    const [floatingProfileVisible, setFloatingProfileVisible] = useState(true);
 
-    const [cards, setCards] = useState<DateCardAttributes[]>([
+    const initialCardState = [
         {
             date: firebase.today,
             ref: null,
             colors: {
-                // textColor: '#ffffff',
-                // backgroundColor: '#000000',
-                // borderColor: '#ffffff',
-                // outerBackgroundColor: '#000000'
-                textColor: theme.runwayTextColor,
-                backgroundColor: theme.runwayBackgroundColor,
-                borderColor: theme.runwayBorderColor,
-                outerBackgroundColor: theme.runwayOuterBackgroundColor
+                textColor: '#ffffff',
+                backgroundColor: '#000000',
+                borderColor: '#ffffff',
+                outerBackgroundColor: '#000000'
+                // textColor: theme.runwayTextColor,
+                // backgroundColor: theme.runwayBackgroundColor,
+                // borderColor: theme.runwayBorderColor,
+                // outerBackgroundColor: theme.runwayOuterBackgroundColor
             },
-            // @ts-ignore
             content: null,
             index: 0
         }
-    ]);
+    ]
+
+    const scrollableCardsRef = useRef<ScrollableCardsRef<DateCardAttributes>>(null);
+    // @ts-expect-error
+    const [cards, setCards] = useState<DateCardAttributes[]>(initialCardState);
 
     useEffect(() => {
         addPreviousDay();
     }, []);
+
+    async function onNewDay() {
+        await delay(300);  // make sure it's a new day
+        firebase.updateDay();
+        
+        // @ts-expect-error
+        setCards(initialCardState);
+
+        currentlyAddingCard.current = false;
+        canLoadMoreDays.current = true;
+
+        await delay(200);
+        scrollableCardsRef.current?.scrollToIndex(1);
+    }
 
     const currentlyAddingCard = useRef(false);
     const canLoadMoreDays = useRef(true);
@@ -94,10 +112,10 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
         }]);
     }
 
-    const boxHeight = (Dimensions.get("window").width - 30 * 2) * 1.4;
     const padding = 30;
+    const boxHeight = (Dimensions.get("window").width - padding * 2) * 1.4;
     const heights = {
-        paddingAboveHeader: (Dimensions.get("window").height - boxHeight) / 2 - padding / 2,
+        paddingAboveHeader: (Dimensions.get("window").height - boxHeight) / 2,
         headerHeight: 0,
         // headerHeight: (Dimensions.get("window").height - ((Dimensions.get("window").width - 30 * 2) * 1.6)) / 2 - 30 / 2
         padding: padding,
@@ -110,19 +128,21 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
         <>
             <FloatingProfile visible={floatingProfileVisible} />
             <ScrollableCards<DateCardAttributes>
+                ref={scrollableCardsRef}
                 data={cards}
-                header={
-                    <ListHeaderComponent
-                        height={heights.headerHeight}
+                // header={
+                //     <ListHeaderComponent
+                //         height={heights.headerHeight}
 
-                        arrowDown={undefined as never}
-                    />
-                }
+                //         arrowDown={undefined as never}
+                //     />
+                // }
                 {...(cards.length !== 0 && { headerArrowDown: true })}
                 // floatingArrowUp
                 renderItem={({ item, index }) => {
                     if (index === 0) {
-                        // coming soon
+                        // Coming soon card
+                        // TODO: reset counter onNewDay (maybe unmount and mount?)
                         return (
                             <BorderedCard colors={item.colors}>
                                 <View style={{ gap: 20 }}>
@@ -130,7 +150,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                                     <CountDown
                                         until={secondsUntilTomorrowUTC()}
                                         size={30}
-                                        onFinish={() => { }}  // TODO
+                                        onFinish={onNewDay}
                                         digitStyle={{ backgroundColor: item.colors.textColor, borderRadius: 10, fontFamily: 'Inter_800ExtraBold' }}
                                         digitTxtStyle={{ color: item.colors.backgroundColor }}
                                         timeToShow={['H', 'M', 'S']}
@@ -163,6 +183,9 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                 {...heights}
                 initialBackgroundColor={theme.runwayBackgroundColor}
                 initialIndex={firebase.todayCompleted ? undefined : 1}
+                onScrollBeginDrag={() => setFloatingProfileVisible(false)}
+                onMomentumScrollBegin={() => setFloatingProfileVisible(false)}
+                onMomentumScrollEnd={() => setFloatingProfileVisible(true)}
                 onEndReached={addPreviousDay}
             />
             <LeaderboardButton onPress={() => navigation.navigate('leaderboard')} />

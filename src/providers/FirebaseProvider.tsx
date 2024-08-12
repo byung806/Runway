@@ -5,6 +5,7 @@ import firestore from '@react-native-firebase/firestore';
 import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functions';
 import React, { ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
 import { usePushNotifications } from './NotificationProvider';
+import { ContentChunkType } from '@/components/2d';
 
 const emailEnding = '@example.com';
 
@@ -41,6 +42,7 @@ export interface ContentQuestionChoice {
     correct: boolean;
 }
 
+// TODO: convert to dynamic chunks format
 export interface Content {
     title: string;
     author: string;
@@ -81,6 +83,7 @@ interface FirebaseContextType {
     requestCompleteDate: (date?: string, percent?: number) => Promise<{ success: boolean }>;
     addFriend: (friend: string) => Promise<{ success: boolean, errorMessage: string }>;
     getLeaderboard: (type: LeaderboardType) => Promise<void>;
+    updateDay: () => Promise<void>;
 
     sendExpoPushToken: (token: string) => Promise<void>;
 }
@@ -116,7 +119,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                     // in this loop when firebase auth user is registered but user data is not yet initialized
                     await delay(300);
                 }
-                
+
                 await getUserData();
                 setInitializing(false);
 
@@ -247,7 +250,16 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                 percent: percent,
             }) as FirebaseFunctionsTypes.HttpsCallableResult<{ success: boolean }>;
         console.log('request complete date result', data.data);
-        return data.data as { success: boolean };
+
+        const { success } = data.data;
+        if (success) {
+            await getUserData();
+            getLeaderboard('global');  // no await because don't need to wait for this to finish
+            getLeaderboard('friends');  // no await because don't need to wait for this to finish
+        } else {
+            console.log('Something went wrong - today completed but database request failed');
+        }
+        return { success };
     }
 
     /**
@@ -304,6 +316,11 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             });
     }
 
+    async function updateDay() {
+        setToday(getTodayDate());
+        setTodayCompleted(today in (userData?.point_days ?? {}));
+    }
+
     return (
         <FirebaseContext.Provider value={{
             today,
@@ -324,6 +341,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             requestCompleteDate,
             addFriend,
             getLeaderboard,
+            updateDay,
 
             sendExpoPushToken,
         }}>

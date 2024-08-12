@@ -28,12 +28,12 @@ const BorderedCard = forwardRef(({ style, colors, newBadge, children }: { style?
 
     return (
         <ReactSpringAnimatedView style={{
+            ...style,
             position: 'relative',
             overflow: 'hidden',
             transform: [{ scale: cardScale }]
         }}>
-            <ReactSpringAnimatedView style={{
-                ...style,
+            <View style={{
                 flex: 1,
                 margin: 2,
                 borderRadius: 12,
@@ -47,7 +47,7 @@ const BorderedCard = forwardRef(({ style, colors, newBadge, children }: { style?
                 <>
                     {children}
                 </>
-            </ReactSpringAnimatedView>
+            </View>
             {newBadge &&
                 <View style={{
                     position: 'absolute',

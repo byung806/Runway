@@ -92,12 +92,6 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
         <View style={{ flex: 1, backgroundColor: theme.runwayBackgroundColor }}>
             <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>
                 <SafeAreaView style={{ ...Styles.centeringContainer, flex: 1 }}>
-                    {/* <View style={{ ...Styles.centeringContainer, margin: 50, flex: 1 }}>
-                        <Logo />
-                        <Text style={Styles.title}>Sign Up!</Text>
-                        <Text style={{ ...Styles.subtitle, color: theme.subtext }}>Create an account to start your flight.</Text>
-                    </View> */}
-
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                         style={{ width: '100%', gap: 10, ...Styles.centeringContainer }}
@@ -111,7 +105,6 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                             style={{ width: '80%', height: 50 }}
                             disabled={loading}
                         />
-                        {/* TODO: figure out ask for email or not */}
                         <TextInput
                             value={email}
                             placeholder={'Email'}

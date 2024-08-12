@@ -1,13 +1,11 @@
-import { ContentChunk } from "@/components/2d/ContentModal";
+import { ContentChunkType } from "@/components/2d";
 import { Content } from "@/providers";
 import { split } from "sentence-splitter";
 
 
-export default function parseContent(content: Content, totalPoints: number): ContentChunk[] {
-    const chunks: ContentChunk[] = [];
+export default function parseContent(content: Content, totalPoints: number): ContentChunkType[] {
+    const chunks: ContentChunkType[] = [];
     const body = content.body;
-
-    // TODO: rn everything's in order but we might want to add a way to reorder the content
 
     const bodyParagraphChunks = body.split('\n');
 
@@ -19,11 +17,9 @@ export default function parseContent(content: Content, totalPoints: number): Con
         sentences.forEach((sentence) => {
             if (sentence.type === 'Sentence') {
                 chunks.push({
-                    focused: false,
                     type: 'textSpacer'
                 });
                 chunks.push({
-                    focused: false,
                     type: 'text',
                     text: sentence.raw,
                     side: count % 2 === 0 ? 'left' : 'right'
@@ -33,7 +29,6 @@ export default function parseContent(content: Content, totalPoints: number): Con
         });
         if (paragraph !== bodyParagraphChunks[bodyParagraphChunks.length - 1]) {
             chunks.push({
-                focused: false,
                 type: 'paragraphSpacer'
             });
         }
@@ -41,7 +36,6 @@ export default function parseContent(content: Content, totalPoints: number): Con
 
 
     chunks.push({
-        focused: false,
         type: 'divider'
     });
 
@@ -52,7 +46,6 @@ export default function parseContent(content: Content, totalPoints: number): Con
         const points = totalPoints / questions.length;
         questions.forEach((question) => {
             chunks.push({
-                focused: false,
                 type: 'question',
                 question: question.question,
                 choices: question.choices,
@@ -60,7 +53,6 @@ export default function parseContent(content: Content, totalPoints: number): Con
             });
             if (question !== questions[questions.length - 1]) {
                 chunks.push({
-                    focused: false,
                     type: 'questionSpacer'
                 });
             }

@@ -9,10 +9,13 @@ import BorderedCard, { BorderedCardRef } from './BorderedCard';
 import Button from './Button';
 import ContentModal from './ContentModal';
 import Text from './Text';
+import { Styles } from '@/styles';
 
 
 
 interface DateCardProps {
+    comingSoon?: boolean;
+
     date: string;
     content: Content;
     colors: ContentColors;
@@ -28,7 +31,7 @@ export interface DateCardRef {
 }
 
 // TODO: show streak indicator on card
-const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCardProps, ref) => {
+const DateCard = forwardRef(({ comingSoon = false, date, content, colors, focused, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
 
@@ -38,6 +41,9 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
         onPressIn: borderedCardRef.current?.onPressIn,
         onPressOut: borderedCardRef.current?.onPressOut,
     }));
+
+    const comingSoonCardOpacity = useSharedValue(comingSoon ? 1 : 0);
+    const normalCardOpacity = useSharedValue(comingSoon ? 0 : 1);
 
     const cardCompleted = date in (firebase.userData?.point_days ?? {});
     const pointsEarnedIfCompleted = cardCompleted ? firebase.userData?.point_days[date] : 0;
@@ -115,7 +121,7 @@ const DateCard = forwardRef(({ date, content, colors, focused, style }: DateCard
                     }}>{extra}</Text>
                     {cardCompleted &&
                         <View style={{ paddingTop: 8 }}>
-                            <AntDesign name={'checkcircle'} size={30} color={theme.black} />
+                            <AntDesign name={'checkcircle'} size={30} color={theme.black} style={{ ...Styles.shadow }} />
                         </View>
                     }
                 </View>

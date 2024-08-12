@@ -32,7 +32,7 @@ export function ContentChunk({ focused, chunk }: { focused: boolean, chunk: Cont
 interface BaseContentChunkType {
     focused: boolean;
 }
-function BaseContentChunk({ focused, children, style }: { focused: boolean, children: JSX.Element, style?: any }) {
+function BaseContentChunk({ focused, children, style }: { children: JSX.Element, style?: any } & BaseContentChunkType) {
     const [viewed, setViewed] = useState(false);
     const opacity = useSharedValue(focused ? 1 : 0);
 
@@ -54,12 +54,12 @@ function BaseContentChunk({ focused, children, style }: { focused: boolean, chil
 }
 
 
-export interface TextContentChunkType extends BaseContentChunkType {
+export interface TextContentChunkType {
     type?: "text";
     text: string;
     side: "left" | "right";
 }
-export function TextContentChunk({ focused, text, side }: TextContentChunkType) {
+export function TextContentChunk({ focused, text, side }: TextContentChunkType & BaseContentChunkType) {
     const { colors } = useContent();
 
     return (
@@ -70,11 +70,11 @@ export function TextContentChunk({ focused, text, side }: TextContentChunkType) 
 }
 
 
-export interface ImageContentChunkType extends BaseContentChunkType {
+export interface ImageContentChunkType {
     type?: "image";
     uri: string;
 }
-export function ImageContentChunk({ focused, uri }: ImageContentChunkType) {
+export function ImageContentChunk({ focused, uri }: ImageContentChunkType & BaseContentChunkType) {
     return (
         <BaseContentChunk focused={focused}>
             <View style={{ width: '80%', aspectRatio: 1 }}>
@@ -85,11 +85,11 @@ export function ImageContentChunk({ focused, uri }: ImageContentChunkType) {
 }
 
 
-export interface IconContentChunkType extends BaseContentChunkType {
+export interface IconContentChunkType {
     type?: "icon";
     icon: string;
 }
-export function IconContentChunk({ focused, icon }: IconContentChunkType) {
+export function IconContentChunk({ focused, icon }: IconContentChunkType & BaseContentChunkType) {
     const { colors } = useContent();
 
     return (
@@ -100,7 +100,7 @@ export function IconContentChunk({ focused, icon }: IconContentChunkType) {
 }
 
 
-export interface TextSpacerContentChunkType extends BaseContentChunkType {
+export interface TextSpacerContentChunkType {
     type?: "textSpacer";
 }
 export function TextSpacerContentChunk() {
@@ -110,7 +110,7 @@ export function TextSpacerContentChunk() {
 }
 
 
-export interface ParagraphSpacerContentChunkType extends BaseContentChunkType {
+export interface ParagraphSpacerContentChunkType {
     type?: "paragraphSpacer";
 }
 export function ParagraphSpacerContentChunk() {
@@ -120,7 +120,7 @@ export function ParagraphSpacerContentChunk() {
 }
 
 
-export interface DividerContentChunkType extends BaseContentChunkType {
+export interface DividerContentChunkType {
     type?: "divider";
 }
 export function DividerContentChunk() {
@@ -136,7 +136,7 @@ export function DividerContentChunk() {
 }
 
 
-export interface QuestionSpacerContentChunkType extends BaseContentChunkType {
+export interface QuestionSpacerContentChunkType {
     type?: "questionSpacer";
 }
 export function QuestionSpacerContentChunk() {
@@ -146,13 +146,13 @@ export function QuestionSpacerContentChunk() {
 }
 
 
-export interface QuestionContentChunkType extends BaseContentChunkType {
+export interface QuestionContentChunkType {
     type?: "question";
     question: string;
     choices: ContentQuestionChoice[];
     possiblePoints: number;
 }
-export function QuestionContentChunk({ focused, question, choices, possiblePoints }: QuestionContentChunkType) {
+export function QuestionContentChunk({ focused, question, choices, possiblePoints }: QuestionContentChunkType & BaseContentChunkType) {
     const theme = useContext(ThemeContext);
     const { isOnboardingContent, colors, cardCompleted, completeQuestion } = useContent();
 

@@ -189,9 +189,9 @@ function ContentFooterComponent() {
                     {!isOnboardingContent && allQuestionsCompleted &&
                         <Pressable onPress={() => {
                             Linking.openURL('mailto:byung806@gmail.com?subject=Runway Possible Content Creator&body=I would like to create content for Runway!\n\nHere are some ideas I have:\n- ');
-                        }} style={{ gap: 8, flexDirection: 'row', ...Styles.centeringContainer }}>
-                            <Foundation name="mail" size={24} color="black" />
-                            <Text style={{ textAlign: 'center', fontSize: 14, color: theme.black }}>
+                        }} style={{ gap: 8, flexDirection: 'row', ...Styles.centeringContainer, ...Styles.shadow }}>
+                            <Foundation name="mail" size={24} color="white" />
+                            <Text style={{ textAlign: 'center', fontSize: 14, color: theme.white }}>
                                 Want to create content for Runway?
                             </Text>
                         </Pressable>

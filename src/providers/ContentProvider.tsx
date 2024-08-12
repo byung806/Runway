@@ -118,14 +118,7 @@ export function ContentProvider(props: ContentProviderProps) {
                     earnedStreakBonus: earnedStreakBonus,
                 });
             } else {
-                // TODO: move this to firebaseprovider and combine with the call on streakscreen?
-                const { success } = await firebase.requestCompleteDate(date, pointsEarned / pointsPossible * 100);
-                if (success) {
-                    await firebase.getUserData();
-                    await firebase.getLeaderboard('global');
-                } else {
-                    console.log('Something went wrong - today completed but database request failed');
-                }
+                await firebase.requestCompleteDate(date, pointsEarned / pointsPossible * 100);
             }
         }
         closeContentModal();

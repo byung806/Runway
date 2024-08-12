@@ -3,11 +3,9 @@ import { Styles } from '@/styles';
 import useBounceAnimation from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
 import * as Haptics from 'expo-haptics';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { Pressable, View } from 'react-native';
 import { Tabs } from 'react-native-collapsible-tab-view';
-import AddFriendModal from './AddFriendModal';
-import Button from './Button';
 import Text from './Text';
 
 interface LeaderboardEntryProps {

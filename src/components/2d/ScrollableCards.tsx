@@ -22,10 +22,15 @@ interface ScrollableCardsProps<T> {
     footerHeight: number,
     initialBackgroundColor: string,
     initialIndex?: number,
+    onScrollBeginDrag?: () => void | Promise<void>,
+    onScrollEndDrag?: () => void | Promise<void>,
+    onMomentumScrollBegin?: () => void | Promise<void>,
+    onMomentumScrollEnd?: () => void | Promise<void>,
     onEndReached?: () => void | Promise<void>
 }
 
 export interface ScrollableCardsRef<T> {
+    scrollToOffset: (offset: number) => void;
     scrollToIndex: (index: number) => void;
 }
 
@@ -45,9 +50,10 @@ interface BaseCardRef {
  * Manages the focused card and background color
  */
 const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsProps<T>, ref: React.Ref<ScrollableCardsRef<T>> | undefined) => {
-    const { data, scrollable = true, header, headerArrowDown, floatingArrowUp, renderItem, footer, paddingAboveHeader, headerHeight, padding, boxHeight, footerHeight, initialBackgroundColor, initialIndex, onEndReached } = props;
+    const { data, scrollable = true, header, headerArrowDown, floatingArrowUp, renderItem, footer, paddingAboveHeader, headerHeight, padding, boxHeight, footerHeight, initialBackgroundColor, initialIndex, onScrollBeginDrag, onScrollEndDrag, onMomentumScrollBegin, onMomentumScrollEnd, onEndReached } = props;
 
     useImperativeHandle(ref, () => ({
+        scrollToOffset,
         scrollToIndex
     }));
 
@@ -157,7 +163,7 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                 getItemLayout={(_, index) => {
                     return {
                         length: boxHeight + padding,
-                        offset: (boxHeight + padding) * index + (paddingAboveHeader + headerHeight + padding),
+                        offset: (boxHeight + padding) * index + (paddingAboveHeader + (header ? (headerHeight + padding) : (- padding / 2))),
                         index
                     }
                 }}
@@ -179,11 +185,16 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 decelerationRate='fast'
+                snapToAlignment='start'
                 snapToOffsets={data.map((_, i) =>
                     (boxHeight + padding) * i
-                    + paddingAboveHeader + headerHeight + padding
+                    + paddingAboveHeader + (header ? (headerHeight + padding) : 0)
                     - Dimensions.get("window").height * 0.5 + boxHeight / 2
                 )}
+                onScrollBeginDrag={onScrollBeginDrag}
+                onScrollEndDrag={onScrollEndDrag}
+                onMomentumScrollBegin={onMomentumScrollBegin}
+                onMomentumScrollEnd={onMomentumScrollEnd}
                 onEndReached={onEndReached}
                 onEndReachedThreshold={2}
             />

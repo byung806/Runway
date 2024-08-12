@@ -21,14 +21,7 @@ export default function StreakScreen({ route, navigation }: { route: any, naviga
             if (!route.params?.date || !route.params?.pointsEarned || !route.params?.pointsPossible) {
                 return;
             }
-            const { success } = await firebase.requestCompleteDate(route.params?.date, route.params?.pointsEarned / route.params?.pointsPossible * 100);
-            if (success) {
-                await firebase.getUserData();
-                await firebase.getLeaderboard('global');
-                // TODO: update friends leaderboard too if rank is ever implemented
-            } else {
-                console.log('Something went wrong - today completed but database request failed');
-            }
+            await firebase.requestCompleteDate(route.params?.date, route.params?.pointsEarned / route.params?.pointsPossible * 100);
         }
         requestStreak();
     }, []);

@@ -1,17 +1,17 @@
 import { BackArrow, Button, Text } from '@/components/2d';
 import React, { useContext, useState } from 'react';
-import { Dimensions, Image, Pressable, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Styles } from '@/styles';
 
-import Leaderboard from '@/components/2d/Leaderboard';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { MaterialTabBar, Tabs } from 'react-native-collapsible-tab-view';
-import { ThemeContext, useFirebase } from '@/providers';
 import AddFriendModal from '@/components/2d/AddFriendModal';
+import Leaderboard from '@/components/2d/Leaderboard';
+import { ThemeContext, useFirebase } from '@/providers';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-
+import { StackNavigationProp } from '@react-navigation/stack';
+import * as Haptics from 'expo-haptics';
+import { MaterialTabBar, Tabs } from 'react-native-collapsible-tab-view';
 
 
 export default function LeaderboardScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
@@ -40,7 +40,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                             }}>
                                 <BackArrow color={theme.white} onPress={() => { navigation.navigate('app') }} />
                                 {/* <Text style={{ color: theme.white, fontSize: 20, ...Styles.shadow }}>Back</Text> */}
-                                <Pressable onPress={() => { firebase.logOut(); }}>
+                                <Pressable onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); firebase.logOut(); }}>
                                     <MaterialIcons name="exit-to-app" size={30} color={theme.white} />
                                 </Pressable>
                                 {/* <Button title="Log Out" onPress={() => { firebase.logOut(); }} backgroundColor='transparent' /> */}
@@ -114,6 +114,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                     backgroundColor: theme.runwayBackgroundColor,
                 }}
                 allowHeaderOverscroll={true}
+                lazy={false}
             >
                 <Tabs.Tab name="Global">
                     <Leaderboard type='global' />
