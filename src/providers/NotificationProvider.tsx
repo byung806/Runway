@@ -14,6 +14,8 @@ Notifications.setNotificationHandler({
 });
 
 interface NotificationContextType {
+    permissionStatus: 'granted' | 'denied' | 'undetermined';
+
     expoPushToken?: Notifications.ExpoPushToken;
     notification?: Notifications.Notification;
 
@@ -22,7 +24,7 @@ interface NotificationContextType {
 }
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
-    const [hasPermission, setHasPermission] = useState<boolean | undefined>(undefined)  // TODO: implement
+    const [permissionStatus, setPermissionStatus] = useState<'granted' | 'denied' | 'undetermined'>('undetermined')
 
     const [expoPushToken, setExpoPushToken] = useState<Notifications.ExpoPushToken | undefined>()
     const [notification, setNotification] = useState<Notifications.Notification | undefined>()
@@ -32,18 +34,13 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 
     async function requestPermissions() {
         if (Device.isDevice) {
-            const { status: existingStatus } = await Notifications.getPermissionsAsync();
-            let finalStatus = existingStatus;
+            const { status: finalStatus } = await Notifications.requestPermissionsAsync()
 
-            if (existingStatus !== 'granted') {
-                const { status } = await Notifications.requestPermissionsAsync()
-                finalStatus = status
-            }
-
-            if (finalStatus !== 'granted') {
-                console.log('Required push notification permissions not granted')
-            } else {
+            setPermissionStatus(finalStatus);
+            if (finalStatus === 'granted') {
                 getExpoPushTokenAsync().then(token => setExpoPushToken(token))
+            } else {
+                console.log('Required push notification permissions not granted')
             }
         }
     }
@@ -51,7 +48,8 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     async function getExpoPushTokenAsync(): Promise<Notifications.ExpoPushToken | undefined> {
         if (Device.isDevice) {
             const { status } = await Notifications.getPermissionsAsync();
-            if (status !== 'granted') {
+            setPermissionStatus(status);
+            if (status === 'denied' || status === 'undetermined') {
                 return
             }
 
@@ -106,6 +104,8 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 
     return (
         <NotificationContext.Provider value={{
+            permissionStatus,
+
             expoPushToken,
             notification,
             requestPermissions,

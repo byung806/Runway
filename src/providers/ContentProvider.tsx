@@ -1,6 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { Content, ContentColors, useFirebase } from "./FirebaseProvider";
+import { usePushNotifications } from "./NotificationProvider";
+import { Alert } from "react-native";
 
 export type ContentQuestionScores = {
     earned: number;
@@ -46,6 +48,7 @@ export function ContentProvider(props: ContentProviderProps) {
     const { isOnboardingContent, date, content, colors, openContentModal, closeContentModal, children } = props;
 
     const firebase = useFirebase();
+    const notifications = usePushNotifications();
     const navigation = useNavigation<any>();
 
     const isToday = date === firebase.today;
@@ -103,6 +106,18 @@ export function ContentProvider(props: ContentProviderProps) {
      * Finish the content and update the user's data
      */
     async function finish() {
+        if (notifications.permissionStatus === 'undetermined') {
+            Alert.alert(
+                'Stay in the loop!',
+                'Get notified about exciting new daily content and boost your progress!',
+                [
+                    { text: 'Maybe Later', style: 'cancel' },
+                    { text: 'Sure!', style: 'default', isPreferred: true, onPress: async () => { await notifications.requestPermissions(); } }
+                ],
+                { cancelable: false }
+            )
+        }
+
         if (!cardCompleted && !isOnboardingContent) {  // don't need this since requestCompleteDate in AppScreen already checks if date is completed, but just in case
             const pointsEarned = questionScores.reduce((acc, curr) => acc + curr.earned, 0);
             const pointsPossible = questionScores.reduce((acc, curr) => acc + curr.possible, 0);
@@ -121,6 +136,7 @@ export function ContentProvider(props: ContentProviderProps) {
                 await firebase.requestCompleteDate(date, pointsEarned / pointsPossible * 100);
             }
         }
+
         closeContentModal();
         setAllQuestionsCompleted(false);
         setQuestionScores([]);

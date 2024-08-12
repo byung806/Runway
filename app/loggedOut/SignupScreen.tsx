@@ -83,9 +83,6 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
     // only navigate to logged in app if user data is loaded
     useEffect(() => {
         setLoading(false);
-        if (firebase.userData) {
-            notifications.requestPermissions();
-        }
     }, [firebase.userData]);
 
     return (
