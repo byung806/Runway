@@ -53,7 +53,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
     async function onNewDay() {
         await delay(300);  // make sure it's a new day
         firebase.updateDay();
-        
+
         // @ts-expect-error
         setCards(initialCardState);
 
@@ -91,9 +91,10 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
 
         const dateString = newDate.toISOString().split('T')[0];
 
-        if (dateString === firebase.today && !firebase.todayCompleted) {
-            canLoadMoreDays.current = false;
-        }
+        // Load only today if today is not completed
+        // if (dateString === firebase.today && !firebase.todayCompleted) {
+        //     canLoadMoreDays.current = false;
+        // }
 
         currentlyAddingCard.current = true;
         const data = await firebase.getContent(dateString);

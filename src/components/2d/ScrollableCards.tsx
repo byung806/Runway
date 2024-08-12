@@ -6,6 +6,7 @@ import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 import { ScrollArrow } from './Arrow';
 
 import * as Haptics from 'expo-haptics';
+import { delay } from '@/utils/utils';
 
 interface ScrollableCardsProps<T> {
     data: T[],
@@ -69,10 +70,18 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
         outerBackgroundColor.value = withTiming(initialBackgroundColor, { duration: 200 });
     }, [theme]);
 
+    // Scroll to initial index (has to be done after flatlist is initialized)
+    const initialScrollFulfilled = useRef(false);
     useEffect(() => {
-        if (initialIndex && data.length > initialIndex) {
-            scrollToIndex(initialIndex);
+        async function scrollToInitialIndex() {
+            if (!initialScrollFulfilled.current && initialIndex && data.length > initialIndex) {
+                await delay(500);  // wait for flatlist to initialize
+                console.log(flatListRef.current);
+                scrollToIndex(initialIndex);
+                initialScrollFulfilled.current = true;
+            }
         }
+        scrollToInitialIndex();
     }, [data]);
 
     const flatListRef = useRef<FlatList<T>>(null);
