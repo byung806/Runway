@@ -14,8 +14,8 @@ function dateToString(date: Date): string {
 /**
  * Converts a string in the format 'YYYY-MM-DD' to a Date object
  */
-function stringToDate(date: string): Date {
-    return new Date(date + 'T00:00:00.000000');
+function stringToDate(dateString: string): Date {
+    return new Date(dateString + 'T00:00:00.000Z');
 }
 
 /**

@@ -29,7 +29,6 @@ export const getLeaderboard = async (request: CallableRequest): Promise<{
     }
 
     if (request.data.type === 'global') {
-        // TODO: decide whether or not to keep global logic in cloud function or just have client read from the leaderboard collection
         const leaderboard: LeaderboardUser[] = [];
         let rank = -1;
         const leaderboardDocs = await getDbCollection('leaderboard').orderBy('points', 'desc').get();
@@ -64,6 +63,11 @@ export const getLeaderboard = async (request: CallableRequest): Promise<{
                 });
             }
         }
+        leaderboard.push({
+            username: userData.get('username'),
+            points: userData.get('points'),
+            streak: userData.get('streak'),
+        });
 
         leaderboard.sort((a, b) => b.points - a.points);
         // find rank of current user among all their friends (current user's points is userData.get('points'))
