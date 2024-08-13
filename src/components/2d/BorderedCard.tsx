@@ -1,5 +1,5 @@
-import { Styles } from "@/styles";
 import { ContentColors, ThemeContext } from "@/providers";
+import { Styles } from "@/styles";
 import useBounceAnimation from "@/utils/useBounceAnimation";
 import { animated, config } from "@react-spring/native";
 import { forwardRef, useContext, useImperativeHandle } from "react";
@@ -13,7 +13,7 @@ export interface BorderedCardRef {
     onPressOut: () => void;
 }
 
-const BorderedCard = forwardRef(({ style, colors, newBadge, children }: { style?: any, colors: ContentColors, newBadge?: boolean, children: JSX.Element }, ref) => {
+const BorderedCard = forwardRef(({ style, colors, newBadge, children }: { style?: any, colors: ContentColors, newBadge?: boolean, children?: JSX.Element }, ref) => {
     const theme = useContext(ThemeContext);
 
     const { scale: cardScale, onPressIn: cardOnPressIn, onPressOut: cardOnPressOut } = useBounceAnimation({
@@ -28,10 +28,10 @@ const BorderedCard = forwardRef(({ style, colors, newBadge, children }: { style?
 
     return (
         <ReactSpringAnimatedView style={{
-            ...style,
             position: 'relative',
             overflow: 'hidden',
-            transform: [{ scale: cardScale }]
+            transform: [{ scale: cardScale }],
+            ...style,
         }}>
             <View style={{
                 flex: 1,
