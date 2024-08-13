@@ -20,6 +20,7 @@ interface ContentContextType {
     earnedPointsWithoutStreak: number;
     earnedStreakBonus: number;
     earnablePointsWithoutStreak: number;
+    questionsStarted: boolean;
     allQuestionsCompleted: boolean;
     cardCompleted: boolean;
 
@@ -62,6 +63,7 @@ export function ContentProvider(props: ContentProviderProps) {
     const [earnedStreakBonus, setEarnedStreakBonus] = useState(0);
     const earnablePointsWithoutStreak = isToday ? 300 : 200;
 
+    const [questionsStarted, setQuestionsStarted] = useState(false);
     const [allQuestionsCompleted, setAllQuestionsCompleted] = useState(false);
     const [questionScores, setQuestionScores] = useState<{
         earned: number;
@@ -78,6 +80,7 @@ export function ContentProvider(props: ContentProviderProps) {
      */
     function back() {
         closeContentModal();
+        setQuestionsStarted(false);
         setAllQuestionsCompleted(false);
         setQuestionScores([]);
         setEarnedPointsWithoutStreak(0);
@@ -88,6 +91,8 @@ export function ContentProvider(props: ContentProviderProps) {
      * Complete a question and add the score to the list
      */
     function completeQuestion(earned: number, possible: number) {
+        setQuestionsStarted(true);
+        
         if (questionScores.length + 1 === content.questions.length) {
             setAllQuestionsCompleted(true);
         }
@@ -138,6 +143,7 @@ export function ContentProvider(props: ContentProviderProps) {
         }
 
         closeContentModal();
+        setQuestionsStarted(false);
         setAllQuestionsCompleted(false);
         setQuestionScores([]);
         setEarnedPointsWithoutStreak(0);
@@ -154,6 +160,7 @@ export function ContentProvider(props: ContentProviderProps) {
             earnedPointsWithoutStreak,
             earnedStreakBonus,
             earnablePointsWithoutStreak,
+            questionsStarted,
             allQuestionsCompleted,
             cardCompleted,
             back,

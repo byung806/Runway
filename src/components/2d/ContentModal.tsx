@@ -5,12 +5,12 @@ import { ThemeContext, useContent } from '@/providers';
 import { Styles } from '@/styles';
 import parseContent from '@/utils/ContentParser';
 import { stringToDate } from '@/utils/date';
+import Foundation from '@expo/vector-icons/Foundation';
 import { ScrollArrow } from './Arrow';
 import Button, { CloseButton } from './Button';
 import CategoryIcon from './CategoryIcon';
-import { ContentChunk, ContentChunkType, DividerContentChunk, DividerContentChunkType, ParagraphSpacerContentChunk, ParagraphSpacerContentChunkType, QuestionContentChunk, QuestionContentChunkType, QuestionSpacerContentChunk, QuestionSpacerContentChunkType, TextContentChunk, TextContentChunkType, TextSpacerContentChunk, TextSpacerContentChunkType } from './ContentChunk';
+import { ContentChunk, ContentChunkType } from './ContentChunk';
 import Text from './Text';
-import Foundation from '@expo/vector-icons/Foundation';
 
 
 //TODO: only show 1 question at a time
@@ -76,7 +76,7 @@ export default function ContentModal({ visible }: { visible: boolean }) {
 
 function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => void }) {
     const theme = useContext(ThemeContext);
-    const { isOnboardingContent, isToday, date, content, colors, back } = useContent();
+    const { isOnboardingContent, isToday, date, content, colors, questionsStarted, back } = useContent();
 
     const [arrowVisible, setArrowVisible] = useState(true);
 
@@ -88,7 +88,7 @@ function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => vo
 
     return (
         <View style={{ height, ...Styles.centeringContainer, padding: 20, gap: 20 }}>
-            {!isOnboardingContent &&
+            {!isOnboardingContent && !questionsStarted &&
                 <View style={{
                     position: 'absolute',
                     top: 60,
