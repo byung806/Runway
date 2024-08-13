@@ -1,15 +1,14 @@
-import { BaseCardAttributes, DateCard, FloatingProfile, LeaderboardButton, ListFooterComponent, ListHeaderComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
+import { BaseCardAttributes, DateCard, FloatingProfile, LeaderboardButton, ListFooterComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, LayoutAnimation, View } from 'react-native';
 
 import BorderedCard from '@/components/2d/BorderedCard';
 import { Content, ThemeContext, useFirebase } from '@/providers';
-import { stringToDate } from '@/utils/date';
+import { secondsUntilTomorrowUTC, stringToDate } from '@/utils/date';
+import { delay } from '@/utils/utils';
 import { StackNavigationProp } from '@react-navigation/stack';
 // @ts-ignore
 import CountDown from 'react-native-countdown-component';
-import { secondsUntilTomorrowUTC } from '@/utils/date';
-import { delay } from '@/utils/utils';
 
 
 interface DateCardAttributes extends BaseCardAttributes {
@@ -32,10 +31,6 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                 backgroundColor: '#000000',
                 borderColor: '#ffffff',
                 outerBackgroundColor: '#000000'
-                // textColor: theme.runwayTextColor,
-                // backgroundColor: theme.runwayBackgroundColor,
-                // borderColor: theme.runwayBorderColor,
-                // outerBackgroundColor: theme.runwayOuterBackgroundColor
             },
             content: null,
             index: 0
@@ -104,6 +99,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
             return;
         }
 
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
         setCards([...cards, {
             date: dateString,
             ref: null,
@@ -143,7 +139,6 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                 renderItem={({ item, index }) => {
                     if (index === 0) {
                         // Coming soon card
-                        // TODO: reset counter onNewDay (maybe unmount and mount?)
                         return (
                             <BorderedCard colors={item.colors}>
                                 <View style={{ gap: 20 }}>

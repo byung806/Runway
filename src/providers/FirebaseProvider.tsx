@@ -5,7 +5,6 @@ import firestore from '@react-native-firebase/firestore';
 import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functions';
 import React, { ReactNode, createContext, useContext, useEffect, useRef, useState } from 'react';
 import { usePushNotifications } from './NotificationProvider';
-import { ContentChunkType } from '@/components/2d';
 
 const emailEnding = '@example.com';
 
@@ -53,13 +52,13 @@ export interface Content {
 
 export type LeaderboardType = 'friends' | 'global';
 
-interface LeaderboardUser {
+export interface LeaderboardUser {
     username: string;
     points: number;
     streak: number;
 }
 
-interface LeaderboardData {
+export interface LeaderboardData {
     leaderboard: LeaderboardUser[];
     rank: number;
 }
