@@ -50,9 +50,17 @@ export const getUserData = async (request: CallableRequest): Promise<FirebaseFir
     }
 
     // reset streak if needed
-    await updateStreak(request.auth.uid, userData);
+    const { streakReset } = await updateStreak(request.auth.uid, userData);
 
-    return userData.data();
+    const returnData = userData.data();
+    if (!returnData) {
+        return;
+    }
+    if (streakReset) {
+        returnData.streak = 0;
+    }
+
+    return returnData;
 }
 
 /**
