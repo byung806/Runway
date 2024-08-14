@@ -5,6 +5,7 @@ import useSound, { PlaySoundFunction, PossibleSounds } from './useSound';
 
 export type SoundType = undefined | 'none' | PossibleSounds;
 
+// TODO: sound settings
 const useBounceAnimation = ({ pressIn, press, pressOut, scaleTo = 0.8, haptics, config, playSound }: {
     pressIn?: () => Promise<void>,
     press?: () => Promise<void>,
@@ -14,12 +15,12 @@ const useBounceAnimation = ({ pressIn, press, pressOut, scaleTo = 0.8, haptics, 
     config?: any,
     playSound?: SoundType
 }) => {
-    let playButtonSound: PlaySoundFunction;
-    let playQuizSoundCorrect: PlaySoundFunction;
-    let playQuizSoundWrong: PlaySoundFunction;
-    if (playSound === 'button') { playButtonSound = useSound('button'); }
-    if (playSound === 'quizCorrect') { playQuizSoundCorrect = useSound('quizCorrect'); }
-    if (playSound === 'quizWrong') { playQuizSoundWrong = useSound('quizWrong'); }
+    // let playButtonSound: PlaySoundFunction;
+    // let playQuizSoundCorrect: PlaySoundFunction;
+    // let playQuizSoundWrong: PlaySoundFunction;
+    // if (playSound === 'button') { playButtonSound = useSound('button'); }
+    // if (playSound === 'quizCorrect') { playQuizSoundCorrect = useSound('quizCorrect'); }
+    // if (playSound === 'quizWrong') { playQuizSoundWrong = useSound('quizWrong'); }
 
     const [active, setActive] = useState(false);
 
@@ -39,15 +40,15 @@ const useBounceAnimation = ({ pressIn, press, pressOut, scaleTo = 0.8, haptics, 
             Haptics.impactAsync(haptics);
         }
 
-        if (playSound === 'button') {
-            await playButtonSound();
-        }
-        if (playSound === 'quizCorrect') {
-            await playQuizSoundCorrect();
-        }
-        if (playSound === 'quizWrong') {
-            await playQuizSoundWrong();
-        }
+        // if (playSound === 'button') {
+        //     await playButtonSound();
+        // }
+        // if (playSound === 'quizCorrect') {
+        //     await playQuizSoundCorrect();
+        // }
+        // if (playSound === 'quizWrong') {
+        //     await playQuizSoundWrong();
+        // }
         await press?.();
     }
 
