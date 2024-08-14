@@ -1,3 +1,5 @@
+// TODO: implement light/dark themes
+
 export interface Theme {
     runwayTextColor: string;
     runwayBorderColor: string;
