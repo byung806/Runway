@@ -49,8 +49,8 @@ export default function FloatingProfile({ visible }: { visible: boolean }) {
                     <Text style={{ color: theme.runwayTextColor, fontSize: 20, ...Styles.shadow }}>{firebase.userData?.username}</Text>
                     {/* </BlackBorder> */}
                     <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: 4 }}>
-                        <FontAwesome5 name='fire-alt' size={20} color={'#cc5500'} style={{ ...Styles.shadow }} />
-                        <Text style={{ color: '#cc5500', fontSize: 20, ...Styles.shadow }}>{firebase.userData?.streak}</Text>
+                        <FontAwesome5 name='fire-alt' size={20} color={firebase.userData?.streak === 0 ? theme.gray : theme.streakColor} style={{ ...Styles.shadow }} />
+                        <Text style={{ color: firebase.userData?.streak === 0 ? theme.gray : theme.streakColor, fontSize: 20, ...Styles.shadow }}>{firebase.userData?.streak}</Text>
                     </View>
                     <Text style={{ color: theme.runwayTextColor, fontSize: 20, ...Styles.shadow }}>{firebase.userData?.points}</Text>
                 </Animated.View>

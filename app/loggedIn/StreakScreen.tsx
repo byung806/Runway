@@ -7,7 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Easing, View } from "react-native";
 import AnimatedNumbers from 'react-native-animated-numbers';
-import { useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LottieView from 'lottie-react-native';
 
@@ -26,13 +26,11 @@ export default function StreakScreen({ route, navigation }: { route: any, naviga
         requestStreak();
     }, []);
 
-    const opacityStreak = useSharedValue(1);
-    const opacityPoints = useSharedValue(0);
-
-    const [pointsEarned, setPointsEarned] = useState(route.params?.pointsEarned ?? 0);
+    const [pointsEarned, setPointsEarned] = useState(route.params?.pointsEarned + route.params?.earnedStreakBonus ?? 0);
     const [streak, setStreak] = useState(route.params?.initialStreak ?? 0);
     const [buttonClickable, setButtonClickable] = useState(false);
-
+    
+    const pointsOpacity = useSharedValue(0);
     const buttonOpacity = useSharedValue(0);
 
     const numberAnimationDuration = 800;
@@ -52,8 +50,8 @@ export default function StreakScreen({ route, navigation }: { route: any, naviga
 
         setStreak(streak + 1);
 
-        await delay(numberAnimationDuration + 600);
-        setPointsEarned(pointsEarned + route.params?.earnedStreakBonus);
+        await delay(numberAnimationDuration + 300);
+        pointsOpacity.value = withTiming(1, { duration: 300 });
 
         await delay(300);
 
@@ -107,7 +105,7 @@ export default function StreakScreen({ route, navigation }: { route: any, naviga
                 </View>
 
                 {/* points earned */}
-                <View style={{ ...Styles.centeringContainer }}>
+                <Animated.View style={{ ...Styles.centeringContainer, opacity: pointsOpacity }}>
                     <Text style={{
                         color: theme.runwayTextColor,
                         fontSize: 30,
@@ -116,19 +114,13 @@ export default function StreakScreen({ route, navigation }: { route: any, naviga
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={{
                             color: theme.runwayTextColor,
-                            fontSize: 100,
+                            fontSize: 60,
                             textAlign: 'center',
                         }}>
-                            +
+                            +{pointsEarned}
                         </Text>
-                        <AnimatedNumbers
-                            animateToNumber={pointsEarned}
-                            animationDuration={numberAnimationDuration + 200}
-                            fontStyle={{ color: theme.runwayTextColor, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
-                            easing={Easing.out(Easing.cubic)}
-                        />
                     </View>
-                </View>
+                </Animated.View>
             </View>
 
             <SafeAreaView style={{

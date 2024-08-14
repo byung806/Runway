@@ -12,6 +12,7 @@ export interface Theme {
     questionIncorrectColor: string;
 
     trophyYellow: string;
+    streakColor: string;
 
     white: string;
     black: string;
@@ -42,6 +43,7 @@ const CommonThemeColors = {
     questionIncorrectColor: '#ff5343',
 
     trophyYellow: '#fcc201',
+    streakColor: '#cc5500',
 
     white: '#ffffff',
     black: '#000000',

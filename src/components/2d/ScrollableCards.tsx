@@ -76,7 +76,6 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
         async function scrollToInitialIndex() {
             if (!initialScrollFulfilled.current && initialIndex && data.length > initialIndex) {
                 await delay(500);  // wait for flatlist to initialize
-                console.log(flatListRef.current);
                 scrollToIndex(initialIndex);
                 initialScrollFulfilled.current = true;
             }
