@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions, LayoutAnimation, View } from 'react-native';
 
 import BorderedCard from '@/components/2d/BorderedCard';
-import { Content, ThemeContext, useFirebase } from '@/providers';
+import { FirebaseContent, ThemeContext, useFirebase } from '@/providers';
 import { secondsUntilTomorrowUTC, stringToDate } from '@/utils/date';
 import { delay } from '@/utils/utils';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -13,7 +13,7 @@ import CountDown from 'react-native-countdown-component';
 
 interface DateCardAttributes extends BaseCardAttributes {
     date: string;
-    content: Content;
+    content: FirebaseContent;
 }
 
 export default function AppScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {

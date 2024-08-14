@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
-import { Content, ContentColors, useFirebase } from "./FirebaseProvider";
+import { FirebaseContent, ContentColors, useFirebase } from "./FirebaseProvider";
 import { usePushNotifications } from "./NotificationProvider";
 import { Alert } from "react-native";
 
@@ -15,7 +15,8 @@ interface ContentContextType {
 
     date: string;
     isToday: boolean;
-    content: Content;
+    content: FirebaseContent;
+    numQuestions: number;
     colors: ContentColors;
     earnedPointsWithoutStreak: number;
     earnedStreakBonus: number;
@@ -35,7 +36,7 @@ interface ContentProviderProps {
     isOnboardingContent?: boolean;
 
     date?: string;
-    content: Content;
+    content: FirebaseContent;
     colors: ContentColors;
     openContentModal: Function;
     closeContentModal: Function;
@@ -63,6 +64,7 @@ export function ContentProvider(props: ContentProviderProps) {
     const [earnedStreakBonus, setEarnedStreakBonus] = useState(0);
     const earnablePointsWithoutStreak = isToday ? 300 : 200;
 
+    const numQuestions = content.chunks ? content.chunks.filter(chunk => chunk.type === 'question').length : content.questions?.length ?? 0;
     const [questionsStarted, setQuestionsStarted] = useState(false);
     const [allQuestionsCompleted, setAllQuestionsCompleted] = useState(false);
     const [questionScores, setQuestionScores] = useState<{
@@ -93,7 +95,7 @@ export function ContentProvider(props: ContentProviderProps) {
     function completeQuestion(earned: number, possible: number) {
         setQuestionsStarted(true);
         
-        if (questionScores.length + 1 === content.questions.length) {
+        if (questionScores.length + 1 === numQuestions) {
             setAllQuestionsCompleted(true);
         }
         setQuestionScores([...questionScores, {
@@ -156,6 +158,7 @@ export function ContentProvider(props: ContentProviderProps) {
             date: date ?? '',
             isToday,
             content,
+            numQuestions,
             colors,
             earnedPointsWithoutStreak,
             earnedStreakBonus,

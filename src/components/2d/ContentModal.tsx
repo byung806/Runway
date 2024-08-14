@@ -46,6 +46,7 @@ export default function ContentModal({ visible }: { visible: boolean }) {
             }}>
                 <FlatList
                     ref={flatListRef}
+                    style={{ width: '100%' }}
                     data={contentChunks}
                     renderItem={({ item, index }) => {
                         const focused = focusedItems.includes(index);
@@ -87,7 +88,7 @@ function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => vo
     const day = dateObject.getDate();
 
     return (
-        <View style={{ height, ...Styles.centeringContainer, padding: 20, gap: 20 }}>
+        <View style={{ height, ...Styles.centeringContainer, gap: 20 }}>
             {!isOnboardingContent && !questionsStarted &&
                 <View style={{
                     position: 'absolute',

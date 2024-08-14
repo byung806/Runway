@@ -1,4 +1,4 @@
-import { ContentQuestionChoice, ThemeContext, useContent } from "@/providers";
+import { FirebaseContentQuestionChoice, ThemeContext, useContent } from "@/providers";
 import { Styles } from "@/styles";
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useContext, useEffect, useState } from "react";
@@ -7,23 +7,19 @@ import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import Button from "./Button";
 import Text from "./Text";
 
-export type ContentChunkType = TextContentChunkType | ImageContentChunkType | TextSpacerContentChunkType | ParagraphSpacerContentChunkType | DividerContentChunkType | QuestionSpacerContentChunkType | QuestionContentChunkType;
+export type ContentChunkType = TextContentChunkType | ImageContentChunkType | IconContentChunkType | QuestionContentChunkType | EmptySpaceContentChunkType;
 export function ContentChunk({ focused, chunk }: { focused: boolean, chunk: ContentChunkType }) {
     switch (chunk.type) {
         case "text":
             return <TextContentChunk focused={focused} text={chunk.text} side={chunk.side} />;
         case "image":
             return <ImageContentChunk focused={focused} uri={chunk.uri} />;
-        case "textSpacer":
-            return <TextSpacerContentChunk />;
-        case "paragraphSpacer":
-            return <ParagraphSpacerContentChunk />;
-        case "divider":
-            return <DividerContentChunk />;
-        case "questionSpacer":
-            return <QuestionSpacerContentChunk />;
+        case "icon":
+            return <IconContentChunk focused={focused} icon={chunk.icon} />;
         case "question":
             return <QuestionContentChunk focused={focused} question={chunk.question} choices={chunk.choices} possiblePoints={chunk.possiblePoints} />;
+        case "empty":
+            return <EmptySpaceContentChunk focused={focused} fractionOfScreen={chunk.fractionOfScreen} />;
         default:
             return null;
     }
@@ -47,7 +43,7 @@ function BaseContentChunk({ focused, children, style }: { children: JSX.Element,
     }, [focused]);
 
     return (
-        <Animated.View style={{ ...style, width: '100%', padding: 20, gap: 10, opacity }}>
+        <Animated.View style={{ ...style, width: '100%', paddingHorizontal: 20, gap: 10, opacity }}>
             {children}
         </Animated.View>
     );
@@ -63,7 +59,7 @@ export function TextContentChunk({ focused, text, side }: TextContentChunkType &
     const { colors } = useContent();
 
     return (
-        <BaseContentChunk focused={focused}>
+        <BaseContentChunk focused={focused} style={{ paddingVertical: Dimensions.get("window").height * 0.15 }}>
             <Text style={{ fontSize: 22, color: colors.textColor, textAlign: side }}>{text}</Text>
         </BaseContentChunk>
     );
@@ -75,11 +71,16 @@ export interface ImageContentChunkType {
     uri: string;
 }
 export function ImageContentChunk({ focused, uri }: ImageContentChunkType & BaseContentChunkType) {
+    const [aspectRatio, setAspectRatio] = useState(1);
+    Image.getSize(uri, (width, height) => { setAspectRatio(width / height); });
+
     return (
-        <BaseContentChunk focused={focused}>
-            <View style={{ width: '80%', aspectRatio: 1 }}>
-                <Image source={{ uri }} style={{ width: '100%', height: '100%' }} />
-            </View>
+        <BaseContentChunk focused={focused} style={{ paddingVertical: Dimensions.get("window").height * 0.15 }}>
+            <Image
+                source={{ uri }}
+                style={{ width: '100%', paddingHorizontal: 20, aspectRatio: aspectRatio, borderRadius: 20, paddingVertical: Dimensions.get("window").height * 0.15 }}
+                resizeMode='contain'
+            />
         </BaseContentChunk>
     );
 }
@@ -93,55 +94,9 @@ export function IconContentChunk({ focused, icon }: IconContentChunkType & BaseC
     const { colors } = useContent();
 
     return (
-        <BaseContentChunk focused={focused}>
+        <BaseContentChunk focused={focused} style={{ paddingVertical: Dimensions.get("window").height * 0.1 }}>
             <FontAwesome5 name={icon} size={40} color={colors.textColor} />
         </BaseContentChunk>
-    );
-}
-
-
-export interface TextSpacerContentChunkType {
-    type?: "textSpacer";
-}
-export function TextSpacerContentChunk() {
-    return (
-        <View style={{ height: Dimensions.get("window").height * 0.3 }} />
-    );
-}
-
-
-export interface ParagraphSpacerContentChunkType {
-    type?: "paragraphSpacer";
-}
-export function ParagraphSpacerContentChunk() {
-    return (
-        <View style={{ height: Dimensions.get("window").height * 0.2 }} />
-    );
-}
-
-
-export interface DividerContentChunkType {
-    type?: "divider";
-}
-export function DividerContentChunk() {
-    return (
-        <View style={{
-            height: Dimensions.get("window").height * 0.3,
-            ...Styles.centeringContainer,
-            paddingHorizontal: 20,
-        }}>
-            {/* <Text style={{ fontSize: 30, color: theme.black }}>Question time!</Text> */}
-        </View>
-    );
-}
-
-
-export interface QuestionSpacerContentChunkType {
-    type?: "questionSpacer";
-}
-export function QuestionSpacerContentChunk() {
-    return (
-        <View style={{ height: Dimensions.get("window").height * 0.2 }} />
     );
 }
 
@@ -149,7 +104,7 @@ export function QuestionSpacerContentChunk() {
 export interface QuestionContentChunkType {
     type?: "question";
     question: string;
-    choices: ContentQuestionChoice[];
+    choices: FirebaseContentQuestionChoice[];
     possiblePoints: number;
 }
 export function QuestionContentChunk({ focused, question, choices, possiblePoints }: QuestionContentChunkType & BaseContentChunkType) {
@@ -193,7 +148,7 @@ export function QuestionContentChunk({ focused, question, choices, possiblePoint
     }
 
     return (
-        <BaseContentChunk focused={focused}>
+        <BaseContentChunk focused={focused} style={{ paddingVertical: Dimensions.get("window").height * 0.15 }}>
             <>
                 <Text style={{ fontSize: 30, color: colors.textColor, ...Styles.lightShadow }}>{question}</Text>
                 <View style={{ width: '100%', gap: 10 }}>
@@ -226,6 +181,18 @@ export function QuestionContentChunk({ focused, question, choices, possiblePoint
                     </Animated.View>
                 }
             </>
+        </BaseContentChunk>
+    );
+}
+
+export interface EmptySpaceContentChunkType {
+    type?: "empty";
+    fractionOfScreen: number;
+}
+export function EmptySpaceContentChunk({ focused, fractionOfScreen }: EmptySpaceContentChunkType & BaseContentChunkType) {
+    return (
+        <BaseContentChunk focused={focused}>
+            <View style={{ height: Dimensions.get("window").height * fractionOfScreen }} />
         </BaseContentChunk>
     );
 }

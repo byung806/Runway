@@ -13,7 +13,7 @@ export interface FirebaseError {
     message: string;
 }
 
-interface UserData {
+interface FirebaseUserData {
     email: string;
     friends: string[];
     point_days: { [date: string]: number };
@@ -31,23 +31,53 @@ export interface ContentColors {
     outerBackgroundColor: string;
 }
 
-export interface ContentQuestion {
+export interface FirebaseContentQuestion {
     question: string;
-    choices: ContentQuestionChoice[];
+    choices: FirebaseContentQuestionChoice[];
 }
 
-export interface ContentQuestionChoice {
+export interface FirebaseContentQuestionChoice {
     choice: string;
     correct: boolean;
 }
 
-// TODO: convert to dynamic chunks format
-export interface Content {
+export interface FirebaseParagraphContentChunkType {
+    type: 'paragraph';
+    text: string;
+}
+
+export interface FirebaseImageContentChunkType {
+    type: 'image';
+    uri: string;
+}
+
+export interface FirebaseIconContentChunkType {
+    type: 'icon';
+    icon: string;
+}
+
+export interface FirebaseQuestionContentChunkType {
+    type: 'question';
+    question: string;
+    choices: FirebaseContentQuestionChoice[];
+}
+
+export interface FirebaseEmptyContentChunkType {
+    type: 'empty';
+    fractionOfScreen: number;
+}
+
+export interface FirebaseContent {
     title: string;
     author: string;
     category: string;
-    body: string;
-    questions: ContentQuestion[];
+
+    // new format
+    chunks?: (FirebaseParagraphContentChunkType | FirebaseImageContentChunkType | FirebaseIconContentChunkType | FirebaseQuestionContentChunkType | FirebaseEmptyContentChunkType)[];
+
+    // old format
+    body?: string;
+    questions?: FirebaseContentQuestion[];
 }
 
 export type LeaderboardType = 'friends' | 'global';
@@ -67,7 +97,7 @@ interface FirebaseContextType {
     today: string;
 
     user: FirebaseAuthTypes.User | null;
-    userData: UserData | null;
+    userData: FirebaseUserData | null;
     todayCompleted: boolean;
     globalLeaderboard: LeaderboardData | null;
     friendsLeaderboard: LeaderboardData | null;
@@ -78,7 +108,7 @@ interface FirebaseContextType {
     logIn: (email: string, password: string) => Promise<FirebaseError | null>;
     logOut: () => Promise<FirebaseError | null>;
     getUserData: () => Promise<void>;
-    getContent: (date: string) => Promise<{ content: Content, colors: ContentColors } | null>;
+    getContent: (date: string) => Promise<{ content: FirebaseContent, colors: ContentColors } | null>;
     requestCompleteDate: (date?: string, percent?: number) => Promise<{ success: boolean }>;
     addFriend: (friend: string) => Promise<{ success: boolean, errorMessage: string }>;
     getLeaderboard: (type: LeaderboardType) => Promise<void>;
@@ -95,7 +125,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 
     // Mirror of auth().currentUser
     const [user, setUser] = useState<FirebaseAuthTypes.User | null>(auth().currentUser);
-    const [userData, setUserData] = useState<UserData | null>(null);
+    const [userData, setUserData] = useState<FirebaseUserData | null>(null);
     const [todayCompleted, setTodayCompleted] = useState(false);
     const [globalLeaderboard, setGlobalLeaderboard] = useState<LeaderboardData | null>(null);
     const [friendsLeaderboard, setFriendsLeaderboard] = useState<LeaderboardData | null>(null);
@@ -206,7 +236,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         try {
             console.log('DATABASE CALL: get user data');
             const userData = await functions()
-                .httpsCallable('getUserData')() as FirebaseFunctionsTypes.HttpsCallableResult<UserData>;
+                .httpsCallable('getUserData')() as FirebaseFunctionsTypes.HttpsCallableResult<FirebaseUserData>;
             setUserData(userData.data);
             setTodayCompleted(today in (userData.data?.point_days ?? {}));
         } catch (error: any) {
@@ -218,7 +248,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
      * Fetches the content for the given date from Firestore
      */
     // TODO: client could request content for any date, but server should only allow today and previous days
-    async function getContent(date: string): Promise<{ content: Content, colors: ContentColors } | null> {
+    async function getContent(date: string): Promise<{ content: FirebaseContent, colors: ContentColors } | null> {
         try {
             console.log('DATABASE CALL: get content for', date);
             const doc = firestore().collection('content').doc(date)
@@ -226,7 +256,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             if (data.exists) {
                 const values = data.data();
                 return {
-                    content: values as Content,
+                    content: values as FirebaseContent,
                     colors: values?.colors as ContentColors,
                 };
             }

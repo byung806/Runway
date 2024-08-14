@@ -6,7 +6,7 @@ import ContentModal from '@/components/2d/ContentModal';
 import OnboardingCard from '@/components/2d/OnboardingCard';
 import OnboardingFooterComponent from '@/components/2d/OnboardingFooterComponent';
 import OnboardingHeaderComponent from '@/components/2d/OnboardingHeaderComponent';
-import { Content, ContentProvider, ThemeContext } from '@/providers';
+import { FirebaseContent, ContentProvider, ThemeContext } from '@/providers';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 
@@ -52,7 +52,7 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
         }
     ]);
 
-    const onboardingContent: Content = {
+    const onboardingContent: FirebaseContent = {
         title: username + '\'s first lesson!',
         category: 'onboarding',
         author: '',

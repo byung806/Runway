@@ -1,5 +1,5 @@
 import { ContentProvider, ThemeContext } from '@/providers';
-import { Content, ContentColors, useFirebase } from '@/providers/FirebaseProvider';
+import { FirebaseContent, ContentColors, useFirebase } from '@/providers/FirebaseProvider';
 import { sameDay, stringToDate } from '@/utils/date';
 import { AntDesign } from "@expo/vector-icons";
 import { forwardRef, memo, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
@@ -17,7 +17,7 @@ interface DateCardProps {
     comingSoon?: boolean;
 
     date: string;
-    content: Content;
+    content: FirebaseContent;
     colors: ContentColors;
 
     focused: boolean;
