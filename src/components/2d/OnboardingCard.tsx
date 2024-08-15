@@ -82,7 +82,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                 <Button
                     title='Learn!'
                     backgroundColor={colors.textColor}
-                    textColor={theme.black}
+                    textColor={theme.white}
                     onPress={openOnboardingContentModal}
                     style={{
                         width: '80%',

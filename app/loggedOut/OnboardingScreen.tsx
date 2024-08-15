@@ -1,6 +1,6 @@
 import { BaseCardAttributes, ScrollableCards, ScrollableCardsRef } from '@/components/2d';
 import React, { useContext, useState } from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, View } from 'react-native';
 
 import ContentModal from '@/components/2d/ContentModal';
 import OnboardingCard from '@/components/2d/OnboardingCard';
@@ -8,6 +8,7 @@ import OnboardingFooterComponent from '@/components/2d/OnboardingFooterComponent
 import OnboardingHeaderComponent from '@/components/2d/OnboardingHeaderComponent';
 import { FirebaseContent, ContentProvider, ThemeContext } from '@/providers';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Styles } from '@/styles';
 
 
 interface OnboardingCardAttributes extends BaseCardAttributes { }
@@ -43,11 +44,10 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
             }, index: 1
         }, {
             ref: null, colors: {
-                // outerBackgroundColor: "#8c62d0",
-                // borderColor: "#b3a4e0",
-                // backgroundColor: "#6d3b9f",
-                // textColor: "#ffffff"
-                ...defaultColors
+                outerBackgroundColor: "#79c3e2",
+                borderColor: "#1f5fbe",
+                backgroundColor: "#6bb7d7",
+                textColor: "#205ebf"
             }, index: 2
         }
     ]);
@@ -146,17 +146,19 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
         setDoneWithExampleQuestion(true);
     }
 
+    const padding = 30;
+    const boxHeight = (Dimensions.get("window").width - padding * 2) * 1.4;
     const heights = {
         paddingAboveHeader: 0,
         headerHeight: Dimensions.get("window").height * 1,
-        padding: 30,
-        firstBoxHeight: (Dimensions.get("window").width - 30 * 2) * 1.6,
-        boxHeight: (Dimensions.get("window").width - 30 * 2) * 1.6,
+        // headerHeight: (Dimensions.get("window").height - ((Dimensions.get("window").width - 30 * 2) * 1.6)) / 2 - 30 / 2
+        padding: padding,
+        boxHeight: boxHeight,
         footerHeight: Dimensions.get("window").height * 0.8,
-    }
+    };
 
     return (
-        <>
+        <View style={{ flex: 1 }}>
             <ScrollableCards<OnboardingCardAttributes>
                 ref={scrollableCardsRef}
                 data={cards}
@@ -180,7 +182,7 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
             <ContentProvider
                 isOnboardingContent={true}
                 content={onboardingContent}
-                colors={defaultColors}
+                colors={cards[2].colors}
                 openContentModal={openOnboardingContentModal}
                 closeContentModal={closeOnboardingContentModal}
             >
@@ -188,6 +190,6 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
                     visible={onboardingContentModalVisible}
                 />
             </ContentProvider>
-        </>
+        </View>
     );
 }
