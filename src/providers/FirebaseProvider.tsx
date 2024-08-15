@@ -136,6 +136,14 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     var debounceTimeout: NodeJS.Timeout | null;
     const debounceTime = 200;  // ms
 
+    useEffect(() => {
+        if (notifications.expoPushToken) {
+            if (userData?.expoPushToken !== notifications.expoPushToken.data) {
+                sendExpoPushToken(notifications.expoPushToken.data);
+            }
+        }
+    }, [notifications.expoPushToken]);
+
     function onAuthStateChanged(authStateUser: FirebaseAuthTypes.User | null) {
         setUser(authStateUser);
 
@@ -151,12 +159,6 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 
                 await getUserData();
                 setInitializing(false);
-
-                if (notifications.expoPushToken) {
-                    if (userData?.expoPushToken !== notifications.expoPushToken.data) {
-                        sendExpoPushToken(notifications.expoPushToken.data);
-                    }
-                }
 
                 getLeaderboard('global');
                 getLeaderboard('friends');

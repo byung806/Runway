@@ -66,10 +66,9 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                         }}>
                             <BackArrow color={theme.white} onPress={() => { navigation.navigate('app') }} />
                             {/* <Text style={{ color: theme.white, fontSize: 20, ...Styles.shadow }}>Back</Text> */}
-                            <Pressable onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); firebase.logOut(); }}>
-                                <MaterialIcons name="exit-to-app" size={30} color={theme.white} />
+                            <Pressable onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); firebase.logOut(); }} style={{ flexDirection: 'row', gap: 10, ...Styles.centeringContainer }}>
+                                <Text style={{ color: theme.white, fontSize: 16 }}>Log Out</Text>
                             </Pressable>
-                            {/* <Button title="Log Out" onPress={() => { firebase.logOut(); }} backgroundColor='transparent' /> */}
                         </View>
 
                         {/* Profile */}
