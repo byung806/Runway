@@ -17,6 +17,7 @@ export default function OnboardingFooterComponent({ height, username }: { height
             <View style={{
                 flex: 1,
                 ...Styles.centeringContainer,
+                paddingHorizontal: 30,
             }}>
                 <Text style={{ fontSize: 40, textAlign: 'center', marginBottom: 30, color: theme.white }}>Create an account to save your points!</Text>
                 <Button

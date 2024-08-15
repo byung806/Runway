@@ -15,12 +15,12 @@ export default function OnboardingHeaderComponent({ height, username, setUsernam
     return (
         <View style={{
             height,
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
         }}>
             <View style={{
                 position: 'absolute',
                 top: 60,
-                left: -10,
+                left: 20,
                 zIndex: 1,
             }}>
                 <BackArrow color={theme.white} onPress={() => { navigation.navigate('start') }} />

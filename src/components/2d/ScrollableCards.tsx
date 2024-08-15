@@ -7,6 +7,7 @@ import { ScrollArrow } from './Arrow';
 
 import * as Haptics from 'expo-haptics';
 import { delay } from '@/utils/utils';
+import { Styles } from '@/styles';
 
 interface ScrollableCardsProps<T> {
     data: T[],
@@ -115,8 +116,8 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
     return (
         <Animated.View style={{
             flex: 1,
-            backgroundColor: outerBackgroundColor,
-            paddingHorizontal: padding,
+            // width: '100%',
+            backgroundColor: outerBackgroundColor
         }}>
             <FlatList
                 ref={flatListRef}
