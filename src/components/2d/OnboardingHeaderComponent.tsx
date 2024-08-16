@@ -20,7 +20,7 @@ export default function OnboardingHeaderComponent({ height, username, setUsernam
             <View style={{
                 position: 'absolute',
                 top: 60,
-                left: 20,
+                left: 0,
                 zIndex: 1,
             }}>
                 <BackArrow color={theme.white} onPress={() => { navigation.navigate('start') }} />

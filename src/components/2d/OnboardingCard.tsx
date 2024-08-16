@@ -223,7 +223,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
 
     if (index === 2) {
         return (
-            <BorderedCard ref={borderedCardRef} style={{ ...style, paddingHorizontal: 30 }} colors={colors}>
+            <BorderedCard ref={borderedCardRef} style={{ ...style }} colors={colors}>
                 <Animated.View style={{ width: '100%', ...Styles.centeringContainer, opacity }}>
                     {insides}
                 </Animated.View>

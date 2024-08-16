@@ -190,7 +190,7 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                     itemVisiblePercentThreshold: 75,  // how much of the item is visible
                     waitForInteraction: false
                 }}
-                contentContainerStyle={{ gap: padding, paddingTop: paddingAboveHeader, paddingBottom: footer ? 0 : (Dimensions.get("window").height - boxHeight) / 2 }}
+                contentContainerStyle={{ gap: padding, paddingTop: paddingAboveHeader, paddingBottom: footer ? 0 : (Dimensions.get("window").height - boxHeight) / 2, paddingHorizontal: padding }}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 decelerationRate='fast'
