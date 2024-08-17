@@ -52,10 +52,10 @@ exports.updateStreaksDaily = onSchedule("10 0 * * *", updateStreaksDaily);
  * Send a notification to all users with a valid expoPushToken
  * Runs at 12:00 AM every day
  */
-exports.sendStreakNotification = onSchedule("0 * * * *", sendStreakNotification);  // TODO: change to 0 0 * * *
+exports.sendStreakNotification = onSchedule("0 0 * * *", sendStreakNotification);
 
 /**
  * Check the status of push notification receipts 30 minutes after sending them
  * Runs at 12:30 AM every day
  */
-exports.checkNotificationReceipts = onSchedule("30 * * * *", handleNotificationReceipts);  // TODO: change to 30 0 * * *
+exports.checkNotificationReceipts = onSchedule("30 0 * * *", handleNotificationReceipts);
