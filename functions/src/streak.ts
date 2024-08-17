@@ -1,21 +1,19 @@
 import { CallableRequest } from "firebase-functions/v2/https";
-import { getDbDoc } from "./utils";
+import { dateToString, getDbCollection, getDbDoc, stringToDate } from "./utils";
 import { updateLeaderboard } from "./leaderboard";
 import { pointsToAddForPastContent, pointsToAddForToday } from "./points";
 
 /**
- * Converts a Date object to a string in the format 'YYYY-MM-DD'
- * Used because dates are stored as 'YYYY-MM-DD' strings in Firestore
+ * Updates the streaks for all users daily
  */
-function dateToString(date: Date): string {
-    return date.toISOString().split('T')[0];
-}
-
-/**
- * Converts a string in the format 'YYYY-MM-DD' to a Date object
- */
-function stringToDate(dateString: string): Date {
-    return new Date(dateString + 'T00:00:00.000Z');
+// TODO: send a notification to the user if the streak is reset
+export async function updateStreaksDaily() {
+    const users = await getDbCollection('users').get();
+    users.forEach(async (user) => {
+        const userData = user.data();
+        if (!userData) return;
+        await updateStreak(user.id, user);
+    });
 }
 
 /**
@@ -67,6 +65,7 @@ export const updateStreak = async (uid: string, userData: FirebaseFirestore.Docu
         await getDbDoc('users', uid).update({
             streak: 0,
         });
+        await updateLeaderboard(userData.get("username"), userData.get("points"), 0);
         return { canIncrementStreak, streakReset: true };
     }
     return { canIncrementStreak, streakReset: false };
