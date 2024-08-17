@@ -20,7 +20,6 @@ interface NotificationContextType {
     notification?: Notifications.Notification;
 
     requestPermissions: () => Promise<void>;
-    // scheduleNotification: () => Promise<void>;
 }
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
@@ -33,6 +32,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     const responseListener = useRef<Notifications.Subscription>()
 
     async function requestPermissions() {
+        // console.log('Requesting push notification permissions')
         if (Device.isDevice) {
             const { status: finalStatus } = await Notifications.requestPermissionsAsync()
 
@@ -43,6 +43,11 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
                 console.log('Required push notification permissions not granted')
             }
         }
+    }
+
+    async function updateExpoPushToken() {
+        // console.log('NotificationProvider updateExpoPushToken')
+        getExpoPushTokenAsync().then(token => setExpoPushToken(token));
     }
 
     async function getExpoPushTokenAsync(): Promise<Notifications.ExpoPushToken | undefined> {
@@ -74,19 +79,8 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
         }
     }
 
-    // async function scheduleNotification() {
-    //     await Notifications.scheduleNotificationAsync({
-    //         content: {
-    //             title: "You've got mail! 📬",
-    //             body: 'Here is the notification body',
-    //             data: { data: 'goes here' },
-    //         },
-    //         trigger: { seconds: 2 },
-    //     });
-    // }
-
     useEffect(() => {
-        getExpoPushTokenAsync().then(token => setExpoPushToken(token))
+        updateExpoPushToken();
 
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification)

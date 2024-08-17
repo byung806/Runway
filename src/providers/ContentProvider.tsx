@@ -116,7 +116,7 @@ export function ContentProvider(props: ContentProviderProps) {
         if (notifications.permissionStatus === 'undetermined') {
             Alert.alert(
                 'Stay in the loop!',
-                'Get notified about exciting new daily content and boost your progress!',
+                'Get notified every day when new content is available!',
                 [
                     { text: 'Maybe Later', style: 'cancel' },
                     { text: 'Sure!', style: 'default', isPreferred: true, onPress: async () => { await notifications.requestPermissions(); } }

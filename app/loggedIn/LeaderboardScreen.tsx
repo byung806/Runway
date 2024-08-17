@@ -30,6 +30,22 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
         initialLeaderboardType === 'friends' ? firebase.friendsLeaderboard : firebase.globalLeaderboard
     );
 
+    // Update FlatList when friends leaderboard or global leaderboard updates
+    useEffect(() => {
+        LayoutAnimation.configureNext(
+            {
+                duration: 500,
+                update: { type: 'spring', springDamping: 0.7 }
+            }
+        );
+        if (leaderboardType === 'friends') {
+            setData(firebase.friendsLeaderboard);
+        } else {
+            setData(firebase.globalLeaderboard);
+        }
+    }, [firebase.friendsLeaderboard, firebase.globalLeaderboard]);
+
+    // Animate FlatList when switching between global and friends leaderboard
     useEffect(() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         LayoutAnimation.configureNext(

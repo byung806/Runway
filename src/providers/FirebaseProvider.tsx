@@ -137,12 +137,15 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     const debounceTime = 200;  // ms
 
     useEffect(() => {
-        if (notifications.expoPushToken) {
+        // console.log('FirebaseProvider useEffect:', notifications.expoPushToken, userData);
+        if (notifications.expoPushToken && userData) {
+            // console.log('Attempting to send expo push token');
             if (userData?.expoPushToken !== notifications.expoPushToken.data) {
+                // console.log('Sending expo push token');
                 sendExpoPushToken(notifications.expoPushToken.data);
             }
         }
-    }, [notifications.expoPushToken]);
+    }, [userData, notifications.expoPushToken]);
 
     function onAuthStateChanged(authStateUser: FirebaseAuthTypes.User | null) {
         setUser(authStateUser);
@@ -306,6 +309,8 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                 .httpsCallable('addFriend')({
                     friendUsername: friend,
                 }) as FirebaseFunctionsTypes.HttpsCallableResult<{ success: boolean, errorMessage: string }>;
+
+            getLeaderboard('friends');  // no await because don't need to wait for this to finish
             return data.data as { success: boolean, errorMessage: string };
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  addFriend');

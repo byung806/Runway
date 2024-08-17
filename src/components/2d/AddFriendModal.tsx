@@ -51,7 +51,7 @@ export default function AddFriendModal({ visible, setVisible }: { visible: boole
                 <Text style={{ fontSize: 40, textAlign: 'center', marginBottom: 30, color: theme.white }}>Add Friend</Text>
                 <TextInput value={username} placeholder="Enter username" onChangeText={setUsername} style={{ width: '80%', height: 50 }} />
                 <Button title="Add" onPress={addFriend} style={{ width: '80%', height: 50 }} disabled={addingFriend} />
-                {message ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5 }}>{message}</Text> : null}
+                {message ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.white }}>{message}</Text> : null}
             </KeyboardAvoidingView>
         </Modal>
     );
