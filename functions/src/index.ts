@@ -1,12 +1,14 @@
-import { onCall } from "firebase-functions/v2/https";
-
 import { initializeApp } from "firebase-admin/app";
-import { requestCompleteDate } from "./streak";
-import { addFriend, getUserData, initializeUser, sendExpoPushToken } from "./user";
-import { getLeaderboard } from "./leaderboard";
-
 
 initializeApp();
+
+import { onCall } from "firebase-functions/v2/https";
+import { onSchedule } from "firebase-functions/v2/scheduler";
+import { getLeaderboard } from "./leaderboard";
+import { handleNotificationReceipts, sendStreakNotification } from "./notifs";
+import { requestCompleteDate, updateStreaksDaily } from "./streak";
+import { addFriend, getUserData, initializeUser, sendExpoPushToken } from "./user";
+
 
 /**
  * Initializes a new user in the database
@@ -37,3 +39,23 @@ exports.getLeaderboard = onCall(getLeaderboard);
  * Updates the user's expo push token
  */
 exports.sendExpoPushToken = onCall(sendExpoPushToken);
+
+
+
+/**
+ * Updates the streaks for all users daily
+ * Runs at 12:10 AM every day
+ */
+exports.updateStreaksDaily = onSchedule("10 0 * * *", updateStreaksDaily);
+
+/**
+ * Send a notification to all users with a valid expoPushToken
+ * Runs at 12:00 AM every day
+ */
+exports.sendStreakNotification = onSchedule("0 * * * *", sendStreakNotification);  // TODO: change to 0 0 * * *
+
+/**
+ * Check the status of push notification receipts 30 minutes after sending them
+ * Runs at 12:30 AM every day
+ */
+exports.checkNotificationReceipts = onSchedule("30 * * * *", handleNotificationReceipts);  // TODO: change to 30 0 * * *

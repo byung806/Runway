@@ -1,7 +1,8 @@
 import { Expo, ExpoPushMessage, ExpoPushReceiptId, ExpoPushTicket } from 'expo-server-sdk';
-import { logger } from "firebase-functions";
-import { dateToString, getDbCollection, getDbDoc } from "./utils";
 import { FieldValue } from 'firebase-admin/firestore';
+import { logger } from "firebase-functions";
+import { generateNotificationContent } from './notifmessages';
+import { dateToString, getDbCollection, getDbDoc } from "./utils";
 
 
 let expo = new Expo();
@@ -19,8 +20,8 @@ export async function sendStreakNotification() {
     const content = contentDoc.data();
     if (!content) return;
 
-    const title = content.title;
-    const category = content.category;  // TODO: use these
+    const contentTitle = content.title;
+    const contentCategory = content.category;  // TODO: use these
 
     const uidMapping: {
         uid: string,
@@ -40,14 +41,16 @@ export async function sendStreakNotification() {
             return;
         }
 
+        console.log(`Sending notification to ${userDoc.id} ${userData.username}`);
+
+        const message = generateNotificationContent(contentTitle, contentCategory, userData);
+
         uidMapping.push({
             uid: userDoc.id,
             expoPushMessage: {
                 to: userData.expoPushToken,
                 sound: 'default',
-                title: '⏰ Got 2 minutes?',
-                subtitle: `🔥 ${title} - ${category} 🔥`,
-                body: 'A new challenge is waiting for you...'  // TODO: Make this more dynamic
+                ...message
             }
         });
         pushMessages.push(uidMapping[uidMapping.length - 1].expoPushMessage);
@@ -77,7 +80,7 @@ export async function sendStreakNotification() {
         const uid = uidMapping[i].uid;
         if (ticket.status === 'ok') {
             // Save ticket id to db, where it can be used to check receipt status 30 min later
-            await getDbDoc('users', uid).set({
+            await getDbDoc('users', uid).update({
                 expoPushTicket: ticket.id
             });
         } else {
@@ -94,7 +97,6 @@ export async function sendStreakNotification() {
         }
     }
 }
-
 
 /**
  * Check the status of push notification receipts 30 minutes after sending them
