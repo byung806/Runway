@@ -113,6 +113,7 @@ interface FirebaseContextType {
     addFriend: (friend: string) => Promise<{ success: boolean, errorMessage: string }>;
     getLeaderboard: (type: LeaderboardType) => Promise<void>;
     updateDay: () => Promise<void>;
+    deleteAccount: () => Promise<{ success: boolean }>;
 
     sendExpoPushToken: (token: string) => Promise<void>;
 }
@@ -352,9 +353,27 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             });
     }
 
+    /**
+     * Updates the today state to the current date
+     */
     async function updateDay() {
         setToday(getTodayDate());
         setTodayCompleted(today in (userData?.point_days ?? {}));
+    }
+
+    /**
+     * Deletes the current user's account
+     */
+    async function deleteAccount(): Promise<{ success: boolean }> {
+        try {
+            console.log('DATABASE CALL: delete account');
+            await functions()
+                .httpsCallable('deleteAccount')();
+            return { success: true };
+        } catch (error: any) {
+            console.log(error + ' from FirebaseProvider.tsx:  deleteAccount');
+            return { success: false };
+        }
     }
 
     return (
@@ -378,6 +397,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             addFriend,
             getLeaderboard,
             updateDay,
+            deleteAccount,
 
             sendExpoPushToken,
         }}>

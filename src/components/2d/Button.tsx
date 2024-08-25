@@ -1,9 +1,9 @@
 import { ThemeContext } from '@/providers/ThemeProvider';
 import { Styles } from '@/styles';
 import * as Haptics from 'expo-haptics';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 
 import useBounceAnimation, { SoundType } from '@/utils/useBounceAnimation';
 import { animated, config } from '@react-spring/native';
@@ -94,14 +94,33 @@ export function CloseButton({ color, onPress }: { color?: string, onPress: () =>
 }
 
 
-export function LeaderboardButton({ onPress }: { onPress: () => void }) {
+export function IconButton({ type, visible, onPress, style }: { type: 'settings' | 'leaderboard', visible?: boolean, onPress: () => void, style?: any }) {
     const theme = useContext(ThemeContext);
+
+    const iconName = type === 'settings' ? 'gear' : 'trophy';
+    const iconColor = type === 'settings' ? theme.runwayTextColor : theme.trophyYellow;
+    const side = type === 'settings' ? 'left' : 'right';
 
     const { scale: buttonScale, onPressIn: buttonOnPressIn, onPress: buttonOnPress, onPressOut: buttonOnPressOut } = useBounceAnimation({
         scaleTo: 0.8,
         haptics: Haptics.ImpactFeedbackStyle.Heavy,
         config: config.gentle
     });
+
+    const initialOpacity = 1;
+
+    const opacity = useSharedValue(initialOpacity);
+    const translateY = useSharedValue(0);
+
+    useEffect(() => {
+        if (visible) {
+            opacity.value = withTiming(initialOpacity, { duration: 600 });
+            // translateY.value = withTiming(0, { duration: 600 });
+        } else {
+            opacity.value = withTiming(0.3, { duration: 300 });
+            // translateY.value = withTiming(100, { duration: 600 });
+        }
+    }, [visible]);
 
     return (
         <Pressable
@@ -111,23 +130,35 @@ export function LeaderboardButton({ onPress }: { onPress: () => void }) {
             onPressOut={buttonOnPressOut}
             style={{ ...Styles.centeringContainer }}
         >
-            <ReactSpringAnimatedView style={{
-                alignSelf: 'center',
-                position: 'absolute',
-                bottom: 30,
-                left: 20,
-                // @ts-ignore
-                transform: [{ scale: buttonScale }],
-
-                height: 60,
-                width: 60,
-                borderRadius: 20,
-                backgroundColor: theme.black,
-                ...Styles.shadow,
-                ...Styles.centeringContainer,
+            <Animated.View style={{
+                width: '100%',
+                position: 'relative',
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                opacity: opacity,
+                transform: [{ translateY: translateY }],
             }}>
-                <FontAwesome name={'trophy'} size={30} color={theme.trophyYellow} />
-            </ReactSpringAnimatedView>
+                <ReactSpringAnimatedView style={{
+                    alignSelf: 'center',
+                    position: 'absolute',
+                    bottom: 30,
+                    left: side === 'left' ? 20 : undefined,
+                    right: side === 'right' ? 20 : undefined,
+                    ...style,
+
+                    // @ts-ignore
+                    transform: [{ scale: buttonScale }],
+
+                    height: 60,
+                    width: 60,
+                    borderRadius: 20,
+                    backgroundColor: theme.black,
+                    ...Styles.shadow,
+                    ...Styles.centeringContainer,
+                }}>
+                    <FontAwesome name={iconName} size={30} color={iconColor} />
+                </ReactSpringAnimatedView>
+            </Animated.View>
         </Pressable>
     )
 }

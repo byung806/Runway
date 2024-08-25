@@ -1,16 +1,17 @@
-import { BaseCardAttributes, DateCard, FloatingProfile, LeaderboardButton, ListFooterComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Dimensions, LayoutAnimation, Linking, Pressable, View } from 'react-native';
-
+import { BaseCardAttributes, DateCard, FloatingProfile, ListFooterComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
 import BorderedCard from '@/components/2d/BorderedCard';
+import { IconButton } from '@/components/2d/Button';
+import ProfileModal from '@/components/2d/ProfileModal';
 import { FirebaseContent, ThemeContext, useFirebase } from '@/providers';
+import { Styles } from '@/styles';
 import { secondsUntilTomorrowUTC, stringToDate } from '@/utils/date';
 import { delay } from '@/utils/utils';
+import Foundation from '@expo/vector-icons/Foundation';
 import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Dimensions, LayoutAnimation, Linking, Pressable, View } from 'react-native';
 // @ts-ignore
 import CountDown from 'react-native-countdown-component';
-import Foundation from '@expo/vector-icons/Foundation';
-import { Styles } from '@/styles';
 
 
 interface DateCardAttributes extends BaseCardAttributes {
@@ -22,6 +23,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
 
+    const [profileModalVisible, setProfileModalVisible] = useState(false);
     const [floatingProfileVisible, setFloatingProfileVisible] = useState(true);
 
     const initialCardState = [
@@ -204,7 +206,11 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                 onMomentumScrollEnd={() => setFloatingProfileVisible(true)}
                 onEndReached={addPreviousDay}
             />
-            <LeaderboardButton onPress={() => navigation.navigate('leaderboard')} />
+
+            <IconButton type='settings' visible={floatingProfileVisible} onPress={() => setProfileModalVisible(true)} />
+            <ProfileModal visible={profileModalVisible} setVisible={setProfileModalVisible} />
+
+            <IconButton type='leaderboard' visible={floatingProfileVisible} onPress={() => navigation.navigate('leaderboard')} />
         </>
     );
 }

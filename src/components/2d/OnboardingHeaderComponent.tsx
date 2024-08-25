@@ -30,6 +30,7 @@ export default function OnboardingHeaderComponent({ height, username, setUsernam
                 ...Styles.centeringContainer,
             }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                 <Text style={{ fontSize: 40, textAlign: 'center', marginBottom: 30, color: theme.white }}>What should we call you?</Text>
+                <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 30, color: theme.gray }}>This will be public to everyone!</Text>
                 <TextInput
                     value={username}
                     onChangeText={setUsername}

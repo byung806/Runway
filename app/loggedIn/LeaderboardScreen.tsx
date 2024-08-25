@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Styles } from '@/styles';
 
 import { LeaderboardData, LeaderboardType, ThemeContext, useFirebase } from '@/providers';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as Haptics from 'expo-haptics';
@@ -81,10 +81,6 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                             justifyContent: 'space-between',
                         }}>
                             <BackArrow color={theme.white} onPress={() => { navigation.navigate('app') }} />
-                            {/* <Text style={{ color: theme.white, fontSize: 20, ...Styles.shadow }}>Back</Text> */}
-                            <Pressable onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); firebase.logOut(); }} style={{ flexDirection: 'row', gap: 10, ...Styles.centeringContainer }}>
-                                <Text style={{ color: theme.white, fontSize: 16 }}>Log Out</Text>
-                            </Pressable>
                         </View>
 
                         {/* Profile */}
@@ -117,10 +113,12 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                             }}>
                                 <View style={{ pointerEvents: 'none', ...Styles.centeringContainer, }}>
                                     <Text style={{ fontSize: 40, textAlign: 'center', color: theme.white }}>
-                                        <Text style={{ color: theme.runwayTextColor }}> {firebase.userData?.username}</Text>
+                                        <Text style={{ color: theme.runwayTextColor }}> {firebase.userData?.username} </Text>
+                                        { firebase.userData && firebase.userData?.streak > 0 &&
+                                        <FontAwesome5 name='fire-alt' size={30} color={'#cc5500'} style={{ ...Styles.shadow }} />}
                                     </Text>
-                                    <Text style={{ fontSize: 80, ...Styles.lightShadow, color: theme.runwayTextColor }}>{firebase.userData?.points}</Text>
-                                    <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.runwayTextColor }}>points</Text>
+                                    <Text style={{ fontSize: 80, ...Styles.lightShadow, color: theme.white }}>{firebase.userData?.points}</Text>
+                                    <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.white }}>points</Text>
                                 </View>
                                 <SegmentedControl
                                     values={['Global', 'Friends']}
