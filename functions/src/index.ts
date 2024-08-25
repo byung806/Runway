@@ -7,7 +7,7 @@ import { onSchedule } from "firebase-functions/v2/scheduler";
 import { getLeaderboard } from "./leaderboard";
 import { handleNotificationReceipts, sendStreakNotification } from "./notifs";
 import { requestCompleteDate, updateStreaksDaily } from "./streak";
-import { addFriend, getUserData, initializeUser, sendExpoPushToken } from "./user";
+import { addFriend, deleteAccount, getUserData, initializeUser, sendExpoPushToken } from "./user";
 
 
 /**
@@ -40,6 +40,10 @@ exports.getLeaderboard = onCall(getLeaderboard);
  */
 exports.sendExpoPushToken = onCall(sendExpoPushToken);
 
+/**
+ * Deletes the user's account
+ */
+exports.deleteAccount = onCall(deleteAccount);
 
 
 /**

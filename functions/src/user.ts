@@ -4,6 +4,7 @@ import { updateLeaderboard } from "./leaderboard";
 import { INITIAL_POINTS } from "./points";
 import { updateStreak } from "./streak";
 import { getDbDoc } from "./utils";
+import * as admin from "firebase-admin";
 
 /**
  * Initializes the user document and the usernames → uid mapping when a user is registered
@@ -43,7 +44,7 @@ export const initializeUser = async (request: CallableRequest): Promise<undefine
  */
 export const getUserData = async (request: CallableRequest): Promise<FirebaseFirestore.DocumentData | undefined> => {
     if (!request.auth) return;
-    
+
     const userData = await getDbDoc('users', request.auth.uid).get();
     if (!userData.exists) {
         return;
@@ -109,4 +110,36 @@ export const sendExpoPushToken = async (request: CallableRequest): Promise<undef
         expoPushToken: request.data.token
     });
     return;
+}
+
+/**
+ * Deletes the user's account
+ */
+export const deleteAccount = async (request: CallableRequest): Promise<{ success: boolean }> => {
+    if (!request.auth) return { success: false };
+    const uid = request.auth.uid;
+
+    try {
+        // Delete the user's Firebase Authentication account
+        await admin.auth().deleteUser(uid);
+
+        const userData = await getDbDoc('users', uid).get()
+        const username = userData.get("username");
+        const friends = userData.get("friends") as string[];
+
+        await getDbDoc('users', uid).delete();
+        await getDbDoc('usernames', username).delete();
+        await getDbDoc('leaderboard', username).delete();
+
+        for (const friend of friends) {
+            const friendUID = (await getDbDoc('usernames', friend).get()).get("uid");
+            await getDbDoc('users', friendUID).update({
+                friends: FieldValue.arrayRemove(username)
+            });
+        }
+    } catch (error) {
+        return { success: false };
+    }
+
+    return { success: true };
 }
