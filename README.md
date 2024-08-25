@@ -13,7 +13,7 @@
 <img src="https://github.com/user-attachments/assets/fab61699-4abb-42ae-ac41-3125a33472bd" alt="ss1" width="24%"/>
 
 ## Running it
-1. Open up [this TestFlight link](https://testflight.apple.com/join/ZSrzVEeb) on your mobile device
+1. Open up [this TestFlight link](https://testflight.apple.com/join/Aw2kB9mT) on your mobile device
 2. Follow the instructions and install the preview of the app
 3. Enjoy!
 
