@@ -186,17 +186,6 @@ function ContentFooterComponent() {
                     <Text style={{ textAlign: 'center', fontSize: 18, color: colors.textColor }}>
                         This lesson created by {content.author}
                     </Text>
-
-                    {!isOnboardingContent && allQuestionsCompleted &&
-                        <Pressable onPress={() => {
-                            Linking.openURL('mailto:byung806@gmail.com?subject=Runway Possible Content Creator&body=I would like to create content for Runway!\n\nHere are some ideas I have:\n- ');
-                        }} style={{ gap: 8, flexDirection: 'row', ...Styles.centeringContainer, ...Styles.shadow }}>
-                            <Foundation name="mail" size={24} color="white" />
-                            <Text style={{ textAlign: 'center', fontSize: 14, color: theme.white }}>
-                                Want to create content for Runway?
-                            </Text>
-                        </Pressable>
-                    }
                 </View>
             }
         </View>

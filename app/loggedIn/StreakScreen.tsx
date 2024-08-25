@@ -4,12 +4,13 @@ import { Styles } from "@/styles";
 import { delay } from "@/utils/utils";
 import { useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import LottieView from 'lottie-react-native';
 import { useContext, useEffect, useRef, useState } from "react";
 import { Easing, View } from "react-native";
 import AnimatedNumbers from 'react-native-animated-numbers';
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import LottieView from 'lottie-react-native';
+
 
 export default function StreakScreen({ route, navigation }: { route: any, navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
@@ -29,7 +30,7 @@ export default function StreakScreen({ route, navigation }: { route: any, naviga
     const [pointsEarned, setPointsEarned] = useState(route.params?.pointsEarned + route.params?.earnedStreakBonus ?? 0);
     const [streak, setStreak] = useState(route.params?.initialStreak ?? 0);
     const [buttonClickable, setButtonClickable] = useState(false);
-    
+
     const pointsOpacity = useSharedValue(0);
     const buttonOpacity = useSharedValue(0);
 

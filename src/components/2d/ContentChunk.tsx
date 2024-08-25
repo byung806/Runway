@@ -7,6 +7,7 @@ import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import Button from "./Button";
 import Text from "./Text";
 
+
 export type ContentChunkType = TextContentChunkType | ImageContentChunkType | IconContentChunkType | QuestionContentChunkType | EmptySpaceContentChunkType;
 export function ContentChunk({ focused, chunk }: { focused: boolean, chunk: ContentChunkType }) {
     switch (chunk.type) {
@@ -78,7 +79,7 @@ export function ImageContentChunk({ focused, uri }: ImageContentChunkType & Base
         <BaseContentChunk focused={focused} style={{ paddingVertical: Dimensions.get("window").height * 0.15 }}>
             <Image
                 source={{ uri }}
-                style={{ width: '100%', paddingHorizontal: 20, aspectRatio: aspectRatio, borderRadius: 20, paddingVertical: Dimensions.get("window").height * 0.15 }}
+                style={{ width: '100%', aspectRatio: aspectRatio, borderRadius: 20 }}
                 resizeMode='contain'
             />
         </BaseContentChunk>

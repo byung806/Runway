@@ -1,6 +1,6 @@
 import { BaseCardAttributes, DateCard, FloatingProfile, LeaderboardButton, ListFooterComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Dimensions, LayoutAnimation, View } from 'react-native';
+import { Dimensions, LayoutAnimation, Linking, Pressable, View } from 'react-native';
 
 import BorderedCard from '@/components/2d/BorderedCard';
 import { FirebaseContent, ThemeContext, useFirebase } from '@/providers';
@@ -9,6 +9,8 @@ import { delay } from '@/utils/utils';
 import { StackNavigationProp } from '@react-navigation/stack';
 // @ts-ignore
 import CountDown from 'react-native-countdown-component';
+import Foundation from '@expo/vector-icons/Foundation';
+import { Styles } from '@/styles';
 
 
 interface DateCardAttributes extends BaseCardAttributes {
@@ -141,18 +143,36 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                         // Coming soon card
                         return (
                             <BorderedCard colors={item.colors}>
-                                <View style={{ gap: 20 }}>
-                                    <Text style={{ color: item.colors.textColor, fontSize: 20, textAlign: 'center' }}>Next card available in:</Text>
-                                    <CountDown
-                                        until={secondsUntilTomorrowUTC()}
-                                        size={30}
-                                        onFinish={onNewDay}
-                                        digitStyle={{ backgroundColor: item.colors.textColor, borderRadius: 10, fontFamily: 'Inter_800ExtraBold' }}
-                                        digitTxtStyle={{ color: item.colors.backgroundColor }}
-                                        timeToShow={['H', 'M', 'S']}
-                                        timeLabelStyle={{ opacity: 0 }}
-                                    />
-                                </View>
+                                <>
+                                    <View style={{ gap: 20 }}>
+                                        <Text style={{ color: item.colors.textColor, fontSize: 20, textAlign: 'center' }}>Next card available in:</Text>
+                                        <CountDown
+                                            until={secondsUntilTomorrowUTC()}
+                                            size={30}
+                                            onFinish={onNewDay}
+                                            digitStyle={{ backgroundColor: item.colors.textColor, borderRadius: 10, fontFamily: 'Inter_800ExtraBold' }}
+                                            digitTxtStyle={{ color: item.colors.backgroundColor }}
+                                            timeToShow={['H', 'M', 'S']}
+                                            timeLabelStyle={{ opacity: 0 }}
+                                        />
+
+                                    </View>
+                                    <View style={{
+                                        position: 'absolute',
+                                        bottom: 0,
+                                        marginBottom: 20,
+                                        width: '100%',
+                                    }}>
+                                        <Pressable onPress={() => {
+                                            Linking.openURL('mailto:byung806@gmail.com?subject=Runway Possible Content Creator&body=I would like to create content for Runway!\n\nHere are some ideas I have:\n- ');
+                                        }} style={{ gap: 8, ...Styles.centeringContainer, ...Styles.shadow, paddingHorizontal: 30 }}>
+                                            <Foundation name="mail" size={24} color="white" />
+                                            <Text style={{ textAlign: 'center', fontSize: 14, color: theme.white }}>
+                                                Want to create content for Runway?
+                                            </Text>
+                                        </Pressable>
+                                    </View>
+                                </>
                             </BorderedCard>
                         );
                     } else {

@@ -1,5 +1,6 @@
 import { ContentProvider, ThemeContext } from '@/providers';
-import { FirebaseContent, ContentColors, useFirebase } from '@/providers/FirebaseProvider';
+import { ContentColors, FirebaseContent, useFirebase } from '@/providers/FirebaseProvider';
+import { Styles } from '@/styles';
 import { sameDay, stringToDate } from '@/utils/date';
 import { AntDesign } from "@expo/vector-icons";
 import { forwardRef, memo, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
@@ -9,8 +10,6 @@ import BorderedCard, { BorderedCardRef } from './BorderedCard';
 import Button from './Button';
 import ContentModal from './ContentModal';
 import Text from './Text';
-import { Styles } from '@/styles';
-
 
 
 interface DateCardProps {
