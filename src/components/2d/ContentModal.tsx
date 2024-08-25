@@ -100,7 +100,7 @@ function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => vo
                 </View>
             }
 
-            <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor }}>
+            <Text style={{ textAlign: 'center', fontSize: 40, color: colors.textColor, paddingHorizontal: 20 }}>
                 {content.title}
             </Text>
 

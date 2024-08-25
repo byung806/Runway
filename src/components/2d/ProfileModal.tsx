@@ -1,13 +1,9 @@
 import { ThemeContext, useFirebase } from '@/providers';
 import { Styles } from '@/styles';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { useContext } from 'react';
-import { Alert, Linking, Modal, Pressable, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Button, { CloseButton } from './Button';
-import Text from './Text';
 import { BlurView } from '@react-native-community/blur';
+import { useContext, useState } from 'react';
+import { Alert, Linking, Modal, Pressable, View } from 'react-native';
+import Button from './Button';
 
 const CONTACT_US_EMAIL = 'mailto:byung806@gmail.com?subject=Runway%20Contact%20Us';
 const PRIVACY_POLICY_URL = 'https://byung806.github.io/RunwayWebsite/privacy-policy';
@@ -15,7 +11,8 @@ const PRIVACY_POLICY_URL = 'https://byung806.github.io/RunwayWebsite/privacy-pol
 export default function ProfileModal({ visible, setVisible }: { visible: boolean, setVisible: (visible: boolean) => void }) {
     const firebase = useFirebase();
     const theme = useContext(ThemeContext);
-    const navigation = useNavigation<any>();
+
+    const [deleteLoading, setDeleteLoading] = useState(false);
 
     async function contactUs() {
         await Linking.openURL(CONTACT_US_EMAIL);
@@ -43,10 +40,11 @@ export default function ProfileModal({ visible, setVisible }: { visible: boolean
                 {
                     text: "Delete Account",
                     onPress: async () => {
+                        setDeleteLoading(true);
                         const { success } = await firebase.deleteAccount();
-                        if (success) {
-                            setVisible(false);
-                        }
+                        setDeleteLoading(false);
+                        
+                        await logOut();
                     },
                     style: "destructive"
                 }
@@ -98,6 +96,7 @@ export default function ProfileModal({ visible, setVisible }: { visible: boolean
                         <Button
                             title="Delete Account"
                             onPress={deleteAccount}
+                            showLoadingSpinner={deleteLoading}
                             backgroundColor={theme.questionIncorrectColor}
                             textColor={theme.white}
                             style={{ width: '100%', height: 50 }}
