@@ -7,10 +7,10 @@
 - Fun! :rocket: - every challenge is designed to be engaging and fun, with bright colors and clean visuals!
 
 ## Screenshots
-<img src="https://github.com/user-attachments/assets/e11cd178-bf7e-4d61-85e3-e085bf4e0d5a" alt="ss1" width="24%"/>
-<img src="https://github.com/user-attachments/assets/439f98c6-9640-486f-8a85-cec5dc75ebf4" alt="ss1" width="24%"/>
-<img src="https://github.com/user-attachments/assets/5c35485d-9515-4dbe-879b-888f447df7f5" alt="ss1" width="24%"/>
-<img src="https://github.com/user-attachments/assets/986adc3a-df53-4453-8368-2ad171f218e4" alt="ss1" width="24%"/>
+<img src="https://github.com/user-attachments/assets/3ae0afd0-df43-4853-b6f1-2f5e460bcf49" alt="ss1" width="24%"/>
+<img src="https://github.com/user-attachments/assets/de6cc8ab-7fec-48c0-8303-940cd599bd64" alt="ss1" width="24%"/>
+<img src="https://github.com/user-attachments/assets/5303bfd2-e322-4e85-93a9-da3527095553" alt="ss1" width="24%"/>
+<img src="https://github.com/user-attachments/assets/fab61699-4abb-42ae-ac41-3125a33472bd" alt="ss1" width="24%"/>
 
 ## Running it
 1. Open up [this TestFlight link](https://testflight.apple.com/join/ZSrzVEeb) on your mobile device
