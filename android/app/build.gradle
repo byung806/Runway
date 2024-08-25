@@ -83,13 +83,13 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.hackclub.runway'
+    namespace 'com.byung806.runway'
     defaultConfig {
-        applicationId 'com.hackclub.runway'
+        applicationId 'com.byung806.runway'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "0.0.1"
+        versionName "1.0.0"
     }
     signingConfigs {
         debug {

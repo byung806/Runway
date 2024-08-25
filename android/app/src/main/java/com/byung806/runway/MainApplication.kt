@@ -1,4 +1,4 @@
-package com.hackclub.runway
+package com.byung806.runway
 
 import android.app.Application
 import android.content.res.Configuration
