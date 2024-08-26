@@ -12,10 +12,12 @@
 <img src="https://github.com/user-attachments/assets/5303bfd2-e322-4e85-93a9-da3527095553" alt="ss1" width="24%"/>
 <img src="https://github.com/user-attachments/assets/fab61699-4abb-42ae-ac41-3125a33472bd" alt="ss1" width="24%"/>
 
-## Running it
-1. Open up [this TestFlight link](https://testflight.apple.com/join/Aw2kB9mT) on your mobile device
-2. Follow the instructions and install the preview of the app
-3. Enjoy!
+## Using it
+### For iOS:
+Download Runway for iOS on the App Store [here](https://apps.apple.com/app/runway-gamify-learning/id6639588047)!
+
+### For Android:
+Runway is coming to Google Play soon!
 
 ## Building it on your own
 ### Clone this repository
