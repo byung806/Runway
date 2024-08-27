@@ -113,7 +113,7 @@ export function ContentProvider(props: ContentProviderProps) {
      * Finish the content and update the user's data
      */
     async function finish() {
-        if (notifications.permissionStatus === 'undetermined') {
+        if (!isOnboardingContent && notifications.permissionStatus === 'undetermined') {
             Alert.alert(
                 'Stay in the loop!',
                 'Get notified every day when new content is available!',
