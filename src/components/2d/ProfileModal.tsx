@@ -5,7 +5,7 @@ import { useContext, useState } from 'react';
 import { Alert, Linking, Modal, Pressable, View } from 'react-native';
 import Button from './Button';
 
-const CONTACT_US_EMAIL = 'mailto:byung806@gmail.com?subject=Runway%20Contact%20Us';
+const CONTACT_US_EMAIL = 'https://byung806.github.io/RunwayWebsite/faq';
 const PRIVACY_POLICY_URL = 'https://byung806.github.io/RunwayWebsite/privacy-policy';
 
 export default function ProfileModal({ visible, setVisible }: { visible: boolean, setVisible: (visible: boolean) => void }) {

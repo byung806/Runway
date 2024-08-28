@@ -166,7 +166,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                                         width: '100%',
                                     }}>
                                         <Pressable onPress={() => {
-                                            Linking.openURL('mailto:byung806@gmail.com?subject=Runway Possible Content Creator&body=I would like to create content for Runway!\n\nHere are some ideas I have:\n- ');
+                                            Linking.openURL('mailto:runwaystem@gmail.com?subject=Runway Possible Content Creator&body=I would like to create content for Runway!\n\nHere are some ideas I have:\n- ');
                                         }} style={{ gap: 8, ...Styles.centeringContainer, ...Styles.shadow, paddingHorizontal: 30 }}>
                                             <Foundation name="mail" size={24} color="white" />
                                             <Text style={{ textAlign: 'center', fontSize: 14, color: theme.white }}>
