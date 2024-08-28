@@ -28,15 +28,6 @@ const notificationMessages: NotificationMessage[] = [
     },
     {
         title: 'A new challenge is out!',
-        body: 'It\'s probably too hard for most people...',
-    },
-    // {  // this is a little mean
-    //     title: 'Top 10 users get an ice cream party!',
-    //     body: 'Too bad you\'re not invited...',
-    //     requirements: (userData) => userData.point_days.length > 10 && true   // TODO: implement this
-    // },
-    {
-        title: 'A new challenge is out!',
         body: (userData, title, category) => `You're doing great, ${userData.username}!`,
     },
     {
@@ -50,6 +41,44 @@ const notificationMessages: NotificationMessage[] = [
     {
         title: (userData, title, category) => `You're on a ${userData.streak}-day streak`,
         body: (userData, title, category) => `Get it to ${userData.streak + 1} with today's challenge!`,
+    },
+    {
+        title: 'Keep the momentum going!',
+        body: 'You\'re on a roll! Keep it up!',
+    },
+    {
+        title: '👀 Missed us?',
+        body: (userData, title, category) => `Learn about ${title}!`,
+    },
+    {
+        title: 'Quick Break?',
+        body: 'Take 2 min and learn something new!'
+    },
+    {
+        title: 'Keep that streak alive!',
+        body: (userData, title, category) => `You're on fire, ${userData.username} 🔥!`,
+        requirements: (userData) => userData.streak > 2
+    },
+    {
+        title: 'You\'re on a roll!',
+        body: (userData, title, category) => `Learn about ${title}!`
+    },
+    {
+        title: '👀 Psst... got a minute?',
+        body: 'Today\'s lesson is out!'
+    },
+    {
+        title: 'Happy birthday!',
+        body: 'We know it\'s not your birthday, but a new challenge is out!'
+    },
+    {
+        title: 'Hey there!',
+        body: (userData, title, category) => `It\'s time to learn about ${title}! 💜`
+    },
+    {
+        title: 'Hello!',
+        body: 'I can\'t believe how high your streak is! KEEP IT GOING!',
+        requirements: (userData) => userData.streak > 10
     }
 ];
 

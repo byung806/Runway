@@ -5,7 +5,7 @@ initializeApp();
 import { onCall } from "firebase-functions/v2/https";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { getLeaderboard } from "./leaderboard";
-import { handleNotificationReceipts, sendStreakNotification } from "./notifs";
+import { handleNotificationReceipts, sendStreakNotification, sendStreakNotificationDebug } from "./notifs";
 import { requestCompleteDate, updateStreaksDaily } from "./streak";
 import { addFriend, deleteAccount, getUserData, initializeUser, sendExpoPushToken } from "./user";
 
@@ -57,6 +57,8 @@ exports.updateStreaksDaily = onSchedule("10 0 * * *", updateStreaksDaily);
  * Runs at 12:00 AM every day
  */
 exports.sendStreakNotification = onSchedule("0 0 * * *", sendStreakNotification);
+
+exports.sendStreakNotificationDebug = onSchedule("0 0 * * *", sendStreakNotificationDebug);
 
 /**
  * Check the status of push notification receipts 30 minutes after sending them
