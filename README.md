@@ -1,5 +1,5 @@
 # Runway - Gamify Learning
-**The ultimate daily mobile app, for iOS and Android.** Coming soon to the App Store & Google Play!
+**The ultimate daily learning app, for iOS and Android.** Available on the App Store (coming soon to Google Play)!
 
 - Build strong habits :muscle: - Runway has a unique approach of one lesson per day. This is great for habit-building, so you learn over time!
 - Challenge friends :medal: - one of the core features of Runway is its competitive aspect! Add friends or compete with everyone using Runway!
