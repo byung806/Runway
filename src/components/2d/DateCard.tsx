@@ -29,7 +29,6 @@ export interface DateCardRef {
     onPressOut: () => void;
 }
 
-// TODO: show streak indicator on card
 const DateCard = forwardRef(({ comingSoon = false, date, content, colors, focused, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();

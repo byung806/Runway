@@ -7,7 +7,7 @@ import Text from './Text';
 import TextInput from './TextInput';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// TODO: MAKE BETTER
+// TODO: MAKE friends system BETTER (add & remove)
 export default function AddFriendModal({ visible, setVisible }: { visible: boolean, setVisible: (visible: boolean) => void }) {
     const firebase = useFirebase();
     const theme = useContext(ThemeContext);

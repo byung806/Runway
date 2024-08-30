@@ -23,7 +23,7 @@ export async function sendStreakNotificationDebug() {
     if (!content) return;
 
     const contentTitle = content.title;
-    const contentCategory = content.category;  // TODO: use these
+    const contentCategory = content.category;
 
     const uidMapping: {
         uid: string,
@@ -117,7 +117,7 @@ export async function sendStreakNotification() {
     if (!content) return;
 
     const contentTitle = content.title;
-    const contentCategory = content.category;  // TODO: use these
+    const contentCategory = content.category;
 
     const uidMapping: {
         uid: string,
