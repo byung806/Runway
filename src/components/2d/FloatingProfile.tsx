@@ -3,7 +3,7 @@ import { Styles } from "@/styles";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { BlurView } from '@react-native-community/blur';
 import React, { useContext, useEffect } from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Text from "./Text";
@@ -66,16 +66,18 @@ export default function FloatingProfile({ visible }: { visible: boolean }) {
                     transform: [{ translateY: translateY }],
                 }}
             >
-                <BlurView
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                    }}
-                    blurType="ultraThinMaterialDark"
-                    blurAmount={10}
-                    // overlayColor="black"
-                    reducedTransparencyFallbackColor="black"
-                />
+                {Platform.OS === 'ios' &&
+                    <BlurView
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                        }}
+                        blurType="ultraThinMaterialDark"
+                        blurAmount={10}
+                        // overlayColor="black"
+                        reducedTransparencyFallbackColor="black"
+                    />
+                }
             </Animated.View>
         </>
     );
