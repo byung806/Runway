@@ -113,6 +113,18 @@ export const sendExpoPushToken = async (request: CallableRequest): Promise<undef
 }
 
 /**
+ * Set user to rated
+ */
+export const setRated = async (request: CallableRequest): Promise<undefined> => {
+    if (!request.auth) return;
+
+    await getDbDoc('users', request.auth.uid).update({
+        rated: true
+    });
+    return;
+}
+
+/**
  * Deletes the user's account
  */
 export const deleteAccount = async (request: CallableRequest): Promise<{ success: boolean }> => {

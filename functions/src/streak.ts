@@ -3,6 +3,9 @@ import { dateToString, getDbCollection, getDbDoc, stringToDate } from "./utils";
 import { updateLeaderboard } from "./leaderboard";
 import { pointsToAddForPastContent, pointsToAddForToday } from "./points";
 
+
+const DAYS_MISSED_TO_LOSE_STREAK = 2;
+
 /**
  * Updates the streaks for all users daily
  */
@@ -35,7 +38,7 @@ function whatToDoWithStreak(currentDate: string, lastLoggedDate: string | null) 
             shouldResetStreak: false
         };
     }
-    if (diffDays === 1) {
+    if (diffDays <= DAYS_MISSED_TO_LOSE_STREAK) {
         return {
             canIncrementStreak: true,
             shouldResetStreak: false

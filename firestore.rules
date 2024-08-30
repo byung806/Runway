@@ -8,5 +8,8 @@ service cloud.firestore {
         match /content/{document=**} {
             allow read: if request.auth != null;
         }
+        match /news/{document=**} {
+            allow read: if request.auth != null;
+        }
     }
 }
