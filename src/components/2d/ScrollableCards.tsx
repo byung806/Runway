@@ -133,6 +133,9 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                             }}
                             onPressOut={item.ref?.onPressOut}
+                            style={{
+                                marginHorizontal: padding,
+                            }}
                         >
                             {
                                 cloneElement(renderItem({ item, index }), {
@@ -190,7 +193,7 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                     itemVisiblePercentThreshold: 75,  // how much of the item is visible
                     waitForInteraction: false
                 }}
-                contentContainerStyle={{ gap: padding, paddingTop: paddingAboveHeader, paddingBottom: footer ? 0 : (Dimensions.get("window").height - boxHeight) / 2, paddingHorizontal: padding }}
+                contentContainerStyle={{ gap: padding, paddingTop: paddingAboveHeader, paddingBottom: footer ? 0 : (Dimensions.get("window").height - boxHeight) / 2 }}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 decelerationRate='fast'
