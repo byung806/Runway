@@ -16,19 +16,10 @@ export interface Theme {
 
     white: string;
     black: string;
-    accentLighter: string;
     accent: string;
-    accentDarker: string;
-    border: string;
     gray: string;
-    grayDark: string;
-    background: string;
-    backgroundSecondary: string;
-    backgroundInverse: string;
     text: string;
     textPlaceholder: string;
-    textInverse: string;
-    subtext: string;
 }
 
 const CommonThemeColors = {

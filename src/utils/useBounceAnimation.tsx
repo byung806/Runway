@@ -5,7 +5,6 @@ import useSound, { PlaySoundFunction, PossibleSounds } from './useSound';
 
 export type SoundType = undefined | 'none' | PossibleSounds;
 
-// TODO: sound settings
 const useBounceAnimation = ({ pressIn, press, pressOut, scaleTo = 0.8, haptics, config, playSound }: {
     pressIn?: () => Promise<void>,
     press?: () => Promise<void>,

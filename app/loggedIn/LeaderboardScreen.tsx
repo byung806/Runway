@@ -12,7 +12,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import * as Haptics from 'expo-haptics';
 
 
-// TODO: better add & remove friend
 export default function LeaderboardScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
