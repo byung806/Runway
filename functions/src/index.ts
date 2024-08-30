@@ -7,7 +7,7 @@ import { onSchedule } from "firebase-functions/v2/scheduler";
 import { getLeaderboard } from "./leaderboard";
 import { handleNotificationReceipts, sendStreakNotification, sendStreakNotificationDebug } from "./notifs";
 import { requestCompleteDate, updateStreaksDaily } from "./streak";
-import { addFriend, deleteAccount, getUserData, initializeUser, sendExpoPushToken } from "./user";
+import { addFriend, deleteAccount, getUserData, initializeUser, sendExpoPushToken, setRated } from "./user";
 
 
 /**
@@ -39,6 +39,11 @@ exports.getLeaderboard = onCall(getLeaderboard);
  * Updates the user's expo push token
  */
 exports.sendExpoPushToken = onCall(sendExpoPushToken);
+
+/**
+ * Set user to rated
+ */
+exports.setRated = onCall(setRated);
 
 /**
  * Deletes the user's account
