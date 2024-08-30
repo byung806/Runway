@@ -78,7 +78,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                     fontSize: 40,
                     textAlign: 'center',
                     marginBottom: 20
-                }}>Water</Text>
+                }}>Auroras</Text>
                 <Button
                     title='Learn!'
                     backgroundColor={colors.textColor}

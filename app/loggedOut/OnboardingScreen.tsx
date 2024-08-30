@@ -44,10 +44,10 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
             }, index: 1
         }, {
             ref: null, colors: {
-                outerBackgroundColor: "#79c3e2",
-                borderColor: "#1f5fbe",
-                backgroundColor: "#6bb7d7",
-                textColor: "#205ebf"
+                outerBackgroundColor: "#190723",
+                borderColor: "#941475",
+                backgroundColor: "#320f3b",
+                textColor: "#74dc80"
             }, index: 2
         }
     ]);
@@ -56,25 +56,71 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
         title: username + '\'s first lesson!',
         category: 'onboarding',
         author: '',
-        body: 'Water is everywhere and is essential for life. But let\'s look at what water really is. Water is a made of hydrogen and oxygen - H₂O.',
-        questions: [
+        chunks: [
             {
-                question: 'What is the chemical formula for water?',
+                type: 'image',
+                uri: 'https://www.civitatis.com/blog/wp-content/uploads/2021/10/10-mejores-destinos-auroras-boreales.jpg'
+            },
+            {
+                type: 'paragraph',
+                text: 'We all know auroras as nature\'s beautiful light show. But how do they work? They start with the Sun - our sun is constantly sending out tiny particles called solar wind.'
+            },
+            {
+                type: 'image',
+                uri: 'https://www.worldatlas.com/r/w1200/upload/43/6d/74/shutterstock-752393257.jpg'
+            },
+            {
+                type: 'paragraph',
+                text: 'These particles are super energetic and zoom through space at incredible speeds. Earth has a protective force field called the magnetic field. Usually, it shields us from the solar wind, but near the North and South Poles, some particles sneak through.'
+            },
+            {
+                type: 'image',
+                uri: 'https://scx2.b-cdn.net/gfx/news/hires/2021/energyfromso.jpg'
+            },
+            {
+                type: 'paragraph',
+                text: 'Here\'s where the magic happens: these particles slam into atoms in our atmosphere, mostly oxygen and nitrogen. Oxygen atoms glow green or red, while nitrogen glows blue or purple. The result? A dazzling display of lights that dance and swirl in the sky!'
+            },
+            {
+                type: 'question',
+                question: 'What causes the different colors in an aurora?',
                 choices: [
                     {
-                        choice: 'CO₂',
+                        choice: 'The atmosphere\'s temperature',
                         correct: false
                     },
                     {
-                        choice: 'H₂O',
+                        choice: 'Which atoms particles hit',
                         correct: true
                     },
                     {
-                        choice: 'O₂',
+                        choice: 'Earth\'s rotation speed',
                         correct: false
                     },
                     {
-                        choice: 'NH₃',
+                        choice: 'The intensity of the Sun',
+                        correct: false
+                    }
+                ],
+            },
+            {
+                type: 'question',
+                question: 'If a planet was discovered that only had yellow auroras, what would this suggest?',
+                choices: [
+                    {
+                        choice: 'The atmosphere is very thin',
+                        correct: false
+                    },
+                    {
+                        choice: 'The planet has a weak magnetic field',
+                        correct: false
+                    },
+                    {
+                        choice: 'The atmosphere only contains one type of gas',
+                        correct: true
+                    },
+                    {
+                        choice: 'The planet is very hot',
                         correct: false
                     }
                 ]
