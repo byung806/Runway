@@ -21,6 +21,7 @@ interface FirebaseUserData {
     streak: number;
     uid: string;
     username: string;
+    rated?: boolean;
     expoPushToken?: string;
 }
 
@@ -98,6 +99,7 @@ interface FirebaseContextType {
 
     user: FirebaseAuthTypes.User | null;
     userData: FirebaseUserData | null;
+    news: string | null;
     todayCompleted: boolean;
     globalLeaderboard: LeaderboardData | null;
     friendsLeaderboard: LeaderboardData | null;
@@ -113,6 +115,7 @@ interface FirebaseContextType {
     addFriend: (friend: string) => Promise<{ success: boolean, errorMessage: string }>;
     getLeaderboard: (type: LeaderboardType) => Promise<void>;
     updateDay: () => Promise<void>;
+    setRated: () => Promise<void>;
     deleteAccount: () => Promise<{ success: boolean }>;
 
     sendExpoPushToken: (token: string) => Promise<void>;
@@ -127,6 +130,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     // Mirror of auth().currentUser
     const [user, setUser] = useState<FirebaseAuthTypes.User | null>(auth().currentUser);
     const [userData, setUserData] = useState<FirebaseUserData | null>(null);
+    const [news, setNews] = useState<string | null>(null);
     const [todayCompleted, setTodayCompleted] = useState(false);
     const [globalLeaderboard, setGlobalLeaderboard] = useState<LeaderboardData | null>(null);
     const [friendsLeaderboard, setFriendsLeaderboard] = useState<LeaderboardData | null>(null);
@@ -162,6 +166,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                 }
 
                 await getUserData();
+                await getNews();
                 setInitializing(false);
 
                 getLeaderboard('global');
@@ -362,6 +367,26 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     }
 
     /**
+     * Get news if it exists
+     */
+    async function getNews() {
+        console.log('DATABASE CALL: get news');
+        const data = await firestore().collection('news').doc('news').get();
+        if (data.exists) {
+            setNews(data.get('text') as string);
+        }
+    }
+
+    /**
+     * 
+     */
+    async function setRated() {
+        console.log('DATABASE CALL: set rated');
+        await functions()
+            .httpsCallable('setRated')();
+    }
+
+    /**
      * Deletes the current user's account
      */
     async function deleteAccount(): Promise<{ success: boolean }> {
@@ -382,6 +407,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 
             user,
             userData,
+            news,
             todayCompleted,
             globalLeaderboard,
             friendsLeaderboard,
@@ -397,6 +423,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             addFriend,
             getLeaderboard,
             updateDay,
+            setRated,
             deleteAccount,
 
             sendExpoPushToken,

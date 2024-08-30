@@ -1,6 +1,6 @@
 import { BaseCardAttributes, DateCard, FloatingProfile, ListFooterComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
 import BorderedCard from '@/components/2d/BorderedCard';
-import { IconButton } from '@/components/2d/Button';
+import Button, { IconButton } from '@/components/2d/Button';
 import ProfileModal from '@/components/2d/ProfileModal';
 import { FirebaseContent, ThemeContext, useFirebase } from '@/providers';
 import { Styles } from '@/styles';
@@ -12,6 +12,9 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions, LayoutAnimation, Linking, Pressable, View } from 'react-native';
 // @ts-ignore
 import CountDown from 'react-native-countdown-component';
+import Rate from 'react-native-rate';
+import AntDesign from '@expo/vector-icons/AntDesign';
+
 
 
 interface DateCardAttributes extends BaseCardAttributes {
@@ -117,12 +120,13 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
     const boxHeight = (Dimensions.get("window").width - padding * 2) * 1.4;
     const heights = {
         paddingAboveHeader: (Dimensions.get("window").height - boxHeight) / 2,
-        headerHeight: 0,
-        // headerHeight: (Dimensions.get("window").height - ((Dimensions.get("window").width - 30 * 2) * 1.6)) / 2 - 30 / 2
+        headerHeight: (firebase.userData?.rated === true || (firebase.userData?.streak ?? 0) === 0) && !firebase.news ? 0 : 50,
         padding: padding,
         boxHeight: boxHeight,
         footerHeight: Dimensions.get("window").height * 0.4,
     };
+
+    const [rateButtonDisabled, setRateButtonDisabled] = useState(false);
 
     // all attributes with undefined as never are injected by the ScrollableCards component (parent) later - undefined as never is to prevent typescript errors
     return (
@@ -131,13 +135,46 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
             <ScrollableCards<DateCardAttributes>
                 ref={scrollableCardsRef}
                 data={cards}
-                // header={
-                //     <ListHeaderComponent
-                //         height={heights.headerHeight}
+                header={
+                    <>
+                        {firebase.userData?.rated !== true && (firebase.userData?.streak ?? 0) !== 0 && !firebase.news &&
+                            <View style={{ height: heights.headerHeight, ...Styles.centeringContainer }}>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <AntDesign name="star" size={24} color={theme.accent} />
+                                    <AntDesign name="star" size={24} color={theme.accent} />
+                                    <AntDesign name="star" size={24} color={theme.accent} />
+                                    <AntDesign name="star" size={24} color={theme.accent} />
+                                    <AntDesign name="star" size={24} color={theme.accent} />
+                                </View>
+                                <Button title="Enjoying Runway? Rate us!" backgroundColor='transparent' textColor='white' disabled={rateButtonDisabled} onPress={async () => {
+                                    setRateButtonDisabled(true);
+                                    const options = {
+                                        AppleAppID: "6639588047",
+                                        preferInApp: false,
+                                        openAppStoreIfInAppFails: true,
+                                        fallbackPlatformURL: "https://byung806.github.io/RunwayWebsite/",
+                                    }
+                                    Rate.rate(options, async (success, errorMessage) => {
+                                        if (success) {
+                                            // this technically only tells us if the user successfully went to the Review Page. Whether they actually did anything, we do not know.
+                                            await firebase.setRated();
+                                            await firebase.getUserData();
+                                        }
+                                        if (errorMessage) {
+                                            // errorMessage comes from the native code. Useful for debugging, but probably not for users to view
+                                            console.error(`Rate.rate() error: ${errorMessage}`)
+                                        }
+                                        setRateButtonDisabled(false);
+                                    })
+                                }} />
+                            </View>}
 
-                //         arrowDown={undefined as never}
-                //     />
-                // }
+                        {firebase.news &&
+                            <View style={{ height: heights.headerHeight, ...Styles.centeringContainer }}>
+                                <Text style={{ color: theme.white, fontSize: 20, textAlign: 'center' }}>{firebase.news}</Text>
+                            </View>}
+                    </>
+                }
                 {...(cards.length !== 0 && { headerArrowDown: true })}
                 // floatingArrowUp
                 renderItem={({ item, index }) => {
