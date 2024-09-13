@@ -1,6 +1,6 @@
 import { ThemeContext } from '@/providers';
 import { useContext } from 'react';
-import { TextInput as TextInputNative } from 'react-native';
+import { Platform, TextInput as TextInputNative } from 'react-native';
 
 interface TextInputProps {
     placeholder: string;
@@ -9,6 +9,7 @@ interface TextInputProps {
     onChangeText: React.Dispatch<React.SetStateAction<string>>;
     disabled?: boolean;
     autoCorrect?: boolean;
+    textContentType?: string;
     autoComplete?: string | any;
     maxLength?: number;
     password?: boolean;
@@ -16,17 +17,24 @@ interface TextInputProps {
     style?: any;
 }
 
-export default function TextInput({ placeholder, defaultValue = '', value, onChangeText, disabled = false, autoCorrect = false, autoComplete, maxLength, password = false, email = false, style }: TextInputProps) {
+export default function TextInput({ placeholder, defaultValue = '', value, onChangeText, disabled = false, autoCorrect = false, textContentType, autoComplete, maxLength, password = false, email = false, style }: TextInputProps) {
     const theme = useContext(ThemeContext);
 
-    function validateValue(text: string) {
+    function _onChangeText(text: string) {
         if (email || password) {
-            return text.trim();
+            onChangeText(text.trim());
         }
-        text = text.trim().toLowerCase();
-
-        return text.replace(/[^0-9a-z_]/g, '');
+        onChangeText(text.trim().toLowerCase().replace(/[^0-9a-z_]/g, ''));
     }
+
+    // function validateValue(text: string) {
+    //     if (email || password) {
+    //         return text.trim();
+    //     }
+    //     text = text.trim().toLowerCase();
+
+    //     return text.replace(/[^0-9a-z_]/g, '');
+    // }
 
     return (
         <TextInputNative
@@ -37,11 +45,11 @@ export default function TextInput({ placeholder, defaultValue = '', value, onCha
             editable={!disabled}
             selectTextOnFocus={!disabled}
             contextMenuHidden={disabled}
-            onChangeText={onChangeText}
+            onChangeText={_onChangeText}
             inputMode={email ? 'email' : 'text'}
-            keyboardType={"default"}
-            value={validateValue(value)}
+            value={value}
             maxLength={maxLength}
+            keyboardType={Platform.OS === 'ios' ? 'default' : 'visible-password'}
             secureTextEntry={password}
             style={{
                 fontFamily: 'Inter_700Bold',

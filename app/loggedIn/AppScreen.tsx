@@ -152,7 +152,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                                         AppleAppID: "6639588047",
                                         preferInApp: false,
                                         openAppStoreIfInAppFails: true,
-                                        fallbackPlatformURL: "https://byung806.github.io/RunwayWebsite/",
+                                        fallbackPlatformURL: "https://runwaymobile.app/",
                                     }
                                     Rate.rate(options, async (success, errorMessage) => {
                                         if (success) {

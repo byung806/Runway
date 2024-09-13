@@ -92,6 +92,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                             onChangeText={setUsername}
                             placeholder={'Username'}
                             autoComplete='username'
+                            textContentType={'username'}
                             style={{ width: '80%', height: 50 }}
                         />
                         <TextInput
@@ -100,6 +101,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                             password={true}
                             onChangeText={setPassword}
                             autoComplete='password'
+                            textContentType={'password'}
                             style={{ width: '80%', height: 50 }}
                             disabled={loading}
                         />

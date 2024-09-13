@@ -100,6 +100,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                             onChangeText={setUsername}
                             maxLength={16}
                             style={{ width: '80%', height: 50 }}
+                            textContentType={'username'}
                             disabled={loading}
                         />
                         <TextInput
@@ -108,6 +109,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                             onChangeText={setEmail}
                             email
                             style={{ width: '80%', height: 50 }}
+                            textContentType={'emailAddress'}
                             disabled={loading}
                         />
                         <TextInput
@@ -116,6 +118,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                             onChangeText={setPassword}
                             password
                             style={{ width: '80%', height: 50 }}
+                            textContentType={'password'}
                             disabled={loading}
                         />
                         <Button
