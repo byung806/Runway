@@ -81,7 +81,7 @@ export interface FirebaseContent {
     questions?: FirebaseContentQuestion[];
 }
 
-export type LeaderboardType = 'friends' | 'global';
+export type LeaderboardType = 'friends' | 'global' | 'fame';
 
 export interface LeaderboardUser {
     username: string;
@@ -103,6 +103,7 @@ interface FirebaseContextType {
     todayCompleted: boolean;
     globalLeaderboard: LeaderboardData | null;
     friendsLeaderboard: LeaderboardData | null;
+    fameLeaderboard: LeaderboardData | null;
 
     initializing: boolean;
 
@@ -134,6 +135,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     const [todayCompleted, setTodayCompleted] = useState(false);
     const [globalLeaderboard, setGlobalLeaderboard] = useState<LeaderboardData | null>(null);
     const [friendsLeaderboard, setFriendsLeaderboard] = useState<LeaderboardData | null>(null);
+    const [fameLeaderboard, setFameLeaderboard] = useState<LeaderboardData | null>(null);
 
     const [initializing, setInitializing] = useState(true);
     const registeringUser = useRef(false);
@@ -171,11 +173,13 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 
                 getLeaderboard('global');
                 getLeaderboard('friends');
+                getLeaderboard('fame');
             } else {
                 setUserData(null);
                 setTodayCompleted(false);
                 setGlobalLeaderboard(null);
                 setFriendsLeaderboard(null);
+                setFameLeaderboard(null);
             }
             setInitializing(false);
         }, debounceTime);
@@ -296,6 +300,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             await getUserData();
             getLeaderboard('global');  // no await because don't need to wait for this to finish
             getLeaderboard('friends');  // no await because don't need to wait for this to finish
+            getLeaderboard('fame');
         } else {
             console.log('Something went wrong - today completed but database request failed');
         }
@@ -339,7 +344,11 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                 }>;
             if (type === 'friends') {
                 setFriendsLeaderboard(data.data);
-            } else {
+            }
+            if (type === 'fame') {
+                setFameLeaderboard(data.data);
+            }
+            else {
                 setGlobalLeaderboard(data.data);
             }
         } catch (error: any) {
@@ -411,6 +420,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             todayCompleted,
             globalLeaderboard,
             friendsLeaderboard,
+            fameLeaderboard,
 
             initializing,
 

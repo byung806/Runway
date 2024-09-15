@@ -26,8 +26,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
     const [leaderboardType, setLeaderboardType] = useState<LeaderboardType>(initialLeaderboardType);
     const [data, setData] = useState<LeaderboardData | null>(
         // @ts-ignore
-        initialLeaderboardType === 'friends' ? firebase.friendsLeaderboard : firebase.globalLeaderboard
-    );
+        initialLeaderboardType === 'friends' ? firebase.friendsLeaderboard : firebase.globalLeaderboard);
 
     // Update FlatList when friends leaderboard or global leaderboard updates
     useEffect(() => {
@@ -39,10 +38,14 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
         );
         if (leaderboardType === 'friends') {
             setData(firebase.friendsLeaderboard);
-        } else {
+        }
+        else if (leaderboardType === 'fame') {
+            setData(firebase.fameLeaderboard);
+        }
+        else {
             setData(firebase.globalLeaderboard);
         }
-    }, [firebase.friendsLeaderboard, firebase.globalLeaderboard]);
+    }, [firebase.friendsLeaderboard, firebase.globalLeaderboard, firebase.fameLeaderboard]);
 
     // Animate FlatList when switching between global and friends leaderboard
     useEffect(() => {
@@ -55,7 +58,11 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
         );
         if (leaderboardType === 'friends') {
             setData(firebase.friendsLeaderboard);
-        } else {
+        }
+        else if (leaderboardType === 'fame') {
+            setData(firebase.fameLeaderboard);
+        }
+        else {
             setData(firebase.globalLeaderboard);
         }
     }, [leaderboardType]);
@@ -113,18 +120,19 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                                 <View style={{ pointerEvents: 'none', ...Styles.centeringContainer, }}>
                                     <Text style={{ fontSize: 40, textAlign: 'center', color: theme.white }}>
                                         <Text style={{ color: theme.runwayTextColor }}> {firebase.userData?.username} </Text>
-                                        { firebase.userData && firebase.userData?.streak > 0 &&
-                                        <FontAwesome5 name='fire-alt' size={30} color={'#cc5500'} style={{ ...Styles.shadow }} />}
+                                        {firebase.userData && firebase.userData?.streak > 0 &&
+                                            <FontAwesome5 name='fire-alt' size={30} color={'#cc5500'} style={{ ...Styles.shadow }} />}
                                     </Text>
                                     <Text style={{ fontSize: 80, ...Styles.lightShadow, color: theme.white }}>{firebase.userData?.points}</Text>
                                     <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.white }}>points</Text>
                                 </View>
                                 <SegmentedControl
-                                    values={['Global', 'Friends']}
+                                    values={['Global', 'Friends', 'Hall of Fame']}
                                     selectedIndex={selectedIndex}
                                     onChange={(event) => {
                                         setSelectedIndex(event.nativeEvent.selectedSegmentIndex);
                                         setLeaderboardType(event.nativeEvent.selectedSegmentIndex === 0 ? 'global' : 'friends');
+                                        setLeaderboardType(event.nativeEvent.selectedSegmentIndex === 0 ? 'global' : 'fame');
                                     }}
                                     tintColor={theme.runwayButtonColor}
                                     backgroundColor={theme.runwayBackgroundColor}
