@@ -82,6 +82,38 @@ export const getLeaderboard = async (request: CallableRequest): Promise<{
         return { leaderboard, rank };
     }
 
+    if (request.data.type === 'fame') {
+        const leaderboard: LeaderboardUser[] = [];
+        let rank = -1;
+
+        // TODO: update date
+        const fameUsers = await getDbDoc('fame', '2024-09-15').get();
+        if (fameUsers.exists) {
+            leaderboard.push({
+                username: fameUsers.get('1').username,
+                points: fameUsers.get('1').points,
+                streak: fameUsers.get('1').streak,
+            });
+            leaderboard.push({
+                username: fameUsers.get('2').username,
+                points: fameUsers.get('2').points,
+                streak: fameUsers.get('2').streak,
+            });
+            leaderboard.push({
+                username: fameUsers.get('3').username,
+                points: fameUsers.get('3').points,
+                streak: fameUsers.get('3').streak,
+            });
+        }
+
+        const userRank = await getDbDoc('fame', userData.get('username')).get();
+        if (userRank.exists) {
+            rank = userRank.get('rank');
+        }
+
+        return { leaderboard, rank };
+    }
+
     // invalid leaderboard type
     return {
         leaderboard: [],
