@@ -47,8 +47,8 @@ export default function FloatingProfile({ visible }: { visible: boolean }) {
                 }}>
                     <Text style={{ color: theme.runwayTextColor, fontSize: 20, ...Styles.shadow }}>{firebase.userData?.username}</Text>
                     <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: 4 }}>
-                        <FontAwesome5 name='fire-alt' size={20} color={firebase.userData?.streak === 0 ? theme.gray : theme.streakColor} style={{ ...Styles.shadow }} />
-                        <Text style={{ color: firebase.userData?.streak === 0 ? theme.gray : theme.streakColor, fontSize: 20, ...Styles.shadow }}>{firebase.userData?.streak}</Text>
+                        <FontAwesome5 name='fire-alt' size={20} color={firebase.userData?.streak === 0 ? theme.inactiveStreakColor : theme.streakColor} style={{ ...Styles.shadow }} />
+                        <Text style={{ color: firebase.userData?.streak === 0 ? theme.inactiveStreakColor : theme.streakColor, fontSize: 20, ...Styles.shadow }}>{firebase.userData?.streak}</Text>
                     </View>
                     <Text style={{ color: theme.runwayTextColor, fontSize: 20, ...Styles.shadow }}>{firebase.userData?.points}</Text>
                 </Animated.View>
@@ -72,7 +72,7 @@ export default function FloatingProfile({ visible }: { visible: boolean }) {
                             width: '100%',
                             height: '100%',
                         }}
-                        blurType="ultraThinMaterialDark"
+                        blurType={theme.scheme === 'dark' ? "ultraThinMaterialDark" : "ultraThinMaterialLight"}
                         blurAmount={10}
                         // overlayColor="black"
                         reducedTransparencyFallbackColor="black"

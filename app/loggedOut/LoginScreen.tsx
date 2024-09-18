@@ -1,6 +1,6 @@
 import { BackArrow, Button, Text, TextInput } from '@/components/2d';
 import { useContext, useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, LayoutAnimation, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FirebaseError, ThemeContext, useFirebase } from '@/providers';
@@ -22,6 +22,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
         setErrorMessage('');
     }, [username, password])
 
@@ -29,14 +30,17 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
     async function loginCallback() {
         // TODO: put all these checks in a util somewhere
         if (username.length == 0) {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             setErrorMessage('Please enter a username!');
             return;
         }
         if (password.length == 0) {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             setErrorMessage('Please enter a password!');
             return;
         }
         if (username.length < 3 || password.length < 6) {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             setErrorMessage('Incorrect password!');
             return
         }
@@ -48,13 +52,14 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
         if (error === null) {
             // now it's waiting for user data to load
         } else {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             setLoading(false);
             if (error === 'timeout') {
                 setErrorMessage('Please try again later!');
             } else if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
                 setErrorMessage('Incorrect password!');
             } else if (error.code === 'auth/too-many-requests') {
-                setErrorMessage('Please try again in one minute.');
+                setErrorMessage('You\'re going too fast! Please give it a minute.');
             } else {
                 console.log(error);
                 setErrorMessage('Error logging in. Please try again later!');
@@ -76,7 +81,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                 left: 20,
                 zIndex: 1,
             }}>
-                <BackArrow color={theme.white} onPress={() => { navigation.navigate('start') }} />
+                <BackArrow color={theme.runwayTextColor} onPress={() => { navigation.navigate('start') }} />
             </View>
 
             <TouchableOpacity activeOpacity={1.0} onPress={Keyboard.dismiss} style={{ flex: 1 }}>
@@ -112,7 +117,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                             onPress={loginCallback}
                             style={{ width: '40%', height: 50, marginTop: 10 }}
                         />
-                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.white }}>{errorMessage}</Text> : null}
+                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.runwayTextColor }}>{errorMessage}</Text> : null}
                     </KeyboardAvoidingView>
                 </SafeAreaView>
             </TouchableOpacity>

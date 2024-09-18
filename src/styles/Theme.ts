@@ -1,35 +1,31 @@
-// TODO: implement light/dark themes
-
 export interface Theme {
+    scheme: 'light' | 'dark';
+
     runwayTextColor: string;
+    runwaySubTextColor: string;
     runwayBorderColor: string;
     runwayBackgroundColor: string;
     runwayButtonColor: string;
+    runwayButtonTextColor: string;
+    runwayTextInputBackgroundColor: string;
     runwayOuterBackgroundColor: string;
-    runwaySplashScreenBackgroundColor: string;
 
     questionCorrectColor: string;
     questionIncorrectColor: string;
 
     trophyYellow: string;
     streakColor: string;
+    inactiveStreakColor: string;
+
+    leaderboardHighlightColor: string;
 
     white: string;
     black: string;
-    accent: string;
     gray: string;
-    text: string;
     textPlaceholder: string;
 }
 
 const CommonThemeColors = {
-    runwayTextColor: '#edbeff',
-    runwayBorderColor: '#844a97',
-    runwayBackgroundColor: '#2f1f35',
-    runwayButtonColor: '#653173',
-    runwayOuterBackgroundColor: '#3c2b41',
-    runwaySplashScreenBackgroundColor: '#8b45a4',
-
     questionCorrectColor: '#66bb5c',
     questionIncorrectColor: '#ff5343',
 
@@ -39,43 +35,53 @@ const CommonThemeColors = {
     white: '#ffffff',
     black: '#000000',
     gray: '#dddddd',
-    grayDark: '#b0b19d',
 }
 
-export const RunwayLightTheme = {
-    accentLighter: '#a56cf2',  // runway light purple
-    accent: '#74398a',  // runway purple
-    accentDarker: '#532764',  // runway darker purple
+export const RunwayLightTheme: Theme = {
+    scheme: 'light',
 
-    border: '#e5e5e5',
+    runwayTextColor: '#3b0051',
+    runwaySubTextColor: '#755486',
+    runwayBorderColor: '#47005e',
+    runwayBackgroundColor: '#f1e1f9',
+    runwayButtonColor: '#653173',
+    runwayButtonTextColor: '#fefefe',
+    runwayTextInputBackgroundColor: '#fdfcfe',
+    runwayOuterBackgroundColor: '#fcfcfc',
 
-    background: '#f2f2f2',
-    backgroundSecondary: '#e5e5e5',
-    backgroundInverse: '#151515',
-    text: '#1c1c1c',
-    textPlaceholder: '#666666',
-    textInverse: '#ffffff',
+    leaderboardHighlightColor: '#d5c9de',
 
-    subtext: '#3e3e3e',
+    inactiveStreakColor: '#3b0051',
+
+    textPlaceholder: '#b4adb6',
 
     ...CommonThemeColors,
 };
 
-export const RunwayDarkTheme = {
-    accentLighter: '#9A4FDB',
-    accent: '#6C22A6',
-    accentDarker: '#301934',
+export const RunwayDarkTheme: Theme = {
+    scheme: 'dark',
 
-    border: '#aaaaaa',
+    // runwayTextColor: '#edbeff',
+    // runwayBorderColor: '#844a97',
+    // runwayBackgroundColor: '#2f1f35',
+    // runwayButtonColor: '#653173',
+    // runwayButtonTextColor: '#edbeff',
+    // runwayOuterBackgroundColor: '#3c2b41',
+    // runwaySplashScreenBackgroundColor: '#8b45a4',
+    runwayTextColor: '#f3e2fc',
+    runwaySubTextColor: '#9a68ab',
+    runwayBorderColor: '#f7e6ff',
+    runwayBackgroundColor: '#3b0051',
+    runwayButtonColor: '#f2e1fb',
+    runwayButtonTextColor: '#360549',
+    runwayTextInputBackgroundColor: '#280236',
+    runwayOuterBackgroundColor: '#3c2b41',
 
-    background: '#151515',
-    backgroundSecondary: '#222222',
-    backgroundInverse: '#f2f2f2',
-    text: '#ffffff',
-    textPlaceholder: '#bbbbbb',
-    textInverse: '#1c1c1c',
+    leaderboardHighlightColor: '#442c4e',
 
-    subtext: '#dddddd',
+    inactiveStreakColor: '#f2e1fb',
+
+    textPlaceholder: '#49474b',
 
     ...CommonThemeColors,
 };

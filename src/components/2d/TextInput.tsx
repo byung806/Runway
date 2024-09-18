@@ -23,6 +23,7 @@ export default function TextInput({ placeholder, defaultValue = '', value, onCha
     function _onChangeText(text: string) {
         if (email || password) {
             onChangeText(text.trim());
+            return;
         }
         onChangeText(text.trim().toLowerCase().replace(/[^0-9a-z_]/g, ''));
     }
@@ -52,13 +53,13 @@ export default function TextInput({ placeholder, defaultValue = '', value, onCha
             keyboardType={Platform.OS === 'ios' ? 'default' : 'visible-password'}
             secureTextEntry={password}
             style={{
-                fontFamily: 'Inter_700Bold',
+                fontFamily: 'LilitaOne_400Regular',
                 borderRadius: 14,
                 // borderWidth: 6,
                 textAlign: 'center',
                 alignSelf: 'center',
                 // borderColor: theme.runwayBorderColor,
-                backgroundColor: theme.runwayOuterBackgroundColor,
+                backgroundColor: theme.runwayTextInputBackgroundColor,
                 padding: 10,
                 fontSize: 20,
                 color: theme.runwayTextColor,

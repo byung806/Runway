@@ -1,10 +1,10 @@
 import { useFirebase } from '@/providers';
 import {
-    Inter_700Bold,
-    Inter_800ExtraBold,
-    Inter_900Black,
+    LilitaOne_400Regular,
+    // LilitaOne_800Bold,
+    // LilitaOne_900Black,
     useFonts,
-} from '@expo-google-fonts/inter';
+} from '@expo-google-fonts/lilita-one';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';
@@ -62,11 +62,11 @@ const cardStyleInterpolator = ({
 
 export default function Layout() {
     const firebase = useFirebase();
-    
+
     const [fontsLoaded] = useFonts({
-        Inter_700Bold,
-        Inter_800ExtraBold,
-        Inter_900Black
+        LilitaOne_400Regular,
+        // LilitaOne_800Bold,
+        // LilitaOne_900Black,
     });
 
     const onLayoutRootView = useCallback(async () => {
@@ -83,7 +83,12 @@ export default function Layout() {
                 <Stack.Navigator
                     initialRouteName={firebase.userData ? 'app' : 'start'}
                     screenOptions={{
-                        cardStyleInterpolator: cardStyleInterpolator,
+                        // cardStyleInterpolator: cardStyleInterpolator,
+                        cardStyleInterpolator: ({ current }) => ({
+                            cardStyle: {
+                                opacity: current.progress,
+                            },
+                        })
                     }}
                 >
                     {firebase.userData ?

@@ -33,11 +33,16 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
         {
             date: firebase.today,
             ref: null,
-            colors: {
+            colors: theme.scheme === 'dark' ? {
                 textColor: '#ffffff',
                 backgroundColor: '#000000',
                 borderColor: '#ffffff',
                 outerBackgroundColor: '#000000'
+            } : {
+                textColor: '#000000',
+                backgroundColor: '#ffffff',
+                borderColor: '#000000',
+                outerBackgroundColor: '#ffffff'
             },
             content: null,
             index: 0
@@ -140,13 +145,13 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                         {firebase.userData?.rated !== true && (firebase.userData?.streak ?? 0) !== 0 && !firebase.news &&
                             <View style={{ height: heights.headerHeight, ...Styles.centeringContainer }}>
                                 <View style={{ flexDirection: 'row' }}>
-                                    <AntDesign name="star" size={24} color={theme.accent} />
-                                    <AntDesign name="star" size={24} color={theme.accent} />
-                                    <AntDesign name="star" size={24} color={theme.accent} />
-                                    <AntDesign name="star" size={24} color={theme.accent} />
-                                    <AntDesign name="star" size={24} color={theme.accent} />
+                                    <AntDesign name="star" size={24} color={theme.trophyYellow} />
+                                    <AntDesign name="star" size={24} color={theme.trophyYellow} />
+                                    <AntDesign name="star" size={24} color={theme.trophyYellow} />
+                                    <AntDesign name="star" size={24} color={theme.trophyYellow} />
+                                    <AntDesign name="star" size={24} color={theme.trophyYellow} />
                                 </View>
-                                <Button title="Enjoying Runway? Rate us!" backgroundColor='transparent' textColor='white' disabled={rateButtonDisabled} onPress={async () => {
+                                <Button title="Enjoying Runway? Rate us!" backgroundColor='transparent' textColor={theme.runwayTextColor} disabled={rateButtonDisabled} onPress={async () => {
                                     setRateButtonDisabled(true);
                                     const options = {
                                         AppleAppID: "6639588047",
@@ -189,7 +194,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                                             until={secondsUntilTomorrowUTC()}
                                             size={30}
                                             onFinish={onNewDay}
-                                            digitStyle={{ backgroundColor: item.colors.textColor, borderRadius: 10, fontFamily: 'Inter_800ExtraBold' }}
+                                            digitStyle={{ backgroundColor: item.colors.textColor, borderRadius: 10, fontFamily: 'LilitaOne_400Regular' }}
                                             digitTxtStyle={{ color: item.colors.backgroundColor }}
                                             timeToShow={['H', 'M', 'S']}
                                             timeLabelStyle={{ opacity: 0 }}
@@ -205,8 +210,8 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                                         <Pressable onPress={() => {
                                             Linking.openURL('mailto:runwaystem@gmail.com?subject=Runway Possible Content Creator&body=I would like to create content for Runway!\n\nHere are some ideas I have:\n- ');
                                         }} style={{ gap: 8, ...Styles.centeringContainer, ...Styles.shadow, paddingHorizontal: 30 }}>
-                                            <Foundation name="mail" size={24} color="white" />
-                                            <Text style={{ textAlign: 'center', fontSize: 14, color: theme.white }}>
+                                            <Foundation name="mail" size={24} color={item.colors.textColor} />
+                                            <Text style={{ textAlign: 'center', fontSize: 14, color: item.colors.textColor }}>
                                                 Want to create content for Runway?
                                             </Text>
                                         </Pressable>

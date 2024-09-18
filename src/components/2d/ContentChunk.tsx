@@ -170,6 +170,9 @@ export function QuestionContentChunk({ focused, question, choices, possiblePoint
                                 reanimatedStyle={{
                                     backgroundColor: buttonBackgroundColors[index]
                                 }}
+                                textStyle={{
+                                    textAlign: 'center'
+                                }}
                             />
                         );
                     })}

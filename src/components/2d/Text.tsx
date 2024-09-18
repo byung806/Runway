@@ -15,7 +15,7 @@ export default function Text({ children, ...props }: TextProps & any) {
             ellipsizeMode='tail'
             maxFontSizeMultiplier={1.2}
             adjustsFontSizeToFit={true}
-            style={{ fontFamily: 'Inter_800ExtraBold', color: theme.text, ...props.style }}
+            style={{ fontFamily: 'LilitaOne_400Regular', color: theme.runwayTextColor, ...props.style }}
         >
             {children}
         </TextNative>

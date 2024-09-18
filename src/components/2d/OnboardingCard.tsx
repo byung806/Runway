@@ -7,6 +7,11 @@ import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 import BorderedCard, { BorderedCardRef } from './BorderedCard';
 import Button from './Button';
 import Text from './Text';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import LeaderboardEntry from './LeaderboardEntry';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+
 
 
 interface OnboardingCardProps {
@@ -45,30 +50,32 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
     let insides: JSX.Element = <></>;
     if (index === 0) {
         insides = (
-            <>
+            <View style={{ gap: 10, ...Styles.centeringContainer }}>
+                <FontAwesome5 name="user-friends" size={36} color={colors.textColor} />
                 <Text style={{
-                    color: theme.white,
-                    fontSize: 40,
+                    color: colors.textColor,
+                    fontSize: 36,
                     textAlign: 'center'
                 }}>
                     Welcome to Runway,
                     <Text style={{ color: colors.textColor }}> {username}</Text>
                     !
                 </Text>
-            </>
-        )
-    } else if (index === 1) {
-        insides = (
-            <>
                 <Text style={{
-                    color: theme.white,
-                    fontSize: 40,
+                    color: theme.runwaySubTextColor,
+                    fontSize: 24,
                     textAlign: 'center'
                 }}>
                     Every day, a new lesson will appear.
-                    <Text style={{ color: colors.textColor, }}> Let's try one out!</Text>
                 </Text>
-            </>
+            </View>
+        )
+    } else if (index === 1) {
+        insides = (
+            <View style={{ gap: 10, ...Styles.centeringContainer }}>
+                <AntDesign name="star" size={36} color={colors.textColor} />
+                <Text style={{ color: colors.textColor, fontSize: 30 }}> Let's try one out!</Text>
+            </View>
         )
     } else if (index === 2) {
         insides = (
@@ -108,7 +115,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                 <AnimatedNumbers
                     animateToNumber={points}
                     animationDuration={800}
-                    fontStyle={{ color: theme.white, fontSize: 100, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
+                    fontStyle={{ color: theme.scheme === 'dark' ? theme.white : theme.black, fontSize: 100, textAlign: 'center', fontFamily: 'LilitaOne_400Regular' }}
                     easing={Easing.out(Easing.cubic)}
                 />
                 <Text style={{
@@ -122,8 +129,8 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
         insides = (
             <>
                 <Text style={{
-                    color: theme.white,
-                    fontSize: 35,
+                    color: colors.textColor,
+                    fontSize: 30,
                     textAlign: 'center'
                 }}>Answer questions correctly in less tries to earn more points!</Text>
             </>
@@ -131,9 +138,10 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
     } else if (index === 5) {
         insides = (
             <>
+                <FontAwesome name={'trophy'} size={60} color={theme.trophyYellow} />
                 <Text style={{
                     color: colors.textColor,
-                    fontSize: 35, textAlign: 'center', padding: 5, marginBottom: 15
+                    fontSize: 30, textAlign: 'center', padding: 5, marginBottom: 15
                 }}>Earn more points to beat out your friends...</Text>
                 <View style={{
                     flexDirection: 'row',
@@ -167,10 +175,21 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
     } else if (index === 6) {
         insides = (
             <>
+                <View style={{
+                    flexDirection: 'row',
+                }}>
+                    <FontAwesome name={'trophy'} size={60} color={theme.trophyYellow} />
+                    <FontAwesome name={'trophy'} size={60} color={theme.trophyYellow} />
+                    <FontAwesome name={'trophy'} size={60} color={theme.trophyYellow} />
+                </View>
                 <Text style={{
                     color: colors.textColor,
-                    fontSize: 35, textAlign: 'center', padding: 5, marginBottom: 15
+                    fontSize: 30, textAlign: 'center', padding: 5, marginBottom: 15
                 }}>Or compete against the whole world!</Text>
+
+                {/* <LeaderboardEntry place={1} name='bobby' streak={0} points={650} />
+                <LeaderboardEntry place={2} name={username} streak={0} points={200} /> */}
+
                 <View style={{
                     flexDirection: 'row',
                     top: 0,
@@ -203,18 +222,18 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                     top: 0,
                     width: '80%', alignItems: 'center', marginBottom: 20
                 }}>
-                    <Text style={{ flex: 1, color: '#ffffff', fontSize: 20 }}>4</Text>
-                    <Text style={{ flex: 1, color: '#ffffff', fontSize: 20, marginLeft: -20 }}>bryan</Text>
-                    <Text style={{ flex: 1, color: '#ffffff', fontSize: 20, marginRight: -70 }}>35</Text>
+                    <Text style={{ flex: 1, color: theme.scheme === 'dark' ? theme.white : theme.black, fontSize: 20 }}>4</Text>
+                    <Text style={{ flex: 1, color: theme.scheme === 'dark' ? theme.white : theme.black, fontSize: 20, marginLeft: -20 }}>bryan</Text>
+                    <Text style={{ flex: 1, color: theme.scheme === 'dark' ? theme.white : theme.black, fontSize: 20, marginRight: -70 }}>35</Text>
                 </View>
                 <View style={{
                     flexDirection: 'row',
                     top: 0,
                     width: '80%', alignItems: 'center'
                 }}>
-                    <Text style={{ flex: 1, color: '#ffffff', fontSize: 20 }}>5</Text>
-                    <Text style={{ flex: 1, color: '#ffffff', fontSize: 20, marginLeft: -20 }}>isabelle</Text>
-                    <Text style={{ flex: 1, color: '#ffffff', fontSize: 20, marginRight: -70 }}>20</Text>
+                    <Text style={{ flex: 1, color: theme.scheme === 'dark' ? theme.white : theme.black, fontSize: 20 }}>5</Text>
+                    <Text style={{ flex: 1, color: theme.scheme === 'dark' ? theme.white : theme.black, fontSize: 20, marginLeft: -20 }}>isabelle</Text>
+                    <Text style={{ flex: 1, color: theme.scheme === 'dark' ? theme.white : theme.black, fontSize: 20, marginRight: -70 }}>20</Text>
                 </View>
             </>
         )

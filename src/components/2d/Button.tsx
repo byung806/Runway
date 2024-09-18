@@ -21,11 +21,12 @@ interface ButtonProps {
     sound?: SoundType;
     reanimatedStyle?: any;
     style?: any;
+    textStyle?: any;
 }
 
 const ReactSpringAnimatedView = animated(View);
 
-export default function Button({ title, onPress, backgroundColor, textColor, forceTextColor, disabled = false, showLoadingSpinner = false, sound = 'button', reanimatedStyle, style }: ButtonProps) {
+export default function Button({ title, onPress, backgroundColor, textColor, forceTextColor, disabled = false, showLoadingSpinner = false, sound = 'button', reanimatedStyle, style, textStyle }: ButtonProps) {
     const theme = useContext(ThemeContext);
 
     const { scale: buttonScale, onPressIn: buttonOnPressIn, onPress: buttonOnPress, onPressOut: buttonOnPressOut } = useBounceAnimation({
@@ -44,7 +45,7 @@ export default function Button({ title, onPress, backgroundColor, textColor, for
             ...style
         }}>
             <Animated.View style={{
-                borderRadius: 12,
+                borderRadius: 20,
                 // opacity: cardContentOpacity,
                 backgroundColor: disabled ? (backgroundColor === 'transparent' ? 'transparent' : '#bbbbbb') : backgroundColor || theme.runwayButtonColor,
                 // transform: [{ translateY: goTransformY }],
@@ -59,8 +60,8 @@ export default function Button({ title, onPress, backgroundColor, textColor, for
                     style={{ ...Styles.centeringContainer, padding: 10, paddingHorizontal: 20 }}
                 >
                     <Text style={{
-                        color: (forceTextColor || !disabled) ? (textColor || theme.runwayTextColor) : '#999999',
-                        fontSize: 20, ...Styles.lightShadow, opacity: showLoadingSpinner ? 0 : 1
+                        color: (forceTextColor || !disabled) ? (textColor || theme.runwayButtonTextColor) : '#999999',
+                        fontSize: 20, ...Styles.lightShadow, opacity: showLoadingSpinner ? 0 : 1, ...textStyle
                     }}>{title}</Text>
 
                     <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, ...Styles.centeringContainer }}>
@@ -98,7 +99,7 @@ export function IconButton({ type, visible, onPress, style }: { type: 'settings'
     const theme = useContext(ThemeContext);
 
     const iconName = type === 'settings' ? 'gear' : 'trophy';
-    const iconColor = type === 'settings' ? theme.runwayTextColor : theme.trophyYellow;
+    const iconColor = type === 'settings' ? theme.white : theme.trophyYellow;
     const side = type === 'settings' ? 'left' : 'right';
 
     const { scale: buttonScale, onPressIn: buttonOnPressIn, onPress: buttonOnPress, onPressOut: buttonOnPressOut } = useBounceAnimation({
@@ -152,7 +153,7 @@ export function IconButton({ type, visible, onPress, style }: { type: 'settings'
                     height: 60,
                     width: 60,
                     borderRadius: 20,
-                    backgroundColor: theme.black,
+                    backgroundColor: theme.scheme === 'dark' ? theme.black : '#3c0052',
                     ...Styles.shadow,
                     ...Styles.centeringContainer,
                 }}>

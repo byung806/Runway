@@ -11,7 +11,6 @@ import Text from './Text';
 
 interface LeaderboardEntryProps {
     place: number;
-    avatar: string;
     name: string;
     points: number;
     streak: number;
@@ -20,7 +19,7 @@ interface LeaderboardEntryProps {
 
 const ReactSpringAnimatedView = animated(View);
 
-export default function LeaderboardEntry({ place, avatar, name, points, streak }: LeaderboardEntryProps) {
+export default function LeaderboardEntry({ place, name, points, streak }: LeaderboardEntryProps) {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
 
@@ -40,7 +39,7 @@ export default function LeaderboardEntry({ place, avatar, name, points, streak }
         } else if (place == 3) {
             return "#CD7F32";
         }
-        return "#ffffff";
+        return theme.runwayTextColor;
     }
 
     return (
@@ -49,16 +48,16 @@ export default function LeaderboardEntry({ place, avatar, name, points, streak }
                 position: 'relative',
                 flexDirection: 'row',
                 padding: 10,
-                backgroundColor: firebase.userData?.username === name ? theme.runwayOuterBackgroundColor : 'transparent',
-                borderColor: firebase.userData?.username === name ? theme.runwayOuterBackgroundColor : 'transparent',
+                backgroundColor: firebase.userData?.username === name ? theme.leaderboardHighlightColor : 'transparent',
+                borderColor: firebase.userData?.username === name ? theme.leaderboardHighlightColor : 'transparent',
                 borderWidth: 2,
                 borderRadius: 10,
                 ...Styles.centeringContainer,
-                transform: [{ scale: scale }],
+                transform: [{ scale: scale }]
             }}>
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View style={{ alignItems: 'center', flexDirection: 'row', gap: 20 }}>
-                        <Text style={{ color: theme.white, fontSize: 15 }}>{place}</Text>
+                        <Text style={{ color: theme.runwayTextColor, fontSize: 15 }}>{place}</Text>
                         <Text style={{ color: theme.runwayTextColor, fontSize: 20 }}>{name}</Text>
                         {streak > 0 &&
                             <View style={{ ...Styles.centeringContainer, flexDirection: 'row', gap: 4 }}>
