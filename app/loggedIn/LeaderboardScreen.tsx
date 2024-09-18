@@ -86,7 +86,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                             // gap: 5,
                             justifyContent: 'space-between',
                         }}>
-                            <BackArrow color={theme.white} onPress={() => { navigation.navigate('app') }} />
+                            <BackArrow color={theme.runwayTextColor} onPress={() => { navigation.navigate('app') }} />
                         </View>
 
                         {/* Profile */}
@@ -118,13 +118,13 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                                 gap: 40,
                             }}>
                                 <View style={{ pointerEvents: 'none', ...Styles.centeringContainer, }}>
-                                    <Text style={{ fontSize: 40, textAlign: 'center', color: theme.white }}>
-                                        <Text style={{ color: theme.runwayTextColor }}> {firebase.userData?.username} </Text>
-                                        {firebase.userData && firebase.userData?.streak > 0 &&
-                                            <FontAwesome5 name='fire-alt' size={30} color={'#cc5500'} style={{ ...Styles.shadow }} />}
+                                    <Text style={{ fontSize: 40, textAlign: 'center' }}>
+                                        <Text style={{ color: theme.runwaySubTextColor }}> {firebase.userData?.username} </Text>
+                                        { firebase.userData && firebase.userData?.streak > 0 &&
+                                        <FontAwesome5 name='fire-alt' size={30} color={'#cc5500'} style={{ ...Styles.shadow }} />}
                                     </Text>
-                                    <Text style={{ fontSize: 80, ...Styles.lightShadow, color: theme.white }}>{firebase.userData?.points}</Text>
-                                    <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.white }}>points</Text>
+                                    <Text style={{ fontSize: 80, ...Styles.lightShadow, color: theme.runwayTextColor }}>{firebase.userData?.points}</Text>
+                                    <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.runwaySubTextColor }}>points</Text>
                                 </View>
                                 <SegmentedControl
                                     values={['Global', 'Friends', 'Hall of Fame']}
@@ -137,7 +137,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                                     tintColor={theme.runwayButtonColor}
                                     backgroundColor={theme.runwayBackgroundColor}
                                     style={{ width: '80%', height: 40 }}
-                                    fontStyle={{ color: theme.runwayTextColor, fontSize: 16, fontFamily: 'Inter_800ExtraBold', fontWeight: '800' }}
+                                    fontStyle={{ color: theme.runwayButtonTextColor, fontSize: 16, fontFamily: 'LilitaOne_400Regular', fontWeight: '800' }}
                                 />
                             </View>
                         </View>
@@ -161,7 +161,6 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                 renderItem={({ item, index }) =>
                     <LeaderboardEntry
                         place={index + 1}
-                        avatar={''}
                         name={item.username}
                         points={item.points}
                         streak={item.streak}

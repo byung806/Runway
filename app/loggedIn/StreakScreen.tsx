@@ -99,7 +99,7 @@ export default function StreakScreen({ route, navigation }: { route: any, naviga
                         <AnimatedNumbers
                             animateToNumber={streak}
                             animationDuration={numberAnimationDuration}
-                            fontStyle={{ color: '#cc5500', fontSize: 80, textAlign: 'center', fontFamily: 'Inter_700Bold' }}
+                            fontStyle={{ color: '#cc5500', fontSize: 80, textAlign: 'center', fontFamily: 'LilitaOne_400Regular' }}
                             easing={Easing.out(Easing.cubic)}
                         />
                     </View>

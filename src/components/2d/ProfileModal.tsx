@@ -78,7 +78,7 @@ export default function ProfileModal({ visible, setVisible }: { visible: boolean
                             borderTopLeftRadius: 40,
                             borderTopRightRadius: 40,
                         }}
-                        blurType="ultraThinMaterialDark"
+                        blurType={theme.scheme === 'dark' ? "ultraThinMaterialDark" : "ultraThinMaterialLight"}
                         blurAmount={10}
                         // overlayColor="black"
                         reducedTransparencyFallbackColor="black"
@@ -101,7 +101,7 @@ export default function ProfileModal({ visible, setVisible }: { visible: boolean
                             textColor={theme.white}
                             style={{ width: '100%', height: 50 }}
                         />
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Button
                                 title="Privacy Policy"
                                 onPress={privacyPolicy}

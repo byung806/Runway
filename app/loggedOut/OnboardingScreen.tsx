@@ -18,7 +18,7 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
 
     const [username, setUsername] = useState('');
     const defaultColors = {
-        outerBackgroundColor: theme.runwayOuterBackgroundColor,
+        outerBackgroundColor: theme.runwayBackgroundColor,  // background instead of outerBackgroundColor because theres no card
         borderColor: theme.runwayBorderColor,
         backgroundColor: theme.runwayBackgroundColor,
         textColor: theme.runwayTextColor

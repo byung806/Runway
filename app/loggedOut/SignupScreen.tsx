@@ -1,6 +1,6 @@
 import { Button, Text, TextInput } from '@/components/2d';
 import React, { useContext, useEffect, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, LayoutAnimation, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FirebaseError, ThemeContext, useFirebase, usePushNotifications } from '@/providers';
@@ -26,32 +26,39 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
 
     // reset error message when user changes input
     useEffect(() => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
         setErrorMessage('');
     }, [username, password, email])
 
     // called on sign up button press
     async function signupCallback() {
         if (username.length < 3) {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             setErrorMessage('Please make your username at least 3 characters long!');
             return;
         }
         if (username.length > 15) {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             setErrorMessage('Please make your username at most 15 characters long!');
             return;
         }
         if (!username.match(/^[0-9a-z]+$/)) {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             setErrorMessage('Please only use letters and numbers in your username!');
             return
         }
         if (matcher.hasMatch(username)) {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             setErrorMessage('Please choose another username!');
             return
         }
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             setErrorMessage('Please enter a valid email!');
             return;
         }
         if (password.length < 6) {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             setErrorMessage('Please make your password at least 6 characters long!');
             return;
         }
@@ -62,6 +69,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
         if (error === null) {
             // now it's waiting for user data to load
         } else {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             setLoading(false);
             if (error === 'timeout') {
                 setErrorMessage('Please try again later!');
@@ -127,7 +135,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                             showLoadingSpinner={loading}
                             onPress={signupCallback}
                         />
-                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.white }}>{errorMessage}</Text> : null}
+                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.runwayTextColor }}>{errorMessage}</Text> : null}
                     </KeyboardAvoidingView>
 
                     <SafeAreaView style={{
