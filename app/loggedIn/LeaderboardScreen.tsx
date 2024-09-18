@@ -21,12 +21,17 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
     const initialLeaderboardType: LeaderboardType = 'global';
 
     // @ts-ignore
-    const [selectedIndex, setSelectedIndex] = useState(initialLeaderboardType === 'global' ? 0 : 1);
+    const [selectedIndex, setSelectedIndex] = useState(
+        initialLeaderboardType === 'global' ? 0 :
+            initialLeaderboardType === 'friends' ? 1 : 2
+    );
 
     const [leaderboardType, setLeaderboardType] = useState<LeaderboardType>(initialLeaderboardType);
     const [data, setData] = useState<LeaderboardData | null>(
         // @ts-ignore
-        initialLeaderboardType === 'friends' ? firebase.friendsLeaderboard : firebase.globalLeaderboard);
+        initialLeaderboardType === 'global' ? firebase.globalLeaderboard :
+            initialLeaderboardType === 'friends' ? firebase.friendsLeaderboard : firebase.fameLeaderboard
+    );
 
     // Update FlatList when friends leaderboard or global leaderboard updates
     useEffect(() => {
@@ -120,8 +125,8 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                                 <View style={{ pointerEvents: 'none', ...Styles.centeringContainer, }}>
                                     <Text style={{ fontSize: 40, textAlign: 'center' }}>
                                         <Text style={{ color: theme.runwaySubTextColor }}> {firebase.userData?.username} </Text>
-                                        { firebase.userData && firebase.userData?.streak > 0 &&
-                                        <FontAwesome5 name='fire-alt' size={30} color={'#cc5500'} style={{ ...Styles.shadow }} />}
+                                        {firebase.userData && firebase.userData?.streak > 0 &&
+                                            <FontAwesome5 name='fire-alt' size={30} color={'#cc5500'} style={{ ...Styles.shadow }} />}
                                     </Text>
                                     <Text style={{ fontSize: 80, ...Styles.lightShadow, color: theme.runwayTextColor }}>{firebase.userData?.points}</Text>
                                     <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.runwaySubTextColor }}>points</Text>
@@ -131,14 +136,32 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                                     selectedIndex={selectedIndex}
                                     onChange={(event) => {
                                         setSelectedIndex(event.nativeEvent.selectedSegmentIndex);
-                                        setLeaderboardType(event.nativeEvent.selectedSegmentIndex === 0 ? 'global' : 'friends');
-                                        setLeaderboardType(event.nativeEvent.selectedSegmentIndex === 0 ? 'global' : 'fame');
+                                        if (event.nativeEvent.selectedSegmentIndex === 0) {
+                                            setLeaderboardType('global');
+                                        }
+                                        else if (event.nativeEvent.selectedSegmentIndex === 1) {
+                                            setLeaderboardType('friends');
+                                        }
+                                        else {
+                                            setLeaderboardType('fame');
+                                        }
                                     }}
                                     tintColor={theme.runwayButtonColor}
                                     backgroundColor={theme.runwayBackgroundColor}
-                                    style={{ width: '80%', height: 40 }}
+                                    style={{ width: '94%', height: 40 }}
                                     fontStyle={{ color: theme.runwayButtonTextColor, fontSize: 16, fontFamily: 'LilitaOne_400Regular', fontWeight: '800' }}
                                 />
+                                {leaderboardType === 'fame' &&
+                                    <Text style={{ fontSize: 20, color: theme.runwaySubTextColor, textAlign: 'center' }}>
+                                        The top 3 users last season.
+                                    </Text>
+                                }
+                                {leaderboardType === 'fame' && firebase.fameLeaderboard && firebase.fameLeaderboard.rank !== -1 &&
+                                    <Text style={{ fontSize: 20, color: theme.runwaySubTextColor, textAlign: 'center' }}>
+                                        You ranked: {firebase.fameLeaderboard.rank}
+                                    </Text>
+
+                                }
                             </View>
                         </View>
 

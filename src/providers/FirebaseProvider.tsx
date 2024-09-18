@@ -342,14 +342,14 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                     leaderboard: LeaderboardUser[];
                     rank: number;
                 }>;
+            if (type === 'global') {
+                setGlobalLeaderboard(data.data);
+            }
             if (type === 'friends') {
                 setFriendsLeaderboard(data.data);
             }
             if (type === 'fame') {
                 setFameLeaderboard(data.data);
-            }
-            else {
-                setGlobalLeaderboard(data.data);
             }
         } catch (error: any) {
             console.log(error + ' from FirebaseProvider.tsx:  getLeaderboard');
