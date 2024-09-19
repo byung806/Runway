@@ -133,12 +133,12 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                                             fontSize: 20,
                                             textAlign: 'center',
                                             color: theme.runwaySubTextColor,
-                                        }}>Learn every day.</Text>
+                                        }}>Learn like never</Text>
                                         <Text style={{
                                             fontSize: 20,
                                             textAlign: 'center',
                                             color: theme.runwaySubTextColor,
-                                        }}>Have fun doing it.</Text>
+                                        }}>before.</Text>
                                     </View>
                                     <View style={{ width: '100%', gap: 10, marginBottom: 20 }}>
                                         <Button
