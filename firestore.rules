@@ -11,5 +11,8 @@ service cloud.firestore {
         match /news/{document=**} {
             allow read: if request.auth != null;
         }
+        match /usernames/{document=**} {
+            allow read: if true;
+        }
     }
 }

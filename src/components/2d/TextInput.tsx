@@ -6,7 +6,7 @@ interface TextInputProps {
     placeholder: string;
     defaultValue?: string;
     value: string;
-    onChangeText: React.Dispatch<React.SetStateAction<string>>;
+    onChangeText: React.Dispatch<React.SetStateAction<string>> | ((text: string) => void) | ((text: string) => Promise<void>);
     disabled?: boolean;
     autoCorrect?: boolean;
     textContentType?: string;
@@ -53,7 +53,7 @@ export default function TextInput({ placeholder, defaultValue = '', value, onCha
             keyboardType={Platform.OS === 'ios' ? 'default' : 'visible-password'}
             secureTextEntry={password}
             style={{
-                fontFamily: 'LilitaOne_400Regular',
+                fontFamily: 'FredokaOne_400Regular',
                 borderRadius: 14,
                 // borderWidth: 6,
                 textAlign: 'center',
