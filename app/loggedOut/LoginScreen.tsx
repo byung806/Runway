@@ -89,36 +89,55 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
 
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                        style={{ width: '100%', gap: 10, ...Styles.centeringContainer }}
+                        style={{ width: '100%', ...Styles.centeringContainer }}
                     >
-                        {/* <Text style={{ color: theme.white, fontSize: 40, textAlign: 'center', margin: 20 }}>Enter your username and password!</Text> */}
-                        <TextInput
-                            value={username}
-                            onChangeText={setUsername}
-                            placeholder={'Username'}
-                            autoComplete='username'
-                            textContentType={'username'}
-                            style={{ width: '80%', height: 50 }}
-                        />
-                        <TextInput
-                            value={password}
-                            placeholder={'Password'}
-                            password={true}
-                            onChangeText={setPassword}
-                            autoComplete='password'
-                            textContentType={'password'}
-                            style={{ width: '80%', height: 50 }}
-                            disabled={loading}
-                        />
-                        <Button
-                            title={'Log In!'}
-                            disabled={loading}
-                            showLoadingSpinner={loading}
-                            onPress={loginCallback}
-                            style={{ width: '40%', height: 50, marginTop: 10 }}
-                        />
-                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.runwayTextColor }}>{errorMessage}</Text> : null}
+                        <View style={{
+                            width: '100%',
+                            ...Styles.centeringContainer,
+                            gap: 10,
+                        }}>
+                            {/* <Text style={{ color: theme.white, fontSize: 24, textAlign: 'center', margin: 20 }}>Enter your username and password!</Text> */}
+                            <TextInput
+                                value={username}
+                                onChangeText={setUsername}
+                                placeholder={'Username'}
+                                autoComplete='username'
+                                textContentType={'username'}
+                                style={{ width: '80%', height: 50 }}
+                            />
+                            <TextInput
+                                value={password}
+                                placeholder={'Password'}
+                                password={true}
+                                onChangeText={setPassword}
+                                autoComplete='password'
+                                textContentType={'password'}
+                                style={{ width: '80%', height: 50 }}
+                                disabled={loading}
+                            />
+                            <Button
+                                title={'Log In!'}
+                                disabled={loading}
+                                showLoadingSpinner={loading}
+                                onPress={loginCallback}
+                                style={{ width: '40%', height: 50, marginTop: 10 }}
+                            />
+                            {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.runwayTextColor }}>{errorMessage}</Text> : null}
+                        </View>
                     </KeyboardAvoidingView>
+
+                    <SafeAreaView style={{
+                        position: 'absolute',
+                        bottom: 0,
+                    }} edges={['bottom']}>
+                        <Button
+                            title={'Don\'t have an account?'}
+                            disabled={loading}
+                            textColor={theme.runwaySubTextColor}
+                            backgroundColor='transparent'
+                            onPress={() => navigation.navigate('signup')}
+                        />
+                    </SafeAreaView>
                 </SafeAreaView>
             </TouchableOpacity>
         </View>
