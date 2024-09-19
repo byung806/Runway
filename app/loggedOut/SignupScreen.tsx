@@ -99,43 +99,49 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                 <SafeAreaView style={{ ...Styles.centeringContainer, flex: 1 }}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                        style={{ width: '100%', gap: 10, ...Styles.centeringContainer }}
+                        style={{ width: '100%', ...Styles.centeringContainer }}
                     >
-                        <TextInput
-                            value={username}
-                            placeholder={'Username'}
-                            defaultValue={username}
-                            onChangeText={setUsername}
-                            maxLength={16}
-                            style={{ width: '80%', height: 50 }}
-                            textContentType={'username'}
-                            disabled={loading}
-                        />
-                        <TextInput
-                            value={email}
-                            placeholder={'Email'}
-                            onChangeText={setEmail}
-                            email
-                            style={{ width: '80%', height: 50 }}
-                            textContentType={'emailAddress'}
-                            disabled={loading}
-                        />
-                        <TextInput
-                            value={password}
-                            placeholder={'Password'}
-                            onChangeText={setPassword}
-                            password
-                            style={{ width: '80%', height: 50 }}
-                            textContentType={'password'}
-                            disabled={loading}
-                        />
-                        <Button
-                            title={'Take Off!'}
-                            disabled={loading}
-                            showLoadingSpinner={loading}
-                            onPress={signupCallback}
-                        />
-                        {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.runwayTextColor }}>{errorMessage}</Text> : null}
+                        <View style={{
+                            width: '100%',
+                            ...Styles.centeringContainer,
+                            gap: 10,
+                        }}>
+                            <TextInput
+                                value={username}
+                                placeholder={'Username'}
+                                defaultValue={username}
+                                onChangeText={setUsername}
+                                maxLength={16}
+                                style={{ width: '80%', height: 50 }}
+                                textContentType={'username'}
+                                disabled={loading}
+                            />
+                            <TextInput
+                                value={email}
+                                placeholder={'Email'}
+                                onChangeText={setEmail}
+                                email
+                                style={{ width: '80%', height: 50 }}
+                                textContentType={'emailAddress'}
+                                disabled={loading}
+                            />
+                            <TextInput
+                                value={password}
+                                placeholder={'Password'}
+                                onChangeText={setPassword}
+                                password
+                                style={{ width: '80%', height: 50 }}
+                                textContentType={'password'}
+                                disabled={loading}
+                            />
+                            <Button
+                                title={'Take Off!'}
+                                disabled={loading}
+                                showLoadingSpinner={loading}
+                                onPress={signupCallback}
+                            />
+                            {errorMessage ? <Text style={{ fontSize: 15, textAlign: 'center', marginVertical: 5, color: theme.runwayTextColor }}>{errorMessage}</Text> : null}
+                        </View>
                     </KeyboardAvoidingView>
 
                     <SafeAreaView style={{
@@ -145,7 +151,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                         <Button
                             title={'Have an account?'}
                             disabled={loading}
-                            textColor={theme.white}
+                            textColor={theme.runwaySubTextColor}
                             backgroundColor='transparent'
                             onPress={() => navigation.navigate('login')}
                         />
