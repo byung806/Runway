@@ -107,6 +107,7 @@ interface FirebaseContextType {
 
     initializing: boolean;
 
+    isUsernameAvailable: (username: string) => Promise<boolean>;
     registerUser: (username: string, email: string, password: string) => Promise<FirebaseError | null>;
     logIn: (email: string, password: string) => Promise<FirebaseError | null>;
     logOut: () => Promise<FirebaseError | null>;
@@ -189,6 +190,19 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
         return subscriber; // unsubscribe on unmount
     }, []);
+
+    /**
+     * Checks if the given username is available
+     */
+    async function isUsernameAvailable(username: string): Promise<boolean> {
+        try {
+            const data = await firestore().collection('usernames').doc(username).get();
+            return !data.exists;
+        } catch (error: any) {
+            console.log(error + ' from FirebaseProvider.tsx:  isUsernameAvailable');
+            return true;
+        }
+    }
 
     /**
      * Registers a new user with the given username, email, and password
@@ -424,6 +438,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 
             initializing,
 
+            isUsernameAvailable,
             registerUser,
             logIn,
             logOut,
