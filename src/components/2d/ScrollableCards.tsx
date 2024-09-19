@@ -175,7 +175,7 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
                 getItemLayout={(_, index) => {
                     return {
                         length: boxHeight + padding,
-                        offset: (boxHeight + padding) * index + (paddingAboveHeader + (header ? (headerHeight + padding) : (- padding / 2))),
+                        offset: (boxHeight + padding) * index + (paddingAboveHeader + (header ? (headerHeight + padding / 6) : (- padding / 2))),
                         index
                     }
                 }}
