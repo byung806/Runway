@@ -1,14 +1,17 @@
-import { useFirebase } from '@/providers';
+import { ThemeContext, useFirebase } from '@/providers';
 import {
     LilitaOne_400Regular,
     // LilitaOne_800Bold,
     // LilitaOne_900Black,
     useFonts,
 } from '@expo-google-fonts/lilita-one';
-import { NavigationContainer } from '@react-navigation/native';
+import {
+    FredokaOne_400Regular,
+} from '@expo-google-fonts/fredoka-one';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { Animated, View } from 'react-native';
 import { AppScreen, LeaderboardScreen, StreakScreen } from './loggedIn';
 import { LoginScreen, OnboardingScreen, SignupScreen, StartScreen } from './loggedOut';
@@ -62,11 +65,12 @@ const cardStyleInterpolator = ({
 
 export default function Layout() {
     const firebase = useFirebase();
+    const theme = useContext(ThemeContext);
 
     const [fontsLoaded] = useFonts({
         LilitaOne_400Regular,
-        // LilitaOne_800Bold,
-        // LilitaOne_900Black,
+        FredokaOne_400Regular
+        // 'FredokaOne-Regular': require('../src/assets/fonts/FredokaOne-Regular.ttf'),
     });
 
     const onLayoutRootView = useCallback(async () => {
@@ -79,7 +83,13 @@ export default function Layout() {
 
     return (
         <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-            <NavigationContainer>
+            <NavigationContainer theme={{
+                ...DefaultTheme,
+                colors: {
+                    ...DefaultTheme.colors,
+                    background: theme.runwayBackgroundColor,
+                }
+            }}>
                 <Stack.Navigator
                     initialRouteName={firebase.userData ? 'app' : 'start'}
                     screenOptions={{

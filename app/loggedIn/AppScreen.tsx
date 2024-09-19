@@ -194,7 +194,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                                             until={secondsUntilTomorrowUTC()}
                                             size={30}
                                             onFinish={onNewDay}
-                                            digitStyle={{ backgroundColor: item.colors.textColor, borderRadius: 10, fontFamily: 'LilitaOne_400Regular' }}
+                                            digitStyle={{ backgroundColor: item.colors.textColor, borderRadius: 10, fontFamily: 'FredokaOne_400Regular' }}
                                             digitTxtStyle={{ color: item.colors.backgroundColor }}
                                             timeToShow={['H', 'M', 'S']}
                                             timeLabelStyle={{ opacity: 0 }}
