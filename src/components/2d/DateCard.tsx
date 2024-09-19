@@ -151,10 +151,18 @@ const DateCard = forwardRef(({ comingSoon = false, date, content, colors, focuse
                     opacity: cardContentOpacity,
                     transform: [{ translateY: titleTransformY }]
                 }}>
-                    <Text style={{
-                        color: colors.textColor,
-                        fontSize: 40,
-                    }} numberOfLines={3}>{content.title}</Text>
+                    <Text
+                        style={{
+                            color: colors.textColor,
+                            fontSize: 40,
+                            textAlign: 'center',
+                        }}
+                        numberOfLines={
+                            content.title.split(' ').length > 4 ? 3 :
+                                content.title.split(' ').length > 1 ? 2 : 1
+                        }
+                        adjustsFontSizeToFit={true}
+                    >{content.title}</Text>
                 </Animated.View>
 
 
