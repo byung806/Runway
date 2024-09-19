@@ -149,7 +149,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                                     tintColor={theme.runwayButtonColor}
                                     backgroundColor={theme.runwayBackgroundColor}
                                     style={{ width: '94%', height: 40 }}
-                                    fontStyle={{ color: theme.runwayButtonTextColor, fontSize: 16, fontFamily: 'LilitaOne_400Regular', fontWeight: '800' }}
+                                    fontStyle={{ color: theme.runwayButtonTextColor, fontSize: 16, fontFamily: 'FredokaOne_400Regular', fontWeight: '400' }}
                                 />
                                 {leaderboardType === 'fame' &&
                                     <Text style={{ fontSize: 20, color: theme.runwaySubTextColor, textAlign: 'center' }}>

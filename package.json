@@ -12,6 +12,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@expo-google-fonts/fredoka-one": "^0.2.3",
     "@expo-google-fonts/lilita-one": "^0.2.3",
     "@react-native-community/blur": "^4.4.0",
     "@react-native-firebase/app": "^20.1.0",

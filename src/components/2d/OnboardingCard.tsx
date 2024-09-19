@@ -115,7 +115,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
                 <AnimatedNumbers
                     animateToNumber={points}
                     animationDuration={800}
-                    fontStyle={{ color: theme.scheme === 'dark' ? theme.white : theme.black, fontSize: 100, textAlign: 'center', fontFamily: 'LilitaOne_400Regular' }}
+                    fontStyle={{ color: theme.scheme === 'dark' ? theme.white : theme.black, fontSize: 100, textAlign: 'center', fontFamily: 'FredokaOne_400Regular' }}
                     easing={Easing.out(Easing.cubic)}
                 />
                 <Text style={{
@@ -177,6 +177,7 @@ const OnboardingCard = forwardRef(({ focused, colors, style, username, index, op
             <>
                 <View style={{
                     flexDirection: 'row',
+                    gap: 10,
                 }}>
                     <FontAwesome name={'trophy'} size={60} color={theme.trophyYellow} />
                     <FontAwesome name={'trophy'} size={60} color={theme.trophyYellow} />
