@@ -203,24 +203,26 @@ export default function OnboardingScreen({ navigation }: { navigation: StackNavi
         footerHeight: Dimensions.get("window").height * 0.8,
     };
 
+    const [scrollable, setScrollable] = useState(false);
+
     return (
         <View style={{ flex: 1 }}>
             <ScrollableCards<OnboardingCardAttributes>
                 ref={scrollableCardsRef}
                 data={cards}
-                scrollable={username.length >= 3 && username.length <= 15}
-                header={<OnboardingHeaderComponent username={username} setUsername={setUsername} height={undefined as never} arrowDown={undefined as never} />}
-                headerArrowDown={username.length >= 3 && username.length <= 15}
-                renderItem={({ item }) =>
+                scrollable={scrollable}
+                renderHeader={({ focused, height }) => {
+                    return (
+                        <OnboardingHeaderComponent focused={focused} scrollable={scrollable} setScrollable={setScrollable} scroll={() => { scrollableCardsRef.current?.scrollToIndex(0); }} height={height} username={username} setUsername={setUsername} />
+                    )
+                }}
+                renderItem={({ item, focused, style }) =>
                     <OnboardingCard
                         username={username} openOnboardingContentModal={openOnboardingContentModal}
-
-                        focused={undefined as never} colors={undefined as never} style={undefined as never} index={undefined as never}
+                        focused={focused} colors={item.colors} style={style} index={item.index}
                     />
                 }
-                footer={
-                    doneWithExampleQuestion ? <OnboardingFooterComponent username={username} height={undefined as never} /> : undefined
-                }
+                renderFooter={doneWithExampleQuestion ? ({ height }) => <OnboardingFooterComponent username={username} height={height} /> : undefined}
                 {...heights}
                 initialBackgroundColor={theme.runwayBackgroundColor}
             />
