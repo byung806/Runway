@@ -20,7 +20,7 @@ import { LoginScreen, OnboardingScreen, SignupScreen, StartScreen } from './logg
 SplashScreen.preventAutoHideAsync();
 const Stack = createStackNavigator();
 
-const cardStyleInterpolator = ({
+const slideCardStyleInterpolator = ({
     current,
     next,
     inverted,
@@ -91,9 +91,8 @@ export default function Layout() {
                 }
             }}>
                 <Stack.Navigator
-                    initialRouteName={firebase.userData ? 'app' : 'start'}
+                    initialRouteName={firebase.userData ? 'loggedIn' : 'start'}
                     screenOptions={{
-                        // cardStyleInterpolator: cardStyleInterpolator,
                         cardStyleInterpolator: ({ current }) => ({
                             cardStyle: {
                                 opacity: current.progress,
@@ -104,9 +103,7 @@ export default function Layout() {
                     {firebase.userData ?
                         (
                             <>
-                                <Stack.Screen name="app" component={AppScreen} options={{ headerShown: false }} />
-                                <Stack.Screen name="streak" component={StreakScreen} options={{ headerShown: false }} />
-                                <Stack.Screen name="leaderboard" component={LeaderboardScreen} options={{ headerShown: false }} />
+                                <Stack.Screen name="loggedIn" component={LoggedInScreens} options={{ headerShown: false }} />
                             </>
                         ) : (
                             <>
@@ -117,13 +114,25 @@ export default function Layout() {
                             </>
                         )
                     }
-                    {/* <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
-                    <Stack.Screen name="start" component={StartScreen} options={{ headerShown: false, gestureEnabled: false }} />
-                    <Stack.Screen name="onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
-                    <Stack.Screen name="signup" component={SignupScreen} options={{ headerShown: false }} />
-                    <Stack.Screen name="logged_in_app" component={ScreenLayout} options={{ headerShown: false, gestureEnabled: false }} /> */}
                 </Stack.Navigator>
             </NavigationContainer>
         </View>
     );
+}
+
+function LoggedInScreens({ navigation }: { navigation: any }) {
+    const firebase = useFirebase();
+
+    return (
+        <Stack.Navigator
+            initialRouteName="app"
+            screenOptions={{
+                cardStyleInterpolator: slideCardStyleInterpolator
+            }}
+        >
+            <Stack.Screen name="app" component={AppScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="streak" component={StreakScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="leaderboard" component={LeaderboardScreen} options={{ headerShown: false }} />
+        </Stack.Navigator>
+    )
 }
