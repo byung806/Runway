@@ -1,4 +1,4 @@
-import { BaseCardAttributes, DateCard, FloatingProfile, ListFooterComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
+import { BaseCardAttributes, DateCard, FloatingNavbar, FloatingProfile, ListFooterComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
 import BorderedCard from '@/components/2d/BorderedCard';
 import Button, { IconButton } from '@/components/2d/Button';
 import ProfileModal from '@/components/2d/ProfileModal';
@@ -10,10 +10,10 @@ import Foundation from '@expo/vector-icons/Foundation';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions, LayoutAnimation, Linking, Pressable, View } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
 // @ts-ignore
 import CountDown from 'react-native-countdown-component';
 import Rate from 'react-native-rate';
-import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 
@@ -133,14 +133,13 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
 
     const [rateButtonDisabled, setRateButtonDisabled] = useState(false);
 
-    // all attributes with undefined as never are injected by the ScrollableCards component (parent) later - undefined as never is to prevent typescript errors
     return (
         <>
             <FloatingProfile visible={floatingProfileVisible} />
             <ScrollableCards<DateCardAttributes>
                 ref={scrollableCardsRef}
                 data={cards}
-                header={
+                renderHeader={() =>
                     <>
                         {firebase.userData?.rated !== true && (firebase.userData?.streak ?? 0) !== 0 && !firebase.news &&
                             <View style={{ height: heights.headerHeight, ...Styles.centeringContainer }}>
@@ -182,11 +181,11 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                 }
                 {...(cards.length !== 0 && { headerArrowDown: true })}
                 // floatingArrowUp
-                renderItem={({ item, index }) => {
-                    if (index === 0) {
+                renderItem={({ item, focused, style }) => {
+                    if (item.index === 0) {
                         // Coming soon card
                         return (
-                            <BorderedCard colors={item.colors}>
+                            <BorderedCard colors={item.colors} style={style}>
                                 <>
                                     <View style={{ gap: 20 }}>
                                         <Text style={{ color: item.colors.textColor, fontSize: 20, textAlign: 'center' }}>Next card available in:</Text>
@@ -224,22 +223,22 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                             <DateCard
                                 date={item.date}
                                 content={item.content}
-
-                                // for attributes that are injected by the ScrollableCards component (parent)
-                                focused={undefined as never} colors={undefined as never} style={undefined as never}
+                                colors={item.colors}
+                                focused={focused}
+                                style={style}
                             />
                         );
                     }
                 }}
-                footer={
-                    cards.length === 1 ? undefined :
+                renderFooter={({ height, arrowUp }) => {
+                    return (
                         <ListFooterComponent
-                            height={undefined as never}
-                            arrowUp={undefined as never}
-
+                            height={height}
+                            arrowUp={arrowUp}
                             showError={cards.length === 0}
                         />
-                }
+                    )
+                }}
                 {...heights}
                 initialBackgroundColor={theme.runwayBackgroundColor}
                 initialIndex={firebase.todayCompleted ? undefined : 1}
