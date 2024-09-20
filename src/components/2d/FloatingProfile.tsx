@@ -72,7 +72,7 @@ export default function FloatingProfile({ visible }: { visible: boolean }) {
                             width: '100%',
                             height: '100%',
                         }}
-                        blurType={theme.scheme === 'dark' ? "ultraThinMaterialDark" : "ultraThinMaterialLight"}
+                        blurType={theme.scheme === 'dark' ? "ultraThinMaterialDark" : "thinMaterialLight"}
                         blurAmount={10}
                         // overlayColor="black"
                         reducedTransparencyFallbackColor="black"
