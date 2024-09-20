@@ -7,7 +7,7 @@ import { Styles } from '@/styles';
 
 import { LeaderboardData, LeaderboardType, ThemeContext, useFirebase } from '@/providers';
 import { FontAwesome5 } from '@expo/vector-icons';
-import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import SegmentedControl from "react-native-segmented-control-2";
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as Haptics from 'expo-haptics';
 
@@ -132,6 +132,28 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                                     <Text style={{ fontSize: 30, ...Styles.lightShadow, color: theme.runwaySubTextColor }}>points</Text>
                                 </View>
                                 <SegmentedControl
+                                    tabs={['Global', 'Friends', 'Fame']}
+                                    onChange={(index) => {
+                                        if (index === 0) {
+                                            setLeaderboardType('global');
+                                        }
+                                        else if (index === 1) {
+                                            setLeaderboardType('friends');
+                                        }
+                                        else {
+                                            setLeaderboardType('fame');
+                                        }
+                                        setSelectedIndex(index);
+                                    }}
+                                    value={selectedIndex}
+                                    activeTabColor={theme.runwayButtonColor}
+                                    activeTextColor={theme.runwayButtonTextColor}
+                                    style={{
+                                        backgroundColor: theme.runwayBackgroundColor,
+                                    }}
+                                    textStyle={{ color: theme.runwaySubTextColor, fontSize: 16, fontFamily: 'FredokaOne_400Regular' }}
+                                />
+                                {/* <SegmentedControl
                                     values={['Global', 'Friends', 'Hall of Fame']}
                                     selectedIndex={selectedIndex}
                                     onChange={(event) => {
@@ -150,7 +172,7 @@ export default function LeaderboardScreen({ navigation }: { navigation: StackNav
                                     backgroundColor={theme.runwayBackgroundColor}
                                     style={{ width: '94%', height: 40 }}
                                     fontStyle={{ color: theme.runwayButtonTextColor, fontSize: 16, fontFamily: 'FredokaOne_400Regular', fontWeight: '400' }}
-                                />
+                                /> */}
                                 {leaderboardType === 'fame' &&
                                     <Text style={{ fontSize: 20, color: theme.runwaySubTextColor, textAlign: 'center' }}>
                                         The top 3 users last season.
