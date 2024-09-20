@@ -1,4 +1,4 @@
-import { BaseCardAttributes, DateCard, FloatingNavbar, FloatingProfile, ListFooterComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
+import { BaseCardAttributes, DateCard, FloatingProfile, ListFooterComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
 import BorderedCard from '@/components/2d/BorderedCard';
 import Button, { IconButton } from '@/components/2d/Button';
 import ProfileModal from '@/components/2d/ProfileModal';
@@ -6,11 +6,11 @@ import { FirebaseContent, ThemeContext, useFirebase } from '@/providers';
 import { Styles } from '@/styles';
 import { secondsUntilTomorrowUTC, stringToDate } from '@/utils/date';
 import { delay } from '@/utils/utils';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import Foundation from '@expo/vector-icons/Foundation';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions, LayoutAnimation, Linking, Pressable, View } from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign';
 // @ts-ignore
 import CountDown from 'react-native-countdown-component';
 import Rate from 'react-native-rate';
