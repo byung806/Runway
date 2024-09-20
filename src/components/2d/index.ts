@@ -1,7 +1,7 @@
 export { default as AddFriendModal } from './AddFriendModal';
 export { BackArrow, ScrollArrow } from './Arrow';
 export { default as BorderedCard, BorderedCardRef } from './BorderedCard';
-export { default as Button, CloseButton, LeaderboardButton } from './Button';
+export { default as Button, CloseButton } from './Button';
 export { ContentChunkType } from './ContentChunk';
 export { default as DateCard, DateCardRef } from './DateCard';
 export { default as FloatingProfile } from './FloatingProfile';
