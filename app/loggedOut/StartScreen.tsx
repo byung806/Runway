@@ -1,6 +1,6 @@
 import { BorderedCard, Button, Text } from '@/components/2d';
 import React, { useContext, useEffect } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, View, Image } from 'react-native';
 
 import { ThemeContext, useFirebase } from '@/providers';
 import { pastelPurple, Styles, yellowGreen, yellowOrange } from '@/styles';
@@ -87,16 +87,6 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
             <Animated.View style={{
                 flex: 1, backgroundColor: theme.runwayOuterBackgroundColor,
             }}>
-                {/* <Animated.Image
-                    source={require('@/assets/logo.png')}
-                    style={{
-                        position: 'absolute',
-                        width: '100%',
-                        height: '100%',
-                        transform: [{ translateY: planeTransformY }],
-                    }}
-                    resizeMode="cover"
-                /> */}
                 <Animated.View style={{ flex: 1, opacity: opacity }}>
                     <View
                         style={{
@@ -124,11 +114,16 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                             >
                                 <View style={{ width: '100%', gap: 40, padding: 30 }}>
                                     <View style={{ gap: 5 }}>
-                                        <Text style={{
+                                        <Image
+                                            source={require('@/assets/runway-logo-2.png')}
+                                            style={{ width: '90%', height: 60, alignSelf: 'center' }}
+                                            resizeMode='cover'
+                                        />
+                                        {/* <Text style={{
                                             fontSize: 40,
                                             textAlign: 'center',
                                             color: theme.runwayTextColor,
-                                        }}>Runway</Text>
+                                        }}>Runway</Text> */}
                                         <Text style={{
                                             fontSize: 20,
                                             textAlign: 'center',
@@ -203,18 +198,6 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                                 }}
                             />
                         </Animated.View>
-
-                        {/* <BlurView
-                            // blurType="ultraThinMaterialDark"
-                            blurAmount={3}
-                            reducedTransparencyFallbackColor="black"
-                            style={{
-                                zIndex: 99,
-                                position: 'absolute',
-                                width: '100%',
-                                height: '100%',
-                            }}
-                        /> */}
                     </View>
                 </Animated.View>
             </Animated.View>
