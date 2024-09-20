@@ -6,9 +6,9 @@ import { ActivityIndicator, Pressable, View } from 'react-native';
 import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 
 import useBounceAnimation, { SoundType } from '@/utils/useBounceAnimation';
+import { FontAwesome } from "@expo/vector-icons";
 import { animated, config } from '@react-spring/native';
 import Text from './Text';
-import { FontAwesome } from "@expo/vector-icons";
 
 interface ButtonProps {
     title: string;
@@ -104,14 +104,12 @@ export function IconButton({ type, visible, onPress, style }: { type: 'settings'
 
     const { scale: buttonScale, onPressIn: buttonOnPressIn, onPress: buttonOnPress, onPressOut: buttonOnPressOut } = useBounceAnimation({
         scaleTo: 0.8,
-        haptics: Haptics.ImpactFeedbackStyle.Heavy,
+        haptics: Haptics.ImpactFeedbackStyle.Medium,
         config: config.gentle
     });
 
     const initialOpacity = 1;
-
     const opacity = useSharedValue(initialOpacity);
-    const translateY = useSharedValue(0);
 
     useEffect(() => {
         if (visible) {
@@ -136,8 +134,7 @@ export function IconButton({ type, visible, onPress, style }: { type: 'settings'
                 position: 'relative',
                 justifyContent: 'space-between',
                 flexDirection: 'row',
-                opacity: opacity,
-                transform: [{ translateY: translateY }],
+                opacity: opacity
             }}>
                 <ReactSpringAnimatedView style={{
                     alignSelf: 'center',
@@ -147,7 +144,6 @@ export function IconButton({ type, visible, onPress, style }: { type: 'settings'
                     right: side === 'right' ? 20 : undefined,
                     ...style,
 
-                    // @ts-ignore
                     transform: [{ scale: buttonScale }],
 
                     height: 60,

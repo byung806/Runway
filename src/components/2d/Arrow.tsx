@@ -8,6 +8,7 @@ import { Styles } from "@/styles";
 import { AntDesign } from "@expo/vector-icons";
 import * as Haptics from 'expo-haptics';
 
+
 interface ScrollArrowProps {
     type: 'upFloating' | 'up' | 'down';
     visible: boolean;
@@ -32,7 +33,6 @@ export function ScrollArrow({ type, visible, onPress }: ScrollArrowProps) {
                 justifyContent: 'flex-end',
                 padding: 8,
                 alignSelf: 'center',
-                // pointerEvents: (!focusedDate || focusedDate === today) ? 'none' : 'auto',
                 pointerEvents: visible ? 'auto' : 'none',
             }} edges={['top']}>
                 <Arrow filled type={type} visible={visible} onPress={onPress} />
@@ -90,6 +90,7 @@ function Arrow({ filled, color, type, visible, onPress }: ArrowProps) {
             ...(filled ? Styles.shadow : {}),
             opacity: arrowOpacity,
             ...Styles.centeringContainer,
+            pointerEvents: visible ? 'auto' : 'none',
             transform: [{ translateY: arrowTransformY }, { scale: arrowScale }]
         }}>
             <Pressable
@@ -106,6 +107,13 @@ function Arrow({ filled, color, type, visible, onPress }: ArrowProps) {
                                 type === 'left' ? 'arrowleft' :
                                     type === 'right' ? 'arrowright' : 'arrowdown'
                 } size={30} color={color || (filled ? theme.white : theme.black)} />
+                {/* <MaterialIcons name={
+                    type === 'upFloating' ? 'keyboard-arrow-up' :
+                        type === 'up' ? 'keyboard-arrow-up' :
+                            type === 'down' ? 'keyboard-arrow-down' :
+                                type === 'left' ? 'keyboard-arrow-left' :
+                                    type === 'right' ? 'keyboard-arrow-right' : 'keyboard-arrow-down'
+                } size={40} olor={color || (filled ? theme.white : theme.black)} /> */}
             </Pressable>
         </Animated.View>
     )
