@@ -9,7 +9,7 @@ export default function parseContent(content: FirebaseContent, totalPoints: numb
         const chunks: ContentChunkType[] = [];
 
         const totalQuestions = content.chunks.filter((chunk) => chunk.type === 'question').length;
-        console.log('Total questions:', totalQuestions);
+        // console.log('Total questions:', totalQuestions);
 
         let count = 0;
         content.chunks.forEach((chunk) => {
