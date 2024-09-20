@@ -111,7 +111,7 @@ export default function SignupScreen({ route, navigation }: { route: any, naviga
                                 placeholder={'Username'}
                                 defaultValue={username}
                                 onChangeText={setUsername}
-                                maxLength={16}
+                                maxLength={15}
                                 style={{ width: '80%', height: 50 }}
                                 textContentType={'username'}
                                 disabled={loading}
