@@ -23,7 +23,9 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
 
     useEffect(() => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-        setErrorMessage('');
+        if (username.length != 0 && password.length != 0) {
+            setErrorMessage('');
+        }
     }, [username, password])
 
     // called on sign up button press
@@ -42,6 +44,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
         if (username.length < 3 || password.length < 6) {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
             setErrorMessage('Incorrect password!');
+            setPassword('');
             return
         }
         setErrorMessage('');
@@ -58,6 +61,7 @@ export default function LoginScreen({ navigation }: { navigation: StackNavigatio
                 setErrorMessage('Please try again later!');
             } else if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
                 setErrorMessage('Incorrect password!');
+                setPassword('');
             } else if (error.code === 'auth/too-many-requests') {
                 setErrorMessage('You\'re going too fast! Please give it a minute.');
             } else {
