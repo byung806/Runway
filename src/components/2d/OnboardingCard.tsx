@@ -1,17 +1,15 @@
 import { ContentColors, ThemeContext } from '@/providers';
 import { Styles } from '@/styles';
-import React, { forwardRef, memo, useContext, useEffect, useImperativeHandle, useState } from 'react';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import React, { forwardRef, memo, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Easing, View } from 'react-native';
 import AnimatedNumbers from 'react-native-animated-numbers';
 import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 import BorderedCard, { BorderedCardRef } from './BorderedCard';
 import Button from './Button';
 import Text from './Text';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import LeaderboardEntry from './LeaderboardEntry';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-
 
 
 interface OnboardingCardProps {
@@ -31,7 +29,7 @@ export interface OnboardingCardRef {
 const OnboardingCard = forwardRef(({ focused, colors, style, username, index, openOnboardingContentModal }: OnboardingCardProps, ref) => {
     const theme = useContext(ThemeContext);
 
-    const borderedCardRef = React.useRef<BorderedCardRef>(null);
+    const borderedCardRef = useRef<BorderedCardRef>(null);
 
     useImperativeHandle(ref, () => ({
         onPressIn: borderedCardRef.current?.onPressIn,
