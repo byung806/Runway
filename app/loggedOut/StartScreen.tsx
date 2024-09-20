@@ -112,13 +112,21 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                                     height: boxHeight
                                 }}
                             >
-                                <View style={{ width: '100%', gap: 40, padding: 30 }}>
+                                <View style={{ width: '100%', gap: 30, padding: 30 }}>
                                     <View style={{ gap: 5 }}>
-                                        <Image
-                                            source={require('@/assets/runway-logo-2.png')}
-                                            style={{ width: '90%', height: 60, alignSelf: 'center' }}
-                                            resizeMode='cover'
-                                        />
+                                        {theme.scheme === 'light' ?
+                                            <Image
+                                                source={require('@/assets/runway-logo-light-2.png')}
+                                                style={{ width: '90%', height: 60, alignSelf: 'center' }}
+                                                resizeMode='cover'
+                                            />
+                                            :
+                                            <Image
+                                                source={require('@/assets/runway-logo-dark-2.png')}
+                                                style={{ width: '90%', height: 60, alignSelf: 'center' }}
+                                                resizeMode='cover'
+                                            />
+                                        }
                                         {/* <Text style={{
                                             fontSize: 40,
                                             textAlign: 'center',
@@ -135,7 +143,7 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                                             color: theme.runwaySubTextColor,
                                         }}>before.</Text>
                                     </View>
-                                    <View style={{ width: '100%', gap: 10, marginBottom: 20 }}>
+                                    <View style={{ width: '100%', gap: 5, marginBottom: 20 }}>
                                         <Button
                                             title={'Get started'}
                                             onPress={onGetStartedPress}
@@ -143,6 +151,13 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                                         />
                                         <Button
                                             title={'Log in'}
+                                            backgroundColor={'transparent'}
+                                            textColor={theme.runwayButtonColor}
+                                            textStyle={{ textAlign: 'center' }}
+                                            reanimatedStyle={{
+                                                borderWidth: 2,
+                                                borderColor: theme.runwayButtonColor,
+                                            }}
                                             onPress={onLoginPress}
                                             style={{ width: "80%" }}
                                         />
@@ -156,7 +171,7 @@ export default function StartScreen({ navigation }: { navigation: StackNavigatio
                                 position: 'absolute',
                                 width: Dimensions.get("window").width - padding * 2,
                                 height: boxHeight,
-                                transform: [{ translateY: card1TranslateY }, {translateX: 150}, { rotate: '44deg' }],
+                                transform: [{ translateY: card1TranslateY }, { translateX: 150 }, { rotate: '44deg' }],
                             }}
                         >
                             <BorderedCard
