@@ -112,7 +112,7 @@ interface FirebaseContextType {
     logIn: (email: string, password: string) => Promise<FirebaseError | null>;
     logOut: () => Promise<FirebaseError | null>;
     getUserData: () => Promise<void>;
-    getContent: (date: string) => Promise<{ content: FirebaseContent, colors: ContentColors } | null>;
+    getContent: (date: string) => Promise<{ content: FirebaseContent, possiblePoints: number, colors: ContentColors } | null>;
     requestCompleteDate: (date?: string, percent?: number) => Promise<{ success: boolean }>;
     addFriend: (friend: string) => Promise<{ success: boolean, errorMessage: string }>;
     getLeaderboard: (type: LeaderboardType) => Promise<void>;
@@ -277,7 +277,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
      * Fetches the content for the given date from Firestore
      */
     // TODO: client could request content for any date, but server should only allow today and previous days
-    async function getContent(date: string): Promise<{ content: FirebaseContent, colors: ContentColors } | null> {
+    async function getContent(date: string): Promise<{ content: FirebaseContent, possiblePoints: number, colors: ContentColors } | null> {
         try {
             console.log('DATABASE CALL: get content for', date);
             const doc = firestore().collection('content').doc(date)
@@ -286,6 +286,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                 const values = data.data();
                 return {
                     content: values as FirebaseContent,
+                    possiblePoints: values?.possiblePoints as number,
                     colors: values?.colors as ContentColors,
                 };
             }

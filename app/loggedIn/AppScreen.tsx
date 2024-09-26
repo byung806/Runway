@@ -19,6 +19,7 @@ import Rate from 'react-native-rate';
 
 interface DateCardAttributes extends BaseCardAttributes {
     date: string;
+    possiblePoints: number;
     content: FirebaseContent;
 }
 
@@ -115,6 +116,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
         setCards([...cards, {
             date: dateString,
             ref: null,
+            possiblePoints: data.possiblePoints,
             content: data.content,
             colors: data.colors,
             index: cards.length
@@ -222,6 +224,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                         return (
                             <DateCard
                                 date={item.date}
+                                possiblePoints={item.possiblePoints}
                                 content={item.content}
                                 colors={item.colors}
                                 focused={focused}
