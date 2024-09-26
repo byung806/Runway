@@ -16,6 +16,7 @@ interface DateCardProps {
     comingSoon?: boolean;
 
     date: string;
+    possiblePoints: number;
     content: FirebaseContent;
     colors: ContentColors;
 
@@ -29,7 +30,7 @@ export interface DateCardRef {
     onPressOut: () => void;
 }
 
-const DateCard = forwardRef(({ comingSoon = false, date, content, colors, focused, style }: DateCardProps, ref) => {
+const DateCard = forwardRef(({ date, content, possiblePoints, colors, focused, style }: DateCardProps, ref) => {
     const theme = useContext(ThemeContext);
     const firebase = useFirebase();
 
@@ -39,9 +40,6 @@ const DateCard = forwardRef(({ comingSoon = false, date, content, colors, focuse
         onPressIn: borderedCardRef.current?.onPressIn,
         onPressOut: borderedCardRef.current?.onPressOut,
     }));
-
-    const comingSoonCardOpacity = useSharedValue(comingSoon ? 1 : 0);
-    const normalCardOpacity = useSharedValue(comingSoon ? 0 : 1);
 
     const cardCompleted = date in (firebase.userData?.point_days ?? {});
     const pointsEarnedIfCompleted = cardCompleted ? firebase.userData?.point_days[date] : 0;
@@ -191,6 +189,7 @@ const DateCard = forwardRef(({ comingSoon = false, date, content, colors, focuse
                 <ContentProvider
                     date={date}
                     content={content}
+                    possiblePoints={possiblePoints}
                     colors={colors}
                     openContentModal={() => setContentModalVisible(true)}
                     closeContentModal={() => setContentModalVisible(false)}

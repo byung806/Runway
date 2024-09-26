@@ -36,6 +36,7 @@ interface ContentProviderProps {
     isOnboardingContent?: boolean;
 
     date?: string;
+    possiblePoints?: number;
     content: FirebaseContent;
     colors: ContentColors;
     openContentModal: Function;
@@ -47,7 +48,7 @@ interface ContentProviderProps {
 export const ContentContext = createContext<ContentContextType | null>(null);
 
 export function ContentProvider(props: ContentProviderProps) {
-    const { isOnboardingContent, date, content, colors, openContentModal, closeContentModal, children } = props;
+    const { isOnboardingContent, date, possiblePoints, content, colors, openContentModal, closeContentModal, children } = props;
 
     const firebase = useFirebase();
     const notifications = usePushNotifications();
@@ -62,7 +63,8 @@ export function ContentProvider(props: ContentProviderProps) {
 
     const [earnedPointsWithoutStreak, setEarnedPointsWithoutStreak] = useState(0);
     const [earnedStreakBonus, setEarnedStreakBonus] = useState(0);
-    const earnablePointsWithoutStreak = isToday ? 300 : 200;
+    const earnablePointsWithoutStreak = possiblePoints ?? (isToday ? 300 : 200);
+    // const earnablePointsWithoutStreak = isToday ? 300 : 200;
 
     const numQuestions = content.chunks ? content.chunks.filter(chunk => chunk.type === 'question').length : content.questions?.length ?? 0;
     const [questionsStarted, setQuestionsStarted] = useState(false);
