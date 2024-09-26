@@ -966,7 +966,7 @@ PODS:
     - ExpoModulesCore
   - EXNotifications (0.28.9):
     - ExpoModulesCore
-  - Expo (51.0.14):
+  - Expo (51.0.32):
     - ExpoModulesCore
   - expo-dev-client (4.0.18):
     - EXManifests
@@ -1175,13 +1175,13 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ExpoAsset (10.0.9):
+  - ExpoAsset (10.0.10):
     - ExpoModulesCore
   - ExpoDevice (6.0.2):
     - ExpoModulesCore
   - ExpoFileSystem (17.0.1):
     - ExpoModulesCore
-  - ExpoFont (12.0.7):
+  - ExpoFont (12.0.10):
     - ExpoModulesCore
   - ExpoGL (14.0.2):
     - ExpoModulesCore
@@ -1190,7 +1190,7 @@ PODS:
     - ExpoModulesCore
   - ExpoKeepAwake (13.0.2):
     - ExpoModulesCore
-  - ExpoModulesCore (1.12.15):
+  - ExpoModulesCore (1.12.24):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2404,7 +2404,7 @@ PODS:
     - Yoga
   - react-native-safe-area-context (4.10.1):
     - React-Core
-  - react-native-segmented-control (2.5.2):
+  - react-native-segmented-control (2.5.4):
     - React-Core
   - react-native-version-number (0.3.6):
     - React
@@ -3037,19 +3037,19 @@ SPEC CHECKSUMS:
   EXJSONUtils: 30c17fd9cc364d722c0946a550dfbf1be92ef6a4
   EXManifests: c1fab4c3237675e7b0299ea8df0bcb14baca4f42
   EXNotifications: fcecd5a47fc8448d4f6173490b6fa8ee747f687d
-  Expo: 9c87c876b45a6934894ba5e9353ee94fdba48125
+  Expo: 33132a667698a3259a4e6c0af1b4936388e5fa33
   expo-dev-client: f317e009e837fc646c928aa4865d628351446ec6
   expo-dev-launcher: d9990da08fa9939e32536c811d56b7fd6a36eeba
   expo-dev-menu: 8792015a2f2eee4512c763737dd28e7ac3342ca1
   expo-dev-menu-interface: be32c09f1e03833050f0ee290dcc86b3ad0e73e4
-  ExpoAsset: 39e60dc31b16e204a9949caf3edb6dcda322e667
+  ExpoAsset: 323700f291684f110fb55f0d4022a3362ea9f875
   ExpoDevice: fc94f0e42ecdfd897e7590f2874fc64dfa7e9b1c
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
-  ExpoFont: 43b69559cef3d773db57c7ae7edd3cb0aa0dc610
+  ExpoFont: 00756e6c796d8f7ee8d211e29c8b619e75cbf238
   ExpoGL: a2d717e4b7279a075d7dff04d8d2471cb404ad2c
   ExpoHaptics: 5a3a88971af384255baf2504f38b41189cec6984
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
-  ExpoModulesCore: 2731dc119f8c1400636a994df4efbc19522defbd
+  ExpoModulesCore: db3e31e694684f08223d713e89f7648c6d3e04d0
   EXSplashScreen: d8b3c547b9b18a41d80c6f6b274c4c26664febd4
   EXUpdatesInterface: 996527fd7d1a5d271eb523258d603f8f92038f24
   FBLazyVector: 4bc164e5b5e6cfc288d2b5ff28643ea15fa1a589
@@ -3104,7 +3104,7 @@ SPEC CHECKSUMS:
   react-native-blur: b58f3155f534d975b7647593d93a2e907513addd
   react-native-pager-view: b4ba00095f74ab430250cef2a119a5e2491b2c8d
   react-native-safe-area-context: dcab599c527c2d7de2d76507a523d20a0b83823d
-  react-native-segmented-control: b92809e9111013dfa266e1168ba366d62898d9a4
+  react-native-segmented-control: fde795d4d9c95ebc97cd37a034eb0a7a922f1ec5
   react-native-version-number: b415bbec6a13f2df62bf978e85bc0d699462f37f
   React-nativeconfig: 5d452e509d6fbedc1522e21b566451fc673ac6b7
   React-NativeModulesApple: 6560431301ffdab8df6212cc8c8eff779396d8e0
