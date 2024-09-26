@@ -8,6 +8,7 @@ import { getLeaderboard } from "./leaderboard";
 import { handleNotificationReceipts, sendStreakNotification, sendStreakNotificationDebug } from "./notifs";
 import { requestCompleteDate, updateStreaksDaily } from "./streak";
 import { addFriend, deleteAccount, getUserData, initializeUser, sendExpoPushToken, setRated } from "./user";
+import { resetSeason } from "./season";
 
 
 /**
@@ -50,6 +51,10 @@ exports.setRated = onCall(setRated);
  */
 exports.deleteAccount = onCall(deleteAccount);
 
+/**
+ * Resets the season
+ */
+exports.resetSeason = onSchedule("0 0 29 2 *", resetSeason);   // February 29st - almost never runs but still valid (meant to be run manually)
 
 /**
  * Updates the streaks for all users daily
