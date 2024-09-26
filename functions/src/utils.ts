@@ -3,6 +3,9 @@ import { getFirestore } from "firebase-admin/firestore";
 const db = getFirestore();
 db.settings({ ignoreUndefinedProperties: true });
 
+export function getDbBatch() {
+    return db.batch();
+}
 
 export function getDbDoc(collection: string, uid: string) {
     return db.collection(collection).doc(uid);

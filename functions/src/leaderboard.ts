@@ -86,8 +86,21 @@ export const getLeaderboard = async (request: CallableRequest): Promise<{
         const leaderboard: LeaderboardUser[] = [];
         let rank = -1;
 
+        // TODO: save date somewhere
+        const docs = await getDbCollection('fame').get();
+        const docNames = docs.docs.map(doc => doc.id);
+        docNames.sort((a, b) => {
+            const [dayA, monthA, yearA] = a.split('-').map(Number);
+            const [dayB, monthB, yearB] = b.split('-').map(Number);
+            const dateA = new Date(yearA, monthA - 1, dayA);
+            const dateB = new Date(yearB, monthB - 1, dayB);
+            return dateB.getTime() - dateA.getTime();
+        });
+
+        const mostRecentFame = docNames[0];
+
         // TODO: update date
-        const fameUsers = await getDbDoc('fame', '2024-09-15').get();
+        const fameUsers = await getDbDoc('fame', mostRecentFame).get();
         if (fameUsers.exists) {
             leaderboard.push({
                 username: fameUsers.get('1').username,

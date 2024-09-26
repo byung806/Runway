@@ -25,6 +25,7 @@ export const initializeUser = async (request: CallableRequest): Promise<undefine
         point_days: {},
         points: INITIAL_POINTS,
         streak: 0,
+        rated: false,
         uid: uid,
         username: username
     });
