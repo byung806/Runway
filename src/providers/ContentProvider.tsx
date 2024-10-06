@@ -64,6 +64,7 @@ export function ContentProvider(props: ContentProviderProps) {
     const [earnedPointsWithoutStreak, setEarnedPointsWithoutStreak] = useState(0);
     const [earnedStreakBonus, setEarnedStreakBonus] = useState(0);
     const earnablePointsWithoutStreak = possiblePoints ?? (isToday ? 300 : 200);
+    console.log('earnablePointsWithoutStreak', earnablePointsWithoutStreak, 'date', date);
     // const earnablePointsWithoutStreak = isToday ? 300 : 200;
 
     const numQuestions = content.chunks ? content.chunks.filter(chunk => chunk.type === 'question').length : content.questions?.length ?? 0;

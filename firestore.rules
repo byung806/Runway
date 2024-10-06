@@ -14,5 +14,8 @@ service cloud.firestore {
         match /usernames/{document=**} {
             allow read: if true;
         }
+        match /points/{document=**} {
+            allow read: if request.auth != null;
+        }
     }
 }
