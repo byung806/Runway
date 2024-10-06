@@ -105,6 +105,8 @@ interface FirebaseContextType {
     friendsLeaderboard: LeaderboardData | null;
     fameLeaderboard: LeaderboardData | null;
 
+    questionIncorrectPointValues: { [key: number]: number };
+
     initializing: boolean;
 
     isUsernameAvailable: (username: string) => Promise<boolean>;
@@ -137,6 +139,8 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     const [globalLeaderboard, setGlobalLeaderboard] = useState<LeaderboardData | null>(null);
     const [friendsLeaderboard, setFriendsLeaderboard] = useState<LeaderboardData | null>(null);
     const [fameLeaderboard, setFameLeaderboard] = useState<LeaderboardData | null>(null);
+
+    const [questionIncorrectPointValues, setQuestionIncorrectPointValues] = useState<{ [key: number]: number }>({});
 
     const [initializing, setInitializing] = useState(true);
     const registeringUser = useRef(false);
@@ -171,6 +175,8 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                 await getUserData();
                 await getNews();
                 setInitializing(false);
+
+                getQuestionIncorrectPointValues();
 
                 getLeaderboard('global');
                 getLeaderboard('friends');
@@ -272,6 +278,20 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             console.log(error + ' from FirebaseProvider.tsx:  getUserData');
         }
     }
+
+    /**
+     * Fetches the question incorrect point values from Firestore
+     */
+    async function getQuestionIncorrectPointValues() {
+        try {
+            console.log('DATABASE CALL: get question incorrect point values');
+            const data = await firestore().collection('points').doc('incorrect').get();
+            setQuestionIncorrectPointValues(data.data() as { [key: number]: number });
+        } catch (error: any) {
+            console.log(error + ' from FirebaseProvider.tsx:  getQuestionIncorrectPointValues');
+        }
+    }
+
 
     /**
      * Fetches the content for the given date from Firestore
@@ -436,6 +456,8 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
             globalLeaderboard,
             friendsLeaderboard,
             fameLeaderboard,
+
+            questionIncorrectPointValues,
 
             initializing,
 
