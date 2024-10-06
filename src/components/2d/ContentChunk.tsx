@@ -1,4 +1,4 @@
-import { FirebaseContentQuestionChoice, ThemeContext, useContent } from "@/providers";
+import { FirebaseContentQuestionChoice, ThemeContext, useContent, useFirebase } from "@/providers";
 import { Styles } from "@/styles";
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useContext, useEffect, useState } from "react";
@@ -110,7 +110,10 @@ export interface QuestionContentChunkType {
 }
 export function QuestionContentChunk({ focused, question, choices, possiblePoints }: QuestionContentChunkType & BaseContentChunkType) {
     const theme = useContext(ThemeContext);
-    const { isOnboardingContent, colors, cardCompleted, completeQuestion } = useContent();
+    const firebase = useFirebase();
+    const { date, isOnboardingContent, colors, cardCompleted, completeQuestion } = useContent();
+
+    console.log('possiblePoints', possiblePoints, 'date', date);
 
     const [buttonCompleted, setButtonCompleted] = useState(choices.map(() => false));
     const buttonBackgroundColors = choices.map(() => useSharedValue(colors.textColor));
@@ -119,6 +122,27 @@ export function QuestionContentChunk({ focused, question, choices, possiblePoint
     const [done, setDone] = useState(false);
 
     const opacity = useSharedValue(0);
+
+    // TODO: pull from firebase
+    function multiplier(amountWrong: number) {
+        console.log('hello')
+        console.log(firebase.questionIncorrectPointValues);
+        if (firebase.questionIncorrectPointValues) {
+            // {
+            //     0: 1
+            //     1: 0.5
+            //     2: 0.25
+            //     3: 0.1
+            // }
+            if (amountWrong in firebase.questionIncorrectPointValues) {
+                return firebase.questionIncorrectPointValues[amountWrong];
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+    }
 
     function handleAnswer(selectedIndex: number, correct: boolean) {
         for (let i = 0; i < buttonBackgroundColors.length; i++) {
@@ -137,9 +161,7 @@ export function QuestionContentChunk({ focused, question, choices, possiblePoint
                         const amountWrong = buttonCompleted.filter(x => x === true).length;
                         const amountTotal = choices.length;
                         
-                        
-
-                        pointsEarned = possiblePoints * (1 - buttonCompleted.filter(x => x === true).length / choices.length);
+                        pointsEarned = multiplier(amountWrong) * possiblePoints;
                     }
                     setPointsEarned(pointsEarned);
                     opacity.value = withTiming(1, { duration: 400 });
