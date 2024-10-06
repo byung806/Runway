@@ -134,6 +134,11 @@ export function QuestionContentChunk({ focused, question, choices, possiblePoint
                     if (isOnboardingContent) {
                         pointsEarned = possiblePoints;
                     } else {
+                        const amountWrong = buttonCompleted.filter(x => x === true).length;
+                        const amountTotal = choices.length;
+                        
+                        
+
                         pointsEarned = possiblePoints * (1 - buttonCompleted.filter(x => x === true).length / choices.length);
                     }
                     setPointsEarned(pointsEarned);
