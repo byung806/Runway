@@ -1,7 +1,7 @@
 import { CallableRequest } from "firebase-functions/v2/https";
 import { dateToString, getDbCollection, getDbDoc, stringToDate } from "./utils";
 import { updateLeaderboard } from "./leaderboard";
-import { pointsToAddForPastContent, pointsToAddForToday } from "./points";
+import { pointsToAddForDay } from "./points";
 
 
 const DAYS_MISSED_TO_LOSE_STREAK = 2;
@@ -99,7 +99,7 @@ export const requestCompleteDate = async (request: CallableRequest): Promise<{ s
         const { canIncrementStreak, streakReset } = await updateStreak(request.auth.uid, userData);
 
         const streak = streakReset ? 0 : userData.get('streak');
-        const pointsToAdd = Math.round(pointsToAddForToday(streak) * percentOfPoints / 100);
+        const pointsToAdd = Math.round(await pointsToAddForDay(streak, requestedDate ?? today, percentOfPoints, true));
 
         // update streak and points
         if (canIncrementStreak) {
@@ -125,7 +125,7 @@ export const requestCompleteDate = async (request: CallableRequest): Promise<{ s
         }
         const dateToAttemptAdd = dateToString(dateObject);
 
-        const pointsToAdd = Math.round(pointsToAddForPastContent(dateToAttemptAdd) * percentOfPoints / 100);
+        const pointsToAdd = Math.round(await pointsToAddForDay(0, dateToAttemptAdd, percentOfPoints, false));
 
         if (dateToAttemptAdd in userData.get('point_days')) {
             return { success: false };

@@ -328,7 +328,6 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
                 date: date,
                 percent: percent,
             }) as FirebaseFunctionsTypes.HttpsCallableResult<{ success: boolean }>;
-        console.log('request complete date result', data.data);
 
         const { success } = data.data;
         if (success) {

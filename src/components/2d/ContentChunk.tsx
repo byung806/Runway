@@ -113,8 +113,6 @@ export function QuestionContentChunk({ focused, question, choices, possiblePoint
     const firebase = useFirebase();
     const { date, isOnboardingContent, colors, cardCompleted, completeQuestion } = useContent();
 
-    console.log('possiblePoints', possiblePoints, 'date', date);
-
     const [buttonCompleted, setButtonCompleted] = useState(choices.map(() => false));
     const buttonBackgroundColors = choices.map(() => useSharedValue(colors.textColor));
 
@@ -123,10 +121,10 @@ export function QuestionContentChunk({ focused, question, choices, possiblePoint
 
     const opacity = useSharedValue(0);
 
-    // TODO: pull from firebase
+    /**
+     * Multiplier for points earned based on how many questions were answered incorrectly
+     */
     function multiplier(amountWrong: number) {
-        console.log('hello')
-        console.log(firebase.questionIncorrectPointValues);
         if (firebase.questionIncorrectPointValues) {
             // {
             //     0: 1

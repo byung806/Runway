@@ -63,8 +63,8 @@ export function ContentProvider(props: ContentProviderProps) {
 
     const [earnedPointsWithoutStreak, setEarnedPointsWithoutStreak] = useState(0);
     const [earnedStreakBonus, setEarnedStreakBonus] = useState(0);
-    const earnablePointsWithoutStreak = possiblePoints ?? (isToday ? 300 : 200);
-    console.log('earnablePointsWithoutStreak', earnablePointsWithoutStreak, 'date', date);
+    const earnablePointsWithoutStreak = possiblePoints ?? (isToday ? 500 : 200);
+    // console.log('earnablePointsWithoutStreak', earnablePointsWithoutStreak, 'date', date);
     // const earnablePointsWithoutStreak = isToday ? 300 : 200;
 
     const numQuestions = content.chunks ? content.chunks.filter(chunk => chunk.type === 'question').length : content.questions?.length ?? 0;
@@ -92,6 +92,25 @@ export function ContentProvider(props: ContentProviderProps) {
         setEarnedStreakBonus(0);
     }
 
+    function calculateStreakBonus(streak: number) {
+        if (streak >= 1 && streak < 5) {
+            return 20;
+        }
+        if (streak >= 5 && streak < 10) {
+            return 30;
+        }
+        if (streak >= 10 && streak < 15) {
+            return 35;
+        }
+        if (streak >= 15 && streak < 20) {
+            return 40;
+        }
+        if (streak >= 20) {
+            return 40 + streak * 0.1;
+        }
+        return 0;
+    }
+
     /**
      * Complete a question and add the score to the list
      */
@@ -107,7 +126,7 @@ export function ContentProvider(props: ContentProviderProps) {
         }]);
         if (isToday) {
             // need this for float rounding errors
-            setEarnedStreakBonus(Math.round((earnedPointsWithoutStreak + earned) * (1 + Math.min((firebase.userData?.streak ?? 0) * 0.01, 1.3)) - (earnedPointsWithoutStreak + earned)));
+            setEarnedStreakBonus(Math.round(calculateStreakBonus(firebase.userData?.streak ?? 0)));
         }
         setEarnedPointsWithoutStreak(earnedPointsWithoutStreak + earned);
     }
@@ -132,7 +151,7 @@ export function ContentProvider(props: ContentProviderProps) {
             const pointsEarned = questionScores.reduce((acc, curr) => acc + curr.earned, 0);
             const pointsPossible = questionScores.reduce((acc, curr) => acc + curr.possible, 0);
 
-            console.log('pointsEarned', pointsEarned, pointsPossible);
+            // console.log('pointsEarned', pointsEarned, pointsPossible);
 
             if (isToday) {
                 navigation.navigate('streak', {

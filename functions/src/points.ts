@@ -1,33 +1,47 @@
 import { LAST_SEASON_RESET } from "./season";
-import { stringToDate } from "./utils";
+import { getDbDoc, stringToDate } from "./utils";
 
 export const INITIAL_POINTS = 200;
 
 const TODAY_BASE_POINTS = 300;
-const STREAK_MULTIPLIER = 0.01;
-const MAX_STREAK_MULTIPLIER = 1.3;
-
 const PAST_CONTENT_POINTS = 200;
 
 const LAST_SEASON_CONTENT_POINTS = 10;
 
-/**
- * Calculates the number of points to add for a card completed same day
- */
-export function pointsToAddForToday(streak: number): number {
-    return TODAY_BASE_POINTS * (Math.min(1 + streak * STREAK_MULTIPLIER, MAX_STREAK_MULTIPLIER));
-}
-
-/**
- * Calculates the number of points to add for a card "backfilled"
- */
-export function pointsToAddForPastContent(date: string): number {
+export async function pointsToAddForDay(streak: number, date: string, percentOfPoints: number, isToday: boolean): Promise<number> {
     const dateObject = stringToDate(date);
     const lastSeasonDateObject = stringToDate(LAST_SEASON_RESET);
 
-    if (dateObject >= lastSeasonDateObject) {
-        return PAST_CONTENT_POINTS;
-    } else {
+    const cardValue = (await getDbDoc('content', date).get()).get('possiblePoints');
+
+    const possiblePoints = (
+        cardValue ?? (isToday ? TODAY_BASE_POINTS : PAST_CONTENT_POINTS)
+    ) * percentOfPoints / 100;
+
+    if (isToday) {
+        if (streak == 0) {
+            return possiblePoints;
+        }
+        if (streak >= 1 && streak < 5) {
+            return possiblePoints + 20;
+        }
+        if (streak >= 5 && streak < 10) {
+            return possiblePoints + 30;
+        }
+        if (streak >= 10 && streak < 15) {
+            return possiblePoints + 35;
+        }
+        if (streak >= 15 && streak < 20) {
+            return possiblePoints + 40;
+        }
+        if (streak >= 20) {
+            return possiblePoints + 40 + streak * 0.1;
+        }
+    }
+    if (dateObject < lastSeasonDateObject) {
         return LAST_SEASON_CONTENT_POINTS;
+    }
+    else {
+        return PAST_CONTENT_POINTS;
     }
 }
