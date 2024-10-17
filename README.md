@@ -1,6 +1,6 @@
 # Runway - Daily Learning
-[<img src="https://github.com/user-attachments/assets/1e5accef-9986-4c04-8fc3-5f48ec83d857" width="20%">](https://apps.apple.com/app/runway-gamify-learning/id6639588047)
-[<img src="https://github.com/user-attachments/assets/4864d6b6-c32e-45bd-9ec3-8a13815bbddd" width="20%">](https://play.google.com/store/apps/details?id=com.byung806.runway)
+[<img src="https://github.com/user-attachments/assets/1e5accef-9986-4c04-8fc3-5f48ec83d857" width="200">](https://apps.apple.com/app/runway-gamify-learning/id6639588047)
+[<img src="https://github.com/user-attachments/assets/4864d6b6-c32e-45bd-9ec3-8a13815bbddd" width="200">](https://play.google.com/store/apps/details?id=com.byung806.runway)
 
 Runway has a unique approach of just one short lesson per day, to easily build learning habits. Each daily lesson is curated by our team of 20+ content creators and made with bright accessible colors and intuitive visuals.
 
