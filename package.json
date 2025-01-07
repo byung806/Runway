@@ -23,6 +23,7 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
     "@react-spring/native": "^9.7.3",
+    "d3": "^7.9.0",
     "expo": "^51.0.32",
     "expo-av": "~14.0.6",
     "expo-build-properties": "~0.12.3",
@@ -54,12 +55,14 @@
     "react-native-screens": "3.31.1",
     "react-native-segmented-control-2": "^2.0.1",
     "react-native-store-version": "^1.4.1",
+    "react-native-svg": "15.2.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-version-number": "^0.3.6",
     "sentence-splitter": "^5.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/d3": "^7.4.3",
     "@types/react": "~18.2.79",
     "typescript": "~5.3.3"
   },

@@ -13,8 +13,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';
 import { useCallback, useContext } from 'react';
 import { Animated, View } from 'react-native';
-import { AppScreen, LeaderboardScreen, StreakScreen } from './loggedIn';
+import { GraphScreen, AppScreen, LeaderboardScreen, StreakScreen } from './loggedIn';
 import { LoginScreen, OnboardingScreen, SignupScreen, StartScreen } from './loggedOut';
+import React from 'react';
 
 
 SplashScreen.preventAutoHideAsync();
@@ -121,18 +122,19 @@ export default function Layout() {
 }
 
 function LoggedInScreens({ navigation }: { navigation: any }) {
-    const firebase = useFirebase();
+    // const firebase = useFirebase();
 
     return (
         <Stack.Navigator
-            initialRouteName="app"
+            initialRouteName="graph"
             screenOptions={{
                 cardStyleInterpolator: slideCardStyleInterpolator
             }}
         >
-            <Stack.Screen name="app" component={AppScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="streak" component={StreakScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="leaderboard" component={LeaderboardScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="graph" component={GraphScreen} options={{ headerShown: false }} />
+            {/* <Stack.Screen name="app" component={AppScreen} options={{ headerShown: false }} /> */}
+            {/* <Stack.Screen name="streak" component={StreakScreen} options={{ headerShown: false }} /> */}
+            {/* <Stack.Screen name="leaderboard" component={LeaderboardScreen} options={{ headerShown: false }} /> */}
         </Stack.Navigator>
     )
 }
