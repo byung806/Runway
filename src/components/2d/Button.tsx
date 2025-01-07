@@ -6,7 +6,7 @@ import { ActivityIndicator, Pressable, View } from 'react-native';
 import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 
 import useBounceAnimation, { SoundType } from '@/utils/useBounceAnimation';
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { animated, config } from '@react-spring/native';
 import Text from './Text';
 
@@ -98,8 +98,12 @@ export function CloseButton({ color, onPress }: { color?: string, onPress: () =>
 export function IconButton({ type, visible, onPress, style }: { type: 'settings' | 'leaderboard', visible?: boolean, onPress: () => void, style?: any }) {
     const theme = useContext(ThemeContext);
 
-    const iconName = type === 'settings' ? 'gear' : 'trophy';
     const iconColor = type === 'settings' ? theme.white : theme.trophyYellow;
+    const icon = type === 'settings' ? (
+        <MaterialCommunityIcons name={'cards'} size={30} color={iconColor} />
+    ) : (
+        <FontAwesome name={'trophy'} size={30} color={iconColor} />
+    );
     const side = type === 'settings' ? 'left' : 'right';
 
     const { scale: buttonScale, onPressIn: buttonOnPressIn, onPress: buttonOnPress, onPressOut: buttonOnPressOut } = useBounceAnimation({
@@ -134,7 +138,7 @@ export function IconButton({ type, visible, onPress, style }: { type: 'settings'
                 position: 'relative',
                 justifyContent: 'space-between',
                 flexDirection: 'row',
-                opacity: opacity
+                opacity: opacity,
             }}>
                 <ReactSpringAnimatedView style={{
                     alignSelf: 'center',
@@ -148,12 +152,13 @@ export function IconButton({ type, visible, onPress, style }: { type: 'settings'
 
                     height: 60,
                     width: 60,
-                    borderRadius: 20,
+                    borderRadius: 60,
+                    zIndex: 10,
                     backgroundColor: theme.scheme === 'dark' ? theme.black : '#3c0052',
                     ...Styles.shadow,
                     ...Styles.centeringContainer,
                 }}>
-                    <FontAwesome name={iconName} size={30} color={iconColor} />
+                    {icon}
                 </ReactSpringAnimatedView>
             </Animated.View>
         </Pressable>

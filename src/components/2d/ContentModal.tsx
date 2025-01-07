@@ -40,8 +40,7 @@ export default function ContentModal({ visible }: { visible: boolean }) {
                 borderColor: colors.borderColor,
                 borderLeftWidth: 6,
                 borderRightWidth: 6,
-                // borderWidth: 6,
-                // borderRadius: 42,
+                borderRadius: 12,
                 backgroundColor: colors.backgroundColor,
             }}>
                 <FlatList

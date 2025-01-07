@@ -4,13 +4,13 @@ export const LAST_SEASON_RESET = '2024-09-26';
 
 /**
  * Resets the season
- * Finds the top 3 users and saves them in "1", "2", and "3" fields in "2024-09-15" document in "fame" collection
+ * Finds the top 3 users and saves them in "1", "2", and "3" fields in today's date document in "fame" collection
  * Resets all users' points, and stores the previous points in "fame" collection
  * Updates "leaderboard" collection
  */
 export const resetSeason = async (): Promise<undefined> => {
     const usersRef = getDbCollection('users');
-    const fameRef = getDbDoc('fame', dateToString(new Date()));
+    const fameRef = getDbDoc('fame', dateToString(new Date()));  // server automatically sends most recent fame date document so it should be okay
     const leaderboardRef = getDbCollection('leaderboard');
 
     // Get all users
