@@ -1,32 +1,28 @@
 // check slack
 
-// any-component zoomer
+// X any-component zoomer
 // https://github.com/Glazzes/react-native-zoom-toolkit/
 
 // View zoomers
 // https://www.npmjs.com/package/@openspacelabs/react-native-zoomable-view
 
 // svg zoomer
-// https://github.com/garblovians/react-native-svg-pan-zoom
+// X https://github.com/garblovians/react-native-svg-pan-zoom
 
-// Is there any way to implement d3 svg-like zoom behavior, but without DOM mutation. For example, using some d3 pure functions with just x and y values as input.
+// X Is there any way to implement d3 svg-like zoom behavior, but without DOM mutation. For example, using some d3 pure functions with just x and y values as input.
 // https://stackoverflow.com/questions/46955024/d3-zoom-behavior-in-react-native
 
+// idea: convert everything to three and use three's camera controls and find force graph library that works with three
+// https://codesandbox.io/s/react-three-fiber-react-spring-svg-parallax-55tzr
 
 // inertia: on pan responder release
 
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { View, Dimensions, PanResponder } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import Svg, { Circle, G, Line } from 'react-native-svg';
 import * as d3 from 'd3';
-
-import {
-    fitContainer,
-    ResumableZoom,
-    useImageResolution,
-} from 'react-native-zoom-toolkit';
-import { Styles } from '@/styles';
+import { GestureEvent, PanGestureHandler, PanGestureHandlerEventPayload, State } from 'react-native-gesture-handler';
 
 interface Node {
     x: number;
@@ -48,21 +44,13 @@ interface Edge {
 const ForceGraphD3 = () => {
     const [nodes, setNodes] = useState<Node[]>([]);
     const [links, setLinks] = useState<Edge[]>([]);
-
-    const [selectedNode, setSelectedNode] = useState<Node | null>(null);
     const forceRef = useRef<d3.Simulation<Node, Edge>>();
     const { width, height } = Dimensions.get('window');
     const minScreenDim = useMemo(() => Math.min(width, height), [width, height]);
 
-    const [zoomState, setZoomState] = useState({ k: 1, x: 0, y: 0 });
-
-    // MINE
-    // useEffect(() => {
-    //     if (selectedNode) {
-    //         selectedNode.fx = width / 2;
-    //         selectedNode.fy = height / 2;
-    //     }
-    // }, [selectedNode]);
+    const prevTransformRef = useRef({ x: 0, y: 0, scale: 1 });  // Previous transform state
+    const transformRef = useRef({ x: 0, y: 0, scale: 1 });  // Transform state (ref used so that it doesn't trigger re-render)
+    const svgGroupRef = useRef<G<any>>(null);  // Reference to the G element
 
     useEffect(() => {
         // Initialize nodes
@@ -75,10 +63,7 @@ const ForceGraphD3 = () => {
         }));
         // Root node (today card)
         const root = initNodes[0];
-        // setSelectedNode(root);
-        root.radius = 0;
-        // root.fx = width / 2;
-        // root.fy = height / 2;
+        root.radius = 100;
 
         // Initialize links
         const initLinks: Edge[] = [];
@@ -93,11 +78,11 @@ const ForceGraphD3 = () => {
         // Initialize force
         const sim = d3.forceSimulation<Node>(initNodes)
             .force('charge', d3.forceManyBody<Node>()
-                .strength((d, i) => (i > 0 ? -1000 : -2000))
+                .strength((d, i) => (i > 0 ? -400 : -8000))
                 .distanceMax(minScreenDim * 3))
             .force('link', d3.forceLink<Node, Edge>(initLinks)
-                .distance(minScreenDim / 4)
-                .strength(1))
+                .distance(minScreenDim / 6)
+                .strength(2))
             .force('x', d3.forceX(width / 2).strength(0.05))
             .force('y', d3.forceY(height / 2).strength(0.05))
             .force('collision', d3.forceCollide<Node>().radius(d => d.radius + 5))
@@ -108,54 +93,34 @@ const ForceGraphD3 = () => {
 
         forceRef.current = sim;
 
-        // zoom doesn't work because the way it's implemented uses addEventListener which doesn't work with Native
-        // const zoom = d3.zoom()
-        //     .scaleExtent([0.5, 5])
-        //     .on('zoom', (e) => {
-        //         setZoomState({
-        //             k: e.transform.k,
-        //             x: e.transform.x,
-        //             y: e.transform.y
-        //         });
-        //     });
-        // zoomRef.current = zoom;
-
         setNodes(initNodes);
         setLinks(initLinks);
 
     }, [width, height]);
 
-    const panResponder = PanResponder.create({
-        onStartShouldSetPanResponder: () => true,
-        onPanResponderMove: (event, { dx, dy }) => {
-            // console.log('gestureState', dx, dy);
-            setZoomState({
-                k: zoomState.k,
-                x: zoomState.x + dx,
-                y: zoomState.y + dy
-            })
-        },
-    });
+    const onGestureEvent = (e: GestureEvent<PanGestureHandlerEventPayload>) => {
+        const { translationX, translationY } = e.nativeEvent;
+        transformRef.current.x = translationX;
+        transformRef.current.y = translationY;
+        if (svgGroupRef.current) {
+            svgGroupRef.current.setNativeProps({
+                transform: `translate(${prevTransformRef.current.x + transformRef.current.x}, ${prevTransformRef.current.y + transformRef.current.y}) scale(${transformRef.current.scale})`,
+            });
+        }
+    };
+
+    const onHandlerStateChange = (e: GestureEvent<PanGestureHandlerEventPayload>) => {
+        if (e.nativeEvent.state === State.END) {
+            prevTransformRef.current.x += transformRef.current.x;
+            prevTransformRef.current.y += transformRef.current.y;
+        }
+    }
 
     return (
-        <View style={{ flex: 1 }} {...panResponder.panHandlers}>
-            {/* <ResumableZoom
-                minScale={1}
-                maxScale={5}
-                scaleMode='clamp'
-                pinchEnabled={false}
-                tapsEnabled={false}
-                // onPanStart={(e) => {
-                //     console.log('onPanStart', e);
-                //     nodes[0].fx = e.x;
-                //     nodes[0].fy = e.y;
-                //     forceRef.current?.alphaTarget(0.8).restart();
-                // }}
-            > */}
+        <PanGestureHandler onGestureEvent={onGestureEvent} onHandlerStateChange={onHandlerStateChange}>
+            <View style={{ flex: 1 }}>
                 <Svg style={{ flex: 1 }}>
-                    <G
-                        transform={`translate(${zoomState.x},${zoomState.y}) scale(${zoomState.k})`}
-                    >
+                    <G ref={svgGroupRef}>
                         {links.map((link, i) => (
                             <Line
                                 key={`link-${i}`}
@@ -167,7 +132,7 @@ const ForceGraphD3 = () => {
                                 strokeWidth={2}
                             />
                         ))}
-                        {nodes.slice(1).map((node) => (
+                        {nodes.slice(0).map((node) => (
                             <Circle
                                 key={`node-${node.id}`}
                                 cx={node.x}
@@ -178,10 +143,9 @@ const ForceGraphD3 = () => {
                         ))}
                     </G>
                 </Svg>
-            {/* </ResumableZoom> */}
-        </View>
+            </View>
+        </PanGestureHandler>
     );
 };
 
 export default ForceGraphD3;
-
