@@ -6,9 +6,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function GraphScreen() {
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-            <SafeAreaView style={{ flex: 1 }}>
+            {/* <SafeAreaView style={{ flex: 1 }}> */}
                 <ForceGraphD3 />
-            </SafeAreaView>
+            {/* </SafeAreaView> */}
         </View>
     );
 }
