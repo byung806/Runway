@@ -1,3 +1,12 @@
+/**
+ * @description Node-based force graph. Implements panning and node click events.
+ * Includes slight physics effect when panning.
+ * 
+ * @exports ForceGraphD3
+ * 
+ * @author Bryan Yung
+ */
+
 // check slack
 
 // X any-component zoomer
@@ -19,16 +28,13 @@
 
 // inertia: on pan responder release
 
-// TODO: add inertia to the pan gesture handler
-// TODO: make nodes clickable
-// TODO: add shadow/glow to nodes
 
-
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { View, Dimensions } from 'react-native';
-import Svg, { Circle, Defs, G, Line } from 'react-native-svg';
+import Svg, { Circle, G, Line, Text } from 'react-native-svg';
 import * as d3 from 'd3';
 import { GestureEvent, PanGestureHandler, PanGestureHandlerEventPayload, State } from 'react-native-gesture-handler';
+import { ThemeContext } from '@/providers';
 
 interface Node {
     x: number;
@@ -47,7 +53,9 @@ interface Link {
     target: Node;
 }
 
-const ForceGraphD3 = () => {
+export default function ForceGraphD3() {
+    const theme = useContext(ThemeContext);
+
     const [nodes, setNodes] = useState<Node[]>([]);
     const [links, setLinks] = useState<Link[]>([]);
     const forceRef = useRef<d3.Simulation<Node, Link>>();
@@ -57,13 +65,14 @@ const ForceGraphD3 = () => {
 
     // ------------------ Panning ------------------
     // useRefs to update without re-render & lag (transform is updated directly on svg)
-    const prevTransformRef = useRef({ x: 0, y: 0, scale: 1 });  // previous transform state
-    const transformRef = useRef({ x: 0, y: 0, scale: 1 });  // current transform state
+    const transformRef = useRef({ x: 0, y: 0, scale: 1 });  // cumulative transform state (left is -x, up is -y)
+    const panningTransformRef = useRef({ x: 0, y: 0, scale: 1 });  // relative transform state (only used when panning)
     const svgGroupRef = useRef<G<any>>(null);
 
+    // ------------------ Initialization ------------------
     useEffect(() => {
         // initialize nodes
-        const initNodes = d3.range(40).map((val): Node => ({
+        const initNodes = d3.range(20).map((val): Node => ({
             radius: Math.floor(Math.random() * 4) + 16,
             id: val,
             degree: 0,
@@ -86,26 +95,27 @@ const ForceGraphD3 = () => {
 
         // initialize force https://d3js.org/d3-force/
         const targetEdgeLength = minScreenDim / 6;
+        const targetNodeSeparation = minScreenDim;
         const sim = d3.forceSimulation<Node>(initNodes)
             // repel when too close
             .force('repel', d3.forceManyBody<Node>()
                 .strength((d, i) => {
                     if (i === 0) {
-                        return -800;
+                        return -400;
                     }
-                    return -400;
+                    return -800;
                 })
-                .distanceMax(minScreenDim))
+                .distanceMax(targetNodeSeparation))
             // attract when too far
             .force('attract', d3.forceManyBody<Node>()
                 .strength((d, i) => 200)
-                .distanceMin(minScreenDim))
+                .distanceMin(targetNodeSeparation))
             // attract linked nodes more
             .force('link', d3.forceLink<Node, Link>(initLinks)
                 .distance(targetEdgeLength)
                 .strength(2))
             // center the graph
-            .force('center', d3.forceCenter(width / 2, height / 2).strength(0.6))
+            .force('center', d3.forceCenter(width / 2, height / 2).strength(0.8))
             // prevent nodes from overlapping
             .force('collision', d3.forceCollide<Node>().radius(d => d.radius + 5))
             .on('tick', () => {
@@ -120,37 +130,63 @@ const ForceGraphD3 = () => {
 
     }, [width, height]);
 
-    function onGestureEvent(e: GestureEvent<PanGestureHandlerEventPayload>) {
+    /*
+    * When panning, update the transform of the svg group
+    */
+    function onPanGestureEvent(e: GestureEvent<PanGestureHandlerEventPayload>) {
         const { translationX, translationY } = e.nativeEvent;
-        transformRef.current.x = translationX;
-        transformRef.current.y = translationY;
+        panningTransformRef.current.x = translationX;
+        panningTransformRef.current.y = translationY;
         if (svgGroupRef.current) {
             svgGroupRef.current.setNativeProps({
-                transform: `translate(${prevTransformRef.current.x + transformRef.current.x}, ${prevTransformRef.current.y + transformRef.current.y}) scale(${transformRef.current.scale})`,
+                transform: `translate(${transformRef.current.x + panningTransformRef.current.x}, ${transformRef.current.y + panningTransformRef.current.y}) scale(${panningTransformRef.current.scale})`,
             });
         }
     };
 
-    function onHandlerStateChange(e: GestureEvent<PanGestureHandlerEventPayload>) {
+    /*
+    * Handle when panning starts or ends
+    */
+    function onPanStateChange(e: GestureEvent<PanGestureHandlerEventPayload>) {
+        // when drag starts, move invisible node to touch position (to create a cool effect)
         if (e.nativeEvent.state === State.BEGAN) {
-            console.log(e.nativeEvent.x, e.nativeEvent.y);  // x and y are the coordinates of the touch ON THE SCREEN
-            nodes[0].fx = e.nativeEvent.x - prevTransformRef.current.x;  // subtract to get relative coordinates to the svg
-            nodes[0].fy = e.nativeEvent.y - prevTransformRef.current.y;
-            forceRef.current?.alpha(0.3).restart();  // when alpha is 0, the simulation stops so we need to make it redo the physics a little bit
+            // subtract to get touch coords relative to the graph
+            nodes[0].fx = e.nativeEvent.x - transformRef.current.x;
+            nodes[0].fy = e.nativeEvent.y - transformRef.current.y;
+
+            // when alpha is 0, the simulation stops so we need to make it redo the physics a little bit
+            forceRef.current?.alpha(0.1).restart();
         }
-        if (e.nativeEvent.state === State.END) {
-            // set the previous transform (so next pan doesn't start from 0)
-            prevTransformRef.current.x += transformRef.current.x;
-            prevTransformRef.current.y += transformRef.current.y;
+
+        // when drag ends, set the previous transform to the current transform
+        else if (e.nativeEvent.state === State.END) {
+            // update the cumulative transform
+            transformRef.current.x += panningTransformRef.current.x;
+            transformRef.current.y += panningTransformRef.current.y;
+
+            // TODO: add inertia, snap to node
+            // find closest node to center of screen (node coordinates have to be shifted by the transform amount)
+            const closestNode = nodes.reduce((prev, curr) => {
+                const prevDist = Math.hypot(
+                    (prev.x + transformRef.current.x) - (width / 2),
+                    (prev.y + transformRef.current.y) - (height / 2));
+                const currDist = Math.hypot(
+                    (curr.x + transformRef.current.x) - (width / 2),
+                    (curr.y + transformRef.current.y) - (height / 2)
+                );
+                return currDist < prevDist ? curr : prev;
+            });
+
+            console.log('closest node:', closestNode.id);
         }
     }
 
     function nodePressed(node: Node) {
-        console.log('node pressed:', node);
+        console.log('node pressed:', node.id);
     }
 
     return (
-        <PanGestureHandler onGestureEvent={onGestureEvent} onHandlerStateChange={onHandlerStateChange}>
+        <PanGestureHandler onGestureEvent={onPanGestureEvent} onHandlerStateChange={onPanStateChange}>
             <View style={{ flex: 1 }}>
                 <Svg style={{ flex: 1 }}>
                     <G ref={svgGroupRef}>
@@ -161,26 +197,45 @@ const ForceGraphD3 = () => {
                                 y1={link.source.y}
                                 x2={link.target.x}
                                 y2={link.target.y}
-                                stroke="#8b45a4"
-                                strokeWidth={2}
+                                stroke={theme.graphLinkColor}
+                                strokeWidth={4}
+                                opacity={0.15}
                             />
                         ))}
                         {nodes.slice(1).map((node) => (
-                            <Circle
-                                key={`node-${node.id}`}
-                                cx={node.x}
-                                cy={node.y}
-                                r={node.radius}
-                                fill={d3.schemeSet3[node.id % 12]}
-                                onPress={() => nodePressed(node)}
-                                opacity={0.8}
-                            />
+                            <G key={`node-${node.id}`}>
+                                <Circle
+                                    cx={node.x}
+                                    cy={node.y}
+                                    r={node.radius}
+                                    fill={d3.schemeSet3[node.id % 12]}
+                                    onPress={() => nodePressed(node)}
+                                    opacity={1}
+                                />
+                                {/* debug text to show each node's id */}
+                                <Text
+                                    x={node.x}
+                                    y={node.y}
+                                    fontSize={node.radius}
+                                    fill="#000"
+                                    textAnchor="middle"
+                                    dy=".3em"
+                                >
+                                    {node.id}
+                                </Text>
+                            </G>
                         ))}
+                        {/* reference for the center */}
+                        <Circle
+                            cx={width / 2}
+                            cy={height / 2}
+                            r={30}
+                            fill={d3.schemeSet3[0]}
+                            opacity={0.8}
+                        />
                     </G>
                 </Svg>
             </View>
         </PanGestureHandler>
     );
 };
-
-export default ForceGraphD3;

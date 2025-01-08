@@ -9,7 +9,7 @@ export default function GraphScreen() {
     const theme = useContext(ThemeContext);
     
     return (
-        <View style={{ flex: 1, backgroundColor: theme.runwayBackgroundColor }}>
+        <View style={{ flex: 1, backgroundColor: theme.graphBackgroundColor }}>
             {/* <SafeAreaView style={{ flex: 1 }}> */}
                 <ForceGraphD3 />
             {/* </SafeAreaView> */}

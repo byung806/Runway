@@ -1,6 +1,9 @@
 export interface Theme {
     scheme: 'light' | 'dark';
 
+    graphBackgroundColor: string;
+    graphLinkColor: string;
+
     runwayTextColor: string;
     runwaySubTextColor: string;
     runwayBorderColor: string;
@@ -40,6 +43,9 @@ const CommonThemeColors = {
 export const RunwayLightTheme: Theme = {
     scheme: 'light',
 
+    graphBackgroundColor: '#fcfcfc',
+    graphLinkColor: '#bbbbbb',
+    
     runwayTextColor: '#3b0051',
     runwaySubTextColor: '#755486',
     runwayBorderColor: '#47005e',
@@ -60,6 +66,9 @@ export const RunwayLightTheme: Theme = {
 
 export const RunwayDarkTheme: Theme = {
     scheme: 'dark',
+
+    graphBackgroundColor: '#010101',
+    graphLinkColor: '#ffffff',
 
     // runwayTextColor: '#edbeff',
     // runwayBorderColor: '#844a97',
