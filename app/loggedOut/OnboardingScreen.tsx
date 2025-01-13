@@ -1,3 +1,11 @@
+/**
+ * @description Onboarding (tutorial) screen for the app. Displays an example lesson with info about the app.
+ * 
+ * @exports AppScreen
+ * 
+ * @author Bryan Yung
+ */
+
 import { BaseCardAttributes, ScrollableCards, ScrollableCardsRef } from '@/components/2d';
 import React, { useContext, useState } from 'react';
 import { Dimensions, View } from 'react-native';

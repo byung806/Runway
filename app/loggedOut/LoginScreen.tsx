@@ -1,3 +1,11 @@
+/**
+ * @description Login screen for the app. Implements profanity filter, password validation, and async Firebase login.
+ * 
+ * @exports AppScreen
+ * 
+ * @author Bryan Yung
+ */
+
 import { BackArrow, Button, Text, TextInput } from '@/components/2d';
 import { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, LayoutAnimation, Platform, TouchableOpacity, View } from 'react-native';
@@ -5,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FirebaseError, useRunwayTheme, useFirebase } from '@/providers';
 import { Styles } from '@/styles';
-import { callWithTimeout } from '@/utils/utils';
+import { callWithTimeout } from '@/utils/Utils';
 import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 

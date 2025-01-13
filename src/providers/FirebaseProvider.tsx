@@ -1,5 +1,5 @@
-import { getTodayDate } from '@/utils/date';
-import { delay } from '@/utils/utils';
+import { getTodayDate } from '@/utils/Date';
+import { delay } from '@/utils/Utils';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import functions, { FirebaseFunctionsTypes } from '@react-native-firebase/functions';

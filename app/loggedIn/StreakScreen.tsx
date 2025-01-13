@@ -1,7 +1,16 @@
+/**
+ * @description Streak screen for the app. Displayed when the streak is incremented.
+ * Navigation to this screen is managed by ContentProvider.
+ * 
+ * @exports AppScreen
+ * 
+ * @author Bryan Yung
+ */
+
 import { Button, Text } from '@/components/2d';
 import { useRunwayTheme, useFirebase } from "@/providers";
 import { Styles } from "@/styles";
-import { delay } from "@/utils/utils";
+import { delay } from "@/utils/Utils";
 import { useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import LottieView from 'lottie-react-native';

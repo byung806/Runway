@@ -6,7 +6,7 @@ import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 import { ScrollArrow } from './Arrow';
 
 import * as Haptics from 'expo-haptics';
-import { delay } from '@/utils/utils';
+import { delay } from '@/utils/Utils';
 import { Styles } from '@/styles';
 
 interface ScrollableCardsProps<T> {

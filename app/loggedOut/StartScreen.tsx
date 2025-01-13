@@ -1,10 +1,18 @@
+/**
+ * @description Initial screen for the app. Animates cards around the Runway logo and provides options to get started or log in.
+ * 
+ * @exports AppScreen
+ * 
+ * @author Bryan Yung
+ */
+
 import { BorderedCard, Button, Text } from '@/components/2d';
 import React, { useEffect } from 'react';
 import { Dimensions, Image, View } from 'react-native';
 
 import { useFirebase, useRunwayTheme } from '@/providers';
 import { pastelPurple, Styles, yellowGreen, yellowOrange } from '@/styles';
-import { delay } from '@/utils/utils';
+import { delay } from '@/utils/Utils';
 import { useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';

@@ -1,3 +1,11 @@
+/**
+ * @description Leaderboard screen. Displays the user's points & streak as well as the global, friends, and Hall of Fame leaderboards.
+ * 
+ * @exports LeaderboardScreen
+ * 
+ * @author Bryan Yung
+ */
+
 import { AddFriendModal, BackArrow, Button, LeaderboardEntry, Text } from '@/components/2d';
 import React, { useEffect, useState } from 'react';
 import { FlatList, LayoutAnimation, View } from 'react-native';

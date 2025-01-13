@@ -15,7 +15,7 @@ import { Dimensions, FlatList, Linking, Modal, Pressable, View } from 'react-nat
 import { useRunwayTheme, useContent } from '@/providers';
 import { Styles } from '@/styles';
 import parseContent from '@/utils/ContentParser';
-import { stringToDate } from '@/utils/date';
+import { stringToDate } from '@/utils/Date';
 import Foundation from '@expo/vector-icons/Foundation';
 import { ScrollArrow } from './Arrow';
 import Button, { CloseButton } from './Button';

@@ -1,3 +1,11 @@
+/**
+ * @description Core file for the app. Initializes notifications, Firebase, and themes.
+ * 
+ * @exports App
+ * 
+ * @author Bryan Yung
+ */
+
 import { registerRootComponent } from 'expo';
 
 import auth from '@react-native-firebase/auth';

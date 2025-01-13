@@ -1,3 +1,12 @@
+/**
+ * @description Lays out the navigation stack for the app.
+ * Manages flow between splash screen and logged in and logged out states.
+ * 
+ * @exports Layout
+ * 
+ * @author Bryan Yung
+ */
+
 import { useRunwayTheme, useFirebase } from '@/providers';
 import {
     LilitaOne_400Regular,

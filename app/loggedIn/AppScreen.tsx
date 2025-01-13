@@ -1,11 +1,20 @@
+/**
+ * @description Main "scrolling cards" screen for the app. Displays a scrollable list of cards and the overlay UIs.
+ * Automatically loads new cards as the user scrolls.
+ * 
+ * @exports AppScreen
+ * 
+ * @author Bryan Yung
+ */
+
 import { BaseCardAttributes, DateCard, FloatingProfile, ListFooterComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
 import BorderedCard from '@/components/2d/BorderedCard';
 import Button, { IconButton } from '@/components/2d/Button';
 import ProfileModal from '@/components/2d/ProfileModal';
 import { FirebaseContent, useRunwayTheme, useFirebase } from '@/providers';
 import { Styles } from '@/styles';
-import { secondsUntilTomorrowUTC, stringToDate } from '@/utils/date';
-import { delay } from '@/utils/utils';
+import { secondsUntilTomorrowUTC, stringToDate } from '@/utils/Date';
+import { delay } from '@/utils/Utils';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Foundation from '@expo/vector-icons/Foundation';
 import { StackNavigationProp } from '@react-navigation/stack';

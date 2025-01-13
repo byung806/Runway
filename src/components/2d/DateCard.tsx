@@ -11,7 +11,7 @@
 import { ContentProvider, useRunwayTheme } from '@/providers';
 import { ContentColors, FirebaseContent, useFirebase } from '@/providers/FirebaseProvider';
 import { Styles } from '@/styles';
-import { sameDay, stringToDate } from '@/utils/date';
+import { sameDay, stringToDate } from '@/utils/Date';
 import { AntDesign } from "@expo/vector-icons";
 import React, { forwardRef, memo, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { View } from 'react-native';

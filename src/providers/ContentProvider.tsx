@@ -1,3 +1,14 @@
+/**
+ * @description Provides functionality for Runway content. Handles question answering, streak bonuses, and content completion.
+ * Also handles database update and navigation to streak screen.
+ * 
+ * @exports ContentQuestionScores
+ * @exports ContentProvider
+ * @exports useContent
+ * 
+ * @author Bryan Yung
+ */
+
 import { useNavigation } from "@react-navigation/native";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { FirebaseContent, ContentColors, useFirebase } from "./FirebaseProvider";
@@ -45,8 +56,10 @@ interface ContentProviderProps {
     children: ReactNode;
 }
 
-export const ContentContext = createContext<ContentContextType | null>(null);
+const ContentContext = createContext<ContentContextType | null>(null);
 
+// TODO: move ContentModal exclusively inside here
+// TODO: move question wrong point deduction logic inside here
 export function ContentProvider(props: ContentProviderProps) {
     const { isOnboardingContent, date, possiblePoints, content, colors, openContentModal, closeContentModal, children } = props;
 
