@@ -1,7 +1,7 @@
-import { ThemeContext } from '@/providers/ThemeProvider';
+import { useRunwayTheme } from '@/providers';
 import { Styles } from '@/styles';
 import * as Haptics from 'expo-haptics';
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -27,7 +27,7 @@ interface ButtonProps {
 const ReactSpringAnimatedView = animated(View);
 
 export default function Button({ title, onPress, backgroundColor, textColor, forceTextColor, disabled = false, showLoadingSpinner = false, sound = 'button', reanimatedStyle, style, textStyle }: ButtonProps) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     const { scale: buttonScale, onPressIn: buttonOnPressIn, onPress: buttonOnPress, onPressOut: buttonOnPressOut } = useBounceAnimation({
         scaleTo: 0.9,
@@ -77,7 +77,7 @@ export default function Button({ title, onPress, backgroundColor, textColor, for
 
 
 export function CloseButton({ color, onPress }: { color?: string, onPress: () => void }) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     return (
         <Animated.View style={{
@@ -96,7 +96,7 @@ export function CloseButton({ color, onPress }: { color?: string, onPress: () =>
 
 
 export function IconButton({ type, visible, onPress, style }: { type: 'settings' | 'leaderboard', visible?: boolean, onPress: () => void, style?: any }) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     const iconColor = type === 'settings' ? theme.white : theme.trophyYellow;
     const icon = type === 'settings' ? (

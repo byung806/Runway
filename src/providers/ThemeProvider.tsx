@@ -1,9 +1,8 @@
 import { RunwayDarkTheme, RunwayLightTheme, Theme } from "@/styles";
 import { StatusBar } from "expo-status-bar";
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
 
-export const ThemeContext = createContext<Theme>(RunwayLightTheme);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
     const scheme = useColorScheme();
@@ -21,3 +20,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         </ThemeContext.Provider>
     );
 }
+
+const ThemeContext = createContext<Theme>(RunwayLightTheme);
+
+// hook to use Theme context
+export const useRunwayTheme = (): Theme => {
+    const theme = useContext(ThemeContext);
+    if (!theme) {
+        throw new Error('useRunwayTheme must be used within a ThemeProvider');
+    }
+    return theme;
+};

@@ -1,5 +1,4 @@
-import { ThemeContext } from '@/providers';
-import { useContext } from 'react';
+import { useRunwayTheme } from '@/providers';
 import { Platform, TextInput as TextInputNative } from 'react-native';
 
 interface TextInputProps {
@@ -18,7 +17,7 @@ interface TextInputProps {
 }
 
 export default function TextInput({ placeholder, defaultValue = '', value, onChangeText, disabled = false, autoCorrect = false, textContentType, autoComplete, maxLength, password = false, email = false, style }: TextInputProps) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     function _onChangeText(text: string) {
         if (email || password) {

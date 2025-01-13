@@ -1,7 +1,7 @@
 import React, { cloneElement, forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Dimensions, FlatList, Pressable } from 'react-native';
 
-import { ContentColors, ThemeContext } from '@/providers';
+import { ContentColors, useRunwayTheme } from '@/providers';
 import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
 import { ScrollArrow } from './Arrow';
 
@@ -58,7 +58,7 @@ const ScrollableCards = <T extends BaseCardAttributes>(props: ScrollableCardsPro
         scrollToIndex
     }));
 
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
     const [focusedCard, setFocusedCard] = useState<T | null>(null);

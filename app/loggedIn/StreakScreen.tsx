@@ -1,5 +1,5 @@
 import { Button, Text } from '@/components/2d';
-import { ThemeContext, useFirebase } from "@/providers";
+import { useRunwayTheme, useFirebase } from "@/providers";
 import { Styles } from "@/styles";
 import { delay } from "@/utils/utils";
 import { useIsFocused } from "@react-navigation/native";
@@ -13,7 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function StreakScreen({ route, navigation }: { route: any, navigation: StackNavigationProp<any, any> }) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
     const focused = useIsFocused();
     const firebase = useFirebase();
 
@@ -27,7 +27,7 @@ export default function StreakScreen({ route, navigation }: { route: any, naviga
         requestStreak();
     }, []);
 
-    const [pointsEarned, setPointsEarned] = useState(route.params?.pointsEarned + route.params?.earnedStreakBonus ?? 0);
+    const [pointsEarned, setPointsEarned] = useState(route.params?.pointsEarned + route.params?.earnedStreakBonus);
     const [streak, setStreak] = useState(route.params?.initialStreak ?? 0);
     const [buttonClickable, setButtonClickable] = useState(false);
 

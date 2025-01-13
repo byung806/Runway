@@ -1,9 +1,9 @@
-import { ThemeContext, useFirebase } from "@/providers";
+import { useFirebase, useRunwayTheme } from "@/providers";
 import { Styles } from "@/styles";
 import { matcher } from '@/utils/ProfanityChecker';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useNavigation } from "@react-navigation/native";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { KeyboardAvoidingView, LayoutAnimation, Platform, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BackArrow, ScrollArrow } from "./Arrow";
@@ -12,7 +12,7 @@ import TextInput from "./TextInput";
 
 
 export default function OnboardingHeaderComponent({ focused, scrollable, setScrollable, scroll, height, username, setUsername }: { focused: boolean, scrollable: boolean, setScrollable: Function, scroll: () => void, height: number, username: string, setUsername: Dispatch<SetStateAction<string>> }) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
     const navigation = useNavigation<any>();
     const firebase = useFirebase();
 

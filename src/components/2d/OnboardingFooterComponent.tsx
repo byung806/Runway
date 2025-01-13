@@ -1,14 +1,13 @@
-import { ThemeContext } from "@/providers";
+import { useRunwayTheme } from "@/providers";
 import { Styles } from "@/styles";
 import { useNavigation } from "@react-navigation/native";
-import { useContext } from "react";
 import { View } from "react-native";
 import Button from "./Button";
 import Text from "./Text";
 
 export default function OnboardingFooterComponent({ height, username }: { height: number, username: string }) {
     const navigation = useNavigation<any>();
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     return (
         <View style={{

@@ -1,9 +1,19 @@
-import { ContentProvider, ThemeContext } from '@/providers';
+/**
+ * @description Visual card shown in the main scrollable Runway view. Manages
+ * 
+ * @param {boolean} visible - whether the entire modal is visible. Controlled fully by parent components.
+ * 
+ * @exports ContentModal
+ * 
+ * @author Bryan Yung
+ */
+
+import { ContentProvider, useRunwayTheme } from '@/providers';
 import { ContentColors, FirebaseContent, useFirebase } from '@/providers/FirebaseProvider';
 import { Styles } from '@/styles';
 import { sameDay, stringToDate } from '@/utils/date';
 import { AntDesign } from "@expo/vector-icons";
-import { forwardRef, memo, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { forwardRef, memo, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { View } from 'react-native';
 import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import BorderedCard, { BorderedCardRef } from './BorderedCard';
@@ -31,7 +41,7 @@ export interface DateCardRef {
 }
 
 const DateCard = forwardRef(({ date, content, possiblePoints, colors, focused, style }: DateCardProps, ref) => {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
     const firebase = useFirebase();
 
     const borderedCardRef = useRef<BorderedCardRef>(null);

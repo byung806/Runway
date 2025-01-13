@@ -1,18 +1,17 @@
 import { BorderedCard, Button, Text } from '@/components/2d';
-import React, { useContext, useEffect } from 'react';
-import { Dimensions, View, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { Dimensions, Image, View } from 'react-native';
 
-import { ThemeContext, useFirebase } from '@/providers';
+import { useFirebase, useRunwayTheme } from '@/providers';
 import { pastelPurple, Styles, yellowGreen, yellowOrange } from '@/styles';
-import { BlurView } from '@react-native-community/blur';
-import { StackNavigationProp } from '@react-navigation/stack';
-import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { delay } from '@/utils/utils';
 import { useIsFocused } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import Animated, { useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 
 
 export default function StartScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
     const firebase = useFirebase();
     const focused = useIsFocused();
 

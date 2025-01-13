@@ -1,15 +1,15 @@
-import { ThemeContext, useFirebase } from "@/providers";
+import { useFirebase, useRunwayTheme } from "@/providers";
 import { Styles } from "@/styles";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { BlurView } from '@react-native-community/blur';
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Platform, View } from "react-native";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Text from "./Text";
 
 export default function FloatingProfile({ visible }: { visible: boolean }) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
     const firebase = useFirebase();
 
     const initialOpacity = 1;

@@ -1,9 +1,9 @@
-import { ContentColors, ThemeContext } from '@/providers';
+import { ContentColors, useRunwayTheme } from '@/providers';
 import { Styles } from '@/styles';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import React, { forwardRef, memo, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { forwardRef, memo, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Easing, View } from 'react-native';
 import AnimatedNumbers from 'react-native-animated-numbers';
 import Animated, { useSharedValue, withTiming } from 'react-native-reanimated';
@@ -27,7 +27,7 @@ export interface OnboardingCardRef {
 }
 
 const OnboardingCard = forwardRef(({ focused, colors, style, username, index, openOnboardingContentModal }: OnboardingCardProps, ref) => {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     const borderedCardRef = useRef<BorderedCardRef>(null);
 

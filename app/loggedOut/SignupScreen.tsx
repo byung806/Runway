@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, LayoutAnimation, Platform, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { FirebaseError, ThemeContext, useFirebase, usePushNotifications } from '@/providers';
+import { FirebaseError, useRunwayTheme, useFirebase, usePushNotifications } from '@/providers';
 import { Styles } from '@/styles';
 import { matcher } from '@/utils/ProfanityChecker';
 import { callWithTimeout } from '@/utils/utils';
@@ -12,9 +12,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 export default function SignupScreen({ route, navigation }: { route: any, navigation: StackNavigationProp<any, any> }) {
     const initialUsername = route.params?.initialUsername;
 
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
     const firebase = useFirebase();
-    const notifications = usePushNotifications();
 
     const [username, setUsername] = useState(initialUsername || '');
     const [password, setPassword] = useState('');

@@ -1,19 +1,19 @@
 import { AddFriendModal, BackArrow, Button, LeaderboardEntry, Text } from '@/components/2d';
-import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, LayoutAnimation, Pressable, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, LayoutAnimation, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Styles } from '@/styles';
 
-import { LeaderboardData, LeaderboardType, ThemeContext, useFirebase } from '@/providers';
+import { LeaderboardData, LeaderboardType, useFirebase, useRunwayTheme } from '@/providers';
 import { FontAwesome5 } from '@expo/vector-icons';
-import SegmentedControl from "react-native-segmented-control-2";
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as Haptics from 'expo-haptics';
+import SegmentedControl from "react-native-segmented-control-2";
 
 
 export default function LeaderboardScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
     const firebase = useFirebase();
 
     const [addFriendModalVisible, setAddFriendModalVisible] = useState(false);

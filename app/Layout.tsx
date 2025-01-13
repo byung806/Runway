@@ -1,4 +1,4 @@
-import { ThemeContext, useFirebase } from '@/providers';
+import { useRunwayTheme, useFirebase } from '@/providers';
 import {
     LilitaOne_400Regular,
     // LilitaOne_800Bold,
@@ -11,7 +11,7 @@ import {
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 import { Animated, View } from 'react-native';
 import { GraphScreen, AppScreen, LeaderboardScreen, StreakScreen } from './loggedIn';
 import { LoginScreen, OnboardingScreen, SignupScreen, StartScreen } from './loggedOut';
@@ -66,7 +66,7 @@ const slideCardStyleInterpolator = ({
 
 export default function Layout() {
     const firebase = useFirebase();
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     const [fontsLoaded] = useFonts({
         LilitaOne_400Regular,

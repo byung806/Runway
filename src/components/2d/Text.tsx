@@ -1,5 +1,5 @@
-import { ThemeContext } from '@/providers';
-import { ReactNode, useContext } from 'react';
+import { useRunwayTheme } from '@/providers';
+import { ReactNode } from 'react';
 import { Text as TextNative } from 'react-native';
 
 interface TextProps {
@@ -7,7 +7,7 @@ interface TextProps {
 }
 
 export default function Text({ children, ...props }: TextProps & any) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     return (
         <TextNative

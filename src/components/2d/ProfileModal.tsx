@@ -1,7 +1,7 @@
-import { ThemeContext, useFirebase } from '@/providers';
+import { useFirebase, useRunwayTheme } from '@/providers';
 import { Styles } from '@/styles';
 import { BlurView } from '@react-native-community/blur';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Alert, Linking, Modal, Pressable, View } from 'react-native';
 import Button from './Button';
 
@@ -10,7 +10,7 @@ const PRIVACY_POLICY_URL = 'https://runwaymobile.app/privacy-policy';
 
 export default function ProfileModal({ visible, setVisible }: { visible: boolean, setVisible: (visible: boolean) => void }) {
     const firebase = useFirebase();
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     const [deleteLoading, setDeleteLoading] = useState(false);
 

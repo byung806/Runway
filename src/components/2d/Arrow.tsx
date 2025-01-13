@@ -1,5 +1,5 @@
-import { ThemeContext } from "@/providers";
-import React, { useContext, useEffect } from "react";
+import { useRunwayTheme } from "@/providers";
+import React, { useEffect } from "react";
 import { Pressable } from "react-native";
 import Animated, { useSharedValue, withSequence, withSpring, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -56,7 +56,7 @@ interface ArrowProps {
 }
 
 function Arrow({ filled, color, type, visible, onPress }: ArrowProps) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     const arrowOpacity = useSharedValue(type === 'upFloating' ? 0 : 1);
     const arrowTransformY = useSharedValue(0);

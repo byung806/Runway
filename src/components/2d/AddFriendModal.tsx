@@ -1,16 +1,16 @@
-import { ThemeContext, useFirebase } from '@/providers';
+import { useFirebase, useRunwayTheme } from '@/providers';
 import { Styles } from '@/styles';
-import { useContext, useState } from 'react';
-import { KeyboardAvoidingView, Modal, Platform, View } from 'react-native';
+import { useState } from 'react';
+import { KeyboardAvoidingView, Modal, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Button, { CloseButton } from './Button';
 import Text from './Text';
 import TextInput from './TextInput';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 // TODO: MAKE friends system BETTER (add & remove)
 export default function AddFriendModal({ visible, setVisible }: { visible: boolean, setVisible: (visible: boolean) => void }) {
     const firebase = useFirebase();
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     const [username, setUsername] = useState('');
     const [addingFriend, setAddingFriend] = useState(false);

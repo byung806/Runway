@@ -2,7 +2,7 @@ import { BaseCardAttributes, DateCard, FloatingProfile, ListFooterComponent, Scr
 import BorderedCard from '@/components/2d/BorderedCard';
 import Button, { IconButton } from '@/components/2d/Button';
 import ProfileModal from '@/components/2d/ProfileModal';
-import { FirebaseContent, ThemeContext, useFirebase } from '@/providers';
+import { FirebaseContent, useRunwayTheme, useFirebase } from '@/providers';
 import { Styles } from '@/styles';
 import { secondsUntilTomorrowUTC, stringToDate } from '@/utils/date';
 import { delay } from '@/utils/utils';
@@ -24,7 +24,7 @@ interface DateCardAttributes extends BaseCardAttributes {
 }
 
 export default function AppScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
     const firebase = useFirebase();
 
     const [profileModalVisible, setProfileModalVisible] = useState(false);

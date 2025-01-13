@@ -1,8 +1,8 @@
-import { ContentColors, ThemeContext } from "@/providers";
+import { ContentColors, useRunwayTheme } from "@/providers";
 import { Styles } from "@/styles";
 import useBounceAnimation from "@/utils/useBounceAnimation";
 import { animated, config } from "@react-spring/native";
-import { forwardRef, useContext, useImperativeHandle } from "react";
+import React, { forwardRef, useImperativeHandle } from "react";
 import { View } from "react-native";
 import Text from "./Text";
 
@@ -14,7 +14,7 @@ export interface BorderedCardRef {
 }
 
 const BorderedCard = forwardRef(({ style, colors, newBadge, children }: { style?: any, colors: ContentColors, newBadge?: boolean, children?: JSX.Element }, ref) => {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     const { scale: cardScale, onPressIn: cardOnPressIn, onPressOut: cardOnPressOut } = useBounceAnimation({
         scaleTo: 0.94,

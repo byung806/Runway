@@ -6,7 +6,7 @@ import ContentModal from '@/components/2d/ContentModal';
 import OnboardingCard from '@/components/2d/OnboardingCard';
 import OnboardingFooterComponent from '@/components/2d/OnboardingFooterComponent';
 import OnboardingHeaderComponent from '@/components/2d/OnboardingHeaderComponent';
-import { FirebaseContent, ContentProvider, ThemeContext } from '@/providers';
+import { FirebaseContent, ContentProvider, useRunwayTheme } from '@/providers';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Styles } from '@/styles';
 
@@ -14,7 +14,7 @@ import { Styles } from '@/styles';
 interface OnboardingCardAttributes extends BaseCardAttributes { }
 
 export default function OnboardingScreen({ navigation }: { navigation: StackNavigationProp<any, any> }) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     const [username, setUsername] = useState('');
     const defaultColors = {

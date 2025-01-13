@@ -1,7 +1,18 @@
+/**
+ * @description Implements Runway Content. Includes scrollable chunks, 
+ * header with title & date, and footer with completion button.
+ * 
+ * @param {boolean} visible - whether the entire modal is visible. Controlled fully by parent components.
+ * 
+ * @exports ContentModal
+ * 
+ * @author Bryan Yung
+ */
+
 import React, { useContext, useMemo, useRef, useState } from 'react';
 import { Dimensions, FlatList, Linking, Modal, Pressable, View } from 'react-native';
 
-import { ThemeContext, useContent } from '@/providers';
+import { useRunwayTheme, useContent } from '@/providers';
 import { Styles } from '@/styles';
 import parseContent from '@/utils/ContentParser';
 import { stringToDate } from '@/utils/date';
@@ -75,7 +86,7 @@ export default function ContentModal({ visible }: { visible: boolean }) {
 }
 
 function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => void }) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
     const { isOnboardingContent, isToday, date, content, colors, questionsStarted, back } = useContent();
 
     const [arrowVisible, setArrowVisible] = useState(true);
@@ -132,7 +143,7 @@ function ContentHeaderComponent({ scrollDownPress }: { scrollDownPress: () => vo
 
 function ContentFooterComponent() {
     const height = Dimensions.get('window').height;
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
     const { isOnboardingContent, isToday, content, cardCompleted, colors, earnedPointsWithoutStreak, earnedStreakBonus, earnablePointsWithoutStreak, allQuestionsCompleted, finish } = useContent();
 
     const [loading, setLoading] = useState(false);

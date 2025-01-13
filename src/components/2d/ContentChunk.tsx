@@ -1,7 +1,7 @@
-import { FirebaseContentQuestionChoice, ThemeContext, useContent, useFirebase } from "@/providers";
+import { FirebaseContentQuestionChoice, useContent, useFirebase, useRunwayTheme } from "@/providers";
 import { Styles } from "@/styles";
 import { FontAwesome5 } from "@expo/vector-icons";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, Image, View } from "react-native";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import Button from "./Button";
@@ -109,7 +109,7 @@ export interface QuestionContentChunkType {
     possiblePoints: number;
 }
 export function QuestionContentChunk({ focused, question, choices, possiblePoints }: QuestionContentChunkType & BaseContentChunkType) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
     const firebase = useFirebase();
     const { date, isOnboardingContent, colors, cardCompleted, completeQuestion } = useContent();
 
@@ -121,6 +121,7 @@ export function QuestionContentChunk({ focused, question, choices, possiblePoint
 
     const opacity = useSharedValue(0);
 
+    // TODO: organization: move multiplier calculation and point calculation into ContentProvider (completeQuestion)
     /**
      * Multiplier for points earned based on how many questions were answered incorrectly
      */

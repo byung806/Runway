@@ -1,4 +1,4 @@
-import { ThemeContext, useFirebase } from '@/providers';
+import { useRunwayTheme, useFirebase } from '@/providers';
 import { Styles } from '@/styles';
 import useBounceAnimation from '@/utils/useBounceAnimation';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -20,7 +20,7 @@ interface LeaderboardEntryProps {
 const ReactSpringAnimatedView = animated(View);
 
 export default function LeaderboardEntry({ place, name, points, streak }: LeaderboardEntryProps) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
     const firebase = useFirebase();
 
     const { scale, onPressIn, onPressOut } = useBounceAnimation({

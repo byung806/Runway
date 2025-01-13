@@ -1,11 +1,10 @@
+import { useRunwayTheme } from "@/providers";
 import { Styles } from "@/styles";
-import { useContext } from "react";
 import { View } from "react-native";
 import Text from "./Text";
-import { ThemeContext } from "@/providers";
 
 export default function ListFooterComponent({ height, arrowUp, showError }: { height: number, arrowUp: JSX.Element, showError: boolean }) {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     if (!showError) {
         return (
