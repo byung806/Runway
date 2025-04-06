@@ -6,14 +6,9 @@
  * @author Bryan Yung
  */
 
-import ContentModal from "@/components/2d/ContentModal";
-import { ForceGraph } from "@/components/2d/ForceGraph";
-import ForceGraphD3 from "@/components/2d/ForceGraphD3";
 import ForceGraphD3New from "@/components/2d/ForceGraphD3New";
-import { ContentProvider, FirebaseContent, useFirebase, useRunwayTheme } from "@/providers";
-import { useState } from "react";
+import { useFirebase, useRunwayTheme } from "@/providers";
 import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function GraphScreen() {
     const theme = useRunwayTheme();

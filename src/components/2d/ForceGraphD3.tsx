@@ -2,6 +2,8 @@
  * @description Node-based force graph. Implements panning and node click events.
  * Includes slight physics effect when panning.
  * 
+ * This file is not used (replaced to ForceGraphD3New.tsx) but is kept for reference.
+ * 
  * @exports ForceGraphD3
  * 
  * @author Bryan Yung
@@ -28,13 +30,19 @@
 
 // inertia: on pan responder release
 
+// TODO: make nodes clickable
+// TODO: add inertia to the pan gesture handler
+// TODO: fade in out of screen?
+// TODO: add shadow/glow to nodes
+// TODO: add "special" nodes for leaderboard and profile and credits and payment
+
 
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { View, Dimensions } from 'react-native';
 import Svg, { Circle, G, Line, Text } from 'react-native-svg';
 import * as d3 from 'd3';
 import { GestureEvent, PanGestureHandler, PanGestureHandlerEventPayload, State } from 'react-native-gesture-handler';
-import { ThemeContext } from '@/providers';
+import { useRunwayTheme } from '@/providers';
 
 interface Node {
     x: number;
@@ -54,7 +62,7 @@ interface Link {
 }
 
 export default function ForceGraphD3() {
-    const theme = useContext(ThemeContext);
+    const theme = useRunwayTheme();
 
     const [nodes, setNodes] = useState<Node[]>([]);
     const [links, setLinks] = useState<Link[]>([]);
@@ -101,7 +109,7 @@ export default function ForceGraphD3() {
             .force('repel', d3.forceManyBody<Node>()
                 .strength((d, i) => {
                     if (i === 0) {
-                        return -400;
+                        return -1200;
                     }
                     return -800;
                 })
@@ -178,6 +186,22 @@ export default function ForceGraphD3() {
             });
 
             console.log('closest node:', closestNode.id);
+
+            // snap to closest node
+            // transformRef.current.x += (width / 2) - (closestNode.x + transformRef.current.x);
+            // transformRef.current.y += (height / 2) - (closestNode.y + transformRef.current.y);
+            // svgGroupRef.current?.setNativeProps({
+            //     transform: `translate(${transformRef.current.x}, ${transformRef.current.y}) scale(${transformRef.current.scale})`,
+            // });
+
+            // fix node so it doesn't move
+            // closestNode.fx = closestNode.x;
+            // closestNode.fy = closestNode.y;
+
+
+            // add inertia
+            const { velocityX, velocityY } = e.nativeEvent;
+            console.log('velocity:', velocityX, velocityY);
         }
     }
 
@@ -213,7 +237,7 @@ export default function ForceGraphD3() {
                                     opacity={1}
                                 />
                                 {/* debug text to show each node's id */}
-                                <Text
+                                {/* <Text
                                     x={node.x}
                                     y={node.y}
                                     fontSize={node.radius}
@@ -222,17 +246,17 @@ export default function ForceGraphD3() {
                                     dy=".3em"
                                 >
                                     {node.id}
-                                </Text>
+                                </Text> */}
                             </G>
                         ))}
                         {/* reference for the center */}
-                        <Circle
+                        {/* <Circle
                             cx={width / 2}
                             cy={height / 2}
                             r={30}
                             fill={d3.schemeSet3[0]}
                             opacity={0.8}
-                        />
+                        /> */}
                     </G>
                 </Svg>
             </View>
