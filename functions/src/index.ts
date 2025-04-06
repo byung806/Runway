@@ -9,6 +9,7 @@ import { handleNotificationReceipts, sendStreakNotification, sendStreakNotificat
 import { requestCompleteDate, updateStreaksDaily } from "./streak";
 import { addFriend, deleteAccount, getUserData, initializeUser, sendExpoPushToken, setRated } from "./user";
 import { resetSeason } from "./season";
+import { copyOldestLessonIfNoLessonToday } from "./lessons";
 
 
 /**
@@ -69,6 +70,12 @@ exports.updateStreaksDaily = onSchedule("10 0 * * *", updateStreaksDaily);
 exports.sendStreakNotification = onSchedule("0 0 * * *", sendStreakNotification);
 
 exports.sendStreakNotificationDebug = onSchedule("0 0 * * *", sendStreakNotificationDebug);
+
+/**
+ * Copy the oldest lesson in the database to the current date if there's no lesson for today (& removes the oldest lesson from the database)
+ * Runs at 12:00 PM every day
+ */
+exports.copyOldestLessonIfNoLessonToday = onSchedule("0 12 * * *", copyOldestLessonIfNoLessonToday);
 
 /**
  * Check the status of push notification receipts 30 minutes after sending them
