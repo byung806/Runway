@@ -1,6 +1,7 @@
 import { BaseCardAttributes, DateCard, FloatingProfile, ListFooterComponent, ScrollableCards, ScrollableCardsRef, Text } from '@/components/2d';
 import BorderedCard from '@/components/2d/BorderedCard';
 import Button, { IconButton } from '@/components/2d/Button';
+import { Home } from '@/components/2d/HorizontalScrollableCards2';
 import ProfileModal from '@/components/2d/ProfileModal';
 import { FirebaseContent, ThemeContext, useFirebase } from '@/providers';
 import { Styles } from '@/styles';
@@ -138,7 +139,7 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
     return (
         <>
             <FloatingProfile visible={floatingProfileVisible} />
-            <ScrollableCards<DateCardAttributes>
+            {/* <ScrollableCards<DateCardAttributes>
                 ref={scrollableCardsRef}
                 data={cards}
                 renderHeader={() =>
@@ -249,7 +250,9 @@ export default function AppScreen({ navigation }: { navigation: StackNavigationP
                 onMomentumScrollBegin={() => setFloatingProfileVisible(false)}
                 onMomentumScrollEnd={() => setFloatingProfileVisible(true)}
                 onEndReached={addPreviousDay}
-            />
+            /> */}
+
+            <Home />
 
             <IconButton type='settings' visible={floatingProfileVisible} onPress={() => setProfileModalVisible(true)} />
             <ProfileModal visible={profileModalVisible} setVisible={setProfileModalVisible} />
