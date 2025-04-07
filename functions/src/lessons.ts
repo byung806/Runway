@@ -1,22 +1,24 @@
 import { dateToString, stringToDate, getDbCollection } from "./utils";
+// import { logger } from "firebase-functions";
 
 /**
  * Copy the oldest lesson in the database to the current date if there's no lesson for today
  * & removes the oldest lesson in the database
  */
 export async function copyOldestLessonIfNoLessonToday() {
-    const lessonsRef = getDbCollection('content');
+    const contentRef = getDbCollection('content');
 
     // Check if today's date already exists in the database
-    const todayDate = dateToString(new Date());
-    const todayLessonDoc = await lessonsRef.doc(todayDate).get();
-    if (todayLessonDoc.exists) {
+    const dateToAdd = dateToString(new Date(Date.now() + 86400000));
+    const dateToAddDoc = await contentRef.doc(dateToAdd).get();
+    if (dateToAddDoc.exists) {
         // If a lesson for today already exists, do nothing
+        // logger.info('date to add exists, aborting');
         return;
     }
 
-    const lessonsSnapshot = await lessonsRef.get();
-    const lessons = lessonsSnapshot.docs
+    const contentSnapshot = await contentRef.get();
+    const lessons = contentSnapshot.docs
         // Convert each document to an object with id (date) and data
         .map(doc => ({ id: doc.id, ...doc.data() }))
         // Filter out lessons that are not in the format 'YYYY-MM-DD'
@@ -31,8 +33,9 @@ export async function copyOldestLessonIfNoLessonToday() {
     const oldestLesson = lessons[0];
 
     // Copy the oldest lesson to today's date if it's not overriding an existing lesson (so new lessons can be added)
-    await lessonsRef.doc(todayDate).set(oldestLesson);
+    const { id, ...lessonData } = oldestLesson;
+    await contentRef.doc(dateToAdd).set(lessonData);
 
     // Remove the oldest lesson from the database
-    await lessonsRef.doc(oldestLesson.id).delete();
+    await contentRef.doc(oldestLesson.id).delete();
 }
